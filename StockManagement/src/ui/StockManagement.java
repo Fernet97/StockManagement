@@ -5,6 +5,9 @@
  */
 package ui;
 
+import database.DriverManagerConnectionPool;
+import javax.swing.JFrame;
+
 /**
  *
  * @author Fernet
@@ -17,7 +20,13 @@ public class StockManagement {
       System.out.println("****** STOCK MAMAGEMENT*******");
       System.out.println("Check connessione ...");
 
-      
+      // Istanzia il frame Login
+      DriverManagerConnectionPool dv = new DriverManagerConnectionPool();
+      dv.checkLogin(1, "test", "test");
+      //LoginDialog login = new LoginDialog();
+      //login.setVisible(true);
+      //login.setTitle("Login");
+                
     
 
   }
