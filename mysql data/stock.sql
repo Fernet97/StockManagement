@@ -24,16 +24,16 @@ DROP TABLE IF EXISTS `fornitori`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `fornitori` (
   `idfornitori` int(11) NOT NULL AUTO_INCREMENT,
-  `p.iva` varchar(11) NOT NULL,
-  `nome` varchar(45) NOT NULL,
-  `cognome` varchar(45) NOT NULL,
-  `nome_azienda` varchar(45) DEFAULT NULL,
-  `stato` varchar(100) NOT NULL,
-  `tel` varchar(15) DEFAULT NULL,
-  `email` varchar(254) DEFAULT NULL,
-  `desc` varchar(1000) NOT NULL,
+  `p.iva` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nome` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `cognome` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nome_azienda` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `stato` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `tel` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `email` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `desc` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`idfornitori`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -53,18 +53,19 @@ DROP TABLE IF EXISTS `prodotti`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `prodotti` (
-  `sku` varchar(45) NOT NULL,
-  `datareg` varchar(18) NOT NULL,
-  `nome` varchar(45) NOT NULL,
-  `categoria` varchar(45) NOT NULL,
+  `sku` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `datareg` varchar(18) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nome` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `categoria` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `instock` tinyint(4) NOT NULL,
-  `descrizione` varchar(1000) NOT NULL,
+  `descrizione` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `giorni_alla_consegna` int(11) NOT NULL,
   `qty` int(11) NOT NULL,
+  `soglia_min` int(11) NOT NULL,
   `costo` float NOT NULL,
-  `foto` varchar(45) DEFAULT NULL,
+  `foto` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`sku`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -84,14 +85,14 @@ DROP TABLE IF EXISTS `prodotti_has_fornitori`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `prodotti_has_fornitori` (
-  `prodotti_sku` varchar(45) NOT NULL,
+  `prodotti_sku` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `fornitori_idfornitori` int(11) NOT NULL,
   PRIMARY KEY (`prodotti_sku`,`fornitori_idfornitori`),
   KEY `fk_prodotti_has_fornitori_fornitori1_idx` (`fornitori_idfornitori`),
   KEY `fk_prodotti_has_fornitori_prodotti_idx` (`prodotti_sku`),
   CONSTRAINT `fk_prodotti_has_fornitori_fornitori1` FOREIGN KEY (`fornitori_idfornitori`) REFERENCES `fornitori` (`idfornitori`),
   CONSTRAINT `fk_prodotti_has_fornitori_prodotti` FOREIGN KEY (`prodotti_sku`) REFERENCES `prodotti` (`sku`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -112,19 +113,19 @@ DROP TABLE IF EXISTS `utenti`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `utenti` (
   `id` int(11) NOT NULL,
-  `fullname` varchar(45) NOT NULL,
-  `telefono` varchar(45) NOT NULL,
-  `email` varchar(45) NOT NULL,
-  `CF` varchar(45) NOT NULL,
-  `indirizzo` varchar(45) DEFAULT NULL,
-  `pwd` varchar(45) NOT NULL,
+  `fullname` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `telefono` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `email` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `CF` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `indirizzo` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `pwd` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `create` tinyint(4) NOT NULL,
   `update` tinyint(4) NOT NULL,
   `view` tinyint(4) NOT NULL,
   `delete` tinyint(4) NOT NULL,
   `isAdmin` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -145,4 +146,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-16 15:26:14
+-- Dump completed on 2019-11-16 16:42:06
