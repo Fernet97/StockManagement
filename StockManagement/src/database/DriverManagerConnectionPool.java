@@ -71,44 +71,11 @@ public  class DriverManagerConnectionPool  {
 		return connection;
 	}
         
-        
-            // verifica connessione
-    public boolean checkLogin(int ID,String password, String user){
-        if("ADMINISTRATOR".equals(user)){
-            //String query="SELECT * FROM utenti WHERE id='"+ID+"' AND password='"+password+"'AND isAdmin= 1";
-            String query="SELECT * FROM utenti WHERE id='1' AND pwd='test' AND isAdmin= '1'";
-            try{
-                rs=stmt.executeQuery(query);
-                while(rs.next()){
-                    flag=true;
-                }
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }else{
-            String query="SELECT * FROM utenti WHERE id='"+ID+"' AND pwd='"+password+"'AND isAdmin = 0'";
-            try{
-                rs=stmt.executeQuery(query);
-                while(rs.next()){
-                    flag=true;
-                }
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-        return flag;
-    }
-        
-        
-        
-        
-
+   
+       
 	public static synchronized void releaseConnection(Connection connection) throws SQLException {
 		if(connection != null) freeDbConnections.add(connection);
 	}
         
-        
-        
-
- 
+           
 }
