@@ -36,8 +36,9 @@ public class StockManagement {
         //quando seleziona casella
         UIManager.put( "nimbusSelectionBackground", new Color(169,46,34) );
         UIManager.put( "text",  new Color( 59, 47, 158) );
-        
+    
         UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("Arial Black", Font.BOLD, 14));
+        
         
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
