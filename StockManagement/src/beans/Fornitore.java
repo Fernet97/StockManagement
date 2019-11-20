@@ -11,7 +11,7 @@ package beans;
  */
 public class Fornitore {
     
-    private int idfornitori;
+    private int idfornitore;
     private String p_iva;
     private String nome;
     private String cognome;
@@ -23,8 +23,8 @@ public class Fornitore {
     
     //constructor
 
-    public Fornitore(int idfornitori, String p_iva, String nome, String cognome, String nome_azienda, String stato, String tel, String email, String desc) {
-        this.idfornitori = idfornitori;
+    public Fornitore(int idfornitore, String p_iva, String nome, String cognome, String nome_azienda, String stato, String tel, String email, String desc) {
+        this.idfornitore = idfornitore;
         this.p_iva = p_iva;
         this.nome = nome;
         this.cognome = cognome;
@@ -35,14 +35,16 @@ public class Fornitore {
         this.desc = desc;
     }
     
+    public Fornitore(){}
+    
    //getter & setter
 
-    public int getIdfornitori() {
-        return idfornitori;
+    public int getIdfornitore() {
+        return idfornitore;
     }
 
-    public void setIdfornitori(int idfornitori) {
-        this.idfornitori = idfornitori;
+    public void setIdfornitore(int idfornitore) {
+        this.idfornitore = idfornitore;
     }
 
     public String getP_iva() {

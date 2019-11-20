@@ -41,6 +41,9 @@ public class Utente {
         this.isAdmin = isAdmin;
     }
     
+    public Utente(){}
+    
+    
     //getter & setter
 
     public int getId() {

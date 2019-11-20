@@ -38,6 +38,8 @@ public class Prodotto {
         this.foto = foto;
     }
     
+    public Prodotto(){}
+    
     
     //getter & setter
 
