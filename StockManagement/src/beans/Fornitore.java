@@ -9,7 +9,7 @@ package beans;
  *
  * @author LittleJoke
  */
-public class Fornitori {
+public class Fornitore {
     
     private int idfornitori;
     private String p_iva;
@@ -23,7 +23,7 @@ public class Fornitori {
     
     //constructor
 
-    public Fornitori(int idfornitori, String p_iva, String nome, String cognome, String nome_azienda, String stato, String tel, String email, String desc) {
+    public Fornitore(int idfornitori, String p_iva, String nome, String cognome, String nome_azienda, String stato, String tel, String email, String desc) {
         this.idfornitori = idfornitori;
         this.p_iva = p_iva;
         this.nome = nome;

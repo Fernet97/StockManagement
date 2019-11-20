@@ -9,7 +9,7 @@ package beans;
  *
  * @author LittleJoke
  */
-public class Utenti {
+public class Utente {
    
    private int id; 
    private String fullname; 
@@ -26,7 +26,7 @@ public class Utenti {
    
    //contructor
 
-    public Utenti(int id, String fullname, String telefono, String email, String CF, String indirizzo, String pwd, boolean create, boolean update, boolean view, boolean delete, boolean isAdmin) {
+    public Utente(int id, String fullname, String telefono, String email, String CF, String indirizzo, String pwd, boolean create, boolean update, boolean view, boolean delete, boolean isAdmin) {
         this.id = id;
         this.fullname = fullname;
         this.telefono = telefono;

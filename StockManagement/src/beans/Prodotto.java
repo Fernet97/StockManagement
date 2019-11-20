@@ -9,7 +9,7 @@ package beans;
  *
  * @author LittleJoke
  */
-public class Prodotti {
+public class Prodotto {
     
     private String sku;
     private String datareg;
@@ -25,7 +25,7 @@ public class Prodotti {
     
     //constructor
 
-    public Prodotti(String sku, String datareg, String nome, String categoria, boolean instock, String descrizione, int giorni_alla_consegna, int qty, float costo, String foto) {
+    public Prodotto(String sku, String datareg, String nome, String categoria, boolean instock, String descrizione, int giorni_alla_consegna, int qty, float costo, String foto) {
         this.sku = sku;
         this.datareg = datareg;
         this.nome = nome;

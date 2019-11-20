@@ -8,7 +8,8 @@ package dao;
 /**
  *
  * @author Fernet
+ * @edit LittleJoke
  */
-public class FornitoriDAO {
+public class FornitoreDAO {
     
 }
