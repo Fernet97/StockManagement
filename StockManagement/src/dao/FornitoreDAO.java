@@ -18,7 +18,6 @@ import java.util.LinkedList;
 /**
  *
  * @author Fernet
- * @edit LittleJoke
  */
 public class FornitoreDAO {
     
@@ -82,7 +81,7 @@ public class FornitoreDAO {
  		try {
 			connection = DriverManagerConnectionPool.getConnection();
 			preparedStatement = connection.prepareStatement(selectSQL);
-			preparedStatement.setInt(1, id);
+			preparedStatement.setInt(1, id);// FA RIFERIMENTO AL NOME ED AL NUMERO DELLA COLONNA NEL DB
 
 			ResultSet rs = preparedStatement.executeQuery();
 
