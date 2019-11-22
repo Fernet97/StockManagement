@@ -19,5 +19,5 @@ import java.util.LinkedList;
  * @author LittleJoke
  */
 public class ProdottoDAO {
-    private final String TABLE_NAME
+   // private final String TABLE_NAME
 }
