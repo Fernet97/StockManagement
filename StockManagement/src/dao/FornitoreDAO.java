@@ -49,7 +49,7 @@ public class FornitoreDAO {
                                 bean.setStato(rs.getString("stato"));
                                 bean.setTel(rs.getString("tel"));
                                 bean.setEmail(rs.getString("email"));
-                                bean.setDesc(rs.getString("desc"));
+                                bean.setDesc(rs.getString("description"));
 
 				fornitori.add(bean);
 			}
@@ -94,7 +94,7 @@ public class FornitoreDAO {
                                 bean.setStato(rs.getString("stato"));
                                 bean.setTel(rs.getString("tel"));
                                 bean.setEmail(rs.getString("email"));
-                                bean.setDesc(rs.getString("desc"));
+                                bean.setDesc(rs.getString("description"));
 			}
 
 		} finally {
@@ -112,7 +112,7 @@ public class FornitoreDAO {
 
 
 	
-        // INSERT INTO `db_stock`.`fornitori` (`idfornitori`, `p_iva`, `nome`, `cognome`, `nome_azienda`, `stato`, `tel`, `email`, `desc`) VALUES ('1', 'xxxxx', 'Mimmo', 'Mimmetti', 'Mimmo corp', 'Italia', '367267267123', 'mimmo@gmail.com', 'scriviamo una descriziona a caso per mimmo');
+        // INSERT INTO `db_stock`.`fornitori` (`idfornitori`, `p_iva`, `nome`, `cognome`, `nome_azienda`, `stato`, `tel`, `email`, `description`) VALUES ('1', 'xxxxx', 'Mimmo', 'Mimmetti', 'Mimmo corp', 'Italia', '367267267123', 'mimmo@gmail.com', 'scriviamo una descriziona a caso per mimmo');
 	public synchronized void add(Fornitore b) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -161,8 +161,10 @@ public class FornitoreDAO {
 		PreparedStatement st = null;
 
                 
+                System.out.println("Entra qui");
                 
-		String insertSQL = "UPDATE fornitori SET idfornitori = ?, p_iva = ?, nome = ?, cognome = ?, nome_azienda = ?, stato = ?, tel = ?, email = ? WHERE idfornitori = 1";		
+                
+		String insertSQL = "UPDATE fornitori SET idfornitori = ?, p_iva = ?, nome = ?, cognome = ?, nome_azienda = ?, stato = ?, tel = ?, email = ?, description = ? WHERE idfornitori = "+b.getIdfornitore();		
 		connection = DriverManagerConnectionPool.getConnection();
                 st = connection.prepareStatement(insertSQL);  
                 
@@ -175,9 +177,11 @@ public class FornitoreDAO {
                 st.setString(6, b.getStato());
                 st.setString(7, b.getTel());
                 st.setString(8, b.getEmail());
-                //st.setString(9, b.getDesc());
+                st.setString(9, b.getDesc());
                 
                 st.executeUpdate();
+
+                connection.commit();
 
                 
 	}        
