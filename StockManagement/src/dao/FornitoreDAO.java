@@ -42,7 +42,7 @@ public class FornitoreDAO {
 			while (rs.next()) {
 				Fornitore bean = new Fornitore();
                                 bean.setIdfornitore(rs.getInt("idfornitori"));
-                                bean.setP_iva(rs.getString("p.iva"));
+                                bean.setP_iva(rs.getString("p_iva"));
 				bean.setNome(rs.getString("nome"));
                                 bean.setCognome(rs.getString("cognome"));
                                 bean.setNome_azienda(rs.getString("nome_azienda"));
@@ -87,7 +87,7 @@ public class FornitoreDAO {
 
 			while (rs.next()) {
                                 bean.setIdfornitore(rs.getInt("idfornitori"));
-                                bean.setP_iva(rs.getString("p.iva"));
+                                bean.setP_iva(rs.getString("p_iva"));
 				bean.setNome(rs.getString("nome"));
                                 bean.setCognome(rs.getString("cognome"));
                                 bean.setNome_azienda(rs.getString("nome_azienda"));
@@ -112,7 +112,7 @@ public class FornitoreDAO {
 
 
 	
-        // INSERT INTO `db_stock`.`fornitori` (`idfornitori`, `p.iva`, `nome`, `cognome`, `nome_azienda`, `stato`, `tel`, `email`, `desc`) VALUES ('1', 'xxxxx', 'Mimmo', 'Mimmetti', 'Mimmo corp', 'Italia', '367267267123', 'mimmo@gmail.com', 'scriviamo una descriziona a caso per mimmo');
+        // INSERT INTO `db_stock`.`fornitori` (`idfornitori`, `p_iva`, `nome`, `cognome`, `nome_azienda`, `stato`, `tel`, `email`, `desc`) VALUES ('1', 'xxxxx', 'Mimmo', 'Mimmetti', 'Mimmo corp', 'Italia', '367267267123', 'mimmo@gmail.com', 'scriviamo una descriziona a caso per mimmo');
 	public synchronized void add(Fornitore b) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -162,7 +162,7 @@ public class FornitoreDAO {
 
                 
                 
-		String insertSQL = "UPDATE fornitori SET idfornitori = ?, p.iva = ?, nome = ?, cognome = ?, nome_azienda = ?, stato = ?, tel = ?, email = ? WHERE idfornitori = 1";		
+		String insertSQL = "UPDATE fornitori SET idfornitori = ?, p_iva = ?, nome = ?, cognome = ?, nome_azienda = ?, stato = ?, tel = ?, email = ? WHERE idfornitori = 1";		
 		connection = DriverManagerConnectionPool.getConnection();
                 st = connection.prepareStatement(insertSQL);  
                 
