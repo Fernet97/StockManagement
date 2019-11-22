@@ -119,7 +119,7 @@ public class FornitoreDAO {
 		PreparedStatement preparedStatement = null;
 
 		String insertSQL = "INSERT INTO " + TABLE_NAME
-				+ " (idfornitori, p.iva, nome, cognome, nome_azienda, stato, tel, email, desc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		
 		try {

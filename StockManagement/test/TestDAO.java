@@ -22,7 +22,7 @@ public class TestDAO {
         try {
             FornitoreDAO daofornitore = new FornitoreDAO();
             
-            Fornitore f = new Fornitore(7, "xxxxx", "Capra", "Capretti", "Carpisa", "Francia", "367239267111", "capra@gmail.com", "scriviamo una descriziona a caso per capra");
+            Fornitore f = new Fornitore(8, "xxxxx", "Capra", "Capretti", "Carpisa", "Francia", "367239267111", "capra@gmail.com", "scriviamo una descriziona a caso per capra");
             
             daofornitore.add(f);
             
