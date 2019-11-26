@@ -51,11 +51,11 @@ public class Prodotto {
         this.sku = sku;
     }
 
-    public String getDatareg() {
+    public String getDataReg() {
         return datareg;
     }
 
-    public void setDatareg(String datareg) {
+    public void setDataReg(String datareg) {
         this.datareg = datareg;
     }
 
@@ -75,11 +75,11 @@ public class Prodotto {
         this.categoria = categoria;
     }
 
-    public boolean isInstock() {
+    public boolean isInStock() {
         return instock;
     }
 
-    public void setInstock(boolean instock) {
+    public void setInStock(boolean instock) {
         this.instock = instock;
     }
 
