@@ -23,10 +23,10 @@ public class TestDAO {
         try {
              FornitoreDAO daofornitore = new FornitoreDAO();
             
-            Fornitore f = new Fornitore(1, "xxxxx", "Capra", "Capretti", "Carpisa", "Francia", "367239267111", "capra@gmail.com", "scriviamo una descriziona a caso per capra");     
-            daofornitore.add(f);
+            //Fornitore f = new Fornitore(2, "zzzzz", "Accipicchia", "AHAHAH", "Paccc", "Svizzera", "23423423423", "uanm@gmail.com", "descrizione a caso");     
+            //daofornitore.add(f);
             //Fornitore mimmo = daofornitore.getByID(1);
-            System.out.println("Fornitore: "+f.getNome() +" " + f.getStato());
+            //System.out.println("Fornitore: "+f.getNome() +" " + f.getStato());
             
             
             
@@ -35,15 +35,11 @@ public class TestDAO {
             //for(Fornitore f : fornitori){
               //   System.out.println(f.getIdfornitore());
             //}
-             Fornitore f2 = new Fornitore(1, "yyyyy", "BELBELBELA", "Capretti", "Carpisa", "Italia", "367239267111", "capra@gmail.com", "un altra descrizione");     
+             //Fornitore f2 = new Fornitore(1, "yyyyy", "BELBELBELA", "Capretti", "Carpisa", "Italia", "367239267111", "capra@gmail.com", "un altra descrizione");     
           
-            daofornitore.update(f2);
+            //daofornitore.update(f2);
 
-            
-            
-            
-            
-         
+            daofornitore.remove(1);
         
             
             

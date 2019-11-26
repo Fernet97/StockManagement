@@ -41,6 +41,7 @@ import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 
@@ -99,7 +100,7 @@ public class FramePrincipale extends JFrame{
         
         //Le tabelle ...
         JPanel TitoloTab1 = new JPanel ();
-        TitoloTab1.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Ultimi 15 prodotti in esaurimento", TitledBorder.CENTER,TitledBorder.TOP));
+        TitoloTab1.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (EtchedBorder.RAISED, Color.red, Color.red),"Ultimi 15 prodotti in esaurimento", TitledBorder.RIGHT,TitledBorder.TOP));
         String[] columns = new String[] {"Nome", "Quantità"};
         Object[][] data = new Object[][] {{"XXXXXX", 14}, {"YYYYYY", 21}, {"ZZZZZZZ", 17}};
         JTable table = new JTable(data, columns);       
@@ -107,14 +108,13 @@ public class FramePrincipale extends JFrame{
         TitoloTab1.add(sp);
         
         JPanel TitoloTab2 = new JPanel ();
-        TitoloTab2.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Giorni all'arrivo", TitledBorder.CENTER,TitledBorder.TOP));
+        TitoloTab2.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (EtchedBorder.RAISED, Color.red, Color.red),"Giorni all'arrivo", TitledBorder.RIGHT,TitledBorder.TOP));
         String[] columns2 = new String[] {"Nome", "Quantità"};
         Object[][] data2 = new Object[][] {{"XXXXXX", 344}, {"YYYYYY", 644}, {"ZZZZZZZ", 28}};
         JTable table2 = new JTable(data2, columns2);        
         JScrollPane sp2 = new JScrollPane(table2); 
         TitoloTab2.add(sp2);
         
-
 
         pannelloTab.setLayout(new GridLayout(2,1));
         pannelloTab.add(TitoloTab1);
@@ -123,7 +123,7 @@ public class FramePrincipale extends JFrame{
 
         //Aggiungi tutto a questo Jpanel HomePage
         JPanel pannelloprinc = new JPanel ();
-        pannelloprinc.setLayout(new GridLayout(1,2, 20, 20));
+        pannelloprinc.setLayout(new GridLayout(1,2, 150, 100));
         pannelloprinc.add(pannellodash);
         pannelloprinc.add(pannelloTab);
         pannelloprinc.setBorder(new EmptyBorder(20, 0, 0, 0)); // per dare un po di margini
@@ -131,8 +131,7 @@ public class FramePrincipale extends JFrame{
         setLayout(new BorderLayout());
         add(pannelloprinc, BorderLayout.CENTER);
         add(new JLabel("                           "), BorderLayout.NORTH); //Soluzioni rustiche
-        add(new JLabel("                           "), BorderLayout.WEST); //Soluzioni rustiche
-        add(new JLabel("                           "), BorderLayout.EAST); //Soluzioni rustiche
+        add(new JLabel("                           "), BorderLayout.EAST); //Soluzioni rustiche       
         add(new JLabel("                           "), BorderLayout.SOUTH); //Soluzioni rustiche
         
         
@@ -165,6 +164,8 @@ public class FramePrincipale extends JFrame{
         pannellolaterale.setBorder(new EmptyBorder(10, 0, 0, 40)); // per dare un po di margini
         
         add(pannellolaterale, BorderLayout.WEST);
+        
+        
         
         
 

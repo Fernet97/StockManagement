@@ -185,5 +185,32 @@ public class FornitoreDAO {
 
                 
 	}        
+        
+        
+        
+	public synchronized void remove(int id) throws SQLException {
+	
+		Connection connection = null;
+		Statement  statement = null;
+
+		String query = "DELETE FROM " + this.TABLE_NAME + " WHERE idfornitori ="+id;
+
+		try {
+			connection = DriverManagerConnectionPool.getConnection();
+			statement = connection.createStatement();
+			int deleted = statement.executeUpdate(query);
+			connection.commit();
+
+		} finally {
+			try {
+				if (statement != null)
+					statement.close();
+			} finally {
+				DriverManagerConnectionPool.releaseConnection(connection);
+			}
+		}
+	
+	
+	}
 
 }
