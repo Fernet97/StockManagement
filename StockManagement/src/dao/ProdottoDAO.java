@@ -146,5 +146,59 @@ public class ProdottoDAO {
                                     }
                         }
         }
+        public synchronized void update (Prodotto p) throws SQLException{
+                        Connection connection = null;
+                        PreparedStatement ps = null;
+                        
+                        System.out.println("start here");
+                        
+                                    String insertSQL = "UPDATE prodotti SET sku = ?, datareg = ?, nome = ?, categoria = ?, instock = ?, descrizione = ?,  giorni_alla_consegna = ?, qty = ?, costo = ?,  foto = ? WHERE sku = "+p.getSku();
+                          
+                        connection = DriverManagerConnectionPool.getConnection();
+                        ps = connection.prepareStatement(insertSQL);     
+                        
+                        
+                        ps.setString(1, p.getSku());
+                        ps.setString(2, p.getDataReg());
+                        ps.setString(3, p.getNome());
+                        ps.setString(4, p.getCategoria());
+                        ps.setBoolean(5, p.isInStock());
+                        ps.setString(6, p.getDescrizione());
+                        ps.setInt(7, p.getGiorni_alla_consegna());
+                        ps.setInt(8, p.getQty());
+                        ps.setFloat(9, p.getCosto());
+                        ps.setString(10, p.getFoto());
+                        
+                        ps.executeUpdate();
+                        
+                        connection.commit();
+        }
+        
+            public synchronized void remove (int sku) throws SQLException{
+                        Connection connection = null;
+                        Statement  statement = null;
+
+		String query = "DELETE FROM " + this.TABLE_NAME + " WHERE sku ="+sku;
+
+                        try {
+                                connection = DriverManagerConnectionPool.getConnection();
+                                statement = connection.createStatement();
+                                int deleted = statement.executeUpdate(query);
+                                connection.commit();
+
+                                    }
+                                        finally {
+                                                            try {
+                                                                    if (statement != null)
+                                                                        statement.close();
+                                                                            }
+                                                                                    finally {
+				DriverManagerConnectionPool.releaseConnection(connection);
+                                                                                                        }
+                                                            }
+	
+	
+	}
+
 }
 
