@@ -1,6 +1,8 @@
 
 import beans.Fornitore;
+import beans.Prodotto;
 import dao.FornitoreDAO;
+import dao.ProdottoDAO;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.logging.Level;
@@ -21,27 +23,32 @@ public class TestDAO {
      public static void main(String[] args) {
     
         try {
+            
+            /*
              FornitoreDAO daofornitore = new FornitoreDAO();
             
-            //Fornitore f = new Fornitore(2, "zzzzz", "Accipicchia", "AHAHAH", "Paccc", "Svizzera", "23423423423", "uanm@gmail.com", "descrizione a caso");     
-            //daofornitore.add(f);
-            //Fornitore mimmo = daofornitore.getByID(1);
-            //System.out.println("Fornitore: "+f.getNome() +" " + f.getStato());
+            Fornitore f = new Fornitore(2, "zzzzz", "Accipicchia", "AHAHAH", "Paccc", "Svizzera", "23423423423", "uanm@gmail.com", "descrizione a caso");     
+            daofornitore.add(f);
+            Fornitore mimmo = daofornitore.getByID(1);
+            System.out.println("Fornitore: "+f.getNome() +" " + f.getStato());
             
             
             
-            //Collection<Fornitore> fornitori = daofornitore.getAll();
+            Collection<Fornitore> fornitori = daofornitore.getAll();
             
-            //for(Fornitore f : fornitori){
-              //   System.out.println(f.getIdfornitore());
-            //}
-             //Fornitore f2 = new Fornitore(1, "yyyyy", "BELBELBELA", "Capretti", "Carpisa", "Italia", "367239267111", "capra@gmail.com", "un altra descrizione");     
+            for(Fornitore f : fornitori){
+              System.out.println(f.getIdfornitore());
+            }
+            Fornitore f2 = new Fornitore(1, "yyyyy", "BELBELBELA", "Capretti", "Carpisa", "Italia", "367239267111", "capra@gmail.com", "un altra descrizione");     
           
-            //daofornitore.update(f2);
+            daofornitore.update(f2);
 
             daofornitore.remove(1);
         
-            
+            */
+            ProdottoDAO dao = new ProdottoDAO();
+            Prodotto pr = new Prodotto("aoijso2", "27-12-12", "ping", "pong", true, "una descrizione a caso", 23, 87, 12.4f, "foto.png");
+            dao.add(pr);
             
             
         } catch (SQLException ex) {

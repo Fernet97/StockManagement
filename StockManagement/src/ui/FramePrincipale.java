@@ -8,6 +8,8 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagLayout;
@@ -67,6 +69,8 @@ public class FramePrincipale extends JFrame{
         CreaMenu();
         
 
+               
+
         //***** AGGIUNGI LE CARTE/SCHERMATE *********
         
         JPanel HomePanel = new JPanel(new CardLayout());
@@ -82,15 +86,43 @@ public class FramePrincipale extends JFrame{
         anagrafiche.add(new JLabel(" a n a g r a f i c h e !  ! !"));
         anagrafiche.setBackground(Color.red);
         HomePanel.add(anagrafiche, "ANAGRAFICHE");
+
+
+        //Barra Laterale (rimarrà fissa per ogni schermata)
+        JPanel pannellolaterale = new JPanel();
+        JLabel TitleLaterale = new JLabel("       DASHBOARD       "); //Per dare ampiezza al jpanel
+        TitleLaterale.setFont(new Font("Arial Black", Font.BOLD, 20));
+        pannellolaterale.setLayout(new BoxLayout(pannellolaterale, BoxLayout.Y_AXIS));
+        TitleLaterale.setAlignmentX(CENTER_ALIGNMENT);  
+        pannellolaterale.add(TitleLaterale);
         
-
-
+        JPanel pannelloOpzioni = new JPanel();
+        pannelloOpzioni.setLayout(new GridLayout(5, 1, 30, 30));
+        pannelloOpzioni.add(new JButton("Home"));     
+        JButton buttonAnagrafiche = new JButton("Anagrafiche");
+        buttonAnagrafiche.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        cardlayout.show(HomePanel, "ANAGRAFICHE");
+                    }
+                });;
+        pannelloOpzioni.add(buttonAnagrafiche);        
+        pannelloOpzioni.add(new JButton("Categorie"));
+        pannelloOpzioni.add(new JButton("Prodotti"));
+        pannelloOpzioni.add(new JButton("Codici"));
+        pannelloOpzioni.setAlignmentX(CENTER_ALIGNMENT);
+        pannelloOpzioni.setBackground(new Color( 128, 128, 128));
+        pannellolaterale.add(pannelloOpzioni);
+        pannellolaterale.setBorder(new EmptyBorder(10, 0, 0, 40)); // per dare un po di margini
+        
+        
+        //************ CARD DASHBOARD ****************
         JPanel pannellodash = new JPanel();
         JPanel pannelloTab = new JPanel();
-        dashboard.add(pannellodash);
-        dashboard.add(pannelloTab);
+  
+        // i pulsantoni della dashboard
         pannellodash.setLayout(new GridLayout(3,2, 50, 70));
-       
+
         for(int i =0; i<6; i++){
             JButton button = new JButton("Ciao"+ i);
             button.setBackground(new Color( 66, 139, 221));
@@ -119,57 +151,19 @@ public class FramePrincipale extends JFrame{
         pannelloTab.setLayout(new GridLayout(2,1));
         pannelloTab.add(TitoloTab1);
         pannelloTab.add(TitoloTab2);
-
-
-        //Aggiungi tutto a questo Jpanel HomePage
-        JPanel pannelloprinc = new JPanel ();
-        pannelloprinc.setLayout(new GridLayout(1,2, 150, 100));
-        pannelloprinc.add(pannellodash);
-        pannelloprinc.add(pannelloTab);
-        pannelloprinc.setBorder(new EmptyBorder(20, 0, 0, 0)); // per dare un po di margini
-
-        setLayout(new BorderLayout());
-        add(pannelloprinc, BorderLayout.CENTER);
+        pannelloTab.setBorder(new EmptyBorder(20, 200, 20, 50));
+                         
+                       
+        dashboard.setLayout (new GridLayout(1,2));  
+        dashboard.add(pannellodash);
+        dashboard.add(pannelloTab);  
+        
+ 
+        add(pannellolaterale, BorderLayout.WEST); 
+        add(HomePanel, BorderLayout.CENTER);
+        //X dar magini verticali...
         add(new JLabel("                           "), BorderLayout.NORTH); //Soluzioni rustiche
-        add(new JLabel("                           "), BorderLayout.EAST); //Soluzioni rustiche       
         add(new JLabel("                           "), BorderLayout.SOUTH); //Soluzioni rustiche
-        
-        
-        
-        //Barra Laterale
-        JPanel pannellolaterale = new JPanel();
-        JLabel TitleLaterale = new JLabel("       DASHBOARD       "); //Per dare ampiezza al jpanel
-        TitleLaterale.setFont(new Font("Arial Black", Font.BOLD, 20));
-        pannellolaterale.setLayout(new BoxLayout(pannellolaterale, BoxLayout.Y_AXIS));
-        TitleLaterale.setAlignmentX(CENTER_ALIGNMENT);  
-        pannellolaterale.add(TitleLaterale);
-        
-        JPanel pannelloOpzioni = new JPanel();
-        pannelloOpzioni.setLayout(new GridLayout(5, 1, 30, 30));
-        pannelloOpzioni.add(new JButton("Home"));     
-        JButton buttonAnagrafiche = new JButton("Anagrafiche");
-        buttonAnagrafiche.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        cardlayout.show(HomePanel, "ANAGRAFICHE");
-                    }
-                });;
-        pannelloOpzioni.add(buttonAnagrafiche);        
-        pannelloOpzioni.add(new JButton("Categorie"));
-        pannelloOpzioni.add(new JButton("Prodotti"));
-        pannelloOpzioni.add(new JButton("Codici"));
-        pannelloOpzioni.setAlignmentX(CENTER_ALIGNMENT);
-        pannelloOpzioni.setBackground(new Color( 128, 128, 128));
-        pannellolaterale.add(pannelloOpzioni);
-        pannellolaterale.setBorder(new EmptyBorder(10, 0, 0, 40)); // per dare un po di margini
-        
-        add(pannellolaterale, BorderLayout.WEST);
-        
-        
-        
-        
-
-
     }
 
     
