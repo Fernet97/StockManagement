@@ -134,7 +134,8 @@ public class LoginDialog extends javax.swing.JDialog {
                         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         mainFrame.setVisible(true);
                         mainFrame.setTitle("$tock managemenT");  
-                        mainFrame.setSize(1500, 1050);
+                        mainFrame.setSize(1750, 1050);
+                        mainFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
                         dispose();       
             }
 }

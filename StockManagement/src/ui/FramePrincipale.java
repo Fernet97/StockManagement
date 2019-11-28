@@ -5,6 +5,7 @@
  */
 package ui;
 
+import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -21,6 +22,10 @@ import java.awt.MenuItem;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.RoundRectangle2D;
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +49,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 
@@ -53,6 +59,10 @@ import javax.swing.border.TitledBorder;
  */
 public class FramePrincipale extends JFrame{
     
+    private JPanel HomePanel;
+    private CardLayout cardlayout;
+    private JPanel pannellolaterale;
+
     
     public FramePrincipale(){
            CreaGUI();
@@ -67,14 +77,11 @@ public class FramePrincipale extends JFrame{
         
         //Aggiungi barra Menu
         CreaMenu();
-        
-
-               
 
         //***** AGGIUNGI LE CARTE/SCHERMATE *********
         
-        JPanel HomePanel = new JPanel(new CardLayout());
-        CardLayout cardlayout = new CardLayout();
+        HomePanel = new JPanel(new CardLayout());
+        cardlayout = new CardLayout();
         HomePanel.setLayout(cardlayout);
                 
         //Aggiungi la carta "DASHBOARD"
@@ -84,12 +91,11 @@ public class FramePrincipale extends JFrame{
         //Aggiungi la carta "ANAGRAFICHE"
         JPanel anagrafiche =new JPanel();
         anagrafiche.add(new JLabel(" a n a g r a f i c h e !  ! !"));
-        anagrafiche.setBackground(Color.red);
         HomePanel.add(anagrafiche, "ANAGRAFICHE");
 
 
         //Barra Laterale (rimarrà fissa per ogni schermata)
-        JPanel pannellolaterale = new JPanel();
+        pannellolaterale = new JPanel();
         JLabel TitleLaterale = new JLabel("       DASHBOARD       "); //Per dare ampiezza al jpanel
         TitleLaterale.setFont(new Font("Arial Black", Font.BOLD, 20));
         pannellolaterale.setLayout(new BoxLayout(pannellolaterale, BoxLayout.Y_AXIS));
@@ -98,20 +104,13 @@ public class FramePrincipale extends JFrame{
         
         JPanel pannelloOpzioni = new JPanel();
         pannelloOpzioni.setLayout(new GridLayout(5, 1, 30, 30));
-        pannelloOpzioni.add(new JButton("Home"));     
-        JButton buttonAnagrafiche = new JButton("Anagrafiche");
-        buttonAnagrafiche.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        cardlayout.show(HomePanel, "ANAGRAFICHE");
-                    }
-                });;
-        pannelloOpzioni.add(buttonAnagrafiche);        
-        pannelloOpzioni.add(new JButton("Categorie"));
-        pannelloOpzioni.add(new JButton("Prodotti"));
-        pannelloOpzioni.add(new JButton("Codici"));
+        pannelloOpzioni.add(new ButtonLaterale("box.png"));
+        pannelloOpzioni.add(new ButtonLaterale("box.png"));
+        pannelloOpzioni.add(new ButtonLaterale("box.png"));
+        pannelloOpzioni.add(new ButtonLaterale("box.png"));
+        pannelloOpzioni.add(new ButtonLaterale("box.png"));
         pannelloOpzioni.setAlignmentX(CENTER_ALIGNMENT);
-        pannelloOpzioni.setBackground(new Color( 128, 128, 128));
+        //pannelloOpzioni.setBackground(new Color( 128, 128, 128));
         pannellolaterale.add(pannelloOpzioni);
         pannellolaterale.setBorder(new EmptyBorder(10, 0, 0, 40)); // per dare un po di margini
         
@@ -188,8 +187,88 @@ public class FramePrincipale extends JFrame{
         setJMenuBar(menu);
     }
 
-   
+ 
 
 
-    
+
+ class ButtonLaterale extends JPanel{
+	
+	private final String tipo;
+        public boolean premuto = false; // per button nel pannello laterale
+
+        
+	public ButtonLaterale(String tipo) {
+		super();
+                this.tipo = tipo;
+		super.setBackground(new Color( 128, 128, 128));
+                
+                super.setLayout(new GridLayout(1,2));
+
+
+                JPanel etichetta1 =  new JPanel();
+                etichetta1.setBackground(Color.red);
+  
+                JPanel pan = new JPanel();
+                pan.setBackground(new Color( 128, 128, 128));
+                JLabel icon = new JLabel(ImpostaImg(tipo));
+                icon.setBorder(new EmptyBorder(5, 0, 0, 0));
+                JLabel testo = new  JLabel("   Prodotti");
+                testo.setFont(new Font("Arial Black", Font.BOLD, 18));
+                pan.setLayout(new GridLayout(2,1));
+                pan.add(icon);
+                pan.add(testo);
+                               
+                super.add(etichetta1);
+                super.add(pan);
+                
+                super.addMouseListener(new MouseListener() {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                       pan.setBackground(Color.red);
+                    }
+
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                       ButtonLaterale bottonepremuto =(ButtonLaterale) e.getSource();
+                       bottonepremuto.premuto = true;
+                       cardlayout.show(HomePanel, "ANAGRAFICHE");
+                       pan.setBackground(Color.red);
+                       HomePanel.setBorder(BorderFactory.createMatteBorder(0, 20, 0, 0, Color.red));
+                       pannellolaterale.setBorder(new EmptyBorder(10, 0, 0, 10)); // per dare un po di margini
+       
+                       
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {}
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {}
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                      ButtonLaterale bottonepremuto =(ButtonLaterale) e.getSource();
+                       if(!bottonepremuto.premuto)
+                             pan.setBackground(new Color( 128, 128, 128));  
+                    }
+
+                });
+               
+                
+	}
+	
+
+	public ImageIcon ImpostaImg(String nomeImmag) {
+
+                ImageIcon icon = new ImageIcon(nomeImmag);
+		Image ImmagineScalata = icon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+		icon.setImage(ImmagineScalata);
+                return icon;
+	}
+
+
+
+		
+    }
+ 
 }
