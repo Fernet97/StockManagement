@@ -113,7 +113,7 @@ public class ProdottoDAO {
                         PreparedStatement ps = null;
         
                         String insertSQL= "INSERT INTO " + TABLE_NAME
-                                                                      + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";       
+                                                                      + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";       
                         
                         try{
                                     connection = DriverManagerConnectionPool.getConnection();

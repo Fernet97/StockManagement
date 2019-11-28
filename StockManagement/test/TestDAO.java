@@ -29,7 +29,7 @@ public class TestDAO {
             
             Fornitore f = new Fornitore(2, "zzzzz", "Accipicchia", "AHAHAH", "Paccc", "Svizzera", "23423423423", "uanm@gmail.com", "descrizione a caso");     
             daofornitore.add(f);
-            Fornitore mimmo = daofornitore.getByID(1);
+           // Fornitore mimmo = daofornitore.getByID(1);
             System.out.println("Fornitore: "+f.getNome() +" " + f.getStato());
             
             
@@ -44,10 +44,9 @@ public class TestDAO {
             daofornitore.update(f2);
 
             daofornitore.remove(1);
-        
-            */
+        */
             ProdottoDAO dao = new ProdottoDAO();
-            Prodotto pr = new Prodotto("aoijso2", "27-12-12", "ping", "pong", true, "una descrizione a caso", 23, 87, 12.4f, "foto.png");
+            Prodotto pr = new Prodotto("aoi", "27-12-12", "ping", "pong", true, "una descrizione a caso", 23, 87, 12.4f,  "foto.png");
             dao.add(pr);
             
             
