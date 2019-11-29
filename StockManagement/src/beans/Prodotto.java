@@ -5,6 +5,9 @@
  */
 package beans;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author LittleJoke
@@ -25,8 +28,7 @@ public class Prodotto {
     
     //constructor
 
-    public Prodotto(String sku, String datareg, String nome, String categoria, boolean instock, String descrizione, int giorni_alla_consegna, int qty, float costo, String foto) {
-        this.sku = sku;
+    public Prodotto(String nome, String categoria, boolean instock, String descrizione, int giorni_alla_consegna, int qty, float costo, String foto) {
         this.datareg = datareg;
         this.nome = nome;
         this.categoria = categoria;
@@ -36,6 +38,8 @@ public class Prodotto {
         this.qty = qty;
         this.costo = costo;
         this.foto = foto;
+        setDataReg(generateData());
+        setSku(generateSKU());
     }
     
     public Prodotto(){}
@@ -123,5 +127,29 @@ public class Prodotto {
         this.foto = foto;
     }
     
+    
+    public String generateData() {
+       
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+	LocalDateTime now = LocalDateTime.now();
+	System.out.println(dtf.format(now)); //2016/11/16 12:08:43
+        return dtf.format(now);
+     
+     }
+     
+     
+    
+    public String generateSKU(){
+        
+        String skuGenerato = getCategoria().substring(0, 2);
+        skuGenerato += "1/";
+        skuGenerato += getDataReg();
+        
+        
+       return skuGenerato;
+        
+    }
+
+
     
 }

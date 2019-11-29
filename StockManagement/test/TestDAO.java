@@ -24,30 +24,38 @@ public class TestDAO {
     
         try {
             
-            /*
-             FornitoreDAO daofornitore = new FornitoreDAO();
             
+             //FornitoreDAO daofornitore = new FornitoreDAO();
+           
+             /*
             Fornitore f = new Fornitore(2, "zzzzz", "Accipicchia", "AHAHAH", "Paccc", "Svizzera", "23423423423", "uanm@gmail.com", "descrizione a caso");     
             daofornitore.add(f);
            // Fornitore mimmo = daofornitore.getByID(1);
             System.out.println("Fornitore: "+f.getNome() +" " + f.getStato());
+            */
             
+           /*Fornitore f2 = new Fornitore(2, "yyyyy", "BELBELBELA", "Capretti", "Carpisa", "Italia", "367239267111", "capra@gmail.com", "un altra descrizione");     
+           daofornitore.update(f2);
+            */
+           
+           
+           //daofornitore.remove(2);
+           
             
-            
-            Collection<Fornitore> fornitori = daofornitore.getAll();
+           /* Collection<Fornitore> fornitori = daofornitore.getAll();
             
             for(Fornitore f : fornitori){
               System.out.println(f.getIdfornitore());
             }
-            Fornitore f2 = new Fornitore(1, "yyyyy", "BELBELBELA", "Capretti", "Carpisa", "Italia", "367239267111", "capra@gmail.com", "un altra descrizione");     
           
-            daofornitore.update(f2);
 
             daofornitore.remove(1);
-        */
-            ProdottoDAO dao = new ProdottoDAO();
-            Prodotto pr = new Prodotto("aoi", "27-12-12", "ping", "pong", true, "una descrizione a caso", 23, 87, 12.4f,  "foto.png");
-            dao.add(pr);
+        
+            */
+           ProdottoDAO dao = new ProdottoDAO();
+           Prodotto pr = new Prodotto("cccccc", "diodi", true, " caso2", 23, 87, 12.4f,  "foto.png");
+           dao.add(pr);
+          //System.out.println("Ho trovato: "+ pp.getNome());
             
             
         } catch (SQLException ex) {

@@ -64,7 +64,7 @@ public class ProdottoDAO {
                                                 
     }
       
-        public  synchronized Prodotto getBySku(int sku) throws SQLException{
+        public  synchronized Prodotto getBySku(String sku) throws SQLException{
              
             Connection connection = null;
              PreparedStatement ps = null;
@@ -76,7 +76,7 @@ public class ProdottoDAO {
                  		try  {
                                                         connection = DriverManagerConnectionPool.getConnection();
                                                         ps = connection.prepareStatement(selectSQL);
-                                                        ps.setInt(1, sku);// FA RIFERIMENTO AL NOME ED AL NUMERO DELLA COLONNA NEL DB
+                                                        ps.setString(1, sku);// FA RIFERIMENTO AL NOME ED AL NUMERO DELLA COLONNA NEL DB
 
                                                         ResultSet rs = ps.executeQuery();
                                                         
@@ -146,10 +146,27 @@ public class ProdottoDAO {
                                     }
                         }
         }
-        public synchronized void update (Prodotto p) throws SQLException{
+        public synchronized void update (Prodotto p) throws SQLException{ //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
                         Connection connection = null;
                         PreparedStatement ps = null;
                         
+                        Prodotto p1 = getBySku(p.getSku());  // i dati del record vecchio che voglio modificare
+                        remove(p.getSku()); 
+
+                        p1.setSku("uno sku generato");
+                        p1.setNome(p.getNome());
+                        p1.setDataReg(p.getDataReg());
+                        p1.setCategoria(p.getCategoria());
+                        p1.setInStock(p.isInStock());
+                        p1.setDescrizione(p.getDescrizione());
+                        p1.setGiorni_alla_consegna(p.getGiorni_alla_consegna());
+                        p1.setQty(p.getQty());
+                        p1.setCosto(p.getCosto());
+                        p1.setFoto(p.getFoto());
+                        add(p1);
+
+                           
+                        /*
                         System.out.println("start here");
                         
                                     String insertSQL = "UPDATE prodotti SET sku = ?, datareg = ?, nome = ?, categoria = ?, instock = ?, descrizione = ?,  giorni_alla_consegna = ?, qty = ?, costo = ?,  foto = ? WHERE sku = "+p.getSku();
@@ -171,19 +188,20 @@ public class ProdottoDAO {
                         
                         ps.executeUpdate();
                         
-                        connection.commit();
+                        connection.commit();*/
         }
         
-            public synchronized void remove (int sku) throws SQLException{
+            public synchronized void remove (String sku) throws SQLException{
                         Connection connection = null;
                         Statement  statement = null;
 
-		String query = "DELETE FROM " + this.TABLE_NAME + " WHERE sku ="+sku;
+		String query = "DELETE FROM " + this.TABLE_NAME + " WHERE sku ='"+sku+"'";
+                System.out.println(query);
 
                         try {
                                 connection = DriverManagerConnectionPool.getConnection();
                                 statement = connection.createStatement();
-                                int deleted = statement.executeUpdate(query);
+                                statement.executeUpdate(query);
                                 connection.commit();
 
                                     }
