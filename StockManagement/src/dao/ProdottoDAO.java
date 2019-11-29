@@ -29,7 +29,7 @@ public class ProdottoDAO {
                                                 
                                                 Collection<Prodotto> prodotti = new  LinkedList<Prodotto>();
                                                 
-                                                String selectSQL = "SELECT * FROM " + this.TABLE_NAME;
+                                                String selectSQL = "SELECT * FROM " + this.TABLE_NAME+ "order by datareg";
          
                                                 try {
 			connection = DriverManagerConnectionPool.getConnection();
@@ -217,6 +217,50 @@ public class ProdottoDAO {
 	
 	
 	}
+            
+            
+        public synchronized Prodotto getLastProdotto() throws SQLException{
+        
+            Connection connection = null;
+            Statement  ps = null;
+            Prodotto bean = new Prodotto();
+
+
+            String query = "select* from prodotti order by datareg DESC LIMIT 1";      
+                 		try  {
+                                                        connection = DriverManagerConnectionPool.getConnection();
+                                                        ps = connection.prepareStatement(query);
+
+                                                        ResultSet rs = ps.executeQuery(query);
+                                                        
+                                                        while (rs.next()) {
+                                                                                                
+                                                                                                bean.setSku(rs.getString("sku"));
+                                                                                                bean.setDataReg(rs.getString("datareg"));
+                                                                                                bean.setNome(rs.getString("nome"));
+                                                                                                bean.setCategoria(rs.getString("categoria"));
+                                                                                                bean.setInStock(rs.getBoolean("instock"));
+                                                                                                bean.setDescrizione(rs.getString("descrizione"));
+                                                                                                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
+                                                                                                bean.setQty(rs.getInt("qty"));
+                                                                                                bean.setCosto(rs.getFloat("costo"));
+                                                                                                bean.setFoto(rs.getString("foto"));
+                                                                                                  
+                                                                                    }
+                                }
+                                                finally {
+			try {
+                                                                                if (ps != null)
+                                                                                    ps.close();
+                                                                            }
+                                                                          finally {
+                                                                                    DriverManagerConnectionPool.releaseConnection(connection);
+                                                                                    }
+                        
+                                                  }
+                                                return bean;
+        
+        }
 
 }
 

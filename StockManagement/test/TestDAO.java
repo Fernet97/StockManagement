@@ -22,7 +22,7 @@ public class TestDAO {
     
      public static void main(String[] args) {
     
-        try {
+       try {
             
             
              //FornitoreDAO daofornitore = new FornitoreDAO();
@@ -53,12 +53,14 @@ public class TestDAO {
         
             */
            ProdottoDAO dao = new ProdottoDAO();
-           Prodotto pr = new Prodotto("cccccc", "diodi", true, " caso2", 23, 87, 12.4f,  "foto.png");
-           dao.add(pr);
+           Prodotto pr1 = new Prodotto("1N9099", "DIODO", true, " caso2", 23, 87, 12.4f,  "foto.png");
+           dao.add(pr1);
+           System.out.println("ultimo index:"+pr1.leggiUltimoSku());
+
           //System.out.println("Ho trovato: "+ pp.getNome());
             
             
-        } catch (SQLException ex) {
+       } catch (SQLException ex) {
             Logger.getLogger(TestDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     
