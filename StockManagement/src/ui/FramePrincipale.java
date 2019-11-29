@@ -62,6 +62,7 @@ public class FramePrincipale extends JFrame{
     private JPanel HomePanel;
     private CardLayout cardlayout;
     private JPanel pannellolaterale;
+    private JPanel pannelloOpzioni;
 
     
     public FramePrincipale(){
@@ -86,12 +87,29 @@ public class FramePrincipale extends JFrame{
                 
         //Aggiungi la carta "DASHBOARD"
         JPanel dashboard = new JPanel();
-        HomePanel.add(dashboard, "DASHBOARD");
+        HomePanel.add(dashboard, "Dashboard");
+        
+        //Aggiungi la carta "ORDINI"
+        JPanel ordini =new JPanel();
+        ordini.add(new JLabel(" O R D I I N I !  ! !"));
+        HomePanel.add(ordini, "Ordini");
         
         //Aggiungi la carta "ANAGRAFICHE"
         JPanel anagrafiche =new JPanel();
         anagrafiche.add(new JLabel(" a n a g r a f i c h e !  ! !"));
-        HomePanel.add(anagrafiche, "ANAGRAFICHE");
+        HomePanel.add(anagrafiche, "Anagrafiche");
+        
+        
+        // Aggiungi la carta "CATEGORIE"
+        JPanel categorie =new JPanel();
+        categorie.add(new JLabel("  C A T E G O R I E!  ! !"));
+        HomePanel.add(categorie, "Categorie");      
+        
+        // Aggiungi la carta "CODICI"
+        JPanel codici =new JPanel();
+        codici.add(new JLabel(" CODICI !  ! !"));
+        HomePanel.add(codici, "Codici");      
+        
 
 
         //Barra Laterale (rimarrà fissa per ogni schermata)
@@ -102,16 +120,17 @@ public class FramePrincipale extends JFrame{
         TitleLaterale.setAlignmentX(CENTER_ALIGNMENT);  
         pannellolaterale.add(TitleLaterale);
         
-        JPanel pannelloOpzioni = new JPanel();
-        pannelloOpzioni.setLayout(new GridLayout(5, 1, 30, 30));
-        pannelloOpzioni.add(new ButtonLaterale("box.png"));
-        pannelloOpzioni.add(new ButtonLaterale("box.png"));
-        pannelloOpzioni.add(new ButtonLaterale("box.png"));
-        pannelloOpzioni.add(new ButtonLaterale("box.png"));
-        pannelloOpzioni.add(new ButtonLaterale("box.png"));
+        pannelloOpzioni = new JPanel();
+        pannelloOpzioni.setLayout(new GridLayout(6, 1, 30, 30));
+        pannelloOpzioni.add(new ButtonLaterale("Dashboard"));
+        pannelloOpzioni.add(new ButtonLaterale("Ordini"));
+        pannelloOpzioni.add(new ButtonLaterale("Anagrafiche"));
+        pannelloOpzioni.add(new ButtonLaterale("Categorie"));
+        pannelloOpzioni.add(new ButtonLaterale("Codici"));
         pannelloOpzioni.setAlignmentX(CENTER_ALIGNMENT);
         //pannelloOpzioni.setBackground(new Color( 128, 128, 128));
         pannellolaterale.add(pannelloOpzioni);
+
         pannellolaterale.setBorder(new EmptyBorder(10, 0, 0, 40)); // per dare un po di margini
         
         
@@ -193,8 +212,12 @@ public class FramePrincipale extends JFrame{
 
  class ButtonLaterale extends JPanel{
 	
-	private final String tipo;
+	public final String tipo;
         public boolean premuto = false; // per button nel pannello laterale
+        private Color color_etichetta;
+        private JLabel icon;
+        private int code;
+        private final JPanel pan;
 
         
 	public ButtonLaterale(String tipo) {
@@ -203,16 +226,44 @@ public class FramePrincipale extends JFrame{
 		super.setBackground(new Color( 128, 128, 128));
                 
                 super.setLayout(new GridLayout(1,2));
+                
+                        
+                if(tipo.equals("Dashboard")){
+                    icon = new JLabel(ImpostaImg("home.png"));
+                    color_etichetta = Color.blue;
+                    code = 0;
 
+                }
+                if(tipo.equals("Ordini")){
+                    icon = new JLabel(ImpostaImg("ordini.png"));
+                    color_etichetta = Color.orange; 
+                    code = 1;
+                
+                }   
+                if(tipo.equals("Anagrafiche")){
+                    icon = new JLabel(ImpostaImg("anagrafiche.png"));
+                    color_etichetta = Color.yellow;                   
+                    code = 2;
+                }       
+                
+                if(tipo.equals("Categorie")){
+                    icon = new JLabel(ImpostaImg("categorie.png"));
+                    color_etichetta = Color.cyan;                   
+                    code = 3;
+                }                     
+               if(tipo.equals("Codici")){
+                    icon = new JLabel(ImpostaImg("codici.png"));
+                    color_etichetta = Color.WHITE;                   
+                    code = 4;
+                }
 
                 JPanel etichetta1 =  new JPanel();
-                etichetta1.setBackground(Color.red);
+                etichetta1.setBackground(color_etichetta);
   
-                JPanel pan = new JPanel();
+                pan = new JPanel();
                 pan.setBackground(new Color( 128, 128, 128));
-                JLabel icon = new JLabel(ImpostaImg(tipo));
                 icon.setBorder(new EmptyBorder(5, 0, 0, 0));
-                JLabel testo = new  JLabel("   Prodotti");
+                JLabel testo = new  JLabel("  "+tipo);
                 testo.setFont(new Font("Arial Black", Font.BOLD, 18));
                 pan.setLayout(new GridLayout(2,1));
                 pan.add(icon);
@@ -224,16 +275,19 @@ public class FramePrincipale extends JFrame{
                 super.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseEntered(MouseEvent e) {
-                       pan.setBackground(Color.red);
+                       pan.setBackground(color_etichetta);
                     }
 
                     @Override
                     public void mouseClicked(MouseEvent e) {
                        ButtonLaterale bottonepremuto =(ButtonLaterale) e.getSource();
                        bottonepremuto.premuto = true;
-                       cardlayout.show(HomePanel, "ANAGRAFICHE");
-                       pan.setBackground(Color.red);
-                       HomePanel.setBorder(BorderFactory.createMatteBorder(0, 20, 0, 0, Color.red));
+                                                                     
+                       disattivaTuttiIBottoniTranne(bottonepremuto.code);
+                        
+                       cardlayout.show(HomePanel, tipo);
+                       pan.setBackground(color_etichetta);
+                       HomePanel.setBorder(BorderFactory.createMatteBorder(0, 20, 0, 0, color_etichetta));
                        pannellolaterale.setBorder(new EmptyBorder(10, 0, 0, 10)); // per dare un po di margini
        
                        
@@ -250,18 +304,35 @@ public class FramePrincipale extends JFrame{
                       ButtonLaterale bottonepremuto =(ButtonLaterale) e.getSource();
                        if(!bottonepremuto.premuto)
                              pan.setBackground(new Color( 128, 128, 128));  
+                       
                     }
 
                 });
                
                 
 	}
+        
+        public void  disattivaTuttiIBottoniTranne(int cod){
+            for(int i=0; i< pannelloOpzioni.getComponentCount(); i++){
+                
+                if(i != cod) {
+                    ButtonLaterale b = (ButtonLaterale) pannelloOpzioni.getComponent(i);
+                    b.pan.setBackground(new Color( 128, 128, 128));  
+                    b.premuto = false;
+                }
+            
+            }
+        
+        }
 	
+        
+
+        
 
 	public ImageIcon ImpostaImg(String nomeImmag) {
 
                 ImageIcon icon = new ImageIcon(nomeImmag);
-		Image ImmagineScalata = icon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+		Image ImmagineScalata = icon.getImage().getScaledInstance(70, 70, Image.SCALE_DEFAULT);
 		icon.setImage(ImmagineScalata);
                 return icon;
 	}
