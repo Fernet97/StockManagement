@@ -2,6 +2,7 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -133,8 +134,10 @@ public class LoginDialog extends javax.swing.JDialog {
                         FramePrincipale mainFrame = new FramePrincipale();
                         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         mainFrame.setVisible(true);
+                        //mainFrame.setResizable(false);
                         mainFrame.setTitle("$tock managemenT");  
-                        mainFrame.setSize(1750, 1050);
+                        //mainFrame.setSize(1750, 1050);
+                        mainFrame.setMinimumSize(new Dimension(1750, 1050));
                         mainFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
                         dispose();       
             }
