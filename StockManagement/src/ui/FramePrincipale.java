@@ -88,29 +88,40 @@ public class FramePrincipale extends JFrame{
         //Aggiungi la carta "DASHBOARD"
         JPanel dashboard = new JPanel();
         HomePanel.add(dashboard, "Dashboard");
+
+        //Aggiungi la carta "ANAGRAFICHE"
+        AnagrafichePanel anagrafiche =new AnagrafichePanel();
+        HomePanel.add(anagrafiche, "Anagrafiche");
+                        
+
+        // Aggiungi la carta "CATEGORIE"
+        JPanel categorie =new JPanel();
+        categorie.add(new JLabel("  C A T E G O R I E!  ! !"));
+        HomePanel.add(categorie, "Categorie"); 
         
+        // Aggiungi la carta "PRODOTTO"
+        JPanel prodotti =new JPanel();
+        categorie.add(new JLabel("  P R O D O T T I!  ! !"));
+        HomePanel.add(prodotti, "Prodotti");        
+  
+        // Aggiungi la carta "CODICI"
+        JPanel codici =new JPanel();
+        codici.add(new JLabel(" CODICI !  ! !"));
+        HomePanel.add(codici, "Codici");          
+
+          
         //Aggiungi la carta "ORDINI"
         JPanel ordini =new JPanel();
         ordini.add(new JLabel(" O R D I I N I !  ! !"));
         HomePanel.add(ordini, "Ordini");
+  
+        //Aggiungi la carta "REPORT"
+        JPanel report =new JPanel();
+        report.add(new JLabel(" R E P O R T !  ! !"));
+        HomePanel.add(report, "Report");      
         
-        //Aggiungi la carta "ANAGRAFICHE"
-        JPanel anagrafiche =new JPanel();
-        anagrafiche.add(new JLabel(" a n a g r a f i c h e !  ! !"));
-        HomePanel.add(anagrafiche, "Anagrafiche");
         
-        
-        // Aggiungi la carta "CATEGORIE"
-        JPanel categorie =new JPanel();
-        categorie.add(new JLabel("  C A T E G O R I E!  ! !"));
-        HomePanel.add(categorie, "Categorie");      
-        
-        // Aggiungi la carta "CODICI"
-        JPanel codici =new JPanel();
-        codici.add(new JLabel(" CODICI !  ! !"));
-        HomePanel.add(codici, "Codici");      
-        
-
+ 
 
         //Barra Laterale (rimarrà fissa per ogni schermata)
         pannellolaterale = new JPanel();
@@ -121,12 +132,14 @@ public class FramePrincipale extends JFrame{
         pannellolaterale.add(TitleLaterale);
         
         pannelloOpzioni = new JPanel();
-        pannelloOpzioni.setLayout(new GridLayout(6, 1, 30, 30));
+        pannelloOpzioni.setLayout(new GridLayout(7, 1, 30, 30));
         pannelloOpzioni.add(new ButtonLaterale("Dashboard"));
-        pannelloOpzioni.add(new ButtonLaterale("Ordini"));
-        pannelloOpzioni.add(new ButtonLaterale("Anagrafiche"));
+        pannelloOpzioni.add(new ButtonLaterale("Anagrafiche")); 
         pannelloOpzioni.add(new ButtonLaterale("Categorie"));
-        pannelloOpzioni.add(new ButtonLaterale("Codici"));
+        pannelloOpzioni.add(new ButtonLaterale("Prodotti"));
+        pannelloOpzioni.add(new ButtonLaterale("Codici"));        
+        pannelloOpzioni.add(new ButtonLaterale("Ordini"));
+        pannelloOpzioni.add(new ButtonLaterale("Report"));        
         pannelloOpzioni.setAlignmentX(CENTER_ALIGNMENT);
         //pannelloOpzioni.setBackground(new Color( 128, 128, 128));
         pannellolaterale.add(pannelloOpzioni);
@@ -139,10 +152,11 @@ public class FramePrincipale extends JFrame{
         JPanel pannelloTab = new JPanel();
   
         // i pulsantoni della dashboard
+        pannellodash.setBorder(new EmptyBorder(0, 20, 0, 0));
         pannellodash.setLayout(new GridLayout(3,2, 50, 70));
 
         for(int i =0; i<6; i++){
-            JButton button = new JButton("Ciao"+ i);
+            ButtonDash button = new ButtonDash("Ciao");
             button.setBackground(new Color( 66, 139, 221));
             pannellodash.add(button);
             
@@ -237,24 +251,37 @@ public class FramePrincipale extends JFrame{
                 if(tipo.equals("Ordini")){
                     icon = new JLabel(ImpostaImg("ordini.png"));
                     color_etichetta = Color.orange; 
-                    code = 1;
+                    code = 5;
                 
                 }   
                 if(tipo.equals("Anagrafiche")){
                     icon = new JLabel(ImpostaImg("anagrafiche.png"));
                     color_etichetta = Color.yellow;                   
-                    code = 2;
+                    code = 1;
                 }       
                 
                 if(tipo.equals("Categorie")){
                     icon = new JLabel(ImpostaImg("categorie.png"));
                     color_etichetta = Color.cyan;                   
-                    code = 3;
+                    code = 2;
                 }                     
                if(tipo.equals("Codici")){
                     icon = new JLabel(ImpostaImg("codici.png"));
                     color_etichetta = Color.WHITE;                   
                     code = 4;
+                }
+               
+               if(tipo.equals("Prodotti")){
+                    icon = new JLabel(ImpostaImg("prodotti.png"));
+                    color_etichetta = Color.PINK;                   
+                    code = 3;
+                }
+
+               
+                if(tipo.equals("Report")){
+                    icon = new JLabel(ImpostaImg("report.png"));
+                    color_etichetta = Color.GREEN;                   
+                    code = 6;
                 }
 
                 JPanel etichetta1 =  new JPanel();
@@ -263,8 +290,10 @@ public class FramePrincipale extends JFrame{
                 pan = new JPanel();
                 pan.setBackground(new Color( 128, 128, 128));
                 icon.setBorder(new EmptyBorder(5, 0, 0, 0));
-                JLabel testo = new  JLabel("  "+tipo);
+                icon.setHorizontalAlignment(JLabel.CENTER);
+                JLabel testo = new  JLabel(tipo);
                 testo.setFont(new Font("Arial Black", Font.BOLD, 18));
+                testo.setHorizontalAlignment(JLabel.CENTER);
                 pan.setLayout(new GridLayout(2,1));
                 pan.add(icon);
                 pan.add(testo);
@@ -282,11 +311,11 @@ public class FramePrincipale extends JFrame{
                     public void mouseClicked(MouseEvent e) {
                        ButtonLaterale bottonepremuto =(ButtonLaterale) e.getSource();
                        bottonepremuto.premuto = true;
-                                                                     
-                       disattivaTuttiIBottoniTranne(bottonepremuto.code);
-                        
-                       cardlayout.show(HomePanel, tipo);
                        pan.setBackground(color_etichetta);
+                       System.out.println("Codice tasto premuto:"+code);
+                       disattivaTuttiIBottoniTranne(bottonepremuto.code);
+                     
+                       cardlayout.show(HomePanel, tipo);
                        HomePanel.setBorder(BorderFactory.createMatteBorder(0, 20, 0, 0, color_etichetta));
                        pannellolaterale.setBorder(new EmptyBorder(10, 0, 0, 10)); // per dare un po di margini
        
@@ -316,6 +345,7 @@ public class FramePrincipale extends JFrame{
             for(int i=0; i< pannelloOpzioni.getComponentCount(); i++){
                 
                 if(i != cod) {
+                    System.out.println(i);
                     ButtonLaterale b = (ButtonLaterale) pannelloOpzioni.getComponent(i);
                     b.pan.setBackground(new Color( 128, 128, 128));  
                     b.premuto = false;
@@ -332,14 +362,47 @@ public class FramePrincipale extends JFrame{
 	public ImageIcon ImpostaImg(String nomeImmag) {
 
                 ImageIcon icon = new ImageIcon(nomeImmag);
-		Image ImmagineScalata = icon.getImage().getScaledInstance(70, 70, Image.SCALE_DEFAULT);
+		Image ImmagineScalata = icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT);
 		icon.setImage(ImmagineScalata);
                 return icon;
-	}
-
-
-
-		
+	}		
     }
  
+ 
+ 
+ 
+ 
+ 
+ 
+  class ButtonDash extends JPanel{
+ 
+      
+      public ButtonDash(String type){
+      
+        super.setLayout(new GridLayout(3,1));
+        super.setBackground(new Color( 66, 139, 221));  
+        
+        JLabel title = new JLabel("TOT Prodotti in Magazzino: "); //Per dare ampiezza al jpanel
+        title.setFont(new Font("Arial Black", Font.BOLD, 20));
+        title.setHorizontalAlignment(JLabel.CENTER);
+        super.add(title);
+        
+        JLabel num = new JLabel("217"); //Per dare ampiezza al jpanel
+        num.setFont(new Font("Arial Black", Font.BOLD, 30));
+        num.setForeground(Color.red);
+        num.setHorizontalAlignment(JLabel.CENTER);
+        super.add(num);
+        
+        JButton vai = new JButton("Vai in prodotti");
+        vai.setFont(new Font("Arial Black", Font.BOLD, 15));
+        vai.setForeground(Color.black);
+        vai.setHorizontalAlignment(JLabel.CENTER);
+        super.add(vai);
+     
+      }
+      
+      
+      
+      
+  }
 }
