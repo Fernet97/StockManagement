@@ -29,13 +29,14 @@ public class Prodotto {
     private String descrizione;
     private int giorni_alla_consegna;
     private int qty;
+    private int qty_min;
     private float costo;
     private String foto;
     
     
     //constructor
 
-    public Prodotto(String nome, String categoria, boolean instock, String descrizione, int giorni_alla_consegna, int qty, float costo, String foto) {
+    public Prodotto(String nome, String categoria, boolean instock, String descrizione, int giorni_alla_consegna, int qty, int qty_min,  float costo, String foto) {
         
         setCode(leggiUltimoSku()+1);
         
@@ -46,6 +47,7 @@ public class Prodotto {
         this.descrizione = descrizione;
         this.giorni_alla_consegna = giorni_alla_consegna;
         this.qty = qty;
+        this.qty_min = qty_min; 
         this.costo = costo;
         this.foto = foto;
         setDataReg(generateData());
@@ -121,6 +123,13 @@ public class Prodotto {
         this.qty = qty;
     }
 
+      public int getQty_min() {
+        return qty_min;
+    }
+
+    public void setQty_min(int qty_min) {
+        this.qty_min = qty_min;
+    }
     public float getCosto() {
         return costo;
     }
@@ -140,9 +149,9 @@ public class Prodotto {
     
     public String generateData() {
        
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 	LocalDateTime now = LocalDateTime.now();
-	System.out.println(dtf.format(now)); //2016/11/16 12:08:43
+	System.out.println(dtf.format(now)); //11/11/2019 11:11
         return dtf.format(now);
      
      }

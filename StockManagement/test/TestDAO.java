@@ -53,7 +53,7 @@ public class TestDAO {
         
             */
            ProdottoDAO dao = new ProdottoDAO();
-           Prodotto pr1 = new Prodotto("1N9099", "DIODO", true, " caso2", 23, 87, 12.4f,  "foto.png");
+           Prodotto pr1 = new Prodotto("1N9099", "DIODO", true, " caso2", 23, 87, 88, 12.4f,  "foto.png");
            dao.add(pr1);
            System.out.println("ultimo index:"+pr1.leggiUltimoSku());
 
