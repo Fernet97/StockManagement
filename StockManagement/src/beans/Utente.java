@@ -11,7 +11,7 @@ package beans;
  */
 public class Utente {
    
-   private int id; 
+   private String id; 
    private String fullname; 
    private String telefono; 
    private String email; 
@@ -26,7 +26,7 @@ public class Utente {
    
    //contructor
 
-    public Utente(int id, String fullname, String telefono, String email, String CF, String indirizzo, String pwd, boolean create, boolean update, boolean view, boolean delete, boolean isAdmin) {
+    public Utente(String id, String fullname, String telefono, String email, String CF, String indirizzo, String pwd, boolean create, boolean update, boolean view, boolean delete, boolean isAdmin) {
         this.id = id;
         this.fullname = fullname;
         this.telefono = telefono;
@@ -46,11 +46,11 @@ public class Utente {
     
     //getter & setter
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
