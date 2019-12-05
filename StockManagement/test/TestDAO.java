@@ -1,10 +1,13 @@
 
 import beans.Fornitore;
 import beans.Prodotto;
+import beans.Utente;
 import dao.FornitoreDAO;
 import dao.ProdottoDAO;
+import dao.UtenteDAO;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,7 +54,7 @@ public class TestDAO {
 
             daofornitore.remove(1);
         
-            */
+          
            ProdottoDAO dao = new ProdottoDAO();
            Prodotto pr1 = new Prodotto("1N9099", "DIODO", true, " caso2", 23, 87, 88, 12.4f,  "foto.png");
            dao.add(pr1);
@@ -59,7 +62,21 @@ public class TestDAO {
 
           //System.out.println("Ho trovato: "+ pp.getNome());
             
-            
+           
+           UtenteDAO user = new UtenteDAO();
+           Collection<Utente> uno = user.getAll();
+           for (Utente u : uno) {
+               System.out.println(u.getId()+ u.getFullname());
+           }
+          
+           */
+           UtenteDAO dao = new UtenteDAO();
+           Utente u = new Utente ("2", "test2", "test2", "test2", "test2", "test2", "test...", true, true, true, true, true);
+           dao.add(u);
+           
+           Utente u2 = new Utente("2", "test3", "test3", "test3", "test3", "test3", "testadicazzo", true, true, true, true, true);
+           dao.update(u2);
+           // System.out.println(u);*/
        } catch (SQLException ex) {
             Logger.getLogger(TestDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

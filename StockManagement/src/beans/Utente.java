@@ -23,7 +23,7 @@ public class Utente {
    private boolean view; 
    private boolean delete; 
    private boolean isAdmin;
-   
+
    //contructor
 
     public Utente(String id, String fullname, String telefono, String email, String CF, String indirizzo, String pwd, boolean create, boolean update, boolean view, boolean delete, boolean isAdmin) {
