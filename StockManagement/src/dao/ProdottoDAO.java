@@ -46,6 +46,11 @@ public class ProdottoDAO {
                                                                                                 bean.setCategoria(rs.getString("categoria"));
                                                                                                 bean.setInStock(rs.getBoolean("instock"));
                                                                                                 bean.setDescrizione(rs.getString("descrizione"));
+                                                                                                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
+                                                                                                bean.setQty(rs.getInt("qty"));
+                                                                                                bean.setQty_min(rs.getInt("qty_min"));
+                                                                                                bean.setCosto(rs.getFloat("costo"));
+                                                                                                bean.setFoto(rs.getString("foto"));
 
                                                                                                 prodotti.add(bean);
                                                                                     }
@@ -90,6 +95,7 @@ public class ProdottoDAO {
                                                                                                 bean.setDescrizione(rs.getString("descrizione"));
                                                                                                 bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
                                                                                                 bean.setQty(rs.getInt("qty"));
+                                                                                                bean.setQty_min(rs.getInt("qty_min"));
                                                                                                 bean.setCosto(rs.getFloat("costo"));
                                                                                                 bean.setFoto(rs.getString("foto"));
                                                                                                   
@@ -113,7 +119,7 @@ public class ProdottoDAO {
                         PreparedStatement ps = null;
         
                         String insertSQL= "INSERT INTO " + TABLE_NAME
-                                                                      + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";       
+                                                                      + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";       
                         
                         try{
                                     connection = DriverManagerConnectionPool.getConnection();
@@ -127,8 +133,9 @@ public class ProdottoDAO {
                                     ps.setString(6, b.getDescrizione());
                                     ps.setInt(7, b.getGiorni_alla_consegna());
                                     ps.setInt(8, b.getQty());
-                                    ps.setFloat(9, b.getCosto());
-                                    ps.setString(10, b.getFoto());
+                                    ps.setInt(9, b.getQty_min());
+                                    ps.setFloat(10, b.getCosto());
+                                    ps.setString(11, b.getFoto());
 		
                                     System.out.println(insertSQL);
                                     
@@ -161,6 +168,7 @@ public class ProdottoDAO {
                         p1.setDescrizione(p.getDescrizione());
                         p1.setGiorni_alla_consegna(p.getGiorni_alla_consegna());
                         p1.setQty(p.getQty());
+                        p1.setQty_min(p.getQty_min());
                         p1.setCosto(p.getCosto());
                         p1.setFoto(p.getFoto());
                         add(p1);
@@ -243,6 +251,7 @@ public class ProdottoDAO {
                                                                                                 bean.setDescrizione(rs.getString("descrizione"));
                                                                                                 bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
                                                                                                 bean.setQty(rs.getInt("qty"));
+                                                                                                bean.setQty_min(rs.getInt("qty_min"));
                                                                                                 bean.setCosto(rs.getFloat("costo"));
                                                                                                 bean.setFoto(rs.getString("foto"));
                                                                                                   
