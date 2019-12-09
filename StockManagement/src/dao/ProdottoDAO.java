@@ -55,7 +55,7 @@ public class ProdottoDAO {
                                                                                                 
                                                                                                 
                                                                                                 prodotti.add(bean);
-                                                                                               System.out.println(bean+"aaaa");
+
                                                                                     }
                                                 }
                                                 finally {
@@ -71,7 +71,7 @@ public class ProdottoDAO {
                                                 return prodotti;
                                                 
     }
-      /* start here
+      
         public  synchronized Prodotto getBySku(String sku) throws SQLException{
              
             Connection connection = null;
@@ -91,16 +91,18 @@ public class ProdottoDAO {
                                                         while (rs.next()) {
                                                                                                 
                                                                                                 bean.setSku(rs.getString("sku"));
-                                                                                                bean.setDataReg(rs.getString("datareg"));
+                                                                                                bean.setDatareg(rs.getString("datareg"));
                                                                                                 bean.setNome(rs.getString("nome"));
                                                                                                 bean.setCategoria(rs.getString("categoria"));
-                                                                                                bean.setInStock(rs.getBoolean("instock"));
-                                                                                                bean.setDescrizione(rs.getString("descrizione"));
-                                                                                                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
                                                                                                 bean.setQty(rs.getInt("qty"));
-                                                                                                bean.setQty_min(rs.getInt("qty_min"));
+                                                                                                bean.setInstock(rs.getBoolean("instock"));
+                                                                                                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
                                                                                                 bean.setCosto(rs.getFloat("costo"));
+                                                                                                bean.setDescrizione(rs.getString("descrizione"));
+                                                                                                bean.setQty_inarrivo(rs.getInt("qty_inarrivo"));
+                                                                                                bean.setQty_min(rs.getInt("qty_min"));
                                                                                                 bean.setFoto(rs.getString("foto"));
+                                                                                                
                                                                                                   
                                                                                     }
                                 }
@@ -117,28 +119,30 @@ public class ProdottoDAO {
                                                 return bean;
                                 }
   
+       
         public synchronized void add(Prodotto b) throws SQLException{
                          Connection connection = null;
                         PreparedStatement ps = null;
         
                         String insertSQL= "INSERT INTO " + TABLE_NAME
-                                                                      + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";       
+                                                                      + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";       
                         
                         try{
                                     connection = DriverManagerConnectionPool.getConnection();
                                     ps = connection.prepareStatement(insertSQL);     
                                     
                                     ps.setString(1, b.getSku());
-                                    ps.setString(2, b.getDataReg());
+                                    ps.setString(2, b.getDatareg());
                                     ps.setString(3, b.getNome());
                                     ps.setString(4, b.getCategoria());
-                                    ps.setBoolean(5, b.isInStock());//tinyint
-                                    ps.setString(6, b.getDescrizione());
+                                    ps.setInt(5, b.getQty());
+                                    ps.setBoolean(6, b.isInstock());//tinyint
                                     ps.setInt(7, b.getGiorni_alla_consegna());
-                                    ps.setInt(8, b.getQty());
-                                    ps.setInt(9, b.getQty_min());
-                                    ps.setFloat(10, b.getCosto());
-                                    ps.setString(11, b.getFoto());
+                                    ps.setFloat(8, b.getCosto());
+                                    ps.setString(9, b.getDescrizione());
+                                   ps.setInt(10, b.getQty_inarrivo());
+                                    ps.setInt(11, b.getQty_min());  
+                                    ps.setString(12, b.getFoto());
 		
                                     System.out.println(insertSQL);
                                     
@@ -156,6 +160,7 @@ public class ProdottoDAO {
                                     }
                         }
         }
+        
         public synchronized void update (Prodotto p) throws SQLException{ //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
                         Connection connection = null;
                         PreparedStatement ps = null;
@@ -163,22 +168,23 @@ public class ProdottoDAO {
                         Prodotto p1 = getBySku(p.getSku());  // i dati del record vecchio che voglio modificare
                         remove(p.getSku()); 
 
-                        p1.setSku("uno sku generato");
-                        p1.setNome(p.getNome());
+                        p1.setSku(p.getSku());
                         p1.setDatareg(p.getDatareg());
+                        p1.setNome(p.getNome());
                         p1.setCategoria(p.getCategoria());
-                        p1.setInStock(p.isInStock());
-                        p1.setDescrizione(p.getDescrizione());
-                        p1.setGiorni_alla_consegna(p.getGiorni_alla_consegna());
                         p1.setQty(p.getQty());
-                        p1.setQty_min(p.getQty_min());
+                        p1.setInstock(p.isInstock());
+                        p1.setGiorni_alla_consegna(p.getGiorni_alla_consegna());
                         p1.setCosto(p.getCosto());
+                        p1.setDescrizione(p.getDescrizione());
+                        p1.setQty_inarrivo(p.getQty_inarrivo());
+                        p1.setQty_min(p.getQty_min());
                         p1.setFoto(p.getFoto());
                         add(p1);
-
+        }
                            
                         /*
-                        System.out.println("start here");
+                        System.out.println("start here"); // ignore update
                         
                                     String insertSQL = "UPDATE prodotti SET sku = ?, datareg = ?, nome = ?, categoria = ?, instock = ?, descrizione = ?,  giorni_alla_consegna = ?, qty = ?, costo = ?,  foto = ? WHERE sku = "+p.getSku();
                           
@@ -204,14 +210,14 @@ public class ProdottoDAO {
       
       */
       
-      /*
+      /**/
         
-            public synchronized void remove (String sku) throws SQLException{
+            public synchronized void remove  (String sku) throws SQLException{
                         Connection connection = null;
                         Statement  statement = null;
 
-		String query = "DELETE FROM " + this.TABLE_NAME + " WHERE sku ='"+sku+"'";
-                System.out.println(query);
+		String query = "DELETE FROM " +this.TABLE_NAME + " WHERE sku ='"+sku+"'";
+                //System.out.println(query);
 
                         try {
                                 connection = DriverManagerConnectionPool.getConnection();
@@ -251,15 +257,16 @@ public class ProdottoDAO {
                                                         while (rs.next()) {
                                                                                                 
                                                                                                 bean.setSku(rs.getString("sku"));
-                                                                                                bean.setDataReg(rs.getString("datareg"));
+                                                                                                bean.setDatareg(rs.getString("datareg"));
                                                                                                 bean.setNome(rs.getString("nome"));
                                                                                                 bean.setCategoria(rs.getString("categoria"));
-                                                                                                bean.setInStock(rs.getBoolean("instock"));
-                                                                                                bean.setDescrizione(rs.getString("descrizione"));
-                                                                                                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
                                                                                                 bean.setQty(rs.getInt("qty"));
-                                                                                                bean.setQty_min(rs.getInt("qty_min"));
+                                                                                                bean.setInstock(rs.getBoolean("instock"));
+                                                                                                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
                                                                                                 bean.setCosto(rs.getFloat("costo"));
+                                                                                                bean.setDescrizione(rs.getString("descrizione"));
+                                                                                                bean.setQty_inarrivo(rs.getInt("qty_inarrivo"));
+                                                                                                bean.setQty_min(rs.getInt("qty_min"));
                                                                                                 bean.setFoto(rs.getString("foto"));
                                                                                                   
                                                                                     }
@@ -277,6 +284,8 @@ public class ProdottoDAO {
                                                 return bean;
         
         }
-end here */
 }
+
+  
+
 

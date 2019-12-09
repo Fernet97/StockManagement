@@ -35,11 +35,12 @@ public class Prodotto {
     private String foto;
     
     
+    
     //constructor
 
         public Prodotto(String sku, String datareg, String nome, String categoria, int qty, boolean instock, int giorni_alla_consegna, float costo, String descrizione, int qty_inarrivo, int qty_min, String foto) {
               
-    //        setCode(leggiUltimoSku()+1);
+         setCode(leggiUltimoSku()+1);
             
         this.sku = sku;
         this.datareg = datareg;
@@ -54,8 +55,8 @@ public class Prodotto {
         this.qty_min = qty_min;
         this.foto = foto;
         
-      //  setDatareg(generateData());
-        //setSku(generateSKU());
+      setDatareg(generateData());
+      setSku(generateSKU());
     }
         
         
@@ -168,7 +169,7 @@ public class Prodotto {
      
      }
      
-    /* start here 
+    
     public int getCode(){
         return code;    
     }
@@ -217,9 +218,9 @@ public class Prodotto {
         return  idlast;
 
     }
+}
 
-   end here */
-    
+     
     /*
         
         //costruttore
@@ -396,4 +397,3 @@ public class Prodotto {
     */
 
        
-}

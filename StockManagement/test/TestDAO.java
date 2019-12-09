@@ -78,9 +78,13 @@ public class TestDAO {
            //dao.update(u2);
            // System.out.println(u);*/
            
-           ProdottoDAO pr = new ProdottoDAO();
-
-           System.out.println(pr.getAll());
+ ProdottoDAO dao = new ProdottoDAO();
+           Prodotto pr1 = new Prodotto("2..0u", "oggi", "nome", "miaot",  23, true,  87, 12.4f, "desc", 0, 1,  "foto.png");
+           dao.add(pr1);
+           System.out.println("ultimo index:"+pr1.leggiUltimoSku());
+           Prodotto pr2 = new Prodotto("2", "miao", "aaaaa", "cazzzzzaaataaaaaa",  47, false,  87, 12.4f, "desc", 0, 1,  "foto.png");
+           dao.update(pr2);
+          //System.out.println("Ho trovato: "+ pp.getNome());
            
        } catch (SQLException ex) {
             Logger.getLogger(TestDAO.class.getName()).log(Level.SEVERE, null, ex);
