@@ -56,10 +56,10 @@ public class TestDAO {
         
           
            ProdottoDAO dao = new ProdottoDAO();
-           Prodotto pr1 = new Prodotto("1N9099", "DIODO", true, " caso2", 23, 87, 88, 12.4f,  "foto.png");
+           Prodotto pr1 = new Prodotto("1N999sku", "oggi", "nome", "cat",  23, true,  87, 12.4f, "desc", 0, 1,  "foto.png");
            dao.add(pr1);
-           System.out.println("ultimo index:"+pr1.leggiUltimoSku());
-
+           //System.out.println("ultimo index:"+pr1.leggiUltimoSku());
+/*
           //System.out.println("Ho trovato: "+ pp.getNome());
             
            
@@ -70,13 +70,18 @@ public class TestDAO {
            }
           
            */
-           UtenteDAO dao = new UtenteDAO();
-           Utente u = new Utente ("2", "test2", "test2", "test2", "test2", "test2", "test...", true, true, true, true, true);
-           dao.add(u);
-           
-           Utente u2 = new Utente("2", "test3", "test3", "test3", "test3", "test3", "testadicazzo", true, true, true, true, true);
-           dao.update(u2);
+        //   UtenteDAO dao = new UtenteDAO();
+          // Utente u = new Utente ("2", "test2", "test2", "test2", "test2", "test2", "test...", true, true, true, true, true);
+           //dao.add(u);
+      //     System.out.println("add ok");
+          // Utente u2 = new Utente("2", "test3", "test3", "test3", "test3", "test3", "testadicazzo", true, true, true, true, true);
+           //dao.update(u2);
            // System.out.println(u);*/
+           
+           ProdottoDAO pr = new ProdottoDAO();
+
+           System.out.println(pr.getAll());
+           
        } catch (SQLException ex) {
             Logger.getLogger(TestDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

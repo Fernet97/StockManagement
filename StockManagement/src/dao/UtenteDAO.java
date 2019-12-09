@@ -161,10 +161,13 @@ public class UtenteDAO {
                         PreparedStatement st = null;  
                         
                          System.out.println("Entra qui");
-                         
-                         String insertSQL= "UPDATE utenti SET id = ?, fullname = ?, telefono = ?, email = ?, CF = ?, indirizzo = ?, pwd = ?, create = ?, update = ?, view= ?, delete = ?, isAdmin = ? WHERE id =" +u.getId();
+                                 String insertSQL= "UPDATE " +TABLE_NAME+ "SET `id` = '?', `fullname` = '?', `telefono` = '?', `email` = '?', `CF` = '?', `indirizzo` = '?', `pwd` = '?', `create` = '?', `update` = '?', `view` = '?', `delete` = '?', `isAdmin` = '?' WHERE  (" +u.getId()+")";
+//                         String insertSQL= "UPDATE utenti SET id = ?, fullname = ?, telefono = ?, email = ?, CF = ?, indirizzo = ?, pwd = ?, create = ?, update = ?, view= ?, delete = ?, isAdmin = ? WHERE (id = " +u.getId()+")";
                         connection = DriverManagerConnectionPool.getConnection();
                           st = connection.prepareStatement(insertSQL);
+                          
+                                    Utente u1 = getByID(u.getId());
+                                    remove(u.getId());
                           
                         st.setString(1, u.getId());
                         st.setString(2, u.getFullname());
@@ -178,10 +181,37 @@ public class UtenteDAO {
                         st.setBoolean(10, u.isView());
                         st.setBoolean(11, u.isDelete());
                         st.setBoolean(12, u.isIsAdmin());
-                        
+                        System.out.println(st);
                          st.executeUpdate();
 
                 connection.close();
         }
+
+public synchronized void remove (String id) throws SQLException{
+                        Connection connection = null;
+                        Statement  statement = null;
+
+		String query = "DELETE FROM " + this.TABLE_NAME + " WHERE id='"+id+"'";
+                System.out.println(query);
+
+                        try {
+                                connection = DriverManagerConnectionPool.getConnection();
+                                statement = connection.createStatement();
+                                statement.executeUpdate(query);
+                                connection.commit();
+
+                                    }
+                                        finally {
+                                                            try {
+                                                                    if (statement != null)
+                                                                        statement.close();
+                                                                            }
+                                                                                    finally {
+				DriverManagerConnectionPool.releaseConnection(connection);
+                                                                                                        }
+                                                            }
+	
+	
+	}
 }
 
