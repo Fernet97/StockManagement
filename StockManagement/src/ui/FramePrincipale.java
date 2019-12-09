@@ -155,12 +155,34 @@ public class FramePrincipale extends JFrame{
         pannellodash.setBorder(new EmptyBorder(0, 20, 0, 0));
         pannellodash.setLayout(new GridLayout(3,2, 50, 70));
 
-        for(int i =0; i<6; i++){
-            ButtonDash button = new ButtonDash("Ciao");
-            button.setBackground(new Color( 66, 139, 221));
-            pannellodash.add(button);
+        //Bottoni Dash
+        ButtonDash button = new ButtonDash("Totale prodotti in magazzino");
+        button.setBackground(new Color( 66, 139, 221));
+        pannellodash.add(button);
             
-        }
+        ButtonDash button1 = new ButtonDash("Totale prodotti in arrivo");
+        button1.setBackground(new Color( 66, 139, 221));
+        pannellodash.add(button1);        
+
+        ButtonDash button2 = new ButtonDash("Spese totali");
+        button2.setBackground(new Color( 66, 139, 221));
+        pannellodash.add(button2);
+
+        ButtonDash button3 = new ButtonDash("Vendite totali");
+        button3.setBackground(new Color( 66, 139, 221));
+        pannellodash.add(button3);
+
+
+        ButtonDash button4 = new ButtonDash("Totale utenti registrati");
+        button4.setBackground(new Color( 66, 139, 221));
+        pannellodash.add(button4);
+
+
+        ButtonDash button5 = new ButtonDash("Nuovo ordine");
+        button5.setBackground(new Color( 66, 139, 221));
+        pannellodash.add(button5);
+        
+        
         
         //Le tabelle ...
         JPanel TitoloTab1 = new JPanel ();
@@ -382,7 +404,7 @@ public class FramePrincipale extends JFrame{
         super.setLayout(new GridLayout(3,1));
         super.setBackground(new Color( 66, 139, 221));  
         
-        JLabel title = new JLabel("TOT Prodotti in Magazzino: "); //Per dare ampiezza al jpanel
+        JLabel title = new JLabel(type); //Per dare ampiezza al jpanel
         title.setFont(new Font("Arial Black", Font.BOLD, 20));
         title.setHorizontalAlignment(JLabel.CENTER);
         super.add(title);
