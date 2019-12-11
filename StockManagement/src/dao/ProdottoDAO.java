@@ -181,8 +181,9 @@ public class ProdottoDAO {
                         p1.setQty_min(p.getQty_min());
                         p1.setFoto(p.getFoto());
                         
-                        add(p1);
-
+                        add(p1);// richiamre metodo remove alla fine 
+                        
+                        
                      //   System.out.println(p);
         }
                            
@@ -213,9 +214,8 @@ public class ProdottoDAO {
       
       */
       
-      /**/
-        
-            public synchronized void remove  (String sku) throws SQLException{
+              
+            public synchronized void remove (String sku) throws SQLException{
                         Connection connection = null;
                         Statement  statement = null;
 

@@ -23,23 +23,23 @@ import java.util.logging.Logger;
  */
 public class TestDAO {
     
-     public static void main(String[] args) {
+     public static void main(String[] args) throws InterruptedException {
     
        try {
             
             
-             //FornitoreDAO daofornitore = new FornitoreDAO();
+             FornitoreDAO daofornitore = new FornitoreDAO();
            
-             /*
-            Fornitore f = new Fornitore(2, "zzzzz", "Accipicchia", "AHAHAH", "Paccc", "Svizzera", "23423423423", "uanm@gmail.com", "descrizione a caso");     
+             
+            Fornitore f = new Fornitore("aaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa");     
             daofornitore.add(f);
-           // Fornitore mimmo = daofornitore.getByID(1);
-            System.out.println("Fornitore: "+f.getNome() +" " + f.getStato());
-            */
+            java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+
             
-           /*Fornitore f2 = new Fornitore(2, "yyyyy", "BELBELBELA", "Capretti", "Carpisa", "Italia", "367239267111", "capra@gmail.com", "un altra descrizione");     
+            
+           Fornitore f2 = new Fornitore( f.getIdfornitore(), "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb");     
            daofornitore.update(f2);
-            */
+            
            
            
            //daofornitore.remove(2);
@@ -83,7 +83,9 @@ public class TestDAO {
            dao.add(pr1);
            //System.out.println("ultimo index:"+pr1.leggiUltimoSku());
            Prodotto pr2 = new Prodotto("2", "miao", "aaaaa", "cazzzzzaaataa",  47, false,  87, 12.4f, "desc", 0, 1,  "foto.png");
+
            dao.update(pr2);
+
            dao.remove(pr1.getSku());
           //System.out.println("Ho trovato: "+ pp.getNome());
            

@@ -6,6 +6,7 @@
 package dao;
 
 import beans.Fornitore;
+import beans.Prodotto;
 import database.DriverManagerConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,18 +41,19 @@ public class FornitoreDAO {
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
-				Fornitore bean = new Fornitore();
-                                bean.setIdfornitore(rs.getInt("idfornitori"));
-                                bean.setP_iva(rs.getString("p_iva"));
-				bean.setNome(rs.getString("nome"));
-                                bean.setCognome(rs.getString("cognome"));
-                                bean.setNome_azienda(rs.getString("nome_azienda"));
-                                bean.setStato(rs.getString("stato"));
-                                bean.setTel(rs.getString("tel"));
-                                bean.setEmail(rs.getString("email"));
-                                bean.setDesc(rs.getString("description"));
-
-				fornitori.add(bean);
+                            
+                            Fornitore bean = new Fornitore();
+                          
+                          bean.setIdfornitore(rs.getString("idfornitori"));
+                          bean.setDatareg(rs.getString("datareg"));
+                          bean.setFullname(rs.getString("fullname"));
+                          bean.setP_iva(rs.getString("p_iva"));
+                          bean.setIndirizzo(rs.getString("indirizzo"));
+                          bean.setTel(rs.getString("tel"));
+                          bean.setEmail(rs.getString("email"));
+                          bean.setDesc(rs.getString("description"));
+                         
+                          fornitori.add(bean);
 			}
 
 		} finally {
@@ -69,43 +71,45 @@ public class FornitoreDAO {
 
 
         
-        public synchronized Fornitore getByID(int id) throws SQLException {
-                
- 		Connection connection = null;
-		PreparedStatement preparedStatement = null;
+        public synchronized Fornitore getByID(String id) throws SQLException {
+          Connection connection = null;
+             PreparedStatement ps = null;
+             
+             Fornitore bean = new Fornitore();
 
-		Fornitore bean = new Fornitore();
+             String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE idfornitori = ?";
+             
+                 		try  {
+                                                        connection = DriverManagerConnectionPool.getConnection();
+                                                        ps = connection.prepareStatement(selectSQL);
+                                                        ps.setString(1, id);// FA RIFERIMENTO AL NOME ED AL NUMERO DELLA COLONNA NEL DB
 
-		String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE idfornitori = ?";
-        
- 		try {
-			connection = DriverManagerConnectionPool.getConnection();
-			preparedStatement = connection.prepareStatement(selectSQL);
-			preparedStatement.setInt(1, id);// FA RIFERIMENTO AL NOME ED AL NUMERO DELLA COLONNA NEL DB
+                                                        ResultSet rs = ps.executeQuery();
+                                                        
+                                                        while (rs.next()) {
 
-			ResultSet rs = preparedStatement.executeQuery();
-
-			while (rs.next()) {
-                                bean.setIdfornitore(rs.getInt("idfornitori"));
-                                bean.setP_iva(rs.getString("p_iva"));
-				bean.setNome(rs.getString("nome"));
-                                bean.setCognome(rs.getString("cognome"));
-                                bean.setNome_azienda(rs.getString("nome_azienda"));
-                                bean.setStato(rs.getString("stato"));
-                                bean.setTel(rs.getString("tel"));
-                                bean.setEmail(rs.getString("email"));
-                                bean.setDesc(rs.getString("description"));
-			}
-
-		} finally {
+                                                            bean.setIdfornitore(rs.getString("idfornitori"));
+                                                            bean.setDatareg(rs.getString("datareg"));
+                                                            bean.setFullname(rs.getString("fullname"));
+                                                            bean.setP_iva(rs.getString("p_iva"));
+                                                            bean.setIndirizzo(rs.getString("indirizzo"));
+                                                            bean.setTel(rs.getString("tel"));
+                                                            bean.setEmail(rs.getString("email"));
+                                                            bean.setDesc(rs.getString("description"));
+                                                                                                  
+                                                                                    }
+                                }
+                                                finally {
 			try {
-				if (preparedStatement != null)
-					preparedStatement.close();
-			} finally {
-				DriverManagerConnectionPool.releaseConnection(connection);
-			}
-		}
-		return bean;           
+                                                                                if (ps != null)
+                                                                                    ps.close();
+                                                                            }
+                                                                          finally {
+                                                                                    DriverManagerConnectionPool.releaseConnection(connection);
+                                                                                    }
+                        
+                                                  }
+                                                return bean;           
         }
 
 
@@ -113,27 +117,26 @@ public class FornitoreDAO {
 
 	
         // INSERT INTO `db_stock`.`fornitori` (`idfornitori`, `p_iva`, `nome`, `cognome`, `nome_azienda`, `stato`, `tel`, `email`, `description`) VALUES ('1', 'xxxxx', 'Mimmo', 'Mimmetti', 'Mimmo corp', 'Italia', '367267267123', 'mimmo@gmail.com', 'scriviamo una descriziona a caso per mimmo');
-	public synchronized void add(Fornitore b) throws SQLException {
+            public synchronized void add(Fornitore b) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
 		String insertSQL = "INSERT INTO " + TABLE_NAME
-				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
 		
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
 			preparedStatement = connection.prepareStatement(insertSQL);
 
-                        preparedStatement.setInt(1, b.getIdfornitore());
-                        preparedStatement.setString(2, b.getP_iva());
-			preparedStatement.setString(3, b.getNome());
-                        preparedStatement.setString(4, b.getCognome());
-                        preparedStatement.setString(5, b.getNome_azienda());
-                        preparedStatement.setString(6, b.getStato());
-                        preparedStatement.setString(7, b.getTel());
-                        preparedStatement.setString(8, b.getEmail());
-                        preparedStatement.setString(9, b.getDesc());
+                                                    preparedStatement.setString(1, b.getIdfornitore());
+                                                    preparedStatement.setString(2, b.getDatareg());
+                                                    preparedStatement.setString(3, b.getFullname());
+                                                    preparedStatement.setString(4, b.getP_iva());
+                                                    preparedStatement.setString(5, b.getIndirizzo());
+                                                    preparedStatement.setString(6, b.getTel());
+                                                    preparedStatement.setString(7, b.getEmail());
+                                                    preparedStatement.setString(8, b.getDesc());
 		
                         System.out.println(insertSQL);
 
@@ -156,7 +159,7 @@ public class FornitoreDAO {
 
         
         
-	public synchronized void update(Fornitore b) throws SQLException {
+            public synchronized void update(Fornitore b) throws SQLException {
 		Connection connection = null;
 		PreparedStatement st = null;
 
@@ -164,23 +167,23 @@ public class FornitoreDAO {
                 System.out.println("Entra qui");
                 
                 
-		String insertSQL = "UPDATE fornitori SET idfornitori = ?, p_iva = ?, nome = ?, cognome = ?, nome_azienda = ?, stato = ?, tel = ?, email = ?, description = ? WHERE idfornitori = "+b.getIdfornitore();		
-		connection = DriverManagerConnectionPool.getConnection();
-                st = connection.prepareStatement(insertSQL);  
+                        String insertSQL = "UPDATE fornitori SET "+b.getIdfornitore()+ "datareg = ?, fullname = ?, p_iva = ?, indirizzo = ?, "
+                                                            + " tel = ?, email = ?, description = ? WHERE idfornitori = "+b.getIdfornitore(); 		
+                        connection = DriverManagerConnectionPool.getConnection();
+                        st = connection.prepareStatement(insertSQL);  
                 
                 
-                st.setInt(1, b.getIdfornitore());
-                st.setString(2, b.getP_iva());   
-                st.setString(3, b.getNome());
-                st.setString(4, b.getCognome());
-                st.setString(5, b.getNome_azienda());
-                st.setString(6, b.getStato());
-                st.setString(7, b.getTel());
-                st.setString(8, b.getEmail());
-                st.setString(9, b.getDesc());
+                st.setString(1, b.getIdfornitore());
+                st.setString(2, b.getDatareg());
+                st.setString(3, b.getFullname());
+                st.setString(4, b.getP_iva());
+                st.setString(5, b.getIndirizzo());
+                st.setString(6, b.getTel());
+                st.setString(7, b.getEmail());
+                st.setString(8, b.getDesc());
                 
                 st.executeUpdate();
-
+                
                 connection.commit();
 
                 
