@@ -166,8 +166,8 @@ public class ProdottoDAO {
                         PreparedStatement ps = null;
                         
                         Prodotto p1 = getBySku(p.getSku());  // i dati del record vecchio che voglio modificare
-                        remove(p.getSku()); 
 
+                        
                         p1.setSku(p.getSku());
                         p1.setDatareg(p.getDatareg());
                         p1.setNome(p.getNome());
@@ -180,7 +180,10 @@ public class ProdottoDAO {
                         p1.setQty_inarrivo(p.getQty_inarrivo());
                         p1.setQty_min(p.getQty_min());
                         p1.setFoto(p.getFoto());
+                        
                         add(p1);
+
+                     //   System.out.println(p);
         }
                            
                         /*
