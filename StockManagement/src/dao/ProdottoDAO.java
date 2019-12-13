@@ -124,8 +124,7 @@ public class ProdottoDAO {
                          Connection connection = null;
                         PreparedStatement ps = null;
         
-                        String insertSQL= "INSERT INTO " + TABLE_NAME
-                                                                      + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";       
+                        String insertSQL= "INSERT INTO " + TABLE_NAME + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); INSERT INTO `prodotti_has_fornitori` (`prodotti_sku`, `fornitori_idfornitori`) VALUES ('"+b.getSku()+"', '"+IdFornitore+"');";       
                         
                         try{
                                     connection = DriverManagerConnectionPool.getConnection();
@@ -150,14 +149,7 @@ public class ProdottoDAO {
                                     
                                     connection.commit();
                                     
-                                    
-                                    //Link al fornitore
-                                     PreparedStatement ps2 = null;
-                                     String insertSQL2= "INSERT INTO 'prodotti_has_fornitori' ('prodotti_sku', 'fornitori_idfornitori') VALUES ('"+b.getSku()+"', '"+IdFornitore +"')";   
-                                     ps2 = connection.prepareStatement(insertSQL2); 
-                                     ps.executeUpdate();
-                                     connection.commit();
-                                     
+    
                                     
                                     
                         }
@@ -165,6 +157,7 @@ public class ProdottoDAO {
                                     try{
                                             if (ps != null)
                                                 ps.close();
+                                            
                                     }
                                     finally{
                                                  DriverManagerConnectionPool.releaseConnection(connection);
