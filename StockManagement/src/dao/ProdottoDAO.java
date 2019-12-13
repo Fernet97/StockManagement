@@ -120,7 +120,7 @@ public class ProdottoDAO {
                                 }
   
        
-        public synchronized void add(Prodotto b) throws SQLException{
+        public synchronized void add(Prodotto b, String IdFornitore) throws SQLException{
                          Connection connection = null;
                         PreparedStatement ps = null;
         
@@ -149,6 +149,17 @@ public class ProdottoDAO {
                                     ps.executeUpdate();
                                     
                                     connection.commit();
+                                    
+                                    
+                                    //Link al fornitore
+                                     PreparedStatement ps2 = null;
+                                     String insertSQL2= "INSERT INTO 'prodotti_has_fornitori' ('prodotti_sku', 'fornitori_idfornitori') VALUES ('"+b.getSku()+"', '"+IdFornitore +"')";   
+                                     ps2 = connection.prepareStatement(insertSQL2); 
+                                     ps.executeUpdate();
+                                     connection.commit();
+                                     
+                                    
+                                    
                         }
                         finally{
                                     try{
@@ -181,7 +192,7 @@ public class ProdottoDAO {
                         p1.setQty_min(p.getQty_min());
                         p1.setFoto(p.getFoto());
                         
-                        add(p1);// richiamre metodo remove alla fine 
+                        add(p1, "FR-2");// richiamre metodo remove alla fine 
                         
                         
                      //   System.out.println(p);
@@ -254,28 +265,29 @@ public class ProdottoDAO {
 
 
             String query = "select* from prodotti order by datareg DESC LIMIT 1";      
-                 		try  {
-                                                        connection = DriverManagerConnectionPool.getConnection();
-                                                        ps = connection.prepareStatement(query);
+           
+            try  {
+                        connection = DriverManagerConnectionPool.getConnection();
+                        ps = connection.prepareStatement(query);
 
-                                                        ResultSet rs = ps.executeQuery(query);
-                                                        
-                                                        while (rs.next()) {
-                                                                                                
-                                                                                                bean.setSku(rs.getString("sku"));
-                                                                                                bean.setDatareg(rs.getString("datareg"));
-                                                                                                bean.setNome(rs.getString("nome"));
-                                                                                                bean.setCategoria(rs.getString("categoria"));
-                                                                                                bean.setQty(rs.getInt("qty"));
-                                                                                                bean.setInstock(rs.getBoolean("instock"));
-                                                                                                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
-                                                                                                bean.setCosto(rs.getFloat("costo"));
-                                                                                                bean.setDescrizione(rs.getString("descrizione"));
-                                                                                                bean.setQty_inarrivo(rs.getInt("qty_inarrivo"));
-                                                                                                bean.setQty_min(rs.getInt("qty_min"));
-                                                                                                bean.setFoto(rs.getString("foto"));
-                                                                                                  
-                                                                                    }
+                        ResultSet rs = ps.executeQuery(query);
+
+                        while (rs.next()) {
+
+                            bean.setSku(rs.getString("sku"));
+                            bean.setDatareg(rs.getString("datareg"));
+                            bean.setNome(rs.getString("nome"));
+                            bean.setCategoria(rs.getString("categoria"));
+                            bean.setQty(rs.getInt("qty"));
+                            bean.setInstock(rs.getBoolean("instock"));
+                            bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
+                            bean.setCosto(rs.getFloat("costo"));
+                            bean.setDescrizione(rs.getString("descrizione"));
+                            bean.setQty_inarrivo(rs.getInt("qty_inarrivo"));
+                            bean.setQty_min(rs.getInt("qty_min"));
+                            bean.setFoto(rs.getString("foto"));
+
+                                                                            }
                                 }
                                                 finally {
 			try {
