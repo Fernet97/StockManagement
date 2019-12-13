@@ -5,12 +5,21 @@
  */
 package beans;
 
+import dao.FornitoreDAO;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author LittleJoke
  */
 public class Fornitore {
-    
+
+
+    private static int code = 0 ;
     private String idfornitore;
     private String datareg;
     private String fullname;   
@@ -23,6 +32,8 @@ public class Fornitore {
     //constructor
 
     public Fornitore(String idfornitore, String datareg, String fullname, String p_iva, String indirizzo, String tel, String email, String desc) {
+            setCode(leggiUltimoID() +1);
+        
         this.idfornitore = idfornitore;
         this.datareg = datareg;
         this.fullname = fullname;
@@ -31,6 +42,9 @@ public class Fornitore {
         this.tel = tel;
         this.email = email;
         this.desc = desc;
+        
+        setDatareg(generateData());
+        setIdfornitore(generateID());
     }
 
     public Fornitore() { }
@@ -101,7 +115,56 @@ public class Fornitore {
         this.desc = desc;
     }
     
+        public static int getCode() {
+        return code;
+    }
+
+    public static void setCode(int code) {
+        Fornitore.code = code;
+    }
     
+    
+       public String generateData() {
+       
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+	LocalDateTime now = LocalDateTime.now();
+	System.out.println(dtf.format(now)); //11/11/2019 11:11
+        return dtf.format(now);
+     }
+
+    private String generateID() {
+      
+      String idgenerato = "FR-"+getCode();
+      return idgenerato;
+    }
+
+    private int leggiUltimoID() {
+                String tmp;
+        int idlast;
+
+        try {
+            FornitoreDAO dao = new FornitoreDAO();
+            
+            String lastid = dao.getLastID().getIdfornitore();
+            //FR-000
+            if(lastid == null) return 0;
+            
+          
+            tmp = lastid.substring(3);
+            System.out.println("miiiiiiiiii"+tmp);
+            idlast= Integer.parseInt(tmp);
+            
+    }
+                
+         catch (SQLException ex) {
+            Logger.getLogger(Prodotto.class.getName()).log(Level.SEVERE, null, ex);
+            idlast = -99999;
+        }
+        
+        return  idlast;
+
+    }
+}
 
     
-}
+

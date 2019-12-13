@@ -211,4 +211,46 @@ public class FornitoreDAO {
         }
 
     }
+    
+    public synchronized Fornitore getLastID() throws SQLException{
+        
+            Connection connection = null;
+            Statement  ps = null;
+            Fornitore bean = new Fornitore();
+
+
+            String query = "select* from fornitori order by datareg DESC LIMIT 1";      
+                 		try  {
+                                                        connection = DriverManagerConnectionPool.getConnection();
+                                                        ps = connection.prepareStatement(query);
+
+                                                        ResultSet rs = ps.executeQuery(query);
+                                                        
+                                                        while (rs.next()) {
+                                                                                                
+                                                            bean.setIdfornitore(rs.getString("idfornitori"));
+                                                            bean.setDatareg(rs.getString("datareg"));
+                                                            bean.setFullname(rs.getString("fullname"));
+                                                            bean.setP_iva(rs.getString("p_iva"));
+                                                            bean.setIndirizzo(rs.getString("indirizzo"));
+                                                            bean.setTel(rs.getString("tel"));
+                                                            bean.setEmail(rs.getString("email"));
+                                                            bean.setDesc(rs.getString("description"));
+
+                                                                                                  
+                                                                                    }
+                                }
+                                                finally {
+			try {
+                                                                                if (ps != null)
+                                                                                    ps.close();
+                                                                            }
+                                                                          finally {
+                                                                                    DriverManagerConnectionPool.releaseConnection(connection);
+                                                                                    }
+                        
+                                                  }
+                                                return bean;
+        
+        }
 }
