@@ -29,7 +29,7 @@ public class ProdottoDAO {
                                                 
                                                 Collection<Prodotto> prodotti = new  LinkedList<Prodotto>();
                                                 
-                                                String selectSQL = "SELECT * FROM " + this.TABLE_NAME+ "order by datareg";
+                                                String selectSQL = "SELECT * FROM " +TABLE_NAME ; // DESC ORDINA DALL'ULTIMO AL PRIMO
          
                                                 try {
 			connection = DriverManagerConnectionPool.getConnection();
@@ -38,21 +38,24 @@ public class ProdottoDAO {
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				Prodotto  bean = new Prodotto();
+				Prodotto  bean  =  new  Prodotto(); 
                                                                                                 
                                                                                                 bean.setSku(rs.getString("sku"));
-                                                                                                bean.setDataReg(rs.getString("datareg"));
+                                                                                                bean.setDatareg(rs.getString("datareg"));
                                                                                                 bean.setNome(rs.getString("nome"));
                                                                                                 bean.setCategoria(rs.getString("categoria"));
-                                                                                                bean.setInStock(rs.getBoolean("instock"));
-                                                                                                bean.setDescrizione(rs.getString("descrizione"));
-                                                                                                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
                                                                                                 bean.setQty(rs.getInt("qty"));
-                                                                                                bean.setQty_min(rs.getInt("qty_min"));
+                                                                                                bean.setInstock(rs.getBoolean("instock"));
+                                                                                                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
                                                                                                 bean.setCosto(rs.getFloat("costo"));
+                                                                                                bean.setDescrizione(rs.getString("descrizione"));
+                                                                                                bean.setQty_inarrivo(rs.getInt("qty_inarrivo"));
+                                                                                                bean.setQty_min(rs.getInt("qty_min"));
                                                                                                 bean.setFoto(rs.getString("foto"));
-
+                                                                                                
+                                                                                                
                                                                                                 prodotti.add(bean);
+                                                                                               System.out.println(bean+"aaaa");
                                                                                     }
                                                 }
                                                 finally {
@@ -68,7 +71,7 @@ public class ProdottoDAO {
                                                 return prodotti;
                                                 
     }
-      
+      /* start here
         public  synchronized Prodotto getBySku(String sku) throws SQLException{
              
             Connection connection = null;
@@ -162,7 +165,7 @@ public class ProdottoDAO {
 
                         p1.setSku("uno sku generato");
                         p1.setNome(p.getNome());
-                        p1.setDataReg(p.getDataReg());
+                        p1.setDatareg(p.getDatareg());
                         p1.setCategoria(p.getCategoria());
                         p1.setInStock(p.isInStock());
                         p1.setDescrizione(p.getDescrizione());
@@ -196,8 +199,12 @@ public class ProdottoDAO {
                         
                         ps.executeUpdate();
                         
-                        connection.commit();*/
-        }
+                        connection.commit();
+        }no
+      
+      */
+      
+      /*
         
             public synchronized void remove (String sku) throws SQLException{
                         Connection connection = null;
@@ -270,6 +277,6 @@ public class ProdottoDAO {
                                                 return bean;
         
         }
-
+end here */
 }
 
