@@ -12,39 +12,33 @@ package beans;
 public class Utente {
    
    private String id; 
+   private String datareg;
    private String fullname; 
+   private String CF;
+   private String indirizzo; 
    private String telefono; 
    private String email; 
-   private String CF; 
-   private String indirizzo; 
    private String pwd; 
-   private boolean create; 
-   private boolean update; 
-   private boolean view; 
-   private boolean delete; 
-   private boolean isAdmin;
+   private int permessi; 
+   private String note; 
+
 
    //contructor
 
-    public Utente(String id, String fullname, String telefono, String email, String CF, String indirizzo, String pwd, boolean create, boolean update, boolean view, boolean delete, boolean isAdmin) {
+    public Utente(String id, String datareg, String fullname, String CF, String indirizzo, String telefono, String email, String pwd, int permessi, String note) {
         this.id = id;
+        this.datareg = datareg;
         this.fullname = fullname;
-        this.telefono = telefono;
-        this.email = email;
         this.CF = CF;
         this.indirizzo = indirizzo;
+        this.telefono = telefono;
+        this.email = email;
         this.pwd = pwd;
-        this.create = create;
-        this.update = update;
-        this.view = view;
-        this.delete = delete;
-        this.isAdmin = isAdmin;
+        this.permessi = permessi;
+        this.note = note;
     }
-    
-    public Utente(){}
-    
-    
-    //getter & setter
+
+// getter & setter 
 
     public String getId() {
         return id;
@@ -54,28 +48,20 @@ public class Utente {
         this.id = id;
     }
 
+    public String getDatareg() {
+        return datareg;
+    }
+
+    public void setDatareg(String datareg) {
+        this.datareg = datareg;
+    }
+
     public String getFullname() {
         return fullname;
     }
 
     public void setFullname(String fullname) {
         this.fullname = fullname;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getCF() {
@@ -94,6 +80,22 @@ public class Utente {
         this.indirizzo = indirizzo;
     }
 
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPwd() {
         return pwd;
     }
@@ -102,44 +104,20 @@ public class Utente {
         this.pwd = pwd;
     }
 
-    public boolean isCreate() {
-        return create;
+    public int getPermessi() {
+        return permessi;
     }
 
-    public void setCreate(boolean create) {
-        this.create = create;
+    public void setPermessi(int permessi) {
+        this.permessi = permessi;
     }
 
-    public boolean isUpdate() {
-        return update;
+    public String getNote() {
+        return note;
     }
 
-    public void setUpdate(boolean update) {
-        this.update = update;
+    public void setNote(String note) {
+        this.note = note;
     }
-
-    public boolean isView() {
-        return view;
-    }
-
-    public void setView(boolean view) {
-        this.view = view;
-    }
-
-    public boolean isDelete() {
-        return delete;
-    }
-
-    public void setDelete(boolean delete) {
-        this.delete = delete;
-    }
-
-    public boolean isIsAdmin() {
-        return isAdmin;
-    }
-
-    public void setIsAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
-    }
-   
+    
 }

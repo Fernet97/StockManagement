@@ -4,7 +4,7 @@ import beans.Prodotto;
 import beans.Utente;
 import dao.FornitoreDAO;
 import dao.ProdottoDAO;
-import dao.UtenteDAO;
+//import dao.UtenteDAO;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -23,65 +23,105 @@ import java.util.logging.Logger;
  */
 public class TestDAO {
     
-     public static void main(String[] args) {
+     public static void main(String[] args) throws InterruptedException {
     
        try {
-            
-            
-             //FornitoreDAO daofornitore = new FornitoreDAO();
            
-             /*
-            Fornitore f = new Fornitore(2, "zzzzz", "Accipicchia", "AHAHAH", "Paccc", "Svizzera", "23423423423", "uanm@gmail.com", "descrizione a caso");     
-            daofornitore.add(f);
-           // Fornitore mimmo = daofornitore.getByID(1);
-            System.out.println("Fornitore: "+f.getNome() +" " + f.getStato());
-            */
-            
-           /*Fornitore f2 = new Fornitore(2, "yyyyy", "BELBELBELA", "Capretti", "Carpisa", "Italia", "367239267111", "capra@gmail.com", "un altra descrizione");     
-           daofornitore.update(f2);
-            */
-           
-           
-           //daofornitore.remove(2);
-           
-            
-           /* Collection<Fornitore> fornitori = daofornitore.getAll();
-            
-            for(Fornitore f : fornitori){
-              System.out.println(f.getIdfornitore());
-            }
-          
-
-            daofornitore.remove(1);
-        
-          
-           ProdottoDAO dao = new ProdottoDAO();
-           Prodotto pr1 = new Prodotto("1N999sku", "oggi", "nome", "cat",  23, true,  87, 12.4f, "desc", 0, 1,  "foto.png");
+                      System.out.println("/*add, update e remove*/");
+           java.util.concurrent.TimeUnit.SECONDS.sleep(3);
+                                                                 /*add, update e remove*/
+                               System.out.println("/*add");
+                                                                 System.out.println("/*Prodotto*/");
+ ProdottoDAO dao = new ProdottoDAO();
+           Prodotto pr1 = new Prodotto("2..0u", "oggi", "nome", "miaot",  23, true,  87, 12.4f, "desc", 0, 1,  "foto.png");
            dao.add(pr1);
-           //System.out.println("ultimo index:"+pr1.leggiUltimoSku());
-/*
-          //System.out.println("Ho trovato: "+ pp.getNome());
-            
-           
-           UtenteDAO user = new UtenteDAO();
-           Collection<Utente> uno = user.getAll();
-           for (Utente u : uno) {
-               System.out.println(u.getId()+ u.getFullname());
-           }
-          
-           */
-        //   UtenteDAO dao = new UtenteDAO();
-          // Utente u = new Utente ("2", "test2", "test2", "test2", "test2", "test2", "test...", true, true, true, true, true);
-           //dao.add(u);
-      //     System.out.println("add ok");
-          // Utente u2 = new Utente("2", "test3", "test3", "test3", "test3", "test3", "testadicazzo", true, true, true, true, true);
-           //dao.update(u2);
-           // System.out.println(u);*/
-           
-           ProdottoDAO pr = new ProdottoDAO();
+         System.out.println("added pr1"+pr1.getSku());
+            java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+           Prodotto pr2 = new Prodotto("2", "miao", "aaaaa", "cazzzzzaaataa",  47, false,  87, 12.4f, "desc", 0, 1,  "foto.png");
+  System.out.println("added pr2 "+pr2.getSku());
+            java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+  dao.update(pr2);
+           System.out.println("/*updateok");
+                              java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+           dao.remove(pr1);
+           System.out.println("/*remove ok");
+            java.util.concurrent.TimeUnit.SECONDS.sleep(10);
 
-           System.out.println(pr.getAll());
+            System.out.println("/*fornitore*/");
+              FornitoreDAO daofornitore = new FornitoreDAO();
            
+             
+            Fornitore f = new Fornitore("aaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa");     
+            daofornitore.add(f);
+            System.out.println("addedf "+f.getIdfornitore());
+            java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+            Fornitore f2 = new Fornitore("bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb"); 
+            System.out.println("addedf2 "+f2.getIdfornitore());
+              java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+           daofornitore.update(f2);
+                      System.out.println("/*updateok");
+             java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+           daofornitore.remove(f);
+                      System.out.println("/*remove ok");
+                      System.out.println("");
+                      System.out.println("");
+            
+                
+               
+                   
+                   
+                                                            
+        
+        
+        
+                                                                /*getbyid*/
+                   System.out.println("/*getbyid*/");
+                   java.util.concurrent.TimeUnit.SECONDS.sleep(3);
+                   System.out.println("/*fornitore");
+                      FornitoreDAO daofornitore1 = new FornitoreDAO();
+           Fornitore byID = daofornitore1.getByID("bbbbbbb");//must be changed
+                    System.out.println("fornitore "+ byID.getIdfornitore());
+                  
+                                java.util.concurrent.TimeUnit.SECONDS.sleep(5);
+                                
+                    System.out.println("/*prodotto");
+                    ProdottoDAO dao1 = new ProdottoDAO();
+                    Prodotto byIDp =  dao1.getBySku("ca2-13/12/2019 13:16:32");//must be changed
+                    System.out.println("prodotto " + byIDp.getSku());
+                  
+                    java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+                                          System.out.println("");
+                      System.out.println("");
+                    
+                                                            /*getall*/
+           
+                                                               System.out.println("/*getall*/");
+                   java.util.concurrent.TimeUnit.SECONDS.sleep(3);
+                                         System.out.println("/*fornitore");
+             FornitoreDAO daofornitore2 = new FornitoreDAO();
+            Collection<Fornitore> fornitori = daofornitore2.getAll();
+            
+            for(Fornitore getall : fornitori){
+              System.out.println("testdaoprint "+getall.getIdfornitore());
+            }
+            
+            java.util.concurrent.TimeUnit.SECONDS.sleep(5);
+                                  System.out.println("/*prodotto");
+                      
+            ProdottoDAO dao2 = new ProdottoDAO();
+            Collection<Prodotto> prodotti = dao2.getAll();
+            for (Prodotto p: prodotti){
+                System.out.println("test dao prodotti "+ p.getSku());
+            }
+     
+           java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+                                 System.out.println("");
+                      System.out.println("");
+           System.out.println("/*finit*/");
+                   
+                   
+                   
+                   
        } catch (SQLException ex) {
             Logger.getLogger(TestDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

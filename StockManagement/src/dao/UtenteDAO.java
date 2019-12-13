@@ -18,7 +18,7 @@ import java.util.LinkedList;
 /**
  *
  * @author LittleJoke
- */
+ *//*
 public class UtenteDAO {
     private final String TABLE_NAME = "utenti";
         
@@ -215,3 +215,4 @@ public synchronized void remove (String id) throws SQLException{
 	}
 }
 
+*/
