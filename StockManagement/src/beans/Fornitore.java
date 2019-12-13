@@ -11,40 +11,54 @@ package beans;
  */
 public class Fornitore {
     
-    private int idfornitore;
+    private String idfornitore;
+    private String datareg;
+    private String fullname;   
     private String p_iva;
-    private String nome;
-    private String cognome;
-    private String nome_azienda;
-    private String stato;
+    private String indirizzo;
     private String tel;
     private String email;
     private String desc;
     
     //constructor
 
-    public Fornitore(int idfornitore, String p_iva, String nome, String cognome, String nome_azienda, String stato, String tel, String email, String desc) {
+    public Fornitore(String idfornitore, String datareg, String fullname, String p_iva, String indirizzo, String tel, String email, String desc) {
         this.idfornitore = idfornitore;
+        this.datareg = datareg;
+        this.fullname = fullname;
         this.p_iva = p_iva;
-        this.nome = nome;
-        this.cognome = cognome;
-        this.nome_azienda = nome_azienda;
-        this.stato = stato;
+        this.indirizzo = indirizzo;
         this.tel = tel;
         this.email = email;
         this.desc = desc;
     }
-    
-    public Fornitore(){}
-    
-   //getter & setter
 
-    public int getIdfornitore() {
+    public Fornitore() { }
+    
+  //getter & setter
+
+    public String getIdfornitore() {
         return idfornitore;
     }
 
-    public void setIdfornitore(int idfornitore) {
+    public void setIdfornitore(String idfornitore) {
         this.idfornitore = idfornitore;
+    }
+
+    public String getDatareg() {
+        return datareg;
+    }
+
+    public void setDatareg(String datareg) {
+        this.datareg = datareg;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getP_iva() {
@@ -55,36 +69,12 @@ public class Fornitore {
         this.p_iva = p_iva;
     }
 
-    public String getNome() {
-        return nome;
+    public String getIndirizzo() {
+        return indirizzo;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCognome() {
-        return cognome;
-    }
-
-    public void setCognome(String cognome) {
-        this.cognome = cognome;
-    }
-
-    public String getNome_azienda() {
-        return nome_azienda;
-    }
-
-    public void setNome_azienda(String nome_azienda) {
-        this.nome_azienda = nome_azienda;
-    }
-
-    public String getStato() {
-        return stato;
-    }
-
-    public void setStato(String stato) {
-        this.stato = stato;
+    public void setIndirizzo(String indirizzo) {
+        this.indirizzo = indirizzo;
     }
 
     public String getTel() {
@@ -112,6 +102,6 @@ public class Fornitore {
     }
     
     
-    
+
     
 }
