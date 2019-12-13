@@ -54,7 +54,7 @@ public class FornitoreDAO {
                 bean.setDesc(rs.getString("description"));
 
                 fornitori.add(bean);
-                System.out.println("getalldao"+bean);
+
             }
 
         } finally {
