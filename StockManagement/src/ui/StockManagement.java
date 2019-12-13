@@ -8,6 +8,7 @@ package ui;
 import database.DriverManagerConnectionPool;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
@@ -54,6 +55,9 @@ public class StockManagement {
             } catch (Exception ex) {
                 // not worth my time
             }}
+        
+       int s_witdh = Toolkit.getDefaultToolkit().getScreenSize().width;
+       int s_height = Toolkit.getDefaultToolkit().getScreenSize().height;
         
         //Crea schermata di Login
         LoginDialog ld=new LoginDialog();

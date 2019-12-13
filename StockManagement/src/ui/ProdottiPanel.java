@@ -446,7 +446,7 @@ class FormProdotti extends javax.swing.JFrame {
         });
 
         jLabel10.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel10.setText("Quantità in attivo");
+        jLabel10.setText("Quantità in arrivo");
 
         jTextField9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

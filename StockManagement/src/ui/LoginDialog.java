@@ -137,7 +137,8 @@ public class LoginDialog extends javax.swing.JDialog {
                         //mainFrame.setResizable(false);
                         mainFrame.setTitle("$tock managemenT");  
                         //mainFrame.setSize(1750, 1050);
-                        mainFrame.setMinimumSize(new Dimension(1750, 1050));
+
+                        mainFrame.setMinimumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
                         mainFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
                         dispose();       
             }
