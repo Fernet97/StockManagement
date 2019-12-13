@@ -215,12 +215,15 @@ public class ProdottoDAO {
       */
       
               
-            public synchronized void remove (String sku) throws SQLException{
+            public synchronized void remove (Prodotto p) throws SQLException{
                         Connection connection = null;
                         Statement  statement = null;
+                                    p.getSku();
+                                    //DELETE FROM `db_stock`.`prodotti` WHERE (`sku` = 'mi1-13/12/2019 11:21:41');
 
-		String query = "DELETE FROM " +this.TABLE_NAME + " WHERE sku ='"+sku+"'";
-                //System.out.println(query);
+		String query = "DELETE FROM " +this.TABLE_NAME + " WHERE  (`sku` = '"+p.getSku()+"')";
+                System.out.println("miao"+p.getSku());
+
 
                         try {
                                 connection = DriverManagerConnectionPool.getConnection();

@@ -4,7 +4,7 @@ import beans.Prodotto;
 import beans.Utente;
 import dao.FornitoreDAO;
 import dao.ProdottoDAO;
-import dao.UtenteDAO;
+//import dao.UtenteDAO;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -27,7 +27,12 @@ public class TestDAO {
     
        try {
             
-            
+           
+           FornitoreDAO daofornitore = new FornitoreDAO();
+           System.out.println("lista fornitori getall");
+           String daofornitore.getAll();
+           System.out.println();
+            /*
              FornitoreDAO daofornitore = new FornitoreDAO();
            
              
@@ -37,13 +42,14 @@ public class TestDAO {
 
             
             
-           Fornitore f2 = new Fornitore( f.getIdfornitore(), "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb");     
+           Fornitore f2 = new Fornitore("bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb");     
            daofornitore.update(f2);
+           daofornitore.remove(f);
             
            
            
            //daofornitore.remove(2);
-           
+           */
             
            /* Collection<Fornitore> fornitori = daofornitore.getAll();
             
@@ -77,17 +83,21 @@ public class TestDAO {
           // Utente u2 = new Utente("2", "test3", "test3", "test3", "test3", "test3", "testadicazzo", true, true, true, true, true);
            //dao.update(u2);
            // System.out.println(u);*/
-           
+         /*
  ProdottoDAO dao = new ProdottoDAO();
            Prodotto pr1 = new Prodotto("2..0u", "oggi", "nome", "miaot",  23, true,  87, 12.4f, "desc", 0, 1,  "foto.png");
            dao.add(pr1);
            //System.out.println("ultimo index:"+pr1.leggiUltimoSku());
+           System.out.println(pr1.getSku());
+            java.util.concurrent.TimeUnit.SECONDS.sleep(10);
            Prodotto pr2 = new Prodotto("2", "miao", "aaaaa", "cazzzzzaaataa",  47, false,  87, 12.4f, "desc", 0, 1,  "foto.png");
+  System.out.println(pr2.getSku());
+            java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+  dao.update(pr2);
+                              java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+           dao.remove(pr1);*/
 
-           dao.update(pr2);
-
-           dao.remove(pr1.getSku());
-          //System.out.println("Ho trovato: "+ pp.getNome());
+                   //System.out.println("Ho trovato: "+ pp.getNome());
            
        } catch (SQLException ex) {
             Logger.getLogger(TestDAO.class.getName()).log(Level.SEVERE, null, ex);

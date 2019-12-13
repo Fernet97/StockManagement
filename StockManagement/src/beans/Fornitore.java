@@ -33,9 +33,7 @@ public class Fornitore {
         this.desc = desc;
     }
 
-    public Fornitore() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public Fornitore() { }
     
   //getter & setter
 
