@@ -107,8 +107,8 @@ public class AnagrafichePanel extends JPanel {
         TitoloTab1.setLayout(new GridLayout(1,1));
         TitoloTab1.setBorder (new EmptyBorder(0, 100, 20, 100));
 
-          String[] columnNames = { "ID", "Data reg.", "Fullname", "P.IVA/CF","Indirizzo", "Tel/Fax", "email", "Note","Modifica","Cancella" };
-          Object[][] data = { { "1", "10/12/2019", "Gianfranco Colil", "XXXXXXX","Via campo san giovanni, ITa", "398737892", "cacio@gmail.com", "una descrizione","Modifica","Cancella"  } };
+          String[] columnNames = { "ID", "Data reg.", "Fullname", "P.IVA/CF","Indirizzo", "Tel/Fax", "email", "Note","Modifica","Cancella"};
+          Object[][] data = { { "1", "10/12/2019", "Gianfranco Colil", "XXXXXXX","Via campo san giovanni, ITa", "398737892", "cacio@gmail.com", "una descrizione","Modifica","Cancella"} };
             
            
            
