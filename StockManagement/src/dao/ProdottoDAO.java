@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package dao;
+import beans.Fornitore;
 import beans.Prodotto;
 import database.DriverManagerConnectionPool;
 import java.sql.Connection;
@@ -219,14 +220,15 @@ public class ProdottoDAO {
       */
       
               
-            public synchronized void remove (Prodotto p) throws SQLException{
+            public synchronized void remove (Prodotto p, Fornitore f) throws SQLException{
                         Connection connection = null;
                         Statement  statement = null;
                                     p.getSku();
                                     //DELETE FROM `db_stock`.`prodotti` WHERE (`sku` = 'mi1-13/12/2019 11:21:41');
-
-		String query = "DELETE FROM " +this.TABLE_NAME + " WHERE  (`sku` = '"+p.getSku()+"')";
-                System.out.println("miao"+p.getSku());
+                                                    // WHERE (`prodotti_sku` = 'mi1-16/12/2019 11:13:59') and (`fornitori_idfornitori` = 'FR-2');
+            String query = "DELETE FROM prodotti_has_fornitori WHERE (`prodotti_sku` =  '"+p.getSku()+"') and (`fornitori_idfornitori` = '"+f.getIdfornitore()+"'); "
+                    + "DELETE FROM " +this.TABLE_NAME + " WHERE  (`sku` = '"+p.getSku()+"');"; 
+                System.out.println(query);
 
 
                         try {

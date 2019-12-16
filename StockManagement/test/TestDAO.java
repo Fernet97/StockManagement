@@ -42,14 +42,14 @@ public class TestDAO {
               java.util.concurrent.TimeUnit.SECONDS.sleep(10);
            daofornitore.update(f2);
                       System.out.println("/*updateok");
-             java.util.concurrent.TimeUnit.SECONDS.sleep(10);
-           daofornitore.remove(f);
+            // java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+        //   daofornitore.remove(f);
                       System.out.println("/*remove ok");
-                                                                 
+                       java.util.concurrent.TimeUnit.SECONDS.sleep(10);
                                                                  System.out.println("/*Prodotto*/");
  ProdottoDAO dao = new ProdottoDAO();
            Prodotto pr1 = new Prodotto("2..0u", "oggi", "nome", "miaot",  23, true,  87, 12.4f, "desc", 0, 1,  "foto.png");
-           dao.add(pr1, f.getIdfornitore());//manca fornitore
+           dao.add(pr1, f2.getIdfornitore());//manca fornitore
          System.out.println("added pr1"+pr1.getSku());
             java.util.concurrent.TimeUnit.SECONDS.sleep(10);
            Prodotto pr2 = new Prodotto("2", "miao", "aaaaa", "cazzzzzaaataa",  47, false,  87, 12.4f, "desc", 0, 1,  "foto.png");
@@ -58,18 +58,13 @@ public class TestDAO {
   dao.update(pr2);
            System.out.println("/*updateok");
                               java.util.concurrent.TimeUnit.SECONDS.sleep(10);
-           dao.remove(pr1);
+           dao.remove(pr1,  f);
            System.out.println("/*remove ok");
-            java.util.concurrent.TimeUnit.SECONDS.sleep(10);
-
-           
-           
-             
- 
-                      System.out.println("");
-                      System.out.println("");
+           System.out.println("");
+            System.out.println("");
             
-                
+                            java.util.concurrent.TimeUnit.SECONDS.sleep(3);
+
                
                    
                    
