@@ -21,7 +21,7 @@ public class TestDAORel {
        
          try{
           FornitoreDAO daofornitore = new FornitoreDAO();
-          Fornitore f = new Fornitore("aaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa");     
+          Fornitore f = new Fornitore("aaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa");     
           daofornitore.add(f);
     
          ProdottoDAO dao = new ProdottoDAO();

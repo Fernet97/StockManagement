@@ -30,27 +30,9 @@ public class TestDAO {
                       System.out.println("/*add, update e remove*/");
            java.util.concurrent.TimeUnit.SECONDS.sleep(3);
                                                                  /*add, update e remove*/
-                               System.out.println("/*add");
-                                                                 System.out.println("/*Prodotto*/");
- ProdottoDAO dao = new ProdottoDAO();
-           Prodotto pr1 = new Prodotto("2..0u", "oggi", "nome", "miaot",  23, true,  87, 12.4f, "desc", 0, 1,  "foto.png");
-           dao.add(pr1);
-         System.out.println("added pr1"+pr1.getSku());
-            java.util.concurrent.TimeUnit.SECONDS.sleep(10);
-           Prodotto pr2 = new Prodotto("2", "miao", "aaaaa", "cazzzzzaaataa",  47, false,  87, 12.4f, "desc", 0, 1,  "foto.png");
-  System.out.println("added pr2 "+pr2.getSku());
-            java.util.concurrent.TimeUnit.SECONDS.sleep(10);
-  dao.update(pr2);
-           System.out.println("/*updateok");
-                              java.util.concurrent.TimeUnit.SECONDS.sleep(10);
-           dao.remove(pr1);
-           System.out.println("/*remove ok");
-            java.util.concurrent.TimeUnit.SECONDS.sleep(10);
-
-            System.out.println("/*fornitore*/");
-              FornitoreDAO daofornitore = new FornitoreDAO();
-           
-             
+                       System.out.println("/*fornitore*/");
+                                                                 System.out.println("/*add");
+            FornitoreDAO daofornitore = new FornitoreDAO();                                                             
             Fornitore f = new Fornitore("aaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa");     
             daofornitore.add(f);
             System.out.println("addedf "+f.getIdfornitore());
@@ -63,6 +45,27 @@ public class TestDAO {
              java.util.concurrent.TimeUnit.SECONDS.sleep(10);
            daofornitore.remove(f);
                       System.out.println("/*remove ok");
+                                                                 
+                                                                 System.out.println("/*Prodotto*/");
+ ProdottoDAO dao = new ProdottoDAO();
+           Prodotto pr1 = new Prodotto("2..0u", "oggi", "nome", "miaot",  23, true,  87, 12.4f, "desc", 0, 1,  "foto.png");
+           dao.add(pr1, f.getIdfornitore());//manca fornitore
+         System.out.println("added pr1"+pr1.getSku());
+            java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+           Prodotto pr2 = new Prodotto("2", "miao", "aaaaa", "cazzzzzaaataa",  47, false,  87, 12.4f, "desc", 0, 1,  "foto.png");
+  System.out.println("added pr2 "+pr2.getSku());
+            java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+  dao.update(pr2);
+           System.out.println("/*updateok");
+                              java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+           dao.remove(pr1);
+           System.out.println("/*remove ok");
+            java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+
+           
+           
+             
+ 
                       System.out.println("");
                       System.out.println("");
             
