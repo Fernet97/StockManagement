@@ -72,7 +72,7 @@ public class FramePrincipale extends JFrame{
     public void CreaGUI() {
 
         //set icona finestra
-        ImageIcon img = new ImageIcon("logo-Icon.png");
+        ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
         this.setIconImage(img.getImage());
                 
         
@@ -264,43 +264,43 @@ public class FramePrincipale extends JFrame{
                 
                         
                 if(tipo.equals("Dashboard")){
-                    icon = new JLabel(ImpostaImg("home.png"));
+                    icon = new JLabel(ImpostaImg("/res/img/home.png"));
                     color_etichetta = Color.blue;
                     code = 0;
 
                 }
                 if(tipo.equals("Ordini")){
-                    icon = new JLabel(ImpostaImg("ordini.png"));
+                    icon = new JLabel(ImpostaImg("/res/img/ordini.png"));
                     color_etichetta = Color.orange; 
                     code = 5;
                 
                 }   
                 if(tipo.equals("Anagrafiche")){
-                    icon = new JLabel(ImpostaImg("anagrafiche.png"));
+                    icon = new JLabel(ImpostaImg("/res/img/anagrafiche.png"));
                     color_etichetta = Color.yellow;                   
                     code = 1;
                 }       
                 
                 if(tipo.equals("Categorie")){
-                    icon = new JLabel(ImpostaImg("categorie.png"));
+                    icon = new JLabel(ImpostaImg("/res/img/categorie.png"));
                     color_etichetta = Color.cyan;                   
                     code = 2;
                 }                     
                if(tipo.equals("Codici")){
-                    icon = new JLabel(ImpostaImg("codici.png"));
+                    icon = new JLabel(ImpostaImg("/res/img/codici.png"));
                     color_etichetta = Color.WHITE;                   
                     code = 4;
                 }
                
                if(tipo.equals("Prodotti")){
-                    icon = new JLabel(ImpostaImg("prodotti.png"));
+                    icon = new JLabel(ImpostaImg("/res/img/prodotti.png"));
                     color_etichetta = Color.PINK;                   
                     code = 3;
                 }
 
                
                 if(tipo.equals("Report")){
-                    icon = new JLabel(ImpostaImg("report.png"));
+                    icon = new JLabel(ImpostaImg("/res/img/report.png"));
                     color_etichetta = Color.GREEN;                   
                     code = 6;
                 }
