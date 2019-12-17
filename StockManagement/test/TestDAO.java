@@ -21,13 +21,18 @@ import java.util.logging.Logger;
  *
  * @author Fernet
  */
+
+//********************************WARNING*****************************************************/
+//LA REMOVE NON FUNZIONA IN TestDAO A CAUSA delle foreign key nella tabella "prodotti_has_fornitori"
+//PER TESTARE QUESTA FUNZIONE USARE IL FILE TestDAORemove.java
+//********************************************************************************************//
 public class TestDAO {
     
      public static void main(String[] args) throws InterruptedException {
     
        try {
            
-                      System.out.println("/*add, update e remove*/");
+                      System.out.println("/*add, update*/");
            java.util.concurrent.TimeUnit.SECONDS.sleep(3);
                                                                  /*add, update e remove*/
                        System.out.println("/*fornitore*/");
@@ -44,7 +49,7 @@ public class TestDAO {
                       System.out.println("/*updateok");
             // java.util.concurrent.TimeUnit.SECONDS.sleep(10);
         //   daofornitore.remove(f);
-                      System.out.println("/*remove ok");
+                     // System.out.println("/*remove ok");
                        java.util.concurrent.TimeUnit.SECONDS.sleep(10);
                                                                  System.out.println("/*Prodotto*/");
  ProdottoDAO dao = new ProdottoDAO();
@@ -58,8 +63,8 @@ public class TestDAO {
   dao.update(pr2);
            System.out.println("/*updateok");
                               java.util.concurrent.TimeUnit.SECONDS.sleep(10);
-           dao.remove(pr1,  f);
-           System.out.println("/*remove ok");
+       //    dao.remove(pr1,  f);
+           //System.out.println("/*remove ok");
            System.out.println("");
             System.out.println("");
             

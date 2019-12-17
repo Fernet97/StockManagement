@@ -226,6 +226,7 @@ public class ProdottoDAO {
                                     p.getSku();
                                     //DELETE FROM `db_stock`.`prodotti` WHERE (`sku` = 'mi1-13/12/2019 11:21:41');
                                                     // WHERE (`prodotti_sku` = 'mi1-16/12/2019 11:13:59') and (`fornitori_idfornitori` = 'FR-2');
+                                         //   DELETE FROM `db_stock`.`prodotti_has_fornitori` WHERE (`prodotti_sku` = 'ca2-16/12/2019 12:21:16') and (`fornitori_idfornitori` = 'FR-2');
             String query = "DELETE FROM prodotti_has_fornitori WHERE (`prodotti_sku` =  '"+p.getSku()+"') and (`fornitori_idfornitori` = '"+f.getIdfornitore()+"'); "
                     + "DELETE FROM " +this.TABLE_NAME + " WHERE  (`sku` = '"+p.getSku()+"');"; 
                 System.out.println(query);
