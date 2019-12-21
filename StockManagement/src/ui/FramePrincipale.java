@@ -100,7 +100,7 @@ public class FramePrincipale extends JFrame{
         HomePanel.add(categorie, "Categorie"); 
         
         // Aggiungi la carta "PRODOTTO"
-        ProdottiPanel prodotti = new ProdottiPanel();;
+        ProdottiPanel prodotti = new ProdottiPanel();
         HomePanel.add(prodotti, "Prodotti");        
   
         // Aggiungi la carta "CODICI"
@@ -382,7 +382,7 @@ public class FramePrincipale extends JFrame{
 
 	public ImageIcon ImpostaImg(String nomeImmag) {
 
-                ImageIcon icon = new ImageIcon(nomeImmag);
+                ImageIcon icon = new ImageIcon  (getClass().getResource(nomeImmag));
 		Image ImmagineScalata = icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT);
 		icon.setImage(ImmagineScalata);
                 return icon;
