@@ -270,7 +270,7 @@ public class FramePrincipale extends JFrame{
 
                 }
                 if(tipo.equals("Ordini")){
-                    icon2 = new JLabel(ImpostaImg("/res/img/ordini.png"));
+                    icon = new JLabel(ImpostaImg("/res/img/ordini.png"));
                     color_etichetta = Color.orange; 
                     code = 5;
                 
