@@ -191,8 +191,8 @@ public class ProdottiPanel extends JPanel{
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
     {
       setText((value == null) ? "" : value.toString());
-      if(getText().equals("Modifica"))setIcon(ImpostaImg("pencil.png"));
-      else if(getText().equals("Cancella")) setIcon(ImpostaImg("eraser.png"));
+      if(getText().equals("Modifica"))setIcon(ImpostaImg("/res/img/pencil.png"));
+      else if(getText().equals("Cancella")) setIcon(ImpostaImg("/res/img/eraser.png"));
       
 
       return this;
@@ -230,8 +230,8 @@ public class ProdottiPanel extends JPanel{
       button.setBackground(UIManager.getColor("Button.background"));
       label = (value == null) ? "" : value.toString();
       button.setText(label);
-      if(button.getText().equals("Modifica"))  button.setIcon(ImpostaImg("pencil.png"));
-      else if(button.getText().equals("Cancella"))button.setIcon(ImpostaImg("eraser.png"));
+      if(button.getText().equals("Modifica"))  button.setIcon(ImpostaImg("/res/img/pencil.png"));
+      else if(button.getText().equals("Cancella"))button.setIcon(ImpostaImg("/res/img/eraser.png"));
       clicked = true;
       return button;
     }
