@@ -6,6 +6,7 @@
 package ui;
 
 import beans.Fornitore;
+import com.sun.jmx.snmp.EnumRowStatus;
 import dao.FornitoreDAO;
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -96,11 +97,7 @@ public class AnagrafichePanel extends JPanel {
                 Formanagrafiche f = new Formanagrafiche(model);
                 f.setResizable(false);
                 f.setVisible(true);
-                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-                
-                
-
+                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);     
             }
         });
         buttonNew.setFont(new Font("Arial Black", Font.BOLD, 15));
@@ -901,8 +898,7 @@ class Formanagrafiche extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
 
         //Aggiungi riga
-        model.addRow(getOggettoforForm());
-        
+        model.addRow(getOggettoforFormSave());
     
     }                                        
 
@@ -911,15 +907,8 @@ class Formanagrafiche extends javax.swing.JFrame {
     }   
     
     
-    
-    public void chiudiForm(){
-    
-           super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    }
-    
-    
-    public Object[] getOggettoforForm(){
+   
+    public Object[] getOggettoforFormSave(){
     
             Fornitore forn = new Fornitore("XXXX", "DDDDDDD",jTextField3.getText() , jTextField4.getText()  , jTextField5.getText(), jTextField6.getText() , jTextField9.getText(), jTextArea1.getText());
             FornitoreDAO dao = new FornitoreDAO();
@@ -940,6 +929,12 @@ class Formanagrafiche extends javax.swing.JFrame {
          
     
     }
+    
+    
+ 
+    
+    
+    
 
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
