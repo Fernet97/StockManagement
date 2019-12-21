@@ -5,6 +5,8 @@
  */
 package ui;
 
+import beans.Fornitore;
+import dao.FornitoreDAO;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
@@ -17,6 +19,9 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
@@ -88,11 +93,13 @@ public class AnagrafichePanel extends JPanel {
                         
             @Override
             public void actionPerformed(ActionEvent e) {       
-                Formanagrafiche f = new Formanagrafiche();
+                Formanagrafiche f = new Formanagrafiche(model);
                 f.setResizable(false);
-                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 f.setVisible(true);
-                model.addRow(new Object[]{ "1", "10/12/2019", "Gianfranco Colil", "XXXXXXX","Via campo san giovanni, ITa", "398737892", "cacio@gmail.com", "una descrizione","Modifica","Cancella"});
+                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                
+                
 
             }
         });
@@ -315,15 +322,22 @@ public class AnagrafichePanel extends JPanel {
  */
 class Formanagrafiche extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Formanagrafiche
-     */
+    private DefaultTableModel modello;
+    
     public Formanagrafiche() {
         initComponents();        
         ImageIcon img = new ImageIcon("logo-Icon.png");
         this.setIconImage(img.getImage());
         
     }
+
+        private Formanagrafiche(DefaultTableModel model) {
+            modello = model;
+                    initComponents();        
+        ImageIcon img = new ImageIcon("logo-Icon.png");
+        this.setIconImage(img.getImage());
+            
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -525,6 +539,8 @@ class Formanagrafiche extends javax.swing.JFrame {
         });
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tel", "Fax" }));
+        jComboBox2.setForeground(Color.black);
+        jComboBox2.setBackground(Color.DARK_GRAY);
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -594,15 +610,21 @@ class Formanagrafiche extends javax.swing.JFrame {
         );
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fornitore", "Utente" }));
+        jComboBox2.setForeground(Color.black);
+        jComboBox2.setBackground(Color.DARK_GRAY);
         jComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox2ActionPerformed(evt);
             }
         });
 
+        jTextField7.setEditable(false); //only user mode
+        jTextField7.setBackground(Color.LIGHT_GRAY);
+        
         jTextField7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField7ActionPerformed(evt);
+
             }
         });
 
@@ -614,6 +636,7 @@ class Formanagrafiche extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Password");
 
+        jTextField8.setEnabled(false);  //disabilitato (enabled only for user mode)
         jTextField8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField8ActionPerformed(evt);
@@ -633,6 +656,7 @@ class Formanagrafiche extends javax.swing.JFrame {
         jLabel6.setText("PERMESSI:");
 
         jCheckBox1.setText("Add");
+        jCheckBox1.setEnabled(false); // (user mode: true)
         jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox1ActionPerformed(evt);
@@ -640,6 +664,8 @@ class Formanagrafiche extends javax.swing.JFrame {
         });
 
         jCheckBox3.setText("Remove");
+        jCheckBox3.setEnabled(false); // (user mode: true)
+
         jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox3ActionPerformed(evt);
@@ -647,6 +673,8 @@ class Formanagrafiche extends javax.swing.JFrame {
         });
 
         jCheckBox4.setText("View");
+        jCheckBox4.setEnabled(false); // (user mode: true)
+        
         jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox4ActionPerformed(evt);
@@ -654,6 +682,7 @@ class Formanagrafiche extends javax.swing.JFrame {
         });
 
         jCheckBox6.setText("isAdmin");
+        jCheckBox6.setEnabled(false); // (user mode: true)
 
         jLabel10.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
@@ -664,13 +693,18 @@ class Formanagrafiche extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextArea1);
 
         jButton2.setText("Salva");
+        jButton2.setForeground(Color.black);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
+
+                
+                
             }
         });
 
         jButton3.setText("Annulla");
+        jButton3.setForeground(Color.black);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -865,14 +899,47 @@ class Formanagrafiche extends javax.swing.JFrame {
     }                                          
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+
+        //Aggiungi riga
+        model.addRow(getOggettoforForm());
+        
+    
     }                                        
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-    }                                        
+    }   
+    
+    
+    
+    public void chiudiForm(){
+    
+           super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-
+    }
+    
+    
+    public Object[] getOggettoforForm(){
+    
+            Fornitore forn = new Fornitore("XXXX", "DDDDDDD",jTextField3.getText() , jTextField4.getText()  , jTextField5.getText(), jTextField6.getText() , jTextField9.getText(), jTextArea1.getText());
+            FornitoreDAO dao = new FornitoreDAO();
+       
+            try {
+            dao.add(forn);
+            
+            forn = dao.getLastID(); //Prendi l'ultimo id caricato
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    
+            return  new Object[]{ forn.getIdfornitore(), forn.getDatareg(), forn.getFullname(), forn.getP_iva(),forn.getIndirizzo(), forn.getTel(), forn.getEmail(), forn.getDesc(),"Modifica","Cancella"};
+            
+         
+    
+    }
 
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -913,7 +980,7 @@ class Formanagrafiche extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField9;
     private java.awt.Label label1;
     // End of variables declaration                   
-}
+    }
 
    
 }
