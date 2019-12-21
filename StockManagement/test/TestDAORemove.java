@@ -14,19 +14,24 @@ import dao.ProdottoDAO;
  *
  * @author Fernet
  */
-public class TestDAORel {
+public class TestDAORemove {
     
       public static void main(String[] args) throws InterruptedException {
          
        
          try{
           FornitoreDAO daofornitore = new FornitoreDAO();
-          Fornitore f = new Fornitore("aaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa");     
+          Fornitore f = new Fornitore("aaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa", "aaaaaaa");     
           daofornitore.add(f);
     
          ProdottoDAO dao = new ProdottoDAO();
          Prodotto pr1 = new Prodotto("2..0u", "oggi", "nome", "miaot",  23, true,  87, 12.4f, "desc", 0, 1,  "foto.png");
          dao.add(pr1, f.getIdfornitore());
+             System.out.println("wait10s");
+                     java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+                        
+         
+         dao.remove(pr1, f);
 
          }catch(Exception e ){
          
