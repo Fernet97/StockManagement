@@ -95,17 +95,15 @@ public class FramePrincipale extends JFrame{
                         
 
         // Aggiungi la carta "CATEGORIE"
-        JPanel categorie =new JPanel();
-        categorie.add(new JLabel("  C A T E G O R I E!  ! !"));
+        CategoriePanel categorie =new CategoriePanel();
         HomePanel.add(categorie, "Categorie"); 
         
         // Aggiungi la carta "PRODOTTO"
-        ProdottiPanel prodotti = new ProdottiPanel();;
+        ProdottiPanel prodotti = new ProdottiPanel();
         HomePanel.add(prodotti, "Prodotti");        
   
         // Aggiungi la carta "CODICI"
-        JPanel codici =new JPanel();
-        codici.add(new JLabel(" CODICI !  ! !"));
+        CodiciPanel codici =new CodiciPanel();
         HomePanel.add(codici, "Codici");          
 
           
