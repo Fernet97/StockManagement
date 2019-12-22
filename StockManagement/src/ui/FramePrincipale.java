@@ -243,7 +243,7 @@ public class FramePrincipale extends JFrame{
 
 
 
- class ButtonLaterale extends JPanel{
+ class ButtonLaterale extends JPanel{ //BOTTONI NAVIGAZIONE DASHBOARD/ANAGRAFICHE ECC
 	
 	public final String tipo;
         public boolean premuto = false; // per button nel pannello laterale
@@ -393,7 +393,7 @@ public class FramePrincipale extends JFrame{
  
  
  
-  class ButtonDash extends JPanel{
+  class ButtonDash extends JPanel{ //PANNELLO TOTALE PRODOTTI
  
       
       public ButtonDash(String type){
