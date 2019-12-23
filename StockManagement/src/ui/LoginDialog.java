@@ -50,7 +50,7 @@ public class LoginDialog extends javax.swing.JDialog {
 
         private void CreaGUI() {
         
-                ImageIcon img = new ImageIcon("logo-Icon.png");
+                ImageIcon img = new ImageIcon (getClass().getResource("/res/img/logo-Icon.png"));
                 this.setIconImage(img.getImage());
 
             //Crea pannello Iniziale: Titolo- Logo 
@@ -59,7 +59,7 @@ public class LoginDialog extends javax.swing.JDialog {
                 JLabel titolo = new JLabel("$tock managemenT");
                 titolo.setFont(new Font("Arial Black", Font.BOLD, 20));
 		PannelloIniziale.add(titolo, BorderLayout.NORTH);
-                ImageIcon icon = new ImageIcon("logo.jpg");
+                ImageIcon icon = new ImageIcon (getClass().getResource("/res/img/logo.jpg"));
                 Image ImmagineScalata = icon.getImage().getScaledInstance(400, 225, Image.SCALE_DEFAULT);
 		icon.setImage(ImmagineScalata);
 		JLabel logo = new JLabel(icon);
