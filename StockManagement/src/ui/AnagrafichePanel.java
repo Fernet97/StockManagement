@@ -6,7 +6,6 @@
 package ui;
 
 import beans.Fornitore;
-import com.sun.jmx.snmp.EnumRowStatus;
 import dao.FornitoreDAO;
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -94,7 +93,7 @@ public class AnagrafichePanel extends JPanel {
                         
             @Override
             public void actionPerformed(ActionEvent e) {       
-                Formanagrafiche f = new Formanagrafiche(model, "ADD", null);
+                Formanagrafiche f = new Formanagrafiche("ADD", null);
                 f.setResizable(false);
                 f.setVisible(true);
                 f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);     
@@ -114,6 +113,7 @@ public class AnagrafichePanel extends JPanel {
           String[] columnNames = { "ID", "Data reg.", "Fullname", "P.IVA/CF","Indirizzo", "Tel/Fax", "email", "Note","Modifica","Cancella"};
           //Object[][] data = { { "1", "10/12/2019", "Gianfranco Colil", "XXXXXXX","Via campo san giovanni, ITa", "398737892", "cacio@gmail.com", "una descrizione","Modifica","Cancella"} };
           Object[][] data = {};  
+          
            
            
            model = new DefaultTableModel(data, columnNames)
@@ -128,7 +128,11 @@ public class AnagrafichePanel extends JPanel {
              JTable table = new JTable(model);
 
              
-             
+        try {
+            refreshTab(); // Aggiorna tavola con  i fornitori del db;
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
              
              
              table.setRowHeight(40); //altezza celle
@@ -192,6 +196,27 @@ public class AnagrafichePanel extends JPanel {
 	}	
 
 
+        
+        public void  refreshTab() throws SQLException{
+            
+            //Cancello vecchie righe...
+            for(int i =0; i<model.getRowCount(); i++) model.removeRow(i);
+            
+            
+            FornitoreDAO dao = new FornitoreDAO();
+            
+            // Aggiorno con le nuove
+            for(Fornitore forn: dao.getAll()){
+                
+               model.addRow(new Object[]{ forn.getIdfornitore(), forn.getDatareg(), forn.getFullname(), forn.getP_iva(),forn.getIndirizzo(), forn.getTel(), forn.getEmail(), forn.getDesc(),"Modifica","Cancella"});
+
+            
+            }
+        
+        
+        
+        
+        }
 
 
 
@@ -277,7 +302,7 @@ public class AnagrafichePanel extends JPanel {
               }
               else if(button.getText().equals("Modifica")) { // APRI FORM PER MODIFICARE RECORD
               
-                    Formanagrafiche f = new Formanagrafiche(model,"UPDATE", "FR-1");
+                    Formanagrafiche f = new Formanagrafiche("UPDATE", table.getValueAt(row, 0).toString());
                     f.setResizable(false);
                     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     f.setVisible(true);
@@ -319,7 +344,6 @@ public class AnagrafichePanel extends JPanel {
  */
 class Formanagrafiche extends javax.swing.JFrame {
 
-    private DefaultTableModel modello;
     public String modalita;
     public String IdSelezionato;
     
@@ -331,8 +355,7 @@ class Formanagrafiche extends javax.swing.JFrame {
         
     }
 
-    private Formanagrafiche(DefaultTableModel model, String mod, String idSelected) {
-        modello = model;
+    private Formanagrafiche(String mod, String idSelected) {
         modalita = mod;
         IdSelezionato = idSelected;
         initComponents();        
@@ -909,8 +932,8 @@ class Formanagrafiche extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
 
         //Aggiungi riga
-        if(modalita.equals("UPDATE"))  model.addRow(getOggettoforFormUpdate());
-        else  model.addRow(getOggettoforFormSave());
+        if(modalita.equals("UPDATE")) getOggettoforFormUpdate();
+        else getOggettoforFormSave();
 
 
     
@@ -922,10 +945,10 @@ class Formanagrafiche extends javax.swing.JFrame {
     
     
    
-    public Object[] getOggettoforFormSave(){
+    public void getOggettoforFormSave(){
     
             
-            Fornitore forn = new Fornitore("XXXX", "DDDDDDD",jTextField3.getText() , jTextField4.getText()  , jTextField5.getText(), jTextField6.getText() , jTextField9.getText(), jTextArea1.getText());
+            Fornitore forn = new Fornitore(jTextField3.getText() , jTextField4.getText()  , jTextField5.getText(), jTextField6.getText() , jTextField9.getText(), jTextArea1.getText());
             FornitoreDAO dao = new FornitoreDAO();
        
             try {
@@ -937,8 +960,11 @@ class Formanagrafiche extends javax.swing.JFrame {
             Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     
-    
-            return  new Object[]{ forn.getIdfornitore(), forn.getDatareg(), forn.getFullname(), forn.getP_iva(),forn.getIndirizzo(), forn.getTel(), forn.getEmail(), forn.getDesc(),"Modifica","Cancella"};
+        try {
+            refreshTab();
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
             
          
     
@@ -977,8 +1003,8 @@ class Formanagrafiche extends javax.swing.JFrame {
 
         }
     
-   public Object[] getOggettoforFormUpdate(){
-       Fornitore forn = new Fornitore( jTextField1.getText(), jTextField2.getText() ,jTextField3.getText() , jTextField4.getText()  , jTextField5.getText(), jTextField6.getText() , jTextField9.getText(), jTextArea1.getText());      
+   public void getOggettoforFormUpdate(){
+       Fornitore forn = new Fornitore(jTextField1.getText(), jTextField3.getText() , jTextField4.getText()  , jTextField5.getText(), jTextField6.getText() , jTextField9.getText(), jTextArea1.getText());      
        FornitoreDAO dao = new FornitoreDAO();
         try {            
             dao.update(forn);
@@ -991,8 +1017,11 @@ class Formanagrafiche extends javax.swing.JFrame {
             Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-       return new Object[]{ forn.getIdfornitore(), forn.getDatareg(), forn.getFullname(), forn.getP_iva(),forn.getIndirizzo(), forn.getTel(), forn.getEmail(), forn.getDesc(),"Modifica","Cancella"};
-
+        try {
+            refreshTab();
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
    }
     
     
