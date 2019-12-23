@@ -36,14 +36,33 @@ public class Prodotto {
     
     
     
-    //constructor
-
-        public Prodotto(String sku, String datareg, String nome, String categoria, int qty, boolean instock, int giorni_alla_consegna, float costo, String descrizione, int qty_inarrivo, int qty_min, String foto) {
+    //constructors
+    
+// Costruttore senza specificare ID ==> Genera ID automaticamente (In genere x ADD)
+        public Prodotto(String nome, String categoria, int qty, boolean instock, int giorni_alla_consegna, float costo, String descrizione, int qty_inarrivo, int qty_min, String foto) {
               
-         setCode(leggiUltimoSku()+1);
+           setCode(leggiUltimoSku()+1);
+
+           this.nome = nome;
+           this.categoria = categoria;
+           this.qty = qty;
+           this.instock = instock;
+           this.giorni_alla_consegna = giorni_alla_consegna;
+           this.costo = costo;
+           this.descrizione = descrizione;
+           this.qty_inarrivo = qty_inarrivo;
+           this.qty_min = qty_min;
+           this.foto = foto;
+
+         setDatareg(generateData());
+         setSku(generateSKU());
+    }
+        
+    //Costruttore CON ID specificato ===> (In genere usato x UPDATE)  
+    public Prodotto(String sku, String nome, String categoria, int qty, boolean instock, int giorni_alla_consegna, float costo, String descrizione, int qty_inarrivo, int qty_min, String foto) {
+              
             
         this.sku = sku;
-        this.datareg = datareg;
         this.nome = nome;
         this.categoria = categoria;
         this.qty = qty;
@@ -56,8 +75,13 @@ public class Prodotto {
         this.foto = foto;
         
       setDatareg(generateData());
-      setSku(generateSKU());
     }
+       
+        
+        
+        
+        
+        
         
         
             public Prodotto(){}

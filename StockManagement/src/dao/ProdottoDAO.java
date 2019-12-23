@@ -167,57 +167,32 @@ public class ProdottoDAO {
         }
         
         public synchronized void update (Prodotto p) throws SQLException{ //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
-                        Connection connection = null;
-                        PreparedStatement ps = null;
-                        
-                        Prodotto p1 = getBySku(p.getSku());  // i dati del record vecchio che voglio modificare
+  		Connection connection = null;
+		Statement statement = null;
 
-                        
-                        p1.setSku(p.getSku());
-                        p1.setDatareg(p.getDatareg());
-                        p1.setNome(p.getNome());
-                        p1.setCategoria(p.getCategoria());
-                        p1.setQty(p.getQty());
-                        p1.setInstock(p.isInstock());
-                        p1.setGiorni_alla_consegna(p.getGiorni_alla_consegna());
-                        p1.setCosto(p.getCosto());
-                        p1.setDescrizione(p.getDescrizione());
-                        p1.setQty_inarrivo(p.getQty_inarrivo());
-                        p1.setQty_min(p.getQty_min());
-                        p1.setFoto(p.getFoto());
-                        
-                        add(p1, "FR-2");// richiamre metodo remove alla fine 
-                        
-                        
-                     //   System.out.println(p);
+		
+                System.out.println("sku del prodoto da modificare: "+ p.getSku());
+		String query = "UPDATE `db_stock`.`prodotti` SET `nome` = '"+p.getNome()+"', `categoria` = '"+p.getCategoria()+"', `qty` = '"+p.getQty()+"', `instock` = "+p.isInstock()+", `giorni_alla_consegna` = '"+p.getGiorni_alla_consegna()+"', `costo` = '"+p.getCosto()+"', `descrizione` = '"+p.getDescrizione()+"', `qty_inarrivo` = '"+p.getQty_inarrivo()+"', `qty_min` = '"+p.getQty_min()+"', `foto` = '"+p.getFoto()+"' WHERE (`sku` = '"+p.getSku()+"');";
+		System.out.println(query);	
+                
+		try {
+			connection = DriverManagerConnectionPool.getConnection();
+			statement = connection.createStatement();
+			statement.executeUpdate(query);
+			connection.commit();
+		} finally {
+			try {
+				if (statement != null)
+					statement.close();
+			} finally {
+				DriverManagerConnectionPool.releaseConnection(connection);
+			}
+		}          
+            
+
         }
                            
-                        /*
-                        System.out.println("start here"); // ignore update
-                        
-                                    String insertSQL = "UPDATE prodotti SET sku = ?, datareg = ?, nome = ?, categoria = ?, instock = ?, descrizione = ?,  giorni_alla_consegna = ?, qty = ?, costo = ?,  foto = ? WHERE sku = "+p.getSku();
-                          
-                        connection = DriverManagerConnectionPool.getConnection();
-                        ps = connection.prepareStatement(insertSQL);     
-                        
-                        
-                        ps.setString(1, p.getSku());
-                        ps.setString(2, p.getDataReg());
-                        ps.setString(3, p.getNome());
-                        ps.setString(4, p.getCategoria());
-                        ps.setBoolean(5, p.isInStock());
-                        ps.setString(6, p.getDescrizione());
-                        ps.setInt(7, p.getGiorni_alla_consegna());
-                        ps.setInt(8, p.getQty());
-                        ps.setFloat(9, p.getCosto());
-                        ps.setString(10, p.getFoto());
-                        
-                        ps.executeUpdate();
-                        
-                        connection.commit();
-        }no
-      
-      */
+
       
               
             public synchronized void remove (Prodotto p, Fornitore f) throws SQLException{

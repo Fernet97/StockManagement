@@ -31,11 +31,10 @@ public class Fornitore {
     
     //constructor
 
-    public Fornitore(String idfornitore, String datareg, String fullname, String p_iva, String indirizzo, String tel, String email, String desc) {
-            setCode(leggiUltimoID() +1);
-        
-        this.idfornitore = idfornitore;
-        this.datareg = datareg;
+    // Costruttore senza specificare ID ==> Genera ID automaticamente (In genere x ADD)
+    public Fornitore(String fullname, String p_iva, String indirizzo, String tel, String email, String desc) {
+         
+        setCode(leggiUltimoID() +1);
         this.fullname = fullname;
         this.p_iva = p_iva;
         this.indirizzo = indirizzo;
@@ -45,7 +44,28 @@ public class Fornitore {
         
         setDatareg(generateData());
         setIdfornitore(generateID());
+        System.out.println("ID del nuovo fornitore:"+getIdfornitore());
     }
+    
+    
+    
+    //Costruttore CON ID specificato ===> (In genere usato x UPDATE)
+        public Fornitore(String idfornitore, String fullname, String p_iva, String indirizzo, String tel, String email, String desc) {
+            
+            this.idfornitore = idfornitore;
+            this.datareg = datareg;
+            this.fullname = fullname;
+            this.p_iva = p_iva;
+            this.indirizzo = indirizzo;
+            this.tel = tel;
+            this.email = email;
+            this.desc = desc;
+            
+            setDatareg(generateData());
+
+
+    }
+
 
     public Fornitore() { }
     
@@ -151,8 +171,9 @@ public class Fornitore {
             
           
             tmp = lastid.substring(3);
-            System.out.println("miiiiiiiiii"+tmp);
             idlast= Integer.parseInt(tmp);
+            System.out.println("ID dell'ultimo fornitore:"+idlast);
+
             
     }
                 

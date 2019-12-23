@@ -167,23 +167,27 @@ public class FornitoreDAO {
      * @throws SQLException
      */
     public synchronized void update(Fornitore b) throws SQLException {
-        Connection connection = null;
-        PreparedStatement st = null;
+		Connection connection = null;
+		Statement statement = null;
 
-        Fornitore b1 = getByID(b.getIdfornitore());  // i dati del record vecchio che voglio modificare
-
-        System.out.println("Entra qui");
-
-        b1.setIdfornitore(b.getIdfornitore());
-        b1.setDatareg(b.getDatareg());
-        b1.setFullname(b.getFullname());
-        b1.setP_iva(b.getP_iva());
-        b1.setIndirizzo(b.getIndirizzo());
-        b1.setTel(b.getTel());
-        b1.setEmail(b.getEmail());
-        b1.setDesc(b.getDesc());
-
-        add(b1);
+		Fornitore f = b;
+		
+                System.out.println("Id del fornitore da modificare: "+ f.getIdfornitore());
+		String query = "UPDATE fornitori SET `datareg` = '"+f.getDatareg()+"', `fullname` = '"+f.getFullname()+"', `p_iva` = '"+f.getP_iva()+"', `indirizzo` = '"+f.getIndirizzo()+"', `tel` = '"+f.getTel()+"', `email` = '"+f.getEmail()+"', `description` = '"+f.getDesc()+"' WHERE (`idfornitori` = '"+f.getIdfornitore()+"');";
+				
+		try {
+			connection = DriverManagerConnectionPool.getConnection();
+			statement = connection.createStatement();
+			statement.executeUpdate(query);
+			connection.commit();
+		} finally {
+			try {
+				if (statement != null)
+					statement.close();
+			} finally {
+				DriverManagerConnectionPool.releaseConnection(connection);
+			}
+		}	
 
     }
 

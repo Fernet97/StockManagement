@@ -94,7 +94,7 @@ public class AnagrafichePanel extends JPanel {
                         
             @Override
             public void actionPerformed(ActionEvent e) {       
-                Formanagrafiche f = new Formanagrafiche(model);
+                Formanagrafiche f = new Formanagrafiche(model, "ADD", null);
                 f.setResizable(false);
                 f.setVisible(true);
                 f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);     
@@ -112,8 +112,8 @@ public class AnagrafichePanel extends JPanel {
         TitoloTab1.setBorder (new EmptyBorder(0, 100, 20, 100));
 
           String[] columnNames = { "ID", "Data reg.", "Fullname", "P.IVA/CF","Indirizzo", "Tel/Fax", "email", "Note","Modifica","Cancella"};
-          Object[][] data = { { "1", "10/12/2019", "Gianfranco Colil", "XXXXXXX","Via campo san giovanni, ITa", "398737892", "cacio@gmail.com", "una descrizione","Modifica","Cancella"} };
-            
+          //Object[][] data = { { "1", "10/12/2019", "Gianfranco Colil", "XXXXXXX","Via campo san giovanni, ITa", "398737892", "cacio@gmail.com", "una descrizione","Modifica","Cancella"} };
+          Object[][] data = {};  
            
            
            model = new DefaultTableModel(data, columnNames)
@@ -277,7 +277,7 @@ public class AnagrafichePanel extends JPanel {
               }
               else if(button.getText().equals("Modifica")) { // APRI FORM PER MODIFICARE RECORD
               
-                    Formanagrafiche f = new Formanagrafiche();
+                    Formanagrafiche f = new Formanagrafiche(model,"UPDATE", "FR-1");
                     f.setResizable(false);
                     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     f.setVisible(true);
@@ -320,17 +320,28 @@ public class AnagrafichePanel extends JPanel {
 class Formanagrafiche extends javax.swing.JFrame {
 
     private DefaultTableModel modello;
+    public String modalita;
+    public String IdSelezionato;
     
     public Formanagrafiche() {
         initComponents();        
         ImageIcon img = new ImageIcon("logo-Icon.png");
         this.setIconImage(img.getImage());
         
+        
     }
 
-        private Formanagrafiche(DefaultTableModel model) {
-            modello = model;
-                    initComponents();        
+    private Formanagrafiche(DefaultTableModel model, String mod, String idSelected) {
+        modello = model;
+        modalita = mod;
+        IdSelezionato = idSelected;
+        initComponents();        
+
+        if(modalita.equals("UPDATE")) {
+            System.out.println("Sono in modalità update ...");
+            System.out.println(" Id selezionato: " + idSelected);
+            setFormAsID(idSelected);
+        }
         ImageIcon img = new ImageIcon("logo-Icon.png");
         this.setIconImage(img.getImage());
             
@@ -898,7 +909,10 @@ class Formanagrafiche extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
 
         //Aggiungi riga
-        model.addRow(getOggettoforFormSave());
+        if(modalita.equals("UPDATE"))  model.addRow(getOggettoforFormUpdate());
+        else  model.addRow(getOggettoforFormSave());
+
+
     
     }                                        
 
@@ -910,12 +924,12 @@ class Formanagrafiche extends javax.swing.JFrame {
    
     public Object[] getOggettoforFormSave(){
     
+            
             Fornitore forn = new Fornitore("XXXX", "DDDDDDD",jTextField3.getText() , jTextField4.getText()  , jTextField5.getText(), jTextField6.getText() , jTextField9.getText(), jTextArea1.getText());
             FornitoreDAO dao = new FornitoreDAO();
        
             try {
-            dao.add(forn);
-            
+            dao.add(forn);            
             forn = dao.getLastID(); //Prendi l'ultimo id caricato
             
             
@@ -931,11 +945,57 @@ class Formanagrafiche extends javax.swing.JFrame {
     }
     
     
- 
     
     
-    
+      private void setFormAsID(String idSelected) {
+            
+            FornitoreDAO dao = new FornitoreDAO();
+            
+            
+        try {
+            Fornitore fornitore = dao.getByID(idSelected);
+            
+            
+            jTextField1.setText(fornitore.getIdfornitore());
+            jTextField2.setText(fornitore.getDatareg());
+            jTextField3.setText(fornitore.getFullname());
+            jTextField4.setText(fornitore.getP_iva());
+            jTextField5.setText(fornitore.getIndirizzo());
+            jTextField6.setText(fornitore.getTel());
+            jTextField9.setText(fornitore.getEmail());
+            jTextArea1.setText(fornitore.getDesc());
+                  
+                  
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+            
+            
+            
 
+        }
+    
+   public Object[] getOggettoforFormUpdate(){
+       Fornitore forn = new Fornitore( jTextField1.getText(), jTextField2.getText() ,jTextField3.getText() , jTextField4.getText()  , jTextField5.getText(), jTextField6.getText() , jTextField9.getText(), jTextArea1.getText());      
+       FornitoreDAO dao = new FornitoreDAO();
+        try {            
+            dao.update(forn);
+            String id = forn.getIdfornitore();
+            forn = dao.getByID(id);
+            
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+       return new Object[]{ forn.getIdfornitore(), forn.getDatareg(), forn.getFullname(), forn.getP_iva(),forn.getIndirizzo(), forn.getTel(), forn.getEmail(), forn.getDesc(),"Modifica","Cancella"};
+
+   }
+    
+    
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox1;
@@ -975,6 +1035,8 @@ class Formanagrafiche extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField9;
     private java.awt.Label label1;
     // End of variables declaration                   
+
+
     }
 
    
