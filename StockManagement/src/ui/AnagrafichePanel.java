@@ -63,6 +63,8 @@ public class AnagrafichePanel extends JPanel {
 
     private final DefaultTableModel model;
     public static Object[] nuovaRiga;
+    public Formanagrafiche form;
+    
 
     
     
@@ -93,10 +95,10 @@ public class AnagrafichePanel extends JPanel {
                         
             @Override
             public void actionPerformed(ActionEvent e) {       
-                Formanagrafiche f = new Formanagrafiche("ADD", null);
-                f.setResizable(false);
-                f.setVisible(true);
-                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);     
+                form = new Formanagrafiche("ADD", null);
+                form.setResizable(false);
+                form.setVisible(true);
+                form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);     
             }
         });
         buttonNew.setFont(new Font("Arial Black", Font.BOLD, 15));
@@ -200,8 +202,8 @@ public class AnagrafichePanel extends JPanel {
         public void  refreshTab() throws SQLException{
             
             //Cancello vecchie righe...
-            for(int i =0; i<model.getRowCount(); i++) model.removeRow(i);
-            
+            System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
+            model.setRowCount(0);
             
             FornitoreDAO dao = new FornitoreDAO();
             
@@ -212,8 +214,11 @@ public class AnagrafichePanel extends JPanel {
 
             
             }
+            
+            
         
-        
+            System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
+
         
         
         }
@@ -297,15 +302,21 @@ public class AnagrafichePanel extends JPanel {
                 
                 if (OpzioneScelta == JOptionPane.OK_OPTION) {
                         System.out.println("OOOOOOOOKKKKKK CANCELLO");  
-                        // QUI METTERE IL DAO CON FUNZIONE REMOVE
+                        FornitoreDAO dao = new FornitoreDAO();
+                        try{
+                        dao.remove(table.getValueAt(row, 0).toString());
+                        refreshTab();
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
                  }
               }
               else if(button.getText().equals("Modifica")) { // APRI FORM PER MODIFICARE RECORD
               
-                    Formanagrafiche f = new Formanagrafiche("UPDATE", table.getValueAt(row, 0).toString());
-                    f.setResizable(false);
-                    f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    f.setVisible(true);
+                    form = new Formanagrafiche("UPDATE", table.getValueAt(row, 0).toString());
+                    form.setResizable(false);
+                    form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    form.setVisible(true);
               
               
               
@@ -728,8 +739,6 @@ class Formanagrafiche extends javax.swing.JFrame {
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
-
-                
                 
             }
         });
@@ -934,13 +943,15 @@ class Formanagrafiche extends javax.swing.JFrame {
         //Aggiungi riga
         if(modalita.equals("UPDATE")) getOggettoforFormUpdate();
         else getOggettoforFormSave();
+        
+        form.setVisible(false);
 
-
-    
+          
     }                                        
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+        form.setVisible(false);
+
     }   
     
     
@@ -953,7 +964,6 @@ class Formanagrafiche extends javax.swing.JFrame {
        
             try {
             dao.add(forn);            
-            forn = dao.getLastID(); //Prendi l'ultimo id caricato
             
             
         } catch (SQLException ex) {
@@ -1008,11 +1018,8 @@ class Formanagrafiche extends javax.swing.JFrame {
        FornitoreDAO dao = new FornitoreDAO();
         try {            
             dao.update(forn);
-            String id = forn.getIdfornitore();
-            forn = dao.getByID(id);
             
-            
-            
+                       
         } catch (SQLException ex) {
             Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -32,7 +32,7 @@ public class FornitoreDAO {
 
         Collection<Fornitore> fornitori = new LinkedList<Fornitore>();
 
-        String selectSQL = "SELECT * FROM " + this.TABLE_NAME;
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME+ " order by datareg";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -191,12 +191,12 @@ public class FornitoreDAO {
 
     }
 
-    public synchronized void remove(Fornitore id) throws SQLException {
+    public synchronized void remove(String idFornitore) throws SQLException {
 
         Connection connection = null;
         Statement statement = null;
 //DELETE FROM `db_stock`.`prodotti` WHERE (`sku` = 'mi1-13/12/2019 11:21:41');
-        String query = "DELETE FROM " + this.TABLE_NAME + " WHERE (`idfornitori` = '"+id.getIdfornitore()+"')";
+        String query = "DELETE FROM " + this.TABLE_NAME + " WHERE (`idfornitori` = '"+idFornitore+"')";
         System.out.println(query);
         try {
             connection = DriverManagerConnectionPool.getConnection();
