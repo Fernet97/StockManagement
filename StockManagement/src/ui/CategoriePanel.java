@@ -17,8 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
@@ -209,28 +208,30 @@ class CategoriePanel extends JPanel {
             
             ProdottoDAO dao = new ProdottoDAO();
             
-            /* Aggiorno con le nuove
+            // Aggiorno con le nuove
             for(String catDinamica: list_cat_new){
                model.addRow(new Object[]{catDinamica,  "DA DEFINIRE", "Vai a prodotti"} ); 
      
-            }*/
+            }
             
             
             // Aggiorno con le nuove
-            ArrayList<String> list_catDB = new ArrayList<>();
             for(Prodotto pro: dao.getAll()){
-                list_catDB.add(pro.getCategoria());
-              // model.addRow(new Object[]{pro.getCategoria(), pro.getQty(), "Vai a prodotti"});
+                
+               model.addRow(new Object[]{pro.getCategoria(), pro.getQty(), "Vai a prodotti"});
      
             }
             
-            list_tot = new ArrayList();
-            list_tot.addAll(list_cat_new);
-            list_tot.addAll();
+        Enumeration names;
+        String key;       
+        names = dao.getCatAndSum().keys();
+        
+        while(names.hasMoreElements()) {
+           key = (String) names.nextElement();
+           System.out.println("Key: " +key+ " & Value: " +
+           dao.getCatAndSum().get(key));
+        }
             
-            
-            
-            }
            
         
         }

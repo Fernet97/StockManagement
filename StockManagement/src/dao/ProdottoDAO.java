@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.LinkedList;
 
 /**
@@ -279,6 +280,45 @@ public class ProdottoDAO {
                                                 return bean;
         
         }
+        
+        
+        
+        
+        public synchronized   Hashtable<String, String> getCatAndSum() throws SQLException {
+            Connection connection = null;
+            Statement  ps = null;
+            Prodotto bean = new Prodotto();
+            Hashtable<String, String> hashtable = new Hashtable<String, String>();
+
+            String query = "select categoria, sum(qty) from prodotti GROUP BY categoria;";      
+           
+            try  {
+                        connection = DriverManagerConnectionPool.getConnection();
+                        ps = connection.prepareStatement(query);
+
+                        ResultSet rs = ps.executeQuery(query);
+
+                        while (rs.next()) {
+                                 hashtable.put(rs.getString("categoria"),rs.getString("sum(qty)"));
+
+
+                                                                            }
+                                }
+                                                finally {
+			try {
+                                                                                if (ps != null)
+                                                                                    ps.close();
+                                                                            }
+                                                                          finally {
+                                                                                    DriverManagerConnectionPool.releaseConnection(connection);
+                                                                                    }
+                        
+                                                  }
+                                                return hashtable;      
+        
+        }
+        
+        
 }
 
   
