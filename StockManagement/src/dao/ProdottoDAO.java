@@ -25,14 +25,14 @@ public class ProdottoDAO {
      
       public synchronized Collection<Prodotto> getAll() throws SQLException{
         
-                                                Connection connection = null;
-                                                PreparedStatement ps = null;
-                                                
-                                                Collection<Prodotto> prodotti = new  LinkedList<Prodotto>();
-                                                
-                                                String selectSQL = "SELECT * FROM " +TABLE_NAME ; // DESC ORDINA DALL'ULTIMO AL PRIMO
-         
-                                                try {
+                Connection connection = null;
+                PreparedStatement ps = null;
+
+                Collection<Prodotto> prodotti = new  LinkedList<Prodotto>();
+
+                String selectSQL = "select* from prodotti, prodotti_has_fornitori where prodotti.sku = prodotti_has_fornitori.prodotti_sku";
+
+                try {
 			connection = DriverManagerConnectionPool.getConnection();
 			 ps = connection.prepareStatement(selectSQL);
 
@@ -40,22 +40,21 @@ public class ProdottoDAO {
 
 			while (rs.next()) {
 				Prodotto  bean  =  new  Prodotto(); 
-                                                                                                
-                                                                                                bean.setSku(rs.getString("sku"));
-                                                                                                bean.setDatareg(rs.getString("datareg"));
-                                                                                                bean.setNome(rs.getString("nome"));
-                                                                                                bean.setCategoria(rs.getString("categoria"));
-                                                                                                bean.setQty(rs.getInt("qty"));
-                                                                                                bean.setInstock(rs.getBoolean("instock"));
-                                                                                                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
-                                                                                                bean.setCosto(rs.getFloat("costo"));
-                                                                                                bean.setDescrizione(rs.getString("descrizione"));
-                                                                                                bean.setQty_inarrivo(rs.getInt("qty_inarrivo"));
-                                                                                                bean.setQty_min(rs.getInt("qty_min"));
-                                                                                                bean.setFoto(rs.getString("foto"));
-                                                                                                
-                                                                                                
-                                                                                                prodotti.add(bean);
+                                bean.setSku(rs.getString("sku"));
+                                bean.setDatareg(rs.getString("datareg"));
+                                bean.setNome(rs.getString("nome"));
+                                bean.setCategoria(rs.getString("categoria"));
+                                bean.setQty(rs.getInt("qty"));
+                                bean.setInstock(rs.getBoolean("instock"));
+                                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
+                                bean.setCosto(rs.getFloat("costo"));
+                                bean.setDescrizione(rs.getString("descrizione"));
+                                bean.setQty_inarrivo(rs.getInt("qty_inarrivo"));
+                                bean.setQty_min(rs.getInt("qty_min"));
+                                bean.setFoto(rs.getString("foto"));
+                                bean.setId_fornitore(rs.getString("fornitori_idfornitori"));
+
+                                prodotti.add(bean);
 
                                                                                     }
                                                 }
@@ -80,7 +79,7 @@ public class ProdottoDAO {
              
              Prodotto bean = new Prodotto();
              //SELECT * FROM prodotti WHERE sku = 1;
-             String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE sku = ?";
+             String selectSQL = "SELECT * FROM " + this.TABLE_NAME+ ", prodotti_has_fornitori" + " WHERE prodotti.sku = ? and prodotti.sku = prodotti_has_fornitori.prodotti_sku";
              
                  		try  {
                                                         connection = DriverManagerConnectionPool.getConnection();
@@ -103,6 +102,7 @@ public class ProdottoDAO {
                                                                                                 bean.setQty_inarrivo(rs.getInt("qty_inarrivo"));
                                                                                                 bean.setQty_min(rs.getInt("qty_min"));
                                                                                                 bean.setFoto(rs.getString("foto"));
+                                                                                                bean.setId_fornitore(rs.getString("fornitori_idfornitori"));
                                                                                                 
                                                                                                   
                                                                                     }
@@ -166,13 +166,20 @@ public class ProdottoDAO {
                         }
         }
         
-        public synchronized void update (Prodotto p) throws SQLException{ //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
+        
+        // NB: ma se vuoi cambiare la categoria .. ma poi dovrei cambiare anche lo sku?
+        public synchronized void update (Prodotto p, String IdNewForn) throws SQLException{ //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
   		Connection connection = null;
 		Statement statement = null;
-
+                String idNewFornitore;
+                
+                
+                if(IdNewForn.equals("")) idNewFornitore = p.getId_fornitore();
+                else idNewFornitore = IdNewForn;
 		
                 System.out.println("sku del prodoto da modificare: "+ p.getSku());
-		String query = "UPDATE `db_stock`.`prodotti` SET `nome` = '"+p.getNome()+"', `categoria` = '"+p.getCategoria()+"', `qty` = '"+p.getQty()+"', `instock` = "+p.isInstock()+", `giorni_alla_consegna` = '"+p.getGiorni_alla_consegna()+"', `costo` = '"+p.getCosto()+"', `descrizione` = '"+p.getDescrizione()+"', `qty_inarrivo` = '"+p.getQty_inarrivo()+"', `qty_min` = '"+p.getQty_min()+"', `foto` = '"+p.getFoto()+"' WHERE (`sku` = '"+p.getSku()+"');";
+		String query = "UPDATE `db_stock`.`prodotti` SET `nome` = '"+p.getNome()+"', `categoria` = '"+p.getCategoria()+"', `qty` = '"+p.getQty()+"', `instock` = "+p.isInstock()+", `giorni_alla_consegna` = '"+p.getGiorni_alla_consegna()+"', `costo` = '"+p.getCosto()+"', `descrizione` = '"+p.getDescrizione()+"', `qty_inarrivo` = '"+p.getQty_inarrivo()+"', `qty_min` = '"+p.getQty_min()+"',"
+                        + " `foto` = '"+p.getFoto()+"' WHERE (`sku` = '"+p.getSku()+"'); UPDATE `db_stock`.`prodotti_has_fornitori` SET `fornitori_idfornitori` = '"+idNewFornitore+"' WHERE (`prodotti_sku` = '"+p.getSku()+"') and (`fornitori_idfornitori` = '"+p.getId_fornitore()+"');";
 		System.out.println(query);	
                 
 		try {
@@ -195,15 +202,14 @@ public class ProdottoDAO {
 
       
               
-            public synchronized void remove (Prodotto p, Fornitore f) throws SQLException{
+            public synchronized void remove (String sku,  String fornitoreID) throws SQLException{
                         Connection connection = null;
                         Statement  statement = null;
-                                    p.getSku();
                                     //DELETE FROM `db_stock`.`prodotti` WHERE (`sku` = 'mi1-13/12/2019 11:21:41');
                                                     // WHERE (`prodotti_sku` = 'mi1-16/12/2019 11:13:59') and (`fornitori_idfornitori` = 'FR-2');
                                          //   DELETE FROM `db_stock`.`prodotti_has_fornitori` WHERE (`prodotti_sku` = 'ca2-16/12/2019 12:21:16') and (`fornitori_idfornitori` = 'FR-2');
-            String query = "DELETE FROM prodotti_has_fornitori WHERE (`prodotti_sku` =  '"+p.getSku()+"') and (`fornitori_idfornitori` = '"+f.getIdfornitore()+"'); "
-                    + "DELETE FROM " +this.TABLE_NAME + " WHERE  (`sku` = '"+p.getSku()+"');"; 
+            String query = "DELETE FROM prodotti_has_fornitori WHERE (`prodotti_sku` =  '"+sku+"') and (`fornitori_idfornitori` = '"+fornitoreID+"'); "
+                    + "DELETE FROM " +this.TABLE_NAME + " WHERE  (`sku` = '"+sku+"');"; 
                 System.out.println(query);
 
 

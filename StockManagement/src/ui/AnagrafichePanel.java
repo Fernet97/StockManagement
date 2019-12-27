@@ -214,12 +214,8 @@ public class AnagrafichePanel extends JPanel {
 
             
             }
-            
-            
-        
             System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
 
-        
         
         }
 

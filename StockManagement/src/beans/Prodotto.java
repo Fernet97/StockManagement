@@ -33,7 +33,9 @@ public class Prodotto {
     private int qty_inarrivo;
     private int qty_min;
     private String foto;
-    
+    private String id_fornitore;
+
+
     
     
     //constructors
@@ -58,11 +60,12 @@ public class Prodotto {
          setSku(generateSKU());
     }
         
-    //Costruttore CON ID specificato ===> (In genere usato x UPDATE)  
-    public Prodotto(String sku, String nome, String categoria, int qty, boolean instock, int giorni_alla_consegna, float costo, String descrizione, int qty_inarrivo, int qty_min, String foto) {
+    //Costruttore CON ID specificato e idFornitore specificato ===> (In genere usato x UPDATE)  
+    public Prodotto(String sku, String idFornitore, String nome, String categoria, int qty, boolean instock, int giorni_alla_consegna, float costo, String descrizione, int qty_inarrivo, int qty_min, String foto) {
               
             
         this.sku = sku;
+        this.id_fornitore = idFornitore;
         this.nome = nome;
         this.categoria = categoria;
         this.qty = qty;
@@ -202,6 +205,15 @@ public class Prodotto {
         code = c;
     }
      
+    public String getId_fornitore() {
+        return id_fornitore;
+    }
+
+    public void setId_fornitore(String id_fornitore) {
+        this.id_fornitore = id_fornitore;
+    }
+    
+    
     
     public String generateSKU(){
         

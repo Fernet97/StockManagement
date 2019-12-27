@@ -5,6 +5,8 @@
  */
 package ui;
 
+import beans.Prodotto;
+import dao.ProdottoDAO;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -13,6 +15,10 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
@@ -42,11 +48,14 @@ import javax.swing.table.TableRowSorter;
  */
 class CategoriePanel extends JPanel {
       private final DefaultTableModel model;
-    public static Object[] nuovaRiga;
-
+      public static Object[] nuovaRiga;
+      public ArrayList<String> list_cat_new;
+      private FramePrincipale frameprinc;
+    
     
     
     public CategoriePanel(){
+        list_cat_new = new ArrayList<>();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
         JLabel title = new JLabel("CATEGORIE");
         title.setFont(new Font("Arial Black", Font.BOLD, 40));
@@ -76,8 +85,13 @@ class CategoriePanel extends JPanel {
                 AddCategoriaDialog input = new AddCategoriaDialog();
                 input.setVisible(true);
                 String txt = input.getName();
-                System.out.println("Hai aggiunto la categoria"+ txt);
-                model.addRow(new Object[]{"ZZZZZ", "12", "Vai a prodotti"} );
+                try {
+                    refreshTab();
+                } catch (SQLException ex) {
+                    Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+
 
             }
         });
@@ -93,7 +107,7 @@ class CategoriePanel extends JPanel {
         TitoloTab1.setBorder (new EmptyBorder(0, 100, 20, 100));
 
           String[] columnNames = { "Nome", "Quantità","Query"};
-          Object[][] data = { { "ZZZZZ", "12", "Vai a prodotti"} };
+          Object[][] data = {  };
             
            
            
@@ -107,11 +121,15 @@ class CategoriePanel extends JPanel {
                 }
               };
              JTable table = new JTable(model);
-
+          
+             try {
+              refreshTab();
+          } catch (SQLException ex) {
+              Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+          }
              
              
-             
-             
+                
              table.setRowHeight(40); //altezza celle
              
              //X colonne che hanno pulsanti
@@ -160,6 +178,12 @@ class CategoriePanel extends JPanel {
     
     }
     
+    public void  setComunicator(FramePrincipale princ){
+        frameprinc  = princ;
+        
+    }
+    
+    
     
     	public ImageIcon ImpostaImg(String nomeImmag) {
 
@@ -172,9 +196,29 @@ class CategoriePanel extends JPanel {
 
 
 
+        public void  refreshTab() throws SQLException{
+          
+            
+            //Cancello vecchie righe...
+            System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
+            model.setRowCount(0);
+            
+            ProdottoDAO dao = new ProdottoDAO();
+            
+            // Aggiorno con le nuove
+            for(Prodotto pro: dao.getAll()){
+                
+               model.addRow(new Object[]{pro.getCategoria(), pro.getQty(), "Vai a prodotti"});
+     
+            }
+            
+            System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
+           
+        
+        }
 
 
-
+        
 
 
 
@@ -187,7 +231,8 @@ class CategoriePanel extends JPanel {
 
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
     {
-      setText("Vai a Prodotti");
+      setText("Vai a prodotti");
+        setForeground(Color.black);
       setIcon(ImpostaImg("prodotti.png"));
       
 
@@ -212,7 +257,7 @@ class CategoriePanel extends JPanel {
         public void actionPerformed(ActionEvent e)
         {         
           System.out.println("APRI FORMMMMm");
-          fireEditingStopped();
+          fireEditingStopped(); 
         }
       });
     }
@@ -234,17 +279,9 @@ class CategoriePanel extends JPanel {
     {
       if (clicked)  // SE CLICCATO QUEL BOTTONE:::::::::::::
       {
-               //Se Ho premuto Cancella ....
-              if(button.getText().equals("Cancella")) {
-                int OpzioneScelta = JOptionPane.showConfirmDialog(getComponent(),"Sicuro di voler cancellare la riga:\n [  "+
-                        table.getValueAt(row, 0)+"  |   "+
-                        table.getValueAt(row, 1)+"  ]");  
-                
-                if (OpzioneScelta == JOptionPane.OK_OPTION) {
-                        System.out.println("OOOOOOOOKKKKKK CANCELLO");  
-                        // QUI METTERE IL DAO CON FUNZIONE REMOVE
-                 }
-                           
+              if(button.getText().equals("Vai a prodotti")) {
+                    frameprinc.VaiAProdotti(table.getValueAt(row, 0).toString());
+                   //PRENDO RIFERIMENTO DI HOME PANEL E CHIAMO IL SUO METODO PER CAMBIARE VERSO LA SCHERMATA PRODOTTI
               
               
               }
@@ -274,23 +311,29 @@ public class AddCategoriaDialog extends JDialog {
     private JTextField name;
 
     public AddCategoriaDialog() {
-        super(new JFrame("Aggiungi Categoria"), "Aggiungi Cateogira");
+        super(new JFrame("Aggiungi Categoria"), "Aggiungi Categoria");
         this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-        this.setMinimumSize(new Dimension(100, 100));
+        this.setMinimumSize(new Dimension(500, 100));
         this.name = new JTextField();
 
-        JButton add = new JButton("Aggiungi");
+        JButton add = new JButton("AGGIUNGI");
+        add.setForeground(Color.black);
         add.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
+                System.out.println("Hai aggiunto la categoria"+ name.getText());
+                model.addRow(new Object[]{name.getText(),  "DA DEFINIRE", "Vai a prodotti"} ); 
+                list_cat_new.add(name.getText());
+                frameprinc.prodotti.list_cat_new.add(name.getText());                
                 close();            
             }
         });
-        this.setLayout(new GridLayout(2, 1, 5, 5));
+        this.setLayout(new GridLayout(1, 2, 5, 5));
 
         this.add(name);
         this.add(add);
         this.pack();
+        this.setResizable(false);
     }
 
     private void close(){   this.dispose(); }

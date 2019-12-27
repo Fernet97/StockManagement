@@ -5,6 +5,10 @@
  */
 package ui;
 
+import beans.Fornitore;
+import beans.Prodotto;
+import dao.FornitoreDAO;
+import dao.ProdottoDAO;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -13,6 +17,13 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
@@ -43,12 +54,17 @@ public class ProdottiPanel extends JPanel{
   
     private final DefaultTableModel model;
     public static Object[] nuovaRiga;
+    public final JTextField casella;
+    public FormProdotti form;
+    public ArrayList<String> list_cat_new;;
+
 
     
     
     public ProdottiPanel(){
+        list_cat_new = new ArrayList<>();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
-        JLabel title = new JLabel("Prodotti");
+        JLabel title = new JLabel("PRODOTTI");
         title.setFont(new Font("Arial Black", Font.BOLD, 40));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         super.add(title);
@@ -60,7 +76,7 @@ public class ProdottiPanel extends JPanel{
         JPanel cerca = new JPanel();    
         JLabel searchlabel = new JLabel("Cerca:");
         searchlabel.setFont(new Font("Arial Black", Font.BOLD, 20));
-        JTextField casella = new JTextField(20);
+        casella = new JTextField(20);
         cerca.add(searchlabel);
         cerca.add(casella);
         panSopra.add(cerca);
@@ -73,11 +89,11 @@ public class ProdottiPanel extends JPanel{
                         
             @Override
             public void actionPerformed(ActionEvent e) {       
-                FormProdotti f = new FormProdotti();
-                f.setResizable(false);
-                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                f.setVisible(true);
-                model.addRow(new Object[]{ "XXXXX", "10/12/2019", "YYYYYY", "XXXXXXX","34", "Amazon", "Sì", "3", "23$","una descrizione a caso","33", "13", "Modifica", "Cancella" });
+                form = new FormProdotti("ADD", null);
+                form.setResizable(false);
+                form.setVisible(true);
+                form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                
 
             }
         });
@@ -93,8 +109,9 @@ public class ProdottiPanel extends JPanel{
         TitoloTab1.setBorder (new EmptyBorder(0, 100, 20, 100));
 
           String[] columnNames = { "sku", "Data reg.", "Nome", "Categoria","Quantità","Fornitore","In Stock?", "giorni alla consegna", "Costo","Note","Quantità in arrivo", "Quantità minima", "Modifica","Cancella" };
-          Object[][] data = { { "XXXXX", "10/12/2019", "YYYYYY", "XXXXXXX","34", "Amazon", "Sì", "3", "23$","una descrizione a caso","33", "13", "Modifica","Cancella"   } };
-            
+          //Object[][] data = { { "XXXXX", "10/12/2019", "YYYYYY", "XXXXXXX","34", "Amazon", "Sì", "3", "23$","una descrizione a caso","33", "13", "Modifica","Cancella"   } };
+          Object[][] data = {};  
+   
            
            
            model = new DefaultTableModel(data, columnNames)
@@ -108,7 +125,11 @@ public class ProdottiPanel extends JPanel{
               };
              JTable table = new JTable(model);
 
-             
+        try {
+            refreshTab(); // Aggiorna tavola con  i fornitori del db;
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }             
              
              
              
@@ -121,8 +142,8 @@ public class ProdottiPanel extends JPanel{
              table.getColumnModel().getColumn(13).setCellRenderer(new ClientsTableButtonRenderer());
              table.getColumnModel().getColumn(13).setCellEditor(new ClientsTableRenderer(new JCheckBox()));             
 
-        JScrollPane sp = new JScrollPane(table); 
-        TitoloTab1.add(sp);  
+            JScrollPane sp = new JScrollPane(table); 
+            TitoloTab1.add(sp);  
         
         
         
@@ -164,15 +185,42 @@ public class ProdottiPanel extends JPanel{
     }
     
     
+   
+    
+    
     	public ImageIcon ImpostaImg(String nomeImmag) {
 
-                ImageIcon icon = new ImageIcon(nomeImmag);
+                ImageIcon icon = new ImageIcon((getClass().getResource(nomeImmag)));
 		Image ImmagineScalata = icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT);
 		icon.setImage(ImmagineScalata);
                 return icon;
-	}	
+	}
+        
+        
+        
+        
 
 
+        
+        public void  refreshTab() throws SQLException{
+            
+            //Cancello vecchie righe...
+            System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
+            model.setRowCount(0);
+            
+            ProdottoDAO dao = new ProdottoDAO();
+            
+            // Aggiorno con le nuove
+            for(Prodotto pro: dao.getAll()){
+               System.out.println(pro.getSku() +" "+ pro.getDatareg()+" "+ pro.getNome()+" "+pro.getCategoria()+" "+ pro.getQty()+" "+pro.getId_fornitore()+" "+pro.isInstock()+" "+ pro.getGiorni_alla_consegna()+" "+pro.getCosto()+" "+ pro.getDescrizione()+" "+pro.getQty_inarrivo()+" "+ pro.getQty_min());
+               model.addRow(new Object[]{ pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), pro.getId_fornitore(), pro.isInstock(), pro.getGiorni_alla_consegna(), pro.getCosto(), pro.getDescrizione(), pro.getQty_inarrivo(), pro.getQty_min(),"Modifica","Cancella"});
+
+            
+            }
+            System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
+
+        
+        }
 
 
 
@@ -257,18 +305,22 @@ public class ProdottiPanel extends JPanel{
                 
                 if (OpzioneScelta == JOptionPane.OK_OPTION) {
                         System.out.println("OOOOOOOOKKKKKK CANCELLO");  
-                        // QUI METTERE IL DAO CON FUNZIONE REMOVE
+                        ProdottoDAO daor = new ProdottoDAO();
+                    try {
+                        daor.remove(table.getValueAt(row, 0).toString(), table.getValueAt(row, 5).toString());
+                        
+                        refreshTab();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                  }
               }
               else if(button.getText().equals("Modifica")) { // APRI FORM PER MODIFICARE RECORD
               
-                    FormProdotti f = new FormProdotti();
+                    FormProdotti f = new FormProdotti("UPDATE", table.getValueAt(row, 0).toString());
                     f.setResizable(false);
                     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     f.setVisible(true);
-              
-              
-              
               
               }
               
@@ -293,13 +345,44 @@ public class ProdottiPanel extends JPanel{
   
 // ****************** LA FORM ***********************
 class FormProdotti extends javax.swing.JFrame {
+    
+    
+    public String modalita;
+    public String IdSelezionato;
+    private String FornitoreCorrente;
 
     /**
      * Creates new form FormProdotti
      */
     public FormProdotti() {
-        initComponents();
+        try {
+            initComponents();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
+        this.setIconImage(img.getImage());        
     }
+    
+    private FormProdotti(String mod, String idSelected) {
+        modalita = mod;
+        IdSelezionato = idSelected;
+        
+        try {        
+            initComponents();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if(modalita.equals("UPDATE")) {
+            System.out.println("Sono in modalità update ...");
+            System.out.println(" Id selezionato: " + idSelected);
+            FornitoreCorrente = setFormAsID(idSelected);
+        }
+        ImageIcon img = new ImageIcon("logo-Icon.png");
+        this.setIconImage(img.getImage());
+            
+        }    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -308,7 +391,7 @@ class FormProdotti extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
-    private void initComponents() {
+    private void initComponents() throws SQLException {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
@@ -363,12 +446,17 @@ class FormProdotti extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel4.setText("Giorni alla consegna");
 
+        jTextField1.setText("AutoGenerato");
+        jTextField1.setEnabled(false);        
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
             }
         });
 
+        
+        jTextField3.setText("AutoGenerato");
+        jTextField3.setEnabled(false); 
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
@@ -409,10 +497,29 @@ class FormProdotti extends javax.swing.JFrame {
         jLabel6.setText("Categoria");
 
         jList1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        ProdottoDAO dao = new ProdottoDAO();
+        // Cat dal db + Cat dinamiche aggiunte prima in java
+        String[] list_prod = new String[dao.getAll().size()+ list_cat_new.size()+1];
+        for(int y =0; y<list_cat_new.size(); y++){ //Aggiungo le categorie aggiunte prima dinamicamente..
+            list_prod[y] = list_cat_new.get(y);
+            System.out.println("size:" + list_cat_new.get(y));        
+        }        
+             
+        Iterator<Prodotto> iter = dao.getAll().iterator();
+        int i =0;
+        int sum = list_cat_new.size();
+        while(iter.hasNext()){ //Aggiungo prima le categorie estrapolate dal db..
+            list_prod[sum+i] = iter.next().getCategoria();
+            i++;
+        }
+       
+
+                
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+             // Elimina i possibili duplicati nella lista risultante...
+            String[] stringsP = Arrays.stream(list_prod).distinct().toArray(String[]:: new);;
+            public int getSize() { return stringsP.length; }
+            public String getElementAt(int i) { return stringsP[i]; }
         });
         jScrollPane1.setViewportView(jList1);
 
@@ -420,10 +527,18 @@ class FormProdotti extends javax.swing.JFrame {
         jLabel8.setText("Costo");
 
         jList2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        FornitoreDAO daof = new FornitoreDAO();
+        String[] list_forn = new String[daof.getAll().size()];
+        Iterator<Fornitore> iter2 = daof.getAll().iterator();
+        int j =0;
+        while(iter2.hasNext()){
+            list_forn[j] = iter2.next().getIdfornitore();
+            j++;
+        }     
         jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+            String[] stringsF = list_forn;
+            public int getSize() { return stringsF.length; }
+            public String getElementAt(int j) { return stringsF[j]; }
         });
         jScrollPane2.setViewportView(jList2);
 
@@ -461,6 +576,7 @@ class FormProdotti extends javax.swing.JFrame {
         });
 
         jButton3.setText("Annulla");
+        jButton3.setForeground(Color.BLACK);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -468,6 +584,7 @@ class FormProdotti extends javax.swing.JFrame {
         });
 
         jButton4.setText("CONFERMA");
+        jButton4.setForeground(Color.BLACK);
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -660,14 +777,95 @@ class FormProdotti extends javax.swing.JFrame {
     }                                           
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+        form.setVisible(false);
+
     }                                        
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
-    }                                        
+        //Aggiungi riga
+        if(modalita.equals("UPDATE")) getOggettoforFormUpdate();
+        else getOggettoforFormSave();
+        
+        form.setVisible(false);
+    } 
+    
+    public void getOggettoforFormSave(){
+        
 
+            Prodotto prod = new Prodotto(jTextField2.getText() , jList1.getSelectedValue(),Integer.parseInt(jTextField6.getText()),jCheckBox1.isSelected(),Integer.parseInt(jTextField5.getText()), Float.valueOf(jTextField7.getText()), jTextField8.getText(), Integer.parseInt(jTextField9.getText()), Integer.parseInt(jTextField4.getText()),"foto.png");
+            ProdottoDAO dao = new ProdottoDAO();
+       
+            try {
+            dao.add(prod, jList2.getSelectedValue());            
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+        try {
+            refreshTab();
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+         
+    
+    }    
+    
+     
+    private String setFormAsID(String idSelected) {
+            
+            ProdottoDAO dao = new ProdottoDAO();
+    
+        try {
+            Prodotto prodotto = dao.getBySku(idSelected);
+            jTextField1.setText(prodotto.getSku());
+            jTextField2.setText(prodotto.getNome());
+            jTextField3.setText(prodotto.getDatareg());
+            jTextField4.setText(Integer.toString(prodotto.getQty_min()));
+            jTextField5.setText(Integer.toString(prodotto.getGiorni_alla_consegna()));
+            jTextField6.setText(Integer.toString(prodotto.getQty()));
+            jTextField7.setText(String.valueOf(prodotto.getCosto()));
+            jTextField8.setText(prodotto.getDescrizione());
+            jTextField9.setText(Integer.toString(prodotto.getQty_inarrivo()));
+            jCheckBox1.setSelected(prodotto.isInstock());
+            jList1.setSelectedValue(prodotto.getCategoria(), true);
+            jList2.setSelectedValue(prodotto.getId_fornitore(), true);
+                       
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }   
+        
+        return jList2.getSelectedValue();
+        
+    }
+    
+    
+   public void getOggettoforFormUpdate(){
+       
+            Prodotto prod = new Prodotto(jTextField1.getText(), FornitoreCorrente, jTextField2.getText() , jList1.getSelectedValue(),Integer.parseInt(jTextField6.getText()),jCheckBox1.isSelected(),Integer.parseInt(jTextField5.getText()), Float.valueOf(jTextField7.getText()), jTextField8.getText(), Integer.parseInt(jTextField9.getText()), Integer.parseInt(jTextField4.getText()),"foto.png");
+            ProdottoDAO dao = new ProdottoDAO();       
+        try {            
+            dao.update(prod, jList2.getSelectedValue());
+            
+                       
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
+        try {
+            refreshTab();
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+   }
+        
+    
+    
+    
+    
+    
 
     // Variables declaration - do not modify                     
     private javax.swing.ButtonGroup buttonGroup1;
@@ -705,8 +903,9 @@ class FormProdotti extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField9;
     private java.awt.Label label1;
     // End of variables declaration                   
-}
+    }
     
+
     
     
 }

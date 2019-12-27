@@ -63,6 +63,8 @@ public class FramePrincipale extends JFrame{
     private CardLayout cardlayout;
     private JPanel pannellolaterale;
     private JPanel pannelloOpzioni;
+    public ProdottiPanel prodotti;
+    public CategoriePanel categorie;
 
     
     public FramePrincipale(){
@@ -95,12 +97,13 @@ public class FramePrincipale extends JFrame{
                         
 
         // Aggiungi la carta "CATEGORIE"
-        CategoriePanel categorie =new CategoriePanel();
+        categorie =new CategoriePanel();
         HomePanel.add(categorie, "Categorie"); 
+        categorie.setComunicator(this);
         
         // Aggiungi la carta "PRODOTTO"
-        ProdottiPanel prodotti = new ProdottiPanel();
-        HomePanel.add(prodotti, "Prodotti");        
+        prodotti = new ProdottiPanel();
+        HomePanel.add(prodotti, "Prodotti");
   
         // Aggiungi la carta "CODICI"
         CodiciPanel codici =new CodiciPanel();
@@ -240,6 +243,16 @@ public class FramePrincipale extends JFrame{
     }
 
  
+    public void  VaiAProdotti(String query){
+            
+            //prodotti.casella
+            cardlayout.show(HomePanel, "Prodotti");
+            prodotti.casella.setText(query);
+    
+    }
+    
+
+    
 
 
 

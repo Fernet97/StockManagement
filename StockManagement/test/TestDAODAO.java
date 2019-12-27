@@ -24,15 +24,25 @@ public class TestDAODAO {
     
           
         try {
-        ProdottoDAO dao = new ProdottoDAO();
-
-            Prodotto pr2 = new Prodotto("ca1-22/12/2019 23:35:09", "XXXXX", "DIODD", 2, true, 3, 1.4f, "NOTEE", 1, 3, "foto.png");
-            dao.update(pr2);
-
             
-            //Fornitore f2 = new Fornitore("FR-1", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb"); 
+            ProdottoDAO dao = new ProdottoDAO();
+            Prodotto pr = new Prodotto("alal", "MINCH", 2, true, 3, 2.4f, "qualche notnia", 1, 3, "foto.png");
+            dao.add(pr, "FR-1");
+            java.util.concurrent.TimeUnit.SECONDS.sleep(4);
+
+            Prodotto pr2 = new Prodotto("uu", "BIOJ", 2, true, 3, 5.4f, "notm", 1, 3, "foto.png");
+            dao.add(pr2, "FR-2");          
             
-            //dao.update(f2);
+            /*
+            Prodotto pr2 = new Prodotto("MI1-25/12/2019 18:37:24", "FR-1", "iosdofisd", "RRRRR", 2, true, 3, 2.4f, "sds notnia", 1, 3, "foto.png");
+            dao.update(pr2, "FR-2"); // "" se non vuoi modificare il fornitore
+           
+                    
+            
+            ProdottoDAO dao = new ProdottoDAO();
+            for(Prodotto p: dao.getAll()){
+                System.out.println(p.getCategoria());
+            }*/
             
             
         } catch (SQLException ex) {
