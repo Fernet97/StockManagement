@@ -5,14 +5,28 @@
  */
 package ui;
 
+import beans.Prodotto;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import dao.ProdottoDAO;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import static java.awt.SystemColor.text;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
@@ -67,7 +81,7 @@ public class CodiciPanel extends JPanel{
         panSopra.add(new JLabel(" ")); 
         
         JButton buttonNew = new JButton("Stampa Selezionati");
-        //*************+* BOTTONE AGGIUNGI NUOVA RIGA**************************
+        //*************+* STAMPA SELEZIONATI**************************
         buttonNew.addActionListener(new ActionListener() {
                         
             @Override
@@ -88,11 +102,8 @@ public class CodiciPanel extends JPanel{
         TitoloTab1.setBorder (new EmptyBorder(0, 100, 20, 100));
 
           String[] columnNames = { "SKU", "QR","Stampa QR"};
-          Object[][] data = { { "XXXXX", "12", "Stampa"},
-                              { "XXXXX", "12", "Stampa"},
-                              { "XXXXX", "12", "Stampa"},
-                              { "XXXXX", "12", "Stampa"},
-                              { "XXXXX", "12", "Stampa"}};
+          Object[][] data = {};  
+
             
            
            
@@ -108,10 +119,16 @@ public class CodiciPanel extends JPanel{
              JTable table = new JTable(model);
 
              
+        try {
+            refreshTab(); // Aggiorna tavola con  i fornitori del db;
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                        
              
              
              
-             table.setRowHeight(100); //altezza celle
+             table.setRowHeight(150); //altezza celle
              
              //X colonne che hanno pulsanti
              table.getColumnModel().getColumn(1).setCellRenderer(new ClientsTableButtonRenderer());
@@ -164,13 +181,32 @@ public class CodiciPanel extends JPanel{
     
     	public ImageIcon ImpostaImg(String nomeImmag) {
 
-                ImageIcon icon = new ImageIcon(nomeImmag);
+                ImageIcon icon = new ImageIcon((getClass().getResource(nomeImmag)));
 		Image ImmagineScalata = icon.getImage().getScaledInstance(70, 70, Image.SCALE_DEFAULT);
 		icon.setImage(ImmagineScalata);
                 return icon;
 	}	
 
 
+        
+        public void  refreshTab() throws SQLException{
+            
+            model.setRowCount(0);
+            
+            ProdottoDAO dao = new ProdottoDAO();
+
+            
+            // Aggiorno con le nuove
+            for(Prodotto prod: dao.getAll()){
+                
+               model.addRow(new Object[]{ prod.getSku(),"","Stampa"});
+
+            
+            }
+            System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
+
+        
+        }
 
 
 
@@ -189,11 +225,23 @@ public class CodiciPanel extends JPanel{
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
     {
       setText("Stampa");
-      setIcon(ImpostaImg("printer.png"));
+      //setIcon(ImpostaImg("printer.png"));
       
       setText((value == null) ? "" : value.toString());
-      if(getText().equals("Stampa"))setIcon(ImpostaImg("printer.png"));
-      else setIcon(ImpostaImg("codici.png"));
+      if(getText().equals("Stampa"))setIcon(ImpostaImg("/res/img/printer.png"));
+      else {//Altrimenti imposta il suo qr CODE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! settare come icona il qrCode relativo allo sku di questa riga
+          System.out.println("Sku di questa riga:"+table.getValueAt(row, 0));       
+          try {
+              String percorsoQRgenerato = generaQRdaSKU(table.getValueAt(row, 0).toString());
+              System.out.println(percorsoQRgenerato);
+              setIcon(new ImageIcon(percorsoQRgenerato));
+          } catch (IOException ex) {
+              Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (WriterException ex) {
+              Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
+          }        
+  
+      } 
       return this;
     }
   }
@@ -214,7 +262,6 @@ public class CodiciPanel extends JPanel{
       {
         public void actionPerformed(ActionEvent e)
         {         
-          System.out.println("APRI FORMMMMm");
           fireEditingStopped();
         }
       });
@@ -229,8 +276,17 @@ public class CodiciPanel extends JPanel{
       button.setBackground(UIManager.getColor("Button.background"));
       label = (value == null) ? "" : value.toString();
       button.setText(label);
-      if(button.getText().equals("Stampa"))  button.setIcon(ImpostaImg("printer.png"));
-      else button.setIcon(ImpostaImg("codici.png"));
+      if(button.getText().equals("Stampa"))  button.setIcon(ImpostaImg("/res/img/printer.png"));
+      else{ /*
+          System.out.println("Sku di questa riga:"+table.getValueAt(row, 0));
+          try {
+              button.setIcon(ImpostaImg( generaQRdaSKU(table.getValueAt(row, 0).toString())));
+          } catch (IOException ex) {
+              Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (WriterException ex) {
+              Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
+          }
+*/}
       clicked = true;
       return button;
     }
@@ -269,7 +325,19 @@ public class CodiciPanel extends JPanel{
     {
       super.fireEditingStopped();
     }
+
+
   }
 
-      
+        
+    public String generaQRdaSKU(String sku) throws IOException, WriterException {
+            
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(sku, BarcodeFormat.QR_CODE, 130, 130);
+
+        Path path = FileSystems.getDefault().getPath("./"+sku.substring(0, sku.indexOf("-"))+".png");
+        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);              
+            
+            return "./"+sku.substring(0, sku.indexOf("-"))+".png"; //Ritorna il percorso del QR generato
+        } 
 }
