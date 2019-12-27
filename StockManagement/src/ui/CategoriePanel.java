@@ -17,6 +17,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
@@ -51,6 +53,7 @@ class CategoriePanel extends JPanel {
       public static Object[] nuovaRiga;
       public ArrayList<String> list_cat_new;
       private FramePrincipale frameprinc;
+      public ArrayList<String> list_tot;
     
     
     
@@ -203,16 +206,31 @@ class CategoriePanel extends JPanel {
             System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
             model.setRowCount(0);
             
+            
             ProdottoDAO dao = new ProdottoDAO();
             
+            /* Aggiorno con le nuove
+            for(String catDinamica: list_cat_new){
+               model.addRow(new Object[]{catDinamica,  "DA DEFINIRE", "Vai a prodotti"} ); 
+     
+            }*/
+            
+            
             // Aggiorno con le nuove
+            ArrayList<String> list_catDB = new ArrayList<>();
             for(Prodotto pro: dao.getAll()){
-                
-               model.addRow(new Object[]{pro.getCategoria(), pro.getQty(), "Vai a prodotti"});
+                list_catDB.add(pro.getCategoria());
+              // model.addRow(new Object[]{pro.getCategoria(), pro.getQty(), "Vai a prodotti"});
      
             }
             
-            System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
+            list_tot = new ArrayList();
+            list_tot.addAll(list_cat_new);
+            list_tot.addAll();
+            
+            
+            
+            }
            
         
         }

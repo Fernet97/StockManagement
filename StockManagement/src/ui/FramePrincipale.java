@@ -29,6 +29,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.RoundRectangle2D;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -65,6 +66,8 @@ public class FramePrincipale extends JFrame{
     private JPanel pannelloOpzioni;
     public ProdottiPanel prodotti;
     public CategoriePanel categorie;
+    private CodiciPanel codici;
+    
 
     
     public FramePrincipale(){
@@ -106,9 +109,9 @@ public class FramePrincipale extends JFrame{
         HomePanel.add(prodotti, "Prodotti");
   
         // Aggiungi la carta "CODICI"
-        CodiciPanel codici =new CodiciPanel();
+        codici =new CodiciPanel();
         HomePanel.add(codici, "Codici");          
-
+       
           
         //Aggiungi la carta "ORDINI"
         JPanel ordini =new JPanel();
@@ -345,6 +348,17 @@ public class FramePrincipale extends JFrame{
                        bottonepremuto.premuto = true;
                        pan.setBackground(color_etichetta);
                        System.out.println("Codice tasto premuto:"+code);
+                       
+                        try {
+                            codici.refreshTab();
+                            prodotti.refreshTab();
+                            categorie.refreshTab();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+           
+
                        disattivaTuttiIBottoniTranne(bottonepremuto.code);
                      
                        cardlayout.show(HomePanel, tipo);
