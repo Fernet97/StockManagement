@@ -20,6 +20,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -303,7 +304,9 @@ public class AnagrafichePanel extends JPanel {
                         dao.remove(table.getValueAt(row, 0).toString());
                         refreshTab();
                         }catch(Exception e){
+                            JOptionPane.showMessageDialog(getComponent(),"Se vuoi cancellare un fornitore, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");                            
                             e.printStackTrace();
+                            
                         }
                  }
               }
@@ -936,12 +939,12 @@ class Formanagrafiche extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
 
-        //Aggiungi riga
-        if(modalita.equals("UPDATE")) getOggettoforFormUpdate();
-        else getOggettoforFormSave();
-        
-        form.setVisible(false);
-
+        if(check()){
+            //Aggiungi riga
+            if(modalita.equals("UPDATE")) getOggettoforFormUpdate();
+            else getOggettoforFormSave();
+        }
+      
           
     }                                        
 
@@ -949,6 +952,25 @@ class Formanagrafiche extends javax.swing.JFrame {
         form.setVisible(false);
 
     }   
+    
+    
+    
+    
+    
+        private boolean check() {
+            if(jTextField3.getText().isEmpty() || jTextField4.getText().isEmpty() || jTextField5.getText().isEmpty() || jTextField6.getText().isEmpty() || jTextField9.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this,"Riempi tutti i campi! ['Note' è opzionale]");
+                if(jTextField6.getText().length() >=15){
+                                JOptionPane.showMessageDialog(this,"Numero di telefono troppo lungo");
+
+                    return false;
+                }
+                return false;
+            }
+            
+            return true;       
+        }
+
     
     
    
@@ -959,8 +981,12 @@ class Formanagrafiche extends javax.swing.JFrame {
             FornitoreDAO dao = new FornitoreDAO();
        
             try {
-            dao.add(forn);            
-            
+                int a= JOptionPane.showConfirmDialog(this,"Dario, sei proprio sicuro?");
+                if(a==JOptionPane.YES_OPTION){
+                    dao.add(forn);            
+                    form.setVisible(false);
+
+                }
             
         } catch (SQLException ex) {
             Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1012,9 +1038,14 @@ class Formanagrafiche extends javax.swing.JFrame {
    public void getOggettoforFormUpdate(){
        Fornitore forn = new Fornitore(jTextField1.getText(), jTextField3.getText() , jTextField4.getText()  , jTextField5.getText(), jTextField6.getText() , jTextField9.getText(), jTextArea1.getText());      
        FornitoreDAO dao = new FornitoreDAO();
-        try {            
-            dao.update(forn);
+        try {    
             
+           int a= JOptionPane.showConfirmDialog(this,"Dario, sei proprio sicuro?");
+           if(a==JOptionPane.YES_OPTION){
+             dao.update(forn);
+             form.setVisible(false);
+
+           }
                        
         } catch (SQLException ex) {
             Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);

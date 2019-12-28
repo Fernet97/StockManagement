@@ -5,7 +5,9 @@
  */
 package ui;
 
+import beans.Prodotto;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
+import dao.ProdottoDAO;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -30,6 +32,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -422,28 +425,75 @@ public class FramePrincipale extends JFrame{
  
   class ButtonDash extends JPanel{ //PANNELLO TOTALE PRODOTTI
  
+      private int number;
       
       public ButtonDash(String type){
-      
+         
+        number = 0;  
         super.setLayout(new GridLayout(3,1));
-        super.setBackground(new Color( 66, 139, 221));  
-        
+        super.setBackground(new Color( 66, 139, 221));   
         JLabel title = new JLabel(type); //Per dare ampiezza al jpanel
         title.setFont(new Font("Arial Black", Font.BOLD, 20));
-        title.setHorizontalAlignment(JLabel.CENTER);
-        super.add(title);
+        title.setHorizontalAlignment(JLabel.CENTER);   
+
+        JButton vai = new JButton("VAI");
+        vai.setFont(new Font("Arial Black", Font.BOLD, 15));
+        vai.setForeground(Color.black);
+        vai.setHorizontalAlignment(JLabel.CENTER);        
+          
+        if(type.equals("Totale prodotti in magazzino")){
+            
+            ProdottoDAO dao = new ProdottoDAO();
+            Enumeration names;
+            String key;       
+         try {
+            names = dao.getCatAndSum().keys();
+            while(names.hasMoreElements()) {
+                key = (String) names.nextElement();
+                number += Integer.parseInt(dao.getCatAndSum().get(key));
+            }} catch (SQLException ex) {
+                    Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                }
+         
+           vai.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    VaiAProdotti("");
+                }
+            });
+        }     
         
-        JLabel num = new JLabel("217"); //Per dare ampiezza al jpanel
+        
+        if(type.equals("Totale prodotti in arrivo")){
+            
+            ProdottoDAO dao = new ProdottoDAO();
+            try {
+                for(Prodotto p : dao.getAll() ){
+                    if(p.getGiorni_alla_consegna() <=5)number++;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            vai.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    VaiAProdotti("");
+                }
+            });
+        } 
+      
+ 
+        JLabel num = new JLabel(String.valueOf(number)); //Per dare ampiezza al jpanel
         num.setFont(new Font("Arial Black", Font.BOLD, 30));
         num.setForeground(Color.red);
         num.setHorizontalAlignment(JLabel.CENTER);
-        super.add(num);
         
-        JButton vai = new JButton("Vai in prodotti");
-        vai.setFont(new Font("Arial Black", Font.BOLD, 15));
-        vai.setForeground(Color.black);
-        vai.setHorizontalAlignment(JLabel.CENTER);
+
+        
+        super.add(title);
+        super.add(num);
         super.add(vai);
+
      
       }
       

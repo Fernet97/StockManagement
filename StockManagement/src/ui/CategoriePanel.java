@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
@@ -208,29 +209,26 @@ class CategoriePanel extends JPanel {
             
             ProdottoDAO dao = new ProdottoDAO();
             
-            // Aggiorno con le nuove
-            for(String catDinamica: list_cat_new){
-               model.addRow(new Object[]{catDinamica,  "DA DEFINIRE", "Vai a prodotti"} ); 
-     
-            }
-            
-            
-            // Aggiorno con le nuove
-            for(Prodotto pro: dao.getAll()){
-                
-               model.addRow(new Object[]{pro.getCategoria(), pro.getQty(), "Vai a prodotti"});
-     
-            }
-            
         Enumeration names;
         String key;       
         names = dao.getCatAndSum().keys();
         
+     
         while(names.hasMoreElements()) {
            key = (String) names.nextElement();
-           System.out.println("Key: " +key+ " & Value: " +
-           dao.getCatAndSum().get(key));
+           System.out.println("Key: " +key+ " & Value: " +dao.getCatAndSum().get(key));
+            model.addRow(new Object[]{key, dao.getCatAndSum().get(key), "Vai a prodotti"});
         }
+        
+                    
+            // Aggiorno con le nuove
+            for(String catDinamica: list_cat_new){
+        
+                model.addRow(new Object[]{catDinamica,  "DA DEFINIRE", "Vai a prodotti"} ); 
+     
+            }
+            
+
             
            
         
