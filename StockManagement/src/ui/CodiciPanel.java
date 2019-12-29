@@ -14,6 +14,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import dao.ProdottoDAO;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -21,6 +22,7 @@ import java.awt.Image;
 import static java.awt.SystemColor.text;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -32,6 +34,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -80,14 +83,31 @@ public class CodiciPanel extends JPanel{
         
         panSopra.add(new JLabel(" ")); 
         
-        JButton buttonNew = new JButton("Stampa Selezionati");
+        JButton buttonNew = new JButton("Apri cartella");
         //*************+* STAMPA SELEZIONATI**************************
         buttonNew.addActionListener(new ActionListener() {
                         
             @Override
-            public void actionPerformed(ActionEvent e) {       
-
-                   // STAMPA I SELEZIONATI
+            public void actionPerformed(ActionEvent e) {  
+                
+                //Cancella tutti i qr code png vecchi:
+                File directory = new File("./QRCODE");
+                File[] files = directory.listFiles();
+                for (File f : files) f.delete();
+                      
+                //refresh
+                try {
+                    refreshTab();
+                } catch (SQLException ex) {
+                    Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            try {
+                          Desktop.getDesktop().open(new File("./QRCODE/"));
+                      } catch (IOException ex) {
+                          Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
+                      }
+                          
             }
         });
         buttonNew.setFont(new Font("Arial Black", Font.BOLD, 15));
@@ -195,6 +215,7 @@ public class CodiciPanel extends JPanel{
             
             ProdottoDAO dao = new ProdottoDAO();
 
+  
             
             // Aggiorno con le nuove
             for(Prodotto prod: dao.getAll()){
@@ -235,6 +256,7 @@ public class CodiciPanel extends JPanel{
               String percorsoQRgenerato = generaQRdaSKU(table.getValueAt(row, 0).toString());
               System.out.println(percorsoQRgenerato);
               setIcon(new ImageIcon(percorsoQRgenerato));
+              setText(percorsoQRgenerato.substring(9));
           } catch (IOException ex) {
               Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
           } catch (WriterException ex) {
@@ -277,16 +299,9 @@ public class CodiciPanel extends JPanel{
       label = (value == null) ? "" : value.toString();
       button.setText(label);
       if(button.getText().equals("Stampa"))  button.setIcon(ImpostaImg("/res/img/printer.png"));
-      else{ /*
-          System.out.println("Sku di questa riga:"+table.getValueAt(row, 0));
-          try {
-              button.setIcon(ImpostaImg( generaQRdaSKU(table.getValueAt(row, 0).toString())));
-          } catch (IOException ex) {
-              Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
-          } catch (WriterException ex) {
-              Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
-          }
-*/}
+      else{ 
+
+      }
       clicked = true;
       return button;
     }
@@ -298,15 +313,22 @@ public class CodiciPanel extends JPanel{
               if(button.getText().equals("Cancella")) {
                 int OpzioneScelta = JOptionPane.showConfirmDialog(getComponent(),"Sicuro di voler cancellare la riga:\n [  "+
                         table.getValueAt(row, 0)+"  |   "+
-                        table.getValueAt(row, 1)+"  ]");  
-                
-                if (OpzioneScelta == JOptionPane.OK_OPTION) {
-                        System.out.println("OOOOOOOOKKKKKK CANCELLO");  
-                        // QUI METTERE IL DAO CON FUNZIONE REMOVE
-                 }
-                           
-              
-              
+                        table.getValueAt(row, 1)+"  ]");    
+                    if (OpzioneScelta == JOptionPane.OK_OPTION) {
+                            System.out.println("OOOOOOOOKKKKKK CANCELLO");  
+                            // QUI METTERE IL DAO CON FUNZIONE REMOVE
+                     }
+  
+              }
+              else if(button.getText().equals("Stampa")) {
+                            String path = table.getValueAt(row, 0).toString();
+                  try {
+                      Desktop.getDesktop().open(new File("./QRCODE/"+path.substring(0, path.indexOf("-"))+".png"));
+                  } catch (IOException ex) {
+                      Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
+                  }
+
+
               }
               
               
@@ -335,9 +357,9 @@ public class CodiciPanel extends JPanel{
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(sku, BarcodeFormat.QR_CODE, 130, 130);
 
-        Path path = FileSystems.getDefault().getPath("./"+sku.substring(0, sku.indexOf("-"))+".png");
+        Path path = FileSystems.getDefault().getPath("./QRCODE/"+sku.substring(0, sku.indexOf("-"))+".png");
         MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);              
             
-            return "./"+sku.substring(0, sku.indexOf("-"))+".png"; //Ritorna il percorso del QR generato
+            return "./QRCODE/"+sku.substring(0, sku.indexOf("-"))+".png"; //Ritorna il percorso del QR generato
         } 
 }

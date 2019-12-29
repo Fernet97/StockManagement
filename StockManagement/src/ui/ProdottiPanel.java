@@ -782,22 +782,55 @@ class FormProdotti extends javax.swing.JFrame {
     }                                        
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        //Aggiungi riga
-        if(modalita.equals("UPDATE")) getOggettoforFormUpdate();
-        else getOggettoforFormSave();
-        
-        form.setVisible(false);
+        if(check()){
+            //Aggiungi riga
+            if(modalita.equals("UPDATE")) getOggettoforFormUpdate();
+            else getOggettoforFormSave();
+        }
+      
     } 
+     
+    
+    
+    private boolean check() {
+            if(jTextField2.getText().isEmpty() || jList1.isSelectionEmpty() || jTextField6.getText().isEmpty() ||jTextField5.getText().isEmpty() || jTextField7.getText().isEmpty() || jTextField9.getText().isEmpty() || jTextField9.getText().isEmpty() || jTextField4.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this,"Compila tutti i campi! ['Note' è opzionale]");
+                return false;}
+            
+              try{ //Controlla se sono interi...
+                    Integer.parseInt(jTextField6.getText());
+                    Integer.parseInt(jTextField5.getText()); 
+                    Integer.parseInt(jTextField9.getText()); 
+                    Integer.parseInt(jTextField4.getText());        
+                }catch(NumberFormatException e){
+                    JOptionPane.showMessageDialog(this,"Controlla che Quantità, Gioni alla consegna, qty minima, qry in arrivo, siano numeri validi. [Per il costo usare '.' per indicare la parte decimale]");
+                    return false;
+                }
+                //controlla se sono float ...
+                try{
+                    Float.parseFloat(jTextField7.getText());
+                }catch(NumberFormatException e){
+                    JOptionPane.showMessageDialog(this,"Controlla che le quantità ed il costo siano numeri validi! [Per il costo usare '.' per indicare la parte decimale]");
+                    return false;
+                }
+            
+
+        return true;
+    }
+            
     
     public void getOggettoforFormSave(){
         
-
             Prodotto prod = new Prodotto(jTextField2.getText() , jList1.getSelectedValue(),Integer.parseInt(jTextField6.getText()),jCheckBox1.isSelected(),Integer.parseInt(jTextField5.getText()), Float.valueOf(jTextField7.getText()), jTextField8.getText(), Integer.parseInt(jTextField9.getText()), Integer.parseInt(jTextField4.getText()),"foto.png");
             ProdottoDAO dao = new ProdottoDAO();
        
             try {
-            dao.add(prod, jList2.getSelectedValue());            
-            
+                int a= JOptionPane.showConfirmDialog(this,"Dario, sei proprio sicuro?");
+                 if(a==JOptionPane.YES_OPTION){
+                    dao.add(prod, jList2.getSelectedValue()); 
+                    form.setVisible(false);
+
+                  }
             
         } catch (SQLException ex) {
             Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -847,7 +880,12 @@ class FormProdotti extends javax.swing.JFrame {
             Prodotto prod = new Prodotto(jTextField1.getText(), FornitoreCorrente, jTextField2.getText() , jList1.getSelectedValue(),Integer.parseInt(jTextField6.getText()),jCheckBox1.isSelected(),Integer.parseInt(jTextField5.getText()), Float.valueOf(jTextField7.getText()), jTextField8.getText(), Integer.parseInt(jTextField9.getText()), Integer.parseInt(jTextField4.getText()),"foto.png");
             ProdottoDAO dao = new ProdottoDAO();       
         try {            
-            dao.update(prod, jList2.getSelectedValue());
+           int a= JOptionPane.showConfirmDialog(this,"Dario, sei proprio sicuro?");
+           if(a==JOptionPane.YES_OPTION){
+            dao.update(prod, jList2.getSelectedValue());               
+             form.setVisible(false);
+
+           }            
             
                        
         } catch (SQLException ex) {
