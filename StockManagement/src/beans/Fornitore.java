@@ -31,7 +31,14 @@ public class Fornitore {
     
     //constructor
 
-    // Costruttore senza specificare ID ==> Genera ID automaticamente (In genere x ADD)
+   // Costruttore senza specificare ID ==> Genera ID automaticamente (In genere x ADD)
+    /** 
+     * costruttore senza id
+     * usato per l'add
+     * add non necessita di id perche
+     * autogenera il codice id univoco
+     * **end**
+     */
     public Fornitore(String fullname, String p_iva, String indirizzo, String tel, String email, String desc) {
          
         setCode(leggiUltimoID() +1);
@@ -50,6 +57,12 @@ public class Fornitore {
     
     
     //Costruttore CON ID specificato ===> (In genere usato x UPDATE)
+     /** 
+     * costruttore con id
+     * usato in genere per l'update
+     * Necessita di id perche serve alla ricerca del codice univoco di identificazione
+     * **end**
+     */
         public Fornitore(String idfornitore, String fullname, String p_iva, String indirizzo, String tel, String email, String desc) {
             
             this.idfornitore = idfornitore;

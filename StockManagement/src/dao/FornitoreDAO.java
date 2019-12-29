@@ -173,7 +173,7 @@ public class FornitoreDAO {
 		Fornitore f = b;
 		
                 System.out.println("Id del fornitore da modificare: "+ f.getIdfornitore());
-		String query = "UPDATE fornitori SET `datareg` = '"+f.getDatareg()+"', `fullname` = '"+f.getFullname()+"', `p_iva` = '"+f.getP_iva()+"', `indirizzo` = '"+f.getIndirizzo()+"', `tel` = '"+f.getTel()+"', `email` = '"+f.getEmail()+"', `description` = '"+f.getDesc()+"' WHERE (`idfornitori` = '"+f.getIdfornitore()+"');";
+		String query = "UPDATE fornitori SET   `fullname` = '"+f.getFullname()+"', `p_iva` = '"+f.getP_iva()+"', `indirizzo` = '"+f.getIndirizzo()+"', `tel` = '"+f.getTel()+"', `email` = '"+f.getEmail()+"', `description` = '"+f.getDesc()+"' WHERE (`idfornitori` = '"+f.getIdfornitore()+"');";
 				
 		try {
 			connection = DriverManagerConnectionPool.getConnection();

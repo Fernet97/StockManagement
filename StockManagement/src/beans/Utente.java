@@ -5,12 +5,21 @@
  */
 package beans;
 
+
+import dao.UtenteDAO;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author LittleJoke
  */
 public class Utente {
    
+   private static int code = 0 ;
    private String id; 
    private String datareg;
    private String fullname; 
@@ -24,9 +33,16 @@ public class Utente {
 
 
    //contructor
-
-    public Utente(String id, String datareg, String fullname, String CF, String indirizzo, String telefono, String email, String pwd, int permessi, String note) {
-        this.id = id;
+//costruttore con utente
+   
+       /** 
+     * costruttore con id
+     * usato in genere per l'update
+     * Necessita di id perche serve alla ricerca del codice univoco di identificazione
+     * **end**
+     */
+    public Utente(String id, String fullname, String CF, String indirizzo, String telefono, String email, String pwd, int permessi, String note) {
+      
         this.datareg = datareg;
         this.fullname = fullname;
         this.CF = CF;
@@ -36,7 +52,36 @@ public class Utente {
         this.pwd = pwd;
         this.permessi = permessi;
         this.note = note;
+        
+           setDatareg(generateData());
     }
+    
+    /** 
+     * costruttore senza id
+     * usato per l'add
+     * add non necessita di id perche
+     * autogenera il codice id univoco
+     * **end**
+     */
+     public Utente( String fullname, String CF, String indirizzo, String telefono, String email, String pwd, int permessi, String note) {
+        
+         setCode(leggiUltimoID() +1);
+        this.datareg = datareg;
+        this.fullname = fullname;
+        this.CF = CF;
+        this.indirizzo = indirizzo;
+        this.telefono = telefono;
+        this.email = email;
+        this.pwd = pwd;
+        this.permessi = permessi;
+        this.note = note;
+        
+           setDatareg(generateData());
+           setId(generateID());
+           System.out.println("id utente nuovo "+getId());
+    }
+
+    public Utente() { }
 
 // getter & setter 
 
@@ -118,6 +163,53 @@ public class Utente {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public static int getCode() {
+        return code;
+    }
+
+    public static void setCode(int code) {
+        Utente.code = code;
+    }
+    
+    
+    public String generateData(){
+          DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+	LocalDateTime now = LocalDateTime.now();
+	System.out.println(dtf.format(now)); //11/11/2019 11:11
+        return dtf.format(now);
+    }
+    
+    private String generateID(){
+         String idgenerato = "ut-"+getCode();
+      return idgenerato;
+    }
+    
+    private int leggiUltimoID(){
+          
+             String tmp;
+        int idlast;
+
+        try {
+            UtenteDAO dao = new UtenteDAO();
+            
+            String lastid = dao.getLastID().getId();
+            //ut-000
+            if(lastid == null) return 0;
+            
+          
+            tmp = lastid.substring(3);
+            idlast= Integer.parseInt(tmp);
+            System.out.println("ID dell'ultimo fornitore:"+idlast);
+    }
+                    
+         catch (SQLException ex) {
+            Logger.getLogger(Utente.class.getName()).log(Level.SEVERE, null, ex);
+            idlast = -99999;
+         }
+    
+        return idlast;
     }
     
 }

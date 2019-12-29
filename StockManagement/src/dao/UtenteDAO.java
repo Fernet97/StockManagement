@@ -18,7 +18,7 @@ import java.util.LinkedList;
 /**
  *
  * @author LittleJoke
- *//*
+ */
 public class UtenteDAO {
     private final String TABLE_NAME = "utenti";
         
@@ -40,18 +40,18 @@ public class UtenteDAO {
                     while (rs.next()) {
                     
                         Utente bean = new Utente();
+                        
                         bean.setId(rs.getString("id"));
+                        bean.setDatareg(rs.getString("datareg"));
                         bean.setFullname(rs.getString("fullname"));
-                        bean.setTelefono(rs.getString("telefono"));
-                        bean.setEmail(rs.getString("email"));
                         bean.setCF(rs.getString("CF"));
                         bean.setIndirizzo(rs.getString("indirizzo"));
+                        bean.setTelefono(rs.getString("tel"));
+                        bean.setEmail(rs.getString("email"));
                         bean.setPwd(rs.getString("pwd"));
-                        bean.setCreate(rs.getBoolean("create"));
-                        bean.setUpdate(rs.getBoolean("update"));
-                        bean.setView(rs.getBoolean("view"));
-                        bean.setDelete(rs.getBoolean("delete"));
-                        bean.setIsAdmin(rs.getBoolean("isAdmin"));
+                        bean.setPermessi(rs.getInt("permessi"));
+                        bean.setNote(rs.getString("note"));
+
                         
                         utenti.add(bean);
                     }
@@ -85,18 +85,16 @@ public class UtenteDAO {
                         while (rs.next()) {
 
 
-                            bean.setId(rs.getString("id"));
-                            bean.setFullname(rs.getString("fullname"));
-                            bean.setTelefono(rs.getString("telefono"));
-                            bean.setEmail(rs.getString("email"));
-                            bean.setCF(rs.getString("CF"));
-                            bean.setIndirizzo(rs.getString("indirizzo"));
-                            bean.setPwd(rs.getString("pwd"));
-                            bean.setCreate(rs.getBoolean("create"));
-                            bean.setUpdate(rs.getBoolean("update"));
-                            bean.setView(rs.getBoolean("view"));
-                            bean.setDelete(rs.getBoolean("delete"));
-                            bean.setIsAdmin(rs.getBoolean("isAdmin"));
+                        bean.setId(rs.getString("id"));
+                        bean.setDatareg(rs.getString("datareg"));
+                        bean.setFullname(rs.getString("fullname"));
+                        bean.setCF(rs.getString("CF"));
+                        bean.setIndirizzo(rs.getString("indirizzo"));
+                        bean.setTelefono(rs.getString("tel"));
+                        bean.setEmail(rs.getString("email"));
+                        bean.setPwd(rs.getString("pwd"));
+                        bean.setPermessi(rs.getInt("permessi"));
+                        bean.setNote(rs.getString("note"));
 
 
                         }
@@ -114,29 +112,28 @@ public class UtenteDAO {
             }
         
         public synchronized void add (Utente u)throws SQLException {
-            // insert into utenti values ("2", "test2", "test2", "test2", "test2", "test2", "test2", 1, 1, 1, 1, 1);
+            
                         Connection connection = null;
                         PreparedStatement preparedStatement = null;
                         
                         String insertSQL =  "INSERT INTO " +TABLE_NAME
-                                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         
                         try {
                                 connection = DriverManagerConnectionPool.getConnection();
                                 preparedStatement = connection.prepareStatement(insertSQL);
 
                                 preparedStatement.setString(1, u.getId());
-                                preparedStatement.setString(2, u.getFullname());
-                                preparedStatement.setString(3, u.getTelefono());
-                                preparedStatement.setString(4, u.getEmail());
-                                preparedStatement.setString(5, u.getCF());
-                                preparedStatement.setString(6, u.getIndirizzo());
-                                preparedStatement.setString(7, u.getPwd());
-                                preparedStatement.setBoolean(8, u.isCreate());
-                                preparedStatement.setBoolean(9, u.isUpdate());
-                                preparedStatement.setBoolean(10, u.isView());
-                                preparedStatement.setBoolean(11, u.isDelete());
-                                preparedStatement.setBoolean(12, u.isIsAdmin());
+                                preparedStatement.setString(2, u.getDatareg());
+                                preparedStatement.setString(3, u.getFullname());
+                                preparedStatement.setString(4, u.getCF());
+                                preparedStatement.setString(5, u.getIndirizzo());
+                                preparedStatement.setString(6, u.getTelefono());    
+                                preparedStatement.setString(7, u.getEmail());
+                                preparedStatement.setString(8, u.getPwd());
+                                preparedStatement.setInt(9, u.getPermessi());
+                                preparedStatement.setString(10, u.getNote());
+                            
                         
 		
                         System.out.println(insertSQL);
@@ -158,34 +155,27 @@ public class UtenteDAO {
         
         public synchronized void update (Utente u) throws SQLException{
                         Connection connection = null;
-                        PreparedStatement st = null;  
+                        Statement st = null;  
                         
-                         System.out.println("Entra qui");
-                                 String insertSQL= "UPDATE " +TABLE_NAME+ "SET `id` = '?', `fullname` = '?', `telefono` = '?', `email` = '?', `CF` = '?', `indirizzo` = '?', `pwd` = '?', `create` = '?', `update` = '?', `view` = '?', `delete` = '?', `isAdmin` = '?' WHERE  (" +u.getId()+")";
-//                         String insertSQL= "UPDATE utenti SET id = ?, fullname = ?, telefono = ?, email = ?, CF = ?, indirizzo = ?, pwd = ?, create = ?, update = ?, view= ?, delete = ?, isAdmin = ? WHERE (id = " +u.getId()+")";
-                        connection = DriverManagerConnectionPool.getConnection();
-                          st = connection.prepareStatement(insertSQL);
-                          
-                                    Utente u1 = getByID(u.getId());
-                                    remove(u.getId());
-                          
-                        st.setString(1, u.getId());
-                        st.setString(2, u.getFullname());
-                        st.setString(3, u.getTelefono());
-                        st.setString(4, u.getEmail());
-                        st.setString(5, u.getCF());
-                        st.setString(6, u.getIndirizzo());
-                        st.setString(7, u.getPwd());
-                        st.setBoolean(8, u.isCreate());
-                        st.setBoolean(9, u.isUpdate());
-                        st.setBoolean(10, u.isView());
-                        st.setBoolean(11, u.isDelete());
-                        st.setBoolean(12, u.isIsAdmin());
-                        System.out.println(st);
-                         st.executeUpdate();
+                         System.out.println("id dell'utente da modificare"+u.getId());
+                                                          
+                        String insertSQL = "UPDATE" +TABLE_NAME+ " SET `fullname` = '"+u.getFullname()+"', `CF` = '"+u.getCF()+"', `indirizzo` = '"+u.getIndirizzo()+"', `tel` = '"+u.getTelefono()+"', `email` = '"+u.getEmail()+"', `pwd` = '"+u.getPwd()+"', `permessi` = '"+u.getPermessi()+"', `note` = '"+u.getNote()+"' WHERE (`id` = '"+u.getId()+"')";
 
-                connection.close();
-        }
+		try {
+			connection = DriverManagerConnectionPool.getConnection();
+			st = connection.createStatement();
+			st.executeUpdate(insertSQL);
+			connection.commit();
+		} finally {
+			try {
+				if (st != null)
+					st.close();
+			} finally {
+				DriverManagerConnectionPool.releaseConnection(connection);
+			}
+		}	
+
+    }
 
 public synchronized void remove (String id) throws SQLException{
                         Connection connection = null;
@@ -213,6 +203,49 @@ public synchronized void remove (String id) throws SQLException{
 	
 	
 	}
-}
 
-*/
+  public synchronized Utente getLastID() throws SQLException{
+        
+            Connection connection = null;
+            Statement  ps = null;
+           Utente bean = new Utente();
+
+
+            String query = "select* from utenti order by datareg DESC LIMIT 1";      
+                 		try  {
+                                                        connection = DriverManagerConnectionPool.getConnection();
+                                                        ps = connection.prepareStatement(query);
+
+                                                        ResultSet rs = ps.executeQuery(query);
+                                                        
+                                                        while (rs.next()) {
+                                                                                                
+                                                            bean.setId(rs.getString("id"));
+                                                            bean.setDatareg(rs.getString("datareg"));
+                                                            bean.setFullname(rs.getString("fullname"));
+                                                            bean.setCF(rs.getString("CF"));
+                                                            bean.setIndirizzo(rs.getString("indirizzo"));
+                                                            bean.setTelefono(rs.getString("tel"));
+                                                            bean.setEmail(rs.getString("email"));
+                                                            bean.setPwd(rs.getString("pwd"));
+                                                            bean.setPermessi(rs.getInt("permessi"));
+                                                            bean.setNote(rs.getString("note"));
+
+
+                                                                                                  
+                                                                                    }
+                                }
+                                                finally {
+			try {
+                                                                                if (ps != null)
+                                                                                    ps.close();
+                                                                            }
+                                                                          finally {
+                                                                                    DriverManagerConnectionPool.releaseConnection(connection);
+                                                                                    }
+                        
+                                                  }
+                                                return bean;
+        
+        }
+}
