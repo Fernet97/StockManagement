@@ -117,6 +117,7 @@ public class FornitoreDAO {
 
         String insertSQL = "INSERT INTO " + TABLE_NAME
                 + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        System.out.println("fornitore add "+insertSQL);
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -131,7 +132,6 @@ public class FornitoreDAO {
             preparedStatement.setString(7, b.getEmail());
             preparedStatement.setString(8, b.getDesc());
 
-            System.out.println(insertSQL);
 
             preparedStatement.executeUpdate();
 
@@ -174,7 +174,7 @@ public class FornitoreDAO {
 		
                 System.out.println("Id del fornitore da modificare: "+ f.getIdfornitore());
 		String query = "UPDATE fornitori SET   `fullname` = '"+f.getFullname()+"', `p_iva` = '"+f.getP_iva()+"', `indirizzo` = '"+f.getIndirizzo()+"', `tel` = '"+f.getTel()+"', `email` = '"+f.getEmail()+"', `description` = '"+f.getDesc()+"' WHERE (`idfornitori` = '"+f.getIdfornitore()+"');";
-				
+		      System.out.println("fornitore update "+ query);		
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
 			statement = connection.createStatement();
@@ -197,7 +197,7 @@ public class FornitoreDAO {
         Statement statement = null;
 //DELETE FROM `db_stock`.`prodotti` WHERE (`sku` = 'mi1-13/12/2019 11:21:41');
         String query = "DELETE FROM " + this.TABLE_NAME + " WHERE (`idfornitori` = '"+idFornitore+"')";
-        System.out.println(query);
+        System.out.println("fornitori remove "+query);
         try {
             connection = DriverManagerConnectionPool.getConnection();
             statement = connection.createStatement();
