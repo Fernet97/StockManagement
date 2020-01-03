@@ -6,6 +6,7 @@
 package beans;
 
 
+import static com.sun.org.apache.xalan.internal.lib.ExsltStrings.split;
 import dao.UtenteDAO;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -181,8 +182,15 @@ public class Utente {
         return dtf.format(now);
     }
     
+     public String usergen(){
+    
+            String[] name = getFullname().split(" ");
+            name[0] = name[0].substring(0, 1) + "."; 
+            return name[0]+name[1];
+    }
+    
     private String generateID(){
-         String idgenerato = "ut-"+getCode();
+         String idgenerato = usergen() +getCode();
       return idgenerato;
     }
     
@@ -195,11 +203,11 @@ public class Utente {
             UtenteDAO dao = new UtenteDAO();
             
             String lastid = dao.getLastID().getId();
-            //ut-000
+            //v.manisera1
             if(lastid == null) return 0;
             
-          
-            tmp = lastid.substring(3);
+//             String numberOnly= str.replaceAll("[^0-9]", "")
+            tmp = lastid.replaceAll("[^0-9]", "");
             idlast= Integer.parseInt(tmp);
             System.out.println("ID dell'ultimo fornitore:"+idlast);
     }
@@ -211,5 +219,7 @@ public class Utente {
     
         return idlast;
     }
+    
+   
     
 }
