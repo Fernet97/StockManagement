@@ -57,6 +57,7 @@ public class ProdottiPanel extends JPanel{
     public final JTextField casella;
     public FormProdotti form;
     public ArrayList<String> list_cat_new;;
+    private final JTable table;
 
 
     
@@ -123,7 +124,7 @@ public class ProdottiPanel extends JPanel{
                   return column >= 12; //il numero di celle editabili...
                 }
               };
-             JTable table = new JTable(model);
+             table = new JTable(model);
 
         try {
             refreshTab(); // Aggiorna tavola con  i fornitori del db;
@@ -136,6 +137,8 @@ public class ProdottiPanel extends JPanel{
              table.setRowHeight(40); //altezza celle
              
              //X colonne che hanno pulsanti
+             table.getColumnModel().getColumn(4).setCellRenderer(new CustomRender());
+             
              table.getColumnModel().getColumn(12).setCellRenderer(new ClientsTableButtonRenderer());
              table.getColumnModel().getColumn(12).setCellEditor(new ClientsTableRenderer(new JCheckBox()));
 
@@ -204,6 +207,7 @@ public class ProdottiPanel extends JPanel{
         
         public void  refreshTab() throws SQLException{
             
+            
             //Cancello vecchie righe...
             System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
             model.setRowCount(0);
@@ -214,13 +218,45 @@ public class ProdottiPanel extends JPanel{
             for(Prodotto pro: dao.getAll()){
                System.out.println(pro.getSku() +" "+ pro.getDatareg()+" "+ pro.getNome()+" "+pro.getCategoria()+" "+ pro.getQty()+" "+pro.getId_fornitore()+" "+pro.isInstock()+" "+ pro.getGiorni_alla_consegna()+" "+pro.getCosto()+" "+ pro.getDescrizione()+" "+pro.getQty_inarrivo()+" "+ pro.getQty_min());
                model.addRow(new Object[]{ pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), pro.getId_fornitore(), pro.isInstock(), pro.getGiorni_alla_consegna(), pro.getCosto(), pro.getDescrizione(), pro.getQty_inarrivo(), pro.getQty_min(),"Modifica","Cancella"});
-
+               
             
             }
             System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
+      
 
         
         }
+
+ class CustomRender  extends JButton implements TableCellRenderer {
+
+        public CustomRender() {
+        
+        
+        
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            
+           if(Integer.parseInt(table.getValueAt(row, 4).toString()) <= Integer.parseInt(table.getValueAt(row, 11).toString())){
+           
+                setBackground(Color.red);           
+           }
+           
+           else setBackground(Color.green);
+           
+           setText(table.getValueAt(row, 4).toString());
+            
+        
+            return this;
+        }
+   
+    
+    
+    
+    
+    
+    }
 
 
 
@@ -245,6 +281,9 @@ public class ProdottiPanel extends JPanel{
 
       return this;
     }
+    
+  
+    
   }
   public class ClientsTableRenderer extends DefaultCellEditor
   {
@@ -274,8 +313,10 @@ public class ProdottiPanel extends JPanel{
       this.row = row;
       this.col = column;
 
+   
       button.setForeground(Color.black);
       button.setBackground(UIManager.getColor("Button.background"));
+      
       label = (value == null) ? "" : value.toString();
       button.setText(label);
       if(button.getText().equals("Modifica"))  button.setIcon(ImpostaImg("/res/img/pencil.png"));
@@ -283,6 +324,7 @@ public class ProdottiPanel extends JPanel{
       clicked = true;
       return button;
     }
+    
     public Object getCellEditorValue()
     {
       if (clicked)  // SE CLICCATO QUEL BOTTONE:::::::::::::
@@ -884,6 +926,7 @@ class FormProdotti extends javax.swing.JFrame {
            if(a==JOptionPane.YES_OPTION){
             dao.update(prod, jList2.getSelectedValue());               
              form.setVisible(false);
+             System.out.println("La form:"+ form);
 
            }            
             
