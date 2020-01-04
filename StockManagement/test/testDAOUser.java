@@ -18,12 +18,14 @@ public class testDAOUser {
          System.out.println("utente");
                                System.out.println("/*add*/");
            java.util.concurrent.TimeUnit.SECONDS.sleep(3);
-          // UtenteDAO  dao = new UtenteDAO();
-           //Utente u = new Utente ("1","1","1","1","1","1", 1 ,"1");
-           //dao.add(u);
+           UtenteDAO  dao = new UtenteDAO();
+           Utente u = new Utente ("gesu bambino ","1","1","1","1","1", 1 ,"1");
+           dao.add(u);
+           System.out.println("//*update*//");
                    UtenteDAO  dao2 = new UtenteDAO();
-                   
-      Utente u2 = new Utente (dao2.getByID("ut-1")+ "fullname", "CF"," indirizzo", "telefono", "email", "pwd", 0, "note");
+                   java.util.concurrent.TimeUnit.SECONDS.sleep(10);
+      Utente u2 = dao2.getByID("g.bambino1");
+      u2.setTelefono("miiiiaaaao");
                dao2.update(u2);
                    }
     

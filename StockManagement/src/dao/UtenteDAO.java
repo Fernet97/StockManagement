@@ -136,7 +136,7 @@ public class UtenteDAO {
                             
                         
 		
-                        System.out.println(insertSQL);
+                        System.out.println("utente add "+insertSQL);
 
 			preparedStatement.executeUpdate();
 
@@ -159,8 +159,8 @@ public class UtenteDAO {
                         
                          System.out.println("id dell'utente da modificare"+u.getId());
                                                           
-                        String insertSQL = "UPDATE" +TABLE_NAME+ " SET `fullname` = '"+u.getFullname()+"', `CF` = '"+u.getCF()+"', `indirizzo` = '"+u.getIndirizzo()+"', `tel` = '"+u.getTelefono()+"', `email` = '"+u.getEmail()+"', `pwd` = '"+u.getPwd()+"', `permessi` = '"+u.getPermessi()+"', `note` = '"+u.getNote()+"' WHERE (`id` = '"+u.getId()+"')";
-
+                        String insertSQL = "UPDATE " +TABLE_NAME+ " SET `fullname` = '"+u.getFullname()+"', `CF` = '"+u.getCF()+"', `indirizzo` = '"+u.getIndirizzo()+"', `tel` = '"+u.getTelefono()+"', `email` = '"+u.getEmail()+"', `pwd` = '"+u.getPwd()+"', `permessi` = '"+u.getPermessi()+"', `note` = '"+u.getNote()+"' WHERE (`id` = '"+u.getId()+"')";
+            System.out.println("utente update "+ insertSQL);
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
 			st = connection.createStatement();
@@ -182,7 +182,7 @@ public synchronized void remove (String id) throws SQLException{
                         Statement  statement = null;
 
 		String query = "DELETE FROM " + this.TABLE_NAME + " WHERE id='"+id+"'";
-                System.out.println(query);
+                System.out.println("utenti remove "+query);
 
                         try {
                                 connection = DriverManagerConnectionPool.getConnection();

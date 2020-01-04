@@ -145,7 +145,7 @@ public class ProdottoDAO {
                                     ps.setInt(11, b.getQty_min());  
                                     ps.setString(12, b.getFoto());
 		
-                                    System.out.println(insertSQL);
+                                    System.out.println("prodotto add "+insertSQL);
                                     
                                     ps.executeUpdate();
                                     
@@ -181,7 +181,7 @@ public class ProdottoDAO {
                 System.out.println("sku del prodoto da modificare: "+ p.getSku());
 		String query = "UPDATE `db_stock`.`prodotti` SET `nome` = '"+p.getNome()+"', `categoria` = '"+p.getCategoria()+"', `qty` = '"+p.getQty()+"', `instock` = "+p.isInstock()+", `giorni_alla_consegna` = '"+p.getGiorni_alla_consegna()+"', `costo` = '"+p.getCosto()+"', `descrizione` = '"+p.getDescrizione()+"', `qty_inarrivo` = '"+p.getQty_inarrivo()+"', `qty_min` = '"+p.getQty_min()+"',"
                         + " `foto` = '"+p.getFoto()+"' WHERE (`sku` = '"+p.getSku()+"'); UPDATE `db_stock`.`prodotti_has_fornitori` SET `fornitori_idfornitori` = '"+idNewFornitore+"' WHERE (`prodotti_sku` = '"+p.getSku()+"') and (`fornitori_idfornitori` = '"+p.getId_fornitore()+"');";
-		System.out.println(query);	
+		System.out.println("prodotto update "+query);	
                 
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
@@ -211,7 +211,7 @@ public class ProdottoDAO {
                                          //   DELETE FROM `db_stock`.`prodotti_has_fornitori` WHERE (`prodotti_sku` = 'ca2-16/12/2019 12:21:16') and (`fornitori_idfornitori` = 'FR-2');
             String query = "DELETE FROM prodotti_has_fornitori WHERE (`prodotti_sku` =  '"+sku+"') and (`fornitori_idfornitori` = '"+fornitoreID+"'); "
                     + "DELETE FROM " +this.TABLE_NAME + " WHERE  (`sku` = '"+sku+"');"; 
-                System.out.println(query);
+                System.out.println("prodotto remove "+query);
 
 
                         try {
