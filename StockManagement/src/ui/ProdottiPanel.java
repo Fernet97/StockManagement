@@ -359,10 +359,10 @@ public class ProdottiPanel extends JPanel{
               }
               else if(button.getText().equals("Modifica")) { // APRI FORM PER MODIFICARE RECORD
               
-                    FormProdotti f = new FormProdotti("UPDATE", table.getValueAt(row, 0).toString());
-                    f.setResizable(false);
-                    f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    f.setVisible(true);
+                    form = new FormProdotti("UPDATE", table.getValueAt(row, 0).toString());
+                    form.setResizable(false);
+                    form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    form.setVisible(true);
               
               }
               
