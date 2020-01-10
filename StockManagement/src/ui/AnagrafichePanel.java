@@ -435,7 +435,7 @@ class Formanagrafiche extends javax.swing.JFrame {
         label1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         label1.setForeground(new java.awt.Color(255, 51, 0));
         label1.setMinimumSize(new java.awt.Dimension(50, 50));
-        label1.setText("FORM");
+        label1.setText("form anagrafiche");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -448,7 +448,7 @@ class Formanagrafiche extends javax.swing.JFrame {
             .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        label1.getAccessibleContext().setAccessibleName("FORM");
+        label1.getAccessibleContext().setAccessibleName("form anagrafiche");
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));

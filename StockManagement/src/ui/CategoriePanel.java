@@ -243,13 +243,15 @@ class CategoriePanel extends JPanel {
   {
     public ClientsTableButtonRenderer()
     {
+
       setOpaque(true);
     }
 
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
     {
+        setForeground(Color.white);
+       
       setText("Vai a prodotti");
-        setForeground(Color.black);
       setIcon(ImpostaImg("prodotti.png"));
       
 
@@ -269,6 +271,8 @@ class CategoriePanel extends JPanel {
       super(checkBox);
       button = new JButton();    // ECCO IL BOTTONE
       button.setOpaque(true);
+              setForeground(Color.white);
+
       button.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent e)
@@ -333,8 +337,8 @@ public class AddCategoriaDialog extends JDialog {
         this.setMinimumSize(new Dimension(500, 100));
         this.name = new JTextField();
 
-        JButton add = new JButton("AGGIUNGI");
-        add.setForeground(Color.black);
+        JButton add = new JButton("Conferma nuova categoria");
+        add.setForeground(Color.white);
         add.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
