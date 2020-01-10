@@ -1,20 +1,7 @@
-
-import beans.Fornitore;
-import beans.Prodotto;
-//import beans.Utente;
-import dao.FornitoreDAO;
-import dao.ProdottoDAO;
-//import dao.UtenteDAO;
-import java.sql.SQLException;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+package others;
 
 import database.DriverManagerConnectionPool;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
