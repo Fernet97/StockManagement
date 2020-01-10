@@ -64,7 +64,7 @@ public class CodiciPanel extends JPanel{
     
     public CodiciPanel(){
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
-        JLabel title = new JLabel("Codici");
+        JLabel title = new JLabel("CODICI");
         title.setFont(new Font("Arial Black", Font.BOLD, 40));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         super.add(title);

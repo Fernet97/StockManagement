@@ -22,9 +22,9 @@ public class StockManagement {
   public static void main(String[] args) {
       
 
-        UIManager.put( "control", new Color( 1, 1, 1) );
-        UIManager.put( "info", new Color( 1, 1, 1) );
-        UIManager.put( "nimbusBase", new Color( 128, 128, 128));
+        UIManager.put( "control", new Color( 27, 32, 36) );
+        UIManager.put( "info", new Color( 40, 45, 51) );
+        UIManager.put( "nimbusBase",new Color( 40, 45, 51) );        
         UIManager.put( "nimbusAlertYellow", new Color( 248, 187, 0) );
         UIManager.put( "nimbusDisabledText", new Color( 128, 128, 128) );
         UIManager.put( "nimbusFocus", new Color(115,164,209) );
@@ -33,11 +33,11 @@ public class StockManagement {
         UIManager.put( "nimbusLightBackground",new Color( 128, 128, 128));
         UIManager.put( "nimbusOrange", new Color(191,98,4) );
         UIManager.put( "nimbusRed", new Color(169,46,34) );
-        UIManager.put( "nimbusSelectedText", Color.YELLOW );
+        UIManager.put( "nimbusSelectedText",Color.white );
         //quando seleziona casella
         UIManager.put( "nimbusSelectionBackground", new Color(169,46,34) );
         UIManager.put( "text",  Color.white);
-    
+            
         UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("Arial Black", Font.BOLD, 14));
         
         

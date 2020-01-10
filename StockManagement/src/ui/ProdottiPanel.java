@@ -240,10 +240,10 @@ public class ProdottiPanel extends JPanel{
             
            if(Integer.parseInt(table.getValueAt(row, 4).toString()) <= Integer.parseInt(table.getValueAt(row, 11).toString())){
            
-                setBackground(Color.red);           
+                setBackground(new Color(244, 80, 37));           
            }
            
-           else setBackground(Color.green);
+           else setBackground(new Color(126, 169, 93));
            
            setText(table.getValueAt(row, 4).toString());
             
