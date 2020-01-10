@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.LinkedList;
+import static others.Passwordgen.generateRandomPassword;
 
 /**
  *
@@ -130,7 +131,7 @@ public class UtenteDAO {
                                 preparedStatement.setString(5, u.getIndirizzo());
                                 preparedStatement.setString(6, u.getTelefono());    
                                 preparedStatement.setString(7, u.getEmail());
-                                preparedStatement.setString(8, u.getPwd());
+                                preparedStatement.setString(8, generateRandomPassword(10));
                                 preparedStatement.setInt(9, u.getPermessi());
                                 preparedStatement.setString(10, u.getNote());
                             

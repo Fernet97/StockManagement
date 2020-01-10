@@ -24,7 +24,7 @@ public class testDAOUser {
            System.out.println("//*update*//");
                    UtenteDAO  dao2 = new UtenteDAO();
                    java.util.concurrent.TimeUnit.SECONDS.sleep(10);
-      Utente u2 = dao2.getByID("g.bambino1");
+      Utente u2 = dao2.getByID(u.getId());
       u2.setTelefono("miiiiaaaao");
                dao2.update(u2);
                    }
