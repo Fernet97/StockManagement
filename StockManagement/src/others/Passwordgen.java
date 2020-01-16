@@ -40,7 +40,9 @@ private static final String PSWD = PSWD_SHUFFLE;
 
         }
         
-         return sb.toString();
+
+         System.out.println("pswd clear "+ sb.toString());
+                  return sb.toString();
     }
     
 

@@ -845,7 +845,7 @@ class FormProdotti extends javax.swing.JFrame {
                     Integer.parseInt(jTextField9.getText()); 
                     Integer.parseInt(jTextField4.getText());        
                 }catch(NumberFormatException e){
-                    JOptionPane.showMessageDialog(this,"Controlla che Quantità, Gioni alla consegna, qty minima, qry in arrivo, siano numeri validi. [Per il costo usare '.' per indicare la parte decimale]");
+                    JOptionPane.showMessageDialog(this,"Controlla che \"Quantità\", \"Gioni alla consegna\", \"qty minima\", \"qty in arrivo\", siano numeri validi. [ Per il costo usare \".\" per indicare la parte decimale ]");
                     return false;
                 }
                 //controlla se sono float ...

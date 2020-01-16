@@ -118,7 +118,7 @@ public class UtenteDAO {
                         PreparedStatement preparedStatement = null;
                         
                         String insertSQL =  "INSERT INTO " +TABLE_NAME
-                                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                + " VALUES (?, ?, ?, ?, ?, ?, ?, md5(?), ?, ?)";
                         
                         try {
                                 connection = DriverManagerConnectionPool.getConnection();
@@ -137,11 +137,13 @@ public class UtenteDAO {
                             
                         
 		
-                        System.out.println("utente add "+insertSQL);
+                        System.out.println("utente add "+preparedStatement);
+                        
 
 			preparedStatement.executeUpdate();
 
 			connection.commit();
+
 		} finally {
 			try {
 				if (preparedStatement != null)
@@ -151,14 +153,15 @@ public class UtenteDAO {
 			}
 		}
 		
-	
+
         }
         
         public synchronized void update (Utente u) throws SQLException{
                         Connection connection = null;
                         Statement st = null;  
                         
-                         System.out.println("id dell'utente da modificare"+u.getId());
+                         System.out.println("id dell'utente da modificare"+u.getId());	                                                   
+
                                                           
                         String insertSQL = "UPDATE " +TABLE_NAME+ " SET `fullname` = '"+u.getFullname()+"', `CF` = '"+u.getCF()+"', `indirizzo` = '"+u.getIndirizzo()+"', `tel` = '"+u.getTelefono()+"', `email` = '"+u.getEmail()+"', `pwd` = '"+u.getPwd()+"', `permessi` = '"+u.getPermessi()+"', `note` = '"+u.getNote()+"' WHERE (`id` = '"+u.getId()+"')";
             System.out.println("utente update "+ insertSQL);

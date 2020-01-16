@@ -19,8 +19,10 @@ public class testDAOUser {
                                System.out.println("/*add*/");
            java.util.concurrent.TimeUnit.SECONDS.sleep(3);
            UtenteDAO  dao = new UtenteDAO();
-           Utente u = new Utente ("gesu bambino ","1","1","1","1","1", 1 ,"1");
+           Utente u = new Utente ("gesu bambino ","1","1","1","1","1", 1 ,"10");
            dao.add(u);
+           System.out.println("pswd md5 "+ u.getPwd());
+           java.util.concurrent.TimeUnit.SECONDS.sleep(3);
            System.out.println("//*update*//");
                    UtenteDAO  dao2 = new UtenteDAO();
                    java.util.concurrent.TimeUnit.SECONDS.sleep(10);
