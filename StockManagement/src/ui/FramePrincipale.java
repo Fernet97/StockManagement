@@ -75,6 +75,7 @@ public class FramePrincipale extends JFrame{
     public ProdottiPanel prodotti;
     public CategoriePanel categorie;
     private CodiciPanel codici;
+    private OrdiniPanel ordini;
     
 
     
@@ -122,8 +123,7 @@ public class FramePrincipale extends JFrame{
        
           
         //Aggiungi la carta "ORDINI"
-        JPanel ordini =new JPanel();
-        ordini.add(new JLabel(" O R D I I N I !  ! !"));
+        ordini =new OrdiniPanel();
         HomePanel.add(ordini, "Ordini");
   
         //Aggiungi la carta "REPORT"
