@@ -201,25 +201,30 @@ class CategoriePanel extends JPanel {
 
         public void  refreshTab() throws SQLException{
           
-            
+     
             //Cancello vecchie righe...
             System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
             model.setRowCount(0);
             
             
+            
+            
             ProdottoDAO dao = new ProdottoDAO();
             
-        Enumeration names;
-        String key;       
-        names = dao.getCatAndSum().keys();
+            Enumeration names;
+            String key;       
+            names = dao.getCatAndSum().keys();
         
      
         while(names.hasMoreElements()) {
-           key = (String) names.nextElement();
+           key = (String) names.nextElement(); //Nome categoria del db
+           if(list_cat_new.contains(key)) list_cat_new.remove(key); // ELIMINO DUPLICATI IN LIST CAT_NEW
+           
            System.out.println("Key: " +key+ " & Value: " +dao.getCatAndSum().get(key));
             model.addRow(new Object[]{key, dao.getCatAndSum().get(key), "Vai a prodotti"});
         }
         
+
                     
             // Aggiorno con le nuove
             for(String catDinamica: list_cat_new){
@@ -227,11 +232,7 @@ class CategoriePanel extends JPanel {
                 model.addRow(new Object[]{catDinamica,  "DA DEFINIRE", "Vai a prodotti"} ); 
      
             }
-            
-
-            
-           
-        
+                
         }
 
 
@@ -345,6 +346,12 @@ public class AddCategoriaDialog extends JDialog {
                 System.out.println("Hai aggiunto la categoria"+ name.getText());
                 model.addRow(new Object[]{name.getText(),  "DA DEFINIRE", "Vai a prodotti"} ); 
                 list_cat_new.add(name.getText());
+                //DEBUG
+                System.out.print("PANNELLO CATEOGORIE: categorie in sospeso: ");
+                for(String cat: list_cat_new){
+                    System.out.println(cat+"");
+                }//END DEBUG
+                
                 frameprinc.prodotti.list_cat_new.add(name.getText());                
                 close();            
             }

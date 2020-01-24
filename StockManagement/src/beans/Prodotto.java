@@ -216,7 +216,7 @@ public class Prodotto {
     
     
     public String generateSKU(){
-        
+        System.out.println("Categoria del nuovo prodotto: "+getCategoria());
         String skuGenerato = getCategoria().substring(0, 2);
         skuGenerato += getCode()+"-";
         skuGenerato += getDatareg();

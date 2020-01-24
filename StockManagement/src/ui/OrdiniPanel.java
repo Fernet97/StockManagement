@@ -54,6 +54,7 @@ public class OrdiniPanel extends JPanel {
     private final JTextField casella;
     private final JLabel qty;
     private int qtyAttuale;
+    private int qtyMin;
 
 
     public OrdiniPanel(){
@@ -207,7 +208,8 @@ public class OrdiniPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if(check()){
                 int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(),"Sei sicuro di voler effettuare tali modifiche?");
-                if (OpzioneScelta == JOptionPane.OK_OPTION) System.out.println("OOOOOOOOKKKKKK EFFETTUO PRELIEVO UNITA'");  
+                if (OpzioneScelta == JOptionPane.OK_OPTION) System.out.println("OOOOOOOOKKKKKK EFFETTUO PRELIEVO UNITA'"); 
+                
                     prodottoCorrente.setQty(qtyAttuale - Integer.parseInt(quantdaprend.getText()));
                     try {
                         System.out.println("aggiorno "+prodottoCorrente.getSku() + "  "+ prodottoCorrente.getId_fornitore() );
@@ -221,18 +223,29 @@ public class OrdiniPanel extends JPanel {
 
             private boolean check() {
 
+                int qtydaTogliere;
                 try{ //Controlla se sono interi...
-                    Integer.parseInt(quantdaprend.getText());       
+                    qtydaTogliere = Integer.parseInt(quantdaprend.getText());    
+
                 }catch(NumberFormatException e){
                     JOptionPane.showMessageDialog(getParent(),"Formato quantità da prelevare errata!!");
                     return false;
                 }
                 
-                int qtydaTogliere = Integer.parseInt(quantdaprend.getText());
-                if(qtydaTogliere > qtyAttuale) {
+                qtydaTogliere = Integer.parseInt(quantdaprend.getText());
+                if(qtydaTogliere<=0){ 
+                    JOptionPane.showMessageDialog(getParent(), "inserisci una quantità positiva");                 
+                    return false;}
+ 
+                if(qtydaTogliere > (qtyAttuale - qtyMin)) {
+                    JOptionPane.showMessageDialog(getParent(), "Non puoi prendere più di "+(qtyAttuale - qtyMin)+ " unità!");
+                    return false;
+                }  
+                
+               if(qtydaTogliere > qtyAttuale) {
                     JOptionPane.showMessageDialog(getParent(), "Non puoi prendere più di "+qtyAttuale+ " unità!");
                     return false;
-                }     
+                }    
                 
                 return true;
 
@@ -265,7 +278,8 @@ public class OrdiniPanel extends JPanel {
                 infocat.setText(prodottoCorrente.getCategoria());
                 infonote.setText(prodottoCorrente.getDescrizione());
                 qtyAttuale = prodottoCorrente.getQty();
-                qty.setText(Integer.toString(prodottoCorrente.getQty()) + " (Qty min = "+prodottoCorrente.getQty_min()+")");
+                qtyMin = prodottoCorrente.getQty_min();
+                qty.setText(Integer.toString(prodottoCorrente.getQty()) + " Min = "+prodottoCorrente.getQty_min());
                 if(prodottoCorrente.getQty() <= prodottoCorrente.getQty_min()) qty.setForeground(Color.red);
                 else qty.setForeground(Color.green);
                 

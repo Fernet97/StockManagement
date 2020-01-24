@@ -56,7 +56,7 @@ public class ProdottiPanel extends JPanel{
     public static Object[] nuovaRiga;
     public final JTextField casella;
     public FormProdotti form;
-    public ArrayList<String> list_cat_new;;
+    public ArrayList<String> list_cat_new;
     private final JTable table;
 
 
@@ -89,7 +89,13 @@ public class ProdottiPanel extends JPanel{
         buttonNew.addActionListener(new ActionListener() {
                         
             @Override
-            public void actionPerformed(ActionEvent e) {       
+            public void actionPerformed(ActionEvent e) {     
+                //debug
+                System.out.print("PANNELLO PRODOTTI: categorie in sospeso: ");
+                for(String cat: list_cat_new){
+                    System.out.print(cat+ " ");
+                }//debug
+                
                 form = new FormProdotti("ADD", null);
                 form.setResizable(false);
                 form.setVisible(true);
@@ -865,6 +871,7 @@ class FormProdotti extends javax.swing.JFrame {
         
             Prodotto prod = new Prodotto(jTextField2.getText() , jList1.getSelectedValue(),Integer.parseInt(jTextField6.getText()),jCheckBox1.isSelected(),Integer.parseInt(jTextField5.getText()), Float.valueOf(jTextField7.getText()), jTextField8.getText(), Integer.parseInt(jTextField9.getText()), Integer.parseInt(jTextField4.getText()),"foto.png");
             ProdottoDAO dao = new ProdottoDAO();
+            
        
             try {
                 int a= JOptionPane.showConfirmDialog(this,"Dario, sei proprio sicuro?");
