@@ -17,6 +17,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
+import java.awt.event.KeyListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -361,10 +362,7 @@ public class AddCategoriaDialog extends JDialog {
                 }
             }
         });
-
-
-        
-                
+                     
                 
         this.setLayout(new GridLayout(1, 2, 5, 5));
 

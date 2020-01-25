@@ -9,6 +9,7 @@ import beans.Fornitore;
 import beans.Prodotto;
 import dao.FornitoreDAO;
 import dao.ProdottoDAO;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -41,6 +42,8 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
@@ -591,7 +594,9 @@ class FormProdotti extends javax.swing.JFrame {
             public String getElementAt(int j) { return stringsF[j]; }
         });
         jScrollPane2.setViewportView(jList2);
+        
 
+        
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel9.setText("Fornitore");
 

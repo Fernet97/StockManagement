@@ -59,6 +59,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import others.RoundedPanel;
 
 
@@ -196,21 +198,44 @@ public class FramePrincipale extends JFrame{
         
         
         //Le tabelle ...
+        ProdottoDAO daop = new ProdottoDAO();
+        
         JPanel TitoloTab1 = new JPanel ();
-        TitoloTab1.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (EtchedBorder.RAISED, Color.red, Color.red),"Ultimi 15 prodotti in esaurimento", TitledBorder.RIGHT,TitledBorder.TOP));
-        String[] columns = new String[] {"Nome", "Quantità"};
-        Object[][] data = new Object[][] {{"XXXXXX", 14}, {"YYYYYY", 21}, {"ZZZZZZZ", 17}};
-        JTable table = new JTable(data, columns);       
+        TitoloTab1.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (EtchedBorder.RAISED, Color.red, Color.red),"prodotti in esaurimento", TitledBorder.RIGHT,TitledBorder.TOP));
+        JTable table = new JTable(); 
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Nome");
+        model.addColumn("Quantità");          
+        table.setModel(model);
         JScrollPane sp = new JScrollPane(table); 
         TitoloTab1.add(sp);
         
         JPanel TitoloTab2 = new JPanel ();
-        TitoloTab2.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (EtchedBorder.RAISED, Color.red, Color.red),"Giorni all'arrivo", TitledBorder.RIGHT,TitledBorder.TOP));
-        String[] columns2 = new String[] {"Nome", "Quantità"};
-        Object[][] data2 = new Object[][] {{"XXXXXX", 344}, {"YYYYYY", 644}, {"ZZZZZZZ", 28}};
-        JTable table2 = new JTable(data2, columns2);        
+        TitoloTab2.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (EtchedBorder.RAISED, Color.red, Color.red),"Prodotti in arrivo", TitledBorder.RIGHT,TitledBorder.TOP));
+        JTable table2 = new JTable();  
+        DefaultTableModel model2 = new DefaultTableModel();
+        model2.addColumn("Nome");
+        model2.addColumn("Quantità");        
+        table2.setModel(model2);        
         JScrollPane sp2 = new JScrollPane(table2); 
         TitoloTab2.add(sp2);
+  
+        try {
+            for(Prodotto prod: daop.getAll()){
+                if(prod.getQty() <= prod.getQty_min()){
+                    model.addRow(new Object[]{prod.getNome(), prod.getQty()});  
+        
+                }
+                if(prod.getGiorni_alla_consegna() <=7){
+                     model2.addRow(new Object[]{prod.getNome(), prod.getQty()});          
+               
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
         
 
         pannelloTab.setLayout(new GridLayout(2,1));
@@ -387,6 +412,8 @@ public class FramePrincipale extends JFrame{
                             codici.refreshTab();
                             prodotti.refreshTab();
                             categorie.refreshTab();
+                            refreshTab();
+                            
                         } catch (SQLException ex) {
                             Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -444,11 +471,23 @@ public class FramePrincipale extends JFrame{
                 return icon;
 	}
         
+        
+        
+        
+        
+
 		
     }
  
  
- 
+    public void refreshTab() {
+
+           
+                        
+                    
+                    
+                    
+        }
 
  
  
@@ -520,7 +559,7 @@ public class FramePrincipale extends JFrame{
             ProdottoDAO dao = new ProdottoDAO();
             try {
                 for(Prodotto p : dao.getAll() ){
-                    if(p.getGiorni_alla_consegna() <=5)number++;
+                    if(p.getGiorni_alla_consegna() <=7)number++;
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
