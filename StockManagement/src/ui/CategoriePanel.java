@@ -6,6 +6,7 @@
 package ui;
 
 import beans.Prodotto;
+import com.sun.glass.events.KeyEvent;
 import dao.ProdottoDAO;
 import java.awt.Color;
 import java.awt.Component;
@@ -15,6 +16,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -34,6 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.RowFilter;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -124,6 +127,8 @@ class CategoriePanel extends JPanel {
                 }
               };
              JTable table = new JTable(model);
+             table.getTableHeader().setReorderingAllowed(false);
+
           
              try {
               refreshTab();
@@ -343,19 +348,24 @@ public class AddCategoriaDialog extends JDialog {
         add.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                System.out.println("Hai aggiunto la categoria"+ name.getText());
-                model.addRow(new Object[]{name.getText(),  "DA DEFINIRE", "Vai a prodotti"} ); 
-                list_cat_new.add(name.getText());
-                //DEBUG
-                System.out.print("PANNELLO CATEOGORIE: categorie in sospeso: ");
-                for(String cat: list_cat_new){
-                    System.out.println(cat+"");
-                }//END DEBUG
-                
-                frameprinc.prodotti.list_cat_new.add(name.getText());                
-                close();            
+                if(name.getText().length() < 2) {
+                    JOptionPane.showMessageDialog(getParent(),"La categoria deve avere almeno 2 lettere!");
+                    close();
+                }
+                else{
+                    System.out.println("Hai aggiunto la categoria"+ name.getText());
+                    model.addRow(new Object[]{name.getText(),  "DA DEFINIRE", "Vai a prodotti"} ); 
+                    list_cat_new.add(name.getText());                
+                    frameprinc.prodotti.list_cat_new.add(name.getText());                
+                    close(); 
+                }
             }
         });
+
+
+        
+                
+                
         this.setLayout(new GridLayout(1, 2, 5, 5));
 
         this.add(name);

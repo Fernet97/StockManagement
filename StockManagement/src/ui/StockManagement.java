@@ -26,7 +26,7 @@ public class StockManagement {
         UIManager.put( "info", new Color( 40, 45, 51) );
         UIManager.put( "nimbusBase",new Color( 40, 45, 51) );        
         UIManager.put( "nimbusAlertYellow", new Color( 248, 187, 0) );
-        UIManager.put( "nimbusDisabledText", new Color( 128, 128, 128) );
+        UIManager.put( "nimbusDisabledText", Color.YELLOW);
         UIManager.put( "nimbusFocus", new Color(115,164,209) );
         UIManager.put( "nimbusGreen", new Color(176,179,50) );
         UIManager.put( "nimbusInfoBlue", new Color( 66, 139, 221) );

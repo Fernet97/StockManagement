@@ -131,6 +131,8 @@ public class ProdottiPanel extends JPanel{
                 }
               };
              table = new JTable(model);
+             table.getTableHeader().setReorderingAllowed(false);
+
 
         try {
             refreshTab(); // Aggiorna tavola con  i fornitori del db;

@@ -137,6 +137,8 @@ public class CodiciPanel extends JPanel{
                 }
               };
              JTable table = new JTable(model);
+             table.getTableHeader().setReorderingAllowed(false);
+
 
              
         try {

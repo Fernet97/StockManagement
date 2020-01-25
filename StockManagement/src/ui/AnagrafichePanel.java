@@ -129,6 +129,7 @@ public class AnagrafichePanel extends JPanel {
                 }
               };
              JTable table = new JTable(model);
+             table.getTableHeader().setReorderingAllowed(false);
 
              
         try {
@@ -659,8 +660,9 @@ class Formanagrafiche extends javax.swing.JFrame {
             }
         });
 
-        jTextField7.setEditable(false); //only user mode
-        jTextField7.setBackground(Color.LIGHT_GRAY);
+        jTextField7.setEnabled(false); //only user mode
+        jTextField7.setText("Solo x utenti");
+        jTextField7.setForeground(new Color(250, 190, 80));
         
         jTextField7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -677,7 +679,10 @@ class Formanagrafiche extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Password");
 
+        
         jTextField8.setEnabled(false);  //disabilitato (enabled only for user mode)
+        jTextField8.setText("Solo x utenti");
+        jTextField8.setBackground(new Color(250, 190, 80));
         jTextField8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField8ActionPerformed(evt);
@@ -697,6 +702,7 @@ class Formanagrafiche extends javax.swing.JFrame {
         jLabel6.setText("PERMESSI:");
 
         jCheckBox1.setText("Add");
+        jCheckBox1.setBackground(new Color(250, 190, 80));
         jCheckBox1.setEnabled(false); // (user mode: true)
         jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -705,6 +711,7 @@ class Formanagrafiche extends javax.swing.JFrame {
         });
 
         jCheckBox3.setText("Remove");
+        jCheckBox3.setBackground(new Color(250, 190, 80));
         jCheckBox3.setEnabled(false); // (user mode: true)
 
         jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
@@ -714,6 +721,7 @@ class Formanagrafiche extends javax.swing.JFrame {
         });
 
         jCheckBox4.setText("View");
+        jCheckBox4.setBackground(new Color(250, 190, 80));
         jCheckBox4.setEnabled(false); // (user mode: true)
         
         jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
@@ -723,6 +731,7 @@ class Formanagrafiche extends javax.swing.JFrame {
         });
 
         jCheckBox6.setText("isAdmin");
+        jCheckBox6.setBackground(new Color(250, 190, 80));
         jCheckBox6.setEnabled(false); // (user mode: true)
 
         jLabel10.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
