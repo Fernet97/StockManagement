@@ -265,7 +265,13 @@ public class FramePrincipale extends JFrame{
         JMenu m1 = new JMenu("Info");
         JMenu m2 = new JMenu("Profilo");
         
-        JMenuItem itemAbout = new JMenuItem("Chi siamo");
+        JMenuItem itemAbout = new JMenuItem("Manuale");
+        itemAbout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null,"\nGUIDA\n-Come creo un fornitore?\n-Come creo una categoria?\n-Come creo un prodotto?");
+            }
+        });
         m1.add(itemAbout);
                 
         JMenuItem itemAggiorna = new JMenuItem("Riavvio");
