@@ -80,6 +80,10 @@ public class FramePrincipale extends JFrame{
     public CategoriePanel categorie;
     private CodiciPanel codici;
     private OrdiniPanel ordini;
+    private DefaultTableModel model;
+    private JTable table;
+    private DefaultTableModel model2;
+    private JTable table2;
     
 
     
@@ -204,9 +208,9 @@ public class FramePrincipale extends JFrame{
         
         JPanel TitoloTab1 = new JPanel ();
         TitoloTab1.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (EtchedBorder.RAISED, Color.red, Color.red),"prodotti in esaurimento", TitledBorder.RIGHT,TitledBorder.TOP));
-        JTable table = new JTable(); 
+        table = new JTable(); 
         table.setEnabled(false);
-        DefaultTableModel model = new DefaultTableModel();
+        model = new DefaultTableModel();
         model.addColumn("Nome");
         model.addColumn("Quantità");          
         table.setModel(model);
@@ -215,8 +219,8 @@ public class FramePrincipale extends JFrame{
         
         JPanel TitoloTab2 = new JPanel ();
         TitoloTab2.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (EtchedBorder.RAISED, Color.red, Color.red),"Prodotti in arrivo", TitledBorder.RIGHT,TitledBorder.TOP));
-        JTable table2 = new JTable();  
-        DefaultTableModel model2 = new DefaultTableModel();
+        table2 = new JTable();  
+        model2 = new DefaultTableModel();
         model2.addColumn("Nome");
         model2.addColumn("Quantità");  
         table2.setEnabled(false);        
@@ -513,8 +517,28 @@ public class FramePrincipale extends JFrame{
  
  
     public void refreshTab() {
+        ProdottoDAO daop = new ProdottoDAO();
 
-           
+        
+              model.setRowCount(0);
+              model2.setRowCount(0);
+            
+         try {
+            for(Prodotto prod: daop.getAll()){
+                if(prod.getQty() <= prod.getQty_min()){
+                    model.addRow(new Object[]{prod.getNome(), prod.getQty()});  
+        
+                }
+                if(prod.getGiorni_alla_consegna() <=7){
+                     model2.addRow(new Object[]{prod.getNome(), prod.getQty()});          
+               
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+  
+         //Aggiornare numeri sui pannelli della dash ...
                         
                     
                     
@@ -592,7 +616,7 @@ public class FramePrincipale extends JFrame{
             ProdottoDAO dao = new ProdottoDAO();
             try {
                 for(Prodotto p : dao.getAll() ){
-                    if(p.getGiorni_alla_consegna() <=7)number++;
+                    if(p.getGiorni_alla_consegna() <=7)number = number + p.getQty();
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
