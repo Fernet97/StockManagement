@@ -9,6 +9,7 @@ import database.DriverManagerConnectionPool;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.io.File;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
@@ -20,6 +21,14 @@ public class StockManagement {
     
     	
   public static void main(String[] args) {
+      
+      
+       // CRE CARTELLA QRCODE
+       File directory = new File("./QRCODE/");
+       if (!directory.mkdir()) {
+       System.out.println("Impossibile creare la directory!");
+       }
+      
       
 
         UIManager.put( "control", new Color( 27, 32, 36) );

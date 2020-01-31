@@ -233,6 +233,11 @@ public class OrdiniPanel extends JPanel {
                 }
                 
                 qtydaTogliere = Integer.parseInt(quantdaprend.getText());
+                
+                if(!prodottoCorrente.isInstock()){
+                      JOptionPane.showMessageDialog(getParent(), "Il prodotto non è in stock !!!");   
+                      return false;
+                }
                 if(qtydaTogliere<=0){ 
                     JOptionPane.showMessageDialog(getParent(), "inserisci una quantità positiva");                 
                     return false;}
@@ -278,6 +283,7 @@ public class OrdiniPanel extends JPanel {
                 infocat.setText(prodottoCorrente.getCategoria());
                 infonote.setText(prodottoCorrente.getDescrizione());
                 qtyAttuale = prodottoCorrente.getQty();
+                
                 qtyMin = prodottoCorrente.getQty_min();
                 qty.setText(Integer.toString(prodottoCorrente.getQty()) + " Min = "+prodottoCorrente.getQty_min());
                 if(prodottoCorrente.getQty() <= prodottoCorrente.getQty_min()) qty.setForeground(Color.red);

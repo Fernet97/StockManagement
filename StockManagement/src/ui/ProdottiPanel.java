@@ -897,6 +897,7 @@ class FormProdotti extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this,"Compila tutti i campi! ['Note' è opzionale]");
                 return false;}
             
+            
               try{ //Controlla se sono interi...
                     Integer.parseInt(jTextField6.getText());
                     Integer.parseInt(jTextField5.getText()); 
@@ -906,6 +907,9 @@ class FormProdotti extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this,"Controlla che \"Quantità\", \"Gioni alla consegna\", \"qty minima\", \"qty in arrivo\", siano numeri validi. [ Per il costo usare \".\" per indicare la parte decimale ]");
                     return false;
                 }
+              
+
+              
                 //controlla se sono float ...
                 try{
                     Float.parseFloat(jTextField7.getText());
