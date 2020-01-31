@@ -156,6 +156,8 @@ public class ProdottiPanel extends JPanel{
              
              //X colonne che hanno pulsanti
              table.getColumnModel().getColumn(4).setCellRenderer(new CustomRender());
+            
+             table.getColumnModel().getColumn(6).setCellRenderer(new CustomStockRender());                     
              
              table.getColumnModel().getColumn(12).setCellRenderer(new ClientsTableButtonRenderer());
              table.getColumnModel().getColumn(12).setCellEditor(new ClientsTableRenderer(new JCheckBox()));
@@ -245,6 +247,8 @@ public class ProdottiPanel extends JPanel{
         
         }
 
+  
+ // RENDER DELLE QUANTITA'
  class CustomRender  extends JButton implements TableCellRenderer {
 
         public CustomRender() {
@@ -258,27 +262,46 @@ public class ProdottiPanel extends JPanel{
             
            if(Integer.parseInt(table.getValueAt(row, 4).toString()) <= Integer.parseInt(table.getValueAt(row, 11).toString())){
            
-                setBackground(new Color(244, 80, 37));           
+                setBackground(new Color(244, 80, 37));    // ROSSO        
            }
            
-           else setBackground(new Color(126, 169, 93));
+           else setBackground(new Color(126, 169, 93));  // VERDE
+           
+            
            
            setText(table.getValueAt(row, 4).toString());
             
         
             return this;
         }
-   
-    
-    
-    
-    
-    
+ }
+ 
+         
+ // RENDER DI IN STOCK SI O NO       
+ class CustomStockRender  extends JButton implements TableCellRenderer {
+
+        public CustomStockRender() {
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            
+           
+           if(Boolean.parseBoolean(table.getValueAt(row, 6).toString())){
+                setBackground(new Color(126, 169, 93));  // VERDE          
+                       
+           }
+           
+           else setBackground(new Color(244, 80, 37));    // ROSSO 
+           
+            
+           
+           setText("");
+            
+        
+            return this;
+        }        
     }
-
-
-
-
 
 
 

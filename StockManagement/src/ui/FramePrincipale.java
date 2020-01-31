@@ -203,6 +203,7 @@ public class FramePrincipale extends JFrame{
         JPanel TitoloTab1 = new JPanel ();
         TitoloTab1.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (EtchedBorder.RAISED, Color.red, Color.red),"prodotti in esaurimento", TitledBorder.RIGHT,TitledBorder.TOP));
         JTable table = new JTable(); 
+        table.setEnabled(false);
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Nome");
         model.addColumn("Quantità");          
@@ -215,7 +216,8 @@ public class FramePrincipale extends JFrame{
         JTable table2 = new JTable();  
         DefaultTableModel model2 = new DefaultTableModel();
         model2.addColumn("Nome");
-        model2.addColumn("Quantità");        
+        model2.addColumn("Quantità");  
+        table2.setEnabled(false);        
         table2.setModel(model2);        
         JScrollPane sp2 = new JScrollPane(table2); 
         TitoloTab2.add(sp2);
