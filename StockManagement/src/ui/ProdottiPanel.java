@@ -18,6 +18,9 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,8 +35,11 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -44,6 +50,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
@@ -565,8 +572,7 @@ class FormProdotti extends javax.swing.JFrame {
             list_prod[sum+i] = iter.next().getCategoria();
             i++;
         }
-       
-
+        
                 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
              // Elimina i possibili duplicati nella lista risultante...
@@ -593,6 +599,22 @@ class FormProdotti extends javax.swing.JFrame {
             public int getSize() { return stringsF.length; }
             public String getElementAt(int j) { return stringsF[j]; }
         });
+        
+         
+        jList2.addListSelectionListener(new ListSelectionListener(){
+                public void valueChanged(ListSelectionEvent e)
+                {
+                    
+          // JPOP MENU          
+        /*
+                JPopupMenu pop = new JPopupMenu();
+                pop.add(new JMenuItem(jList2.getSelectedValue()));
+                pop.show(getParent(), 30, 30);
+             */                    
+               
+                }
+              });
+              
         jScrollPane2.setViewportView(jList2);
         
 
@@ -848,7 +870,7 @@ class FormProdotti extends javax.swing.JFrame {
     
     
     private boolean check() {
-            if(jTextField2.getText().isEmpty() || jList1.isSelectionEmpty() || jTextField6.getText().isEmpty() ||jTextField5.getText().isEmpty() || jTextField7.getText().isEmpty() || jTextField9.getText().isEmpty() || jTextField9.getText().isEmpty() || jTextField4.getText().isEmpty()){
+            if(jTextField2.getText().isEmpty() || jList1.isSelectionEmpty() || jList2.isSelectionEmpty() || jTextField6.getText().isEmpty() ||jTextField5.getText().isEmpty() || jTextField7.getText().isEmpty() || jTextField9.getText().isEmpty() || jTextField9.getText().isEmpty() || jTextField4.getText().isEmpty()){
                 JOptionPane.showMessageDialog(this,"Compila tutti i campi! ['Note' è opzionale]");
                 return false;}
             
