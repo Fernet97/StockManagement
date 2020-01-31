@@ -208,7 +208,7 @@ public class OrdiniPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if(check()){
                 int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(),"Sei sicuro di voler effettuare tali modifiche?");
-                if (OpzioneScelta == JOptionPane.OK_OPTION) System.out.println("OOOOOOOOKKKKKK EFFETTUO PRELIEVO UNITA'"); 
+                if (OpzioneScelta == JOptionPane.OK_OPTION) {System.out.println("OOOOOOOOKKKKKK EFFETTUO PRELIEVO UNITA'"); 
                 
                     prodottoCorrente.setQty(qtyAttuale - Integer.parseInt(quantdaprend.getText()));
                     try {
@@ -218,7 +218,7 @@ public class OrdiniPanel extends JPanel {
                     } catch (SQLException ex) {
                         Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
+                }}
             }
 
             private boolean check() {

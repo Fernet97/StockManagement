@@ -8,6 +8,7 @@ package ui;
 import beans.Prodotto;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
 import dao.ProdottoDAO;
+import database.DriverManagerConnectionPool;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -34,6 +35,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.RoundRectangle2D;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.logging.Level;
@@ -292,6 +294,7 @@ public class FramePrincipale extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 chiudiStockManagement();
+
             }
         });
         
@@ -314,13 +317,34 @@ public class FramePrincipale extends JFrame{
     
 
     public void riavviaStockManagement(){
-        dispose();
+        chiudiStockManagement();
         StockManagement.main(new String[1]);
     }
     
     
     public  void chiudiStockManagement(){
-        //System.exit(0);
+                        
+        System.out.println("STO PER CHIUDERE");
+        Connection con = null;
+
+        try {
+           con = DriverManagerConnectionPool.getConnection();
+            System.out.println("La connessione: "+con);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(getParent(), "Non trovo nessuna connesione :(");
+            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+        try {
+            DriverManagerConnectionPool.releaseConnection(con);
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        System.out.println("La connessione dopo averla chiusa: "+con);
         dispose();
     }
 
@@ -495,7 +519,8 @@ public class FramePrincipale extends JFrame{
                     
                     
                     
-        }
+   
+    }
 
  
  
