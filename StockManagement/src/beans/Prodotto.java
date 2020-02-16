@@ -20,6 +20,8 @@ import java.util.logging.Logger;
  * @author LittleJoke
  */
 public class Prodotto {
+   
+    /*
     private static int code;
     private String sku;
     private String datareg;
@@ -34,12 +36,141 @@ public class Prodotto {
     private int qty_min;
     private String foto;
     private String id_fornitore;
+*/
+    
+    // nuove variabili
+    
+    private static int code;
+    String sku;
+    String datareg;
+    String nome;
+    int qty;
+    String Categoria;
+    boolean instock;
+    float costo;
+    int qty_min;
+    String note;
+    String foto;
+    boolean negozio;
 
+    
+    
+    // costruttore
+    public Prodotto(String sku, String datareg, String nome, int qty, String Categoria, boolean instock, float costo, int qty_min, String note, String foto, boolean negozio) {
+        this.sku = sku;
+        this.datareg = datareg;
+        this.nome = nome;
+        this.qty = qty;
+        this.Categoria = Categoria;
+        this.instock = instock;
+        this.costo = costo;
+        this.qty_min = qty_min;
+        this.note = note;
+        this.foto = foto;
+        this.negozio = negozio;
+    }
+
+    
+    // getter & setter senza code
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public String getDatareg() {
+        return datareg;
+    }
+
+    public void setDatareg(String datareg) {
+        this.datareg = datareg;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
+    }
+
+    public String getCategoria() {
+        return Categoria;
+    }
+
+    public void setCategoria(String Categoria) {
+        this.Categoria = Categoria;
+    }
+
+    public boolean isInstock() {
+        return instock;
+    }
+
+    public void setInstock(boolean instock) {
+        this.instock = instock;
+    }
+
+    public float getCosto() {
+        return costo;
+    }
+
+    public void setCosto(float costo) {
+        this.costo = costo;
+    }
+
+    public int getQty_min() {
+        return qty_min;
+    }
+
+    public void setQty_min(int qty_min) {
+        this.qty_min = qty_min;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
+    public boolean isNegozio() {
+        return negozio;
+    }
+
+    public void setNegozio(boolean negozio) {
+        this.negozio = negozio;
+    }
+    
+}
+    
+    
+    
+    
+    
 
     
     
     //constructors
-    
+   /* costruttore getter, setter e altro 
 // Costruttore senza specificare ID ==> Genera ID automaticamente (In genere x ADD)
         public Prodotto(String nome, String categoria, int qty, boolean instock, int giorni_alla_consegna, float costo, String descrizione, int qty_inarrivo, int qty_min, String foto) {
               
@@ -257,7 +388,12 @@ public class Prodotto {
 }
 
      
-    /*
+    end */
+
+
+
+
+/* primo test 
         
         //costruttore
     public Prodotto(String nome, String categoria, boolean instock, String descrizione, int giorni_alla_consegna, int qty, int qty_min,  float costo, String foto) {
