@@ -16,70 +16,73 @@ import java.util.logging.Logger;
  *
  * @author LittleJoke
  */
-public class Fornitore {
-    
-    
+public class Fornitore_old {
+
+
     private static int code = 0 ;
     private String idfornitore;
     private String datareg;
-    private String fullname;
+    private String fullname;   
     private String p_iva;
     private String indirizzo;
     private String tel;
     private String email;
-    private String note;
-
+    private String desc;
     
-    /**
-     * 
-     * @param idfornitore
-     * @param datareg
-     * @param fullname
-     * @param p_iva
-     * @param indirizzo
-     * @param tel
-     * @param email
-     * @param note 
+    //constructor
+
+   // Costruttore senza specificare ID ==> Genera ID automaticamente (In genere x ADD)
+    /** 
+     * costruttore senza id
+     * usato per l'add
+     * add non necessita di id perche
+     * autogenera il codice id univoco
+     * **end**
      */
-    public Fornitore(String idfornitore, String datareg, String fullname, String p_iva, String indirizzo, String tel, String email, String note) {
-       
-         setCode(leggiUltimoID() +1);
-        this.idfornitore = idfornitore;
-        this.datareg = datareg;
+    public Fornitore_old(String fullname, String p_iva, String indirizzo, String tel, String email, String desc) {
+         
+        setCode(leggiUltimoID() +1);
         this.fullname = fullname;
         this.p_iva = p_iva;
         this.indirizzo = indirizzo;
         this.tel = tel;
         this.email = email;
-        this.note = note;
+        this.desc = desc;
         
-          setDatareg(generateData());
+        setDatareg(generateData());
         setIdfornitore(generateID());
         System.out.println("ID del nuovo fornitore:"+getIdfornitore());
     }
-
-    /**
-     * per update
-     * @param fullname
-     * @param p_iva
-     * @param indirizzo
-     * @param tel
-     * @param email
-     * @param note 
+    
+    
+    
+    //Costruttore CON ID specificato ===> (In genere usato x UPDATE)
+     /** 
+     * costruttore con id
+     * usato in genere per l'update
+     * Necessita di id perche serve alla ricerca del codice univoco di identificazione
+     * **end**
      */
-    public Fornitore(String fullname, String p_iva, String indirizzo, String tel, String email, String note) {
-        this.fullname = fullname;
-        this.p_iva = p_iva;
-        this.indirizzo = indirizzo;
-        this.tel = tel;
-        this.email = email;
-        this.note = note;
-        
-         setDatareg(generateData());
+        public Fornitore_old(String idfornitore, String fullname, String p_iva, String indirizzo, String tel, String email, String desc) {
+            
+            this.idfornitore = idfornitore;
+            this.datareg = datareg;
+            this.fullname = fullname;
+            this.p_iva = p_iva;
+            this.indirizzo = indirizzo;
+            this.tel = tel;
+            this.email = email;
+            this.desc = desc;
+            
+            setDatareg(generateData());
+
+
     }
+
+
+    public Fornitore_old() { }
     
-    
-    // getter & setter
+  //getter & setter
 
     public String getIdfornitore() {
         return idfornitore;
@@ -137,20 +140,20 @@ public class Fornitore {
         this.email = email;
     }
 
-    public String getNote() {
-        return note;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
     
-           public static int getCode() {
+        public static int getCode() {
         return code;
     }
 
     public static void setCode(int code) {
-        Fornitore.code = code;
+        Fornitore_old.code = code;
     }
     
     
@@ -195,5 +198,7 @@ public class Fornitore {
         return  idlast;
 
     }
-    
 }
+
+    
+

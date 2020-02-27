@@ -9,6 +9,6 @@ package dao;
  *
  * @author LittleJoke
  */
-public class FornitoreDAO {
+public class ClienteDAO {
     
 }

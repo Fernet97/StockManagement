@@ -5,6 +5,7 @@
  */
 package beans;
 
+//import dao.ProdottoDAO;  
 import dao.ProdottoDAO;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -33,6 +34,7 @@ public class Prodotto {
     String note;
     String foto;
     boolean negozio;
+    
 
     // costruttore completo
     public Prodotto(String sku, String datareg, String nome, int qty, String Categoria, boolean instock, float costo, int qty_min, String note, String foto, boolean negozio) {
