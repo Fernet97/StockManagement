@@ -156,7 +156,9 @@ public class ProdottoDAO {
         System.out.println("sku del prodoto da modificare: " + p.getSku());
        // UPDATE `db_stock`.`prodotto` SET `sku` = '1', `datareg` = '2', `nome` = '2', `qty` = '2', `categoria` = '2', `instock` = '2', `costo` = '2', `qty_min` = '2', `note` = '2', `foto` = '2', `negozio` = '2' WHERE (`sku` = '1');
 
-        String query = "UPDATE "+this.TABLE_NAME+" SET `nome` = '"+p.getNome()+"', `qty` = '"+p.getQty()+"', `categoria` = '"+p.getCategoria()+"', `instock` = '"+p.isInstock()+"', `costo` = '"+p.getCosto()+"', `qty_min` = '"+p.getQty_min()+"', `note` = '"+p.getNote()+"', `foto` = '"+p.getNote()+"', `negozio` = '"+p.isNegozio()+"' WHERE (`sku` = '"+p.getSku()+"')";
+        String query = "UPDATE "+this.TABLE_NAME+" SET `nome` = '"+p.getNome()+"', `qty` = '"+p.getQty()+"', `categoria` = '"+p.getCategoria()+"', "
+                + "`instock` = '"+p.isInstock()+"', `costo` = '"+p.getCosto()+"', `qty_min` = '"+p.getQty_min()+"', `note` = '"+p.getNote()+"', "
+                + "`foto` = '"+p.getNote()+"', `negozio` = '"+p.isNegozio()+"' WHERE (`sku` = '"+p.getSku()+"')";
         System.out.println("prodotto update " + query);
 
         try {
@@ -179,9 +181,6 @@ public class ProdottoDAO {
     public synchronized void remove(String sku, String fornitoreID) throws SQLException {
         Connection connection = null;
         Statement statement = null;
-        //DELETE FROM `db_stock`.`prodotti` WHERE (`sku` = 'mi1-13/12/2019 11:21:41');
-        // WHERE (`prodotti_sku` = 'mi1-16/12/2019 11:13:59') and (`fornitori_idfornitori` = 'FR-2');
-        //   DELETE FROM `db_stock`.`prodotti_has_fornitori` WHERE (`prodotti_sku` = 'ca2-16/12/2019 12:21:16') and (`fornitori_idfornitori` = 'FR-2');
         String query = "DELETE FROM " + this.TABLE_NAME + " WHERE  (`sku` = '" + sku + "');";
         System.out.println("prodotto remove " + query);
 

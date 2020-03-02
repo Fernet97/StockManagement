@@ -21,7 +21,7 @@ import static others.Passwordgen.generateRandomPassword;
  * @author LittleJoke
  */
 public class UtenteDAO {
-    private final String TABLE_NAME = "utenti";
+    private final String TABLE_NAME = "utente";
         
     public synchronized Collection<Utente> getAll() throws SQLException {
 
