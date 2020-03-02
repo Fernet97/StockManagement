@@ -71,6 +71,12 @@ public class Prodotto {
         this.negozio = negozio;
     }
 
+    public Prodotto() {
+
+    }
+
+  
+
     // getter & setter senza code
     public String getSku() {
         return sku;
