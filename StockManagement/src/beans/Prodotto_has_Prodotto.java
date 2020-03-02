@@ -14,12 +14,16 @@ package beans;
 public class Prodotto_has_Prodotto {
    String sku_prodotto;
    String sku_componente;
-   String qty;
+   int qty;
 
-    public Prodotto_has_Prodotto(String sku_prodotto, String sku_componente, String qty) {
+    public Prodotto_has_Prodotto(String sku_prodotto, String sku_componente, int qty) {
         this.sku_prodotto = sku_prodotto;
         this.sku_componente = sku_componente;
         this.qty = qty;
+    }
+
+    public Prodotto_has_Prodotto() {
+
     }
 
     public String getSku_prodotto() {
@@ -38,11 +42,11 @@ public class Prodotto_has_Prodotto {
         this.sku_componente = sku_componente;
     }
 
-    public String getQty() {
+    public int getQty() {
         return qty;
     }
 
-    public void setQty(String qty) {
+    public void setQty(int qty) {
         this.qty = qty;
     }
  

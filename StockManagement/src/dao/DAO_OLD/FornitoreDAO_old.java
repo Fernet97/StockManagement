@@ -23,7 +23,7 @@ import java.util.LinkedList;
  */
 public class FornitoreDAO_old {
 
-    private final String TABLE_NAME = "fornitori";
+    private final String TABLE_NAME = "fornitore";
 
     public synchronized Collection<Fornitore_old> getAll() throws SQLException {
 

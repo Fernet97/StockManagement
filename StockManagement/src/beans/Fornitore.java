@@ -5,7 +5,7 @@
  */
 package beans;
 
-import dao.FornitoreDAO_old;
+import dao.FornitoreDAO;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -76,6 +76,10 @@ public class Fornitore {
         this.note = note;
         
          setDatareg(generateData());
+    }
+
+    public Fornitore() {
+       
     }
     
     
@@ -173,7 +177,7 @@ public class Fornitore {
         int idlast;
 
         try {
-            FornitoreDAO_old dao = new FornitoreDAO_old();
+            FornitoreDAO dao = new FornitoreDAO();
             
             String lastid = dao.getLastID().getIdfornitore();
             //FR-000
@@ -188,7 +192,7 @@ public class Fornitore {
     }
                 
          catch (SQLException ex) {
-            Logger.getLogger(Prodotto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Fornitore.class.getName()).log(Level.SEVERE, null, ex);
             idlast = -99999;
         }
         
