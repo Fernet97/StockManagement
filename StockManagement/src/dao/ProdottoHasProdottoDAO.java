@@ -62,33 +62,26 @@ public class ProdottoHasProdottoDAO {
 		return prpr;
 	}
     
-        public synchronized Utente getByID(String id) throws SQLException{
+        public synchronized Prodotto_has_Prodotto getByProdotto(String sku_prodotto) throws SQLException{
                         Connection connection = null;
                         PreparedStatement preparedStatement = null;
 
-                        Utente bean = new Utente();
-
-                        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE id = ?";
+Prodotto_has_Prodotto bean = new Prodotto_has_Prodotto();
+                        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE sku_prodotto = ?";
 
                           try {
                         connection = DriverManagerConnectionPool.getConnection();
                         preparedStatement = connection.prepareStatement(selectSQL);
-                        preparedStatement.setString(1, id);
+                        preparedStatement.setString(1, sku_prodotto);
                         ResultSet rs = preparedStatement.executeQuery();
 
                         while (rs.next()) {
 
 
-                        bean.setId(rs.getString("id"));
-                        bean.setDatareg(rs.getString("datareg"));
-                        bean.setFullname(rs.getString("fullname"));
-                        bean.setCF(rs.getString("CF"));
-                        bean.setIndirizzo(rs.getString("indirizzo"));
-                        bean.setTelefono(rs.getString("tel"));
-                        bean.setEmail(rs.getString("email"));
-                        bean.setPwd(rs.getString("pwd"));
-                        bean.setPermessi(rs.getInt("permessi"));
-                        bean.setNote(rs.getString("note"));
+                        bean.setSku_prodotto(rs.getString("sku_prodotto"));
+                          bean.setSku_componente(rs.getString("sku_componente"));
+                          bean.setQty(rs.getInt("qty"));
+                        
 
 
                         }
@@ -105,32 +98,26 @@ public class ProdottoHasProdottoDAO {
                     return bean;          
             }
         
-        public synchronized void add (Utente u)throws SQLException {
+        public synchronized void add (Prodotto_has_Prodotto prpr)throws SQLException {
             
                         Connection connection = null;
                         PreparedStatement preparedStatement = null;
-                        
+
                         String insertSQL =  "INSERT INTO " +TABLE_NAME
-                                + " VALUES (?, ?, ?, ?, ?, ?, ?, md5(?), ?, ?)";
+                                + " VALUES (?, ?, ?)";
                         
                         try {
                                 connection = DriverManagerConnectionPool.getConnection();
                                 preparedStatement = connection.prepareStatement(insertSQL);
 
-                                preparedStatement.setString(1, u.getId());
-                                preparedStatement.setString(2, u.getDatareg());
-                                preparedStatement.setString(3, u.getFullname());
-                                preparedStatement.setString(4, u.getCF());
-                                preparedStatement.setString(5, u.getIndirizzo());
-                                preparedStatement.setString(6, u.getTelefono());    
-                                preparedStatement.setString(7, u.getEmail());
-                                preparedStatement.setString(8, generateRandomPassword(10));
-                                preparedStatement.setInt(9, u.getPermessi());
-                                preparedStatement.setString(10, u.getNote());
+                                preparedStatement.setString(1, prpr.getSku_prodotto());
+                                preparedStatement.setString(2, prpr.getSku_componente());
+                                preparedStatement.setInt(3, prpr.getQty());
+                                
                             
                         
 		
-                        System.out.println("utente add "+preparedStatement);
+                        System.out.println("prpr add "+preparedStatement);
                         
 
 			preparedStatement.executeUpdate();
@@ -149,15 +136,16 @@ public class ProdottoHasProdottoDAO {
 
         }
         
-        public synchronized void update (Utente u) throws SQLException{
+        public synchronized void update (Prodotto_has_Prodotto prpr) throws SQLException{
                         Connection connection = null;
                         Statement st = null;  
                         
-                         System.out.println("id dell'utente da modificare"+u.getId());	                                                   
+                         System.out.println("id dell'utente da modificare");	                                                   
 
                                                           
-                        String insertSQL = "UPDATE " +TABLE_NAME+ " SET `fullname` = '"+u.getFullname()+"', `CF` = '"+u.getCF()+"', `indirizzo` = '"+u.getIndirizzo()+"', `tel` = '"+u.getTelefono()+"', `email` = '"+u.getEmail()+"', `pwd` = '"+u.getPwd()+"', `permessi` = '"+u.getPermessi()+"', `note` = '"+u.getNote()+"' WHERE (`id` = '"+u.getId()+"')";
-            System.out.println("utente update "+ insertSQL);
+                        String insertSQL = "UPDATE "+this.TABLE_NAME+" SET `sku_prodotto` = '"+prpr.getSku_prodotto()+"', `sku_componente` = '"+prpr.getSku_componente()+"', `qty` = '"+prpr.getQty()
+                                +"' WHERE (`sku_prodotto` = '"+prpr.getSku_prodotto()+"') and (`sku_componente` = '"+prpr.getSku_componente()+"')";
+            System.out.println("prpr update "+ insertSQL);
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
 			st = connection.createStatement();
@@ -174,12 +162,12 @@ public class ProdottoHasProdottoDAO {
 
     }
 
-public synchronized void remove (String id) throws SQLException{
+public synchronized void remove (Prodotto_has_Prodotto prpr) throws SQLException{
                         Connection connection = null;
                         Statement  statement = null;
 
-		String query = "DELETE FROM " + this.TABLE_NAME + " WHERE id='"+id+"'";
-                System.out.println("utenti remove "+query);
+		String query = "DELETE FROM " + this.TABLE_NAME + " WHERE sku_prodotto='"+prpr.getSku_prodotto()+"'";
+                System.out.println("prpr remove "+query);
 
                         try {
                                 connection = DriverManagerConnectionPool.getConnection();
@@ -201,49 +189,6 @@ public synchronized void remove (String id) throws SQLException{
 	
 	}
 
-  public synchronized Utente getLastID() throws SQLException{
-        
-            Connection connection = null;
-            Statement  ps = null;
-           Utente bean = new Utente();
 
-
-            String query = "select* from utenti order by datareg DESC LIMIT 1";      
-                 		try  {
-                                                        connection = DriverManagerConnectionPool.getConnection();
-                                                        ps = connection.prepareStatement(query);
-
-                                                        ResultSet rs = ps.executeQuery(query);
-                                                        
-                                                        while (rs.next()) {
-                                                                                                
-                                                            bean.setId(rs.getString("id"));
-                                                            bean.setDatareg(rs.getString("datareg"));
-                                                            bean.setFullname(rs.getString("fullname"));
-                                                            bean.setCF(rs.getString("CF"));
-                                                            bean.setIndirizzo(rs.getString("indirizzo"));
-                                                            bean.setTelefono(rs.getString("tel"));
-                                                            bean.setEmail(rs.getString("email"));
-                                                            bean.setPwd(rs.getString("pwd"));
-                                                            bean.setPermessi(rs.getInt("permessi"));
-                                                            bean.setNote(rs.getString("note"));
-
-
-                                                                                                  
-                                                                                    }
-                                }
-                                                finally {
-			try {
-                                                                                if (ps != null)
-                                                                                    ps.close();
-                                                                            }
-                                                                          finally {
-                                                                                    DriverManagerConnectionPool.releaseConnection(connection);
-                                                                                    }
-                        
-                                                  }
-                                                return bean;
-        
-        }
     
 }

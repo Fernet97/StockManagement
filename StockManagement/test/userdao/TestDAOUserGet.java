@@ -1,3 +1,5 @@
+package userdao;
+
 import beans.Utente;
 import dao.UtenteDAO;
 import java.sql.SQLException;
