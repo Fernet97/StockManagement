@@ -22,7 +22,7 @@ import static others.Passwordgen.generateRandomPassword;
 public class Utente {
    
    private static int code = 0 ;
-   private String id; 
+   private String idutente; 
    private String datareg;
    private String fullname; 
    private String CF;
@@ -43,7 +43,7 @@ public class Utente {
      * Necessita di id perche serve alla ricerca del codice univoco di identificazione
      * **end**
      */
-    public Utente(String id, String fullname, String CF, String indirizzo, String telefono, String email, String pwd, int permessi, String note) {
+    public Utente(String idutente, String fullname, String CF, String indirizzo, String telefono, String email, String pwd, int permessi, String note) {
       
         this.datareg = datareg;
         this.fullname = fullname;
@@ -79,20 +79,20 @@ public class Utente {
         this.note = note;
         
            setDatareg(generateData());
-           setId(generateID());
-           System.out.println("id utente nuovo "+getId());
+           setIdutente(generateID());
+           System.out.println("id utente nuovo "+getIdutente());
     }
 
     public Utente() { }
 
 // getter & setter 
 
-    public String getId() {
-        return id;
+    public String getIdutente() {
+        return idutente;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setIdutente(String idutente) {
+        this.idutente = idutente;
     }
 
     public String getDatareg() {
@@ -203,14 +203,14 @@ public class Utente {
         try {
             UtenteDAO dao = new UtenteDAO();
             
-            String lastid = dao.getLastID().getId();
+            String lastid = dao.getLastID().getIdutente();
             //v.manisera1
             if(lastid == null) return 0;
             
 //             String numberOnly= str.replaceAll("[^0-9]", "")
             tmp = lastid.replaceAll("[^0-9]", "");
             idlast= Integer.parseInt(tmp);
-            System.out.println("ID dell'ultimo fornitore:"+idlast);
+            System.out.println("ID dell'ultimo utente:"+idlast);
     }
                     
          catch (SQLException ex) {

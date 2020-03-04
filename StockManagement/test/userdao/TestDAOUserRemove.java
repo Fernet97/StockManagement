@@ -18,7 +18,7 @@ public class TestDAOUserRemove {
        public static void main(String[] args) throws InterruptedException, SQLException{
            System.out.println("*//remove*//");
            UtenteDAO  dao = new UtenteDAO();
-           dao.remove("g.bambino1");
+           dao.remove("f.caino2");
        }
     
 }
