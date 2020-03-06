@@ -93,31 +93,7 @@ public class Prodotto {
 
     }
 
-    /**
-     * per update
-     * @param sku
-     * @param nome
-     * @param qty
-     * @param Categoria
-     * @param instock
-     * @param costo
-     * @param qty_min
-     * @param note
-     * @param foto
-     * @param negozio 
-     */
-    public Prodotto(String sku, String nome, int qty, String Categoria, int instock, float costo, int qty_min, String note, String foto, int negozio) {
-        this.sku = sku;
-        this.nome = nome;
-        this.qty = qty;
-        this.Categoria = Categoria;
-        this.instock = instock;
-        this.costo = costo;
-        this.qty_min = qty_min;
-        this.note = note;
-        this.foto = foto;
-        this.negozio = negozio;
-    }
+    
     
     
 
