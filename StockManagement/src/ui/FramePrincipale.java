@@ -80,6 +80,7 @@ public class FramePrincipale extends JFrame{
     public CategoriePanel categorie;
     private CodiciPanel codici;
     private OrdiniPanel ordini;
+    private OrdiniAdminPanel ordiniadmin;
     private DefaultTableModel model;
     private JTable table;
     private DefaultTableModel model2;
@@ -112,8 +113,8 @@ public class FramePrincipale extends JFrame{
         HomePanel.add(dashboard, "Dashboard");
 
         //Aggiungi la carta "ANAGRAFICHE"
-        AnagrafichePanel anagrafiche =new AnagrafichePanel();
-        HomePanel.add(anagrafiche, "Anagrafiche");
+        //AnagrafichePanel anagrafiche =new AnagrafichePanel();
+        //HomePanel.add(anagrafiche, "Anagrafiche");
                         
 
         // Aggiungi la carta "CATEGORIE"
@@ -126,13 +127,17 @@ public class FramePrincipale extends JFrame{
         HomePanel.add(prodotti, "Prodotti");
   
         // Aggiungi la carta "CODICI"
-        codici =new CodiciPanel();
-        HomePanel.add(codici, "Codici");          
+        //codici =new CodiciPanel();
+       // HomePanel.add(codici, "Codici");          
        
           
-        //Aggiungi la carta "ORDINI"
-        ordini =new OrdiniPanel();
-        HomePanel.add(ordini, "Ordini");
+        //Aggiungi la carta "ORDINI"    
+        //ordiniadmin =new OrdiniAdminPanel();
+        //HomePanel.add(ordini, "Ordini");
+        
+        //Aggiungi la carta "ORDINIADMIN"
+        ordiniadmin =new OrdiniAdminPanel();
+        HomePanel.add(ordiniadmin, "Ordini"); //Se è admin allora va sempre con etichetta "ordini"
   
         //Aggiungi la carta "REPORT"
         JPanel report =new JPanel();
@@ -444,7 +449,9 @@ public class FramePrincipale extends JFrame{
                        pan.setBackground(color_etichetta);
                        System.out.println("Codice tasto premuto:"+code);
                        
+                       /* DA RIMETTERE DOPO AGGIUSTATO IL DB
                         try {
+                            
                             codici.refreshTab();
                             prodotti.refreshTab();
                             categorie.refreshTab();
@@ -452,7 +459,7 @@ public class FramePrincipale extends JFrame{
                             
                         } catch (SQLException ex) {
                             Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        }*/
 
            
 
