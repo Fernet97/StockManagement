@@ -1,5 +1,7 @@
 package ui;
 
+import beans.Utente;
+import dao.UtenteDAO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,6 +14,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -20,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import others.Cryptorr;
 
 
 
@@ -37,15 +43,7 @@ public class LoginDialog extends javax.swing.JDialog {
         public LoginDialog() {
             CreaGUI();
         }
-        
-    
-            
-    // verifica Login
-    public boolean checkLogin(String user, String password){
-        
-        System.out.println("Accesso come "+user+" "+password);
-        return true;
-    }
+
     
 
         private void CreaGUI() {
@@ -126,20 +124,63 @@ public class LoginDialog extends javax.swing.JDialog {
                 this.add(pannelloB, BorderLayout.SOUTH);
                
         }
+        
+        
+        
+        
        
         
+            
+            
+            // verifica Login
+            public boolean checkLogin(String user, String password){
+                Utente utente = null;
+                UtenteDAO udao = new UtenteDAO();
+                try {
+                    utente = udao.getByID(user);
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDialog.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                
+                    System.out.println("nome utente nel db:"+utente.getIdutente()+ " nome utente inserita adesso:"+user);
+
+                    if(utente.getIdutente().equals(user)){
+                        if(utente.getPwd().equals(Cryptorr.MD5(password))){
+                            System.out.println("PASSWORD CORRETTA");
+                            System.out.println("pwd nel db:"+utente.getPwd()+ " pwd inserita adesso:"+password);
+                            return true;
+                        }
+                         System.out.println("PASSWORD SBAGLIATA");
+
+                    }   
+                    System.out.println("NOME UTENTE NON TROVATO");    
+                    return false;
+            }
+            
+            
+            
         
             public void avviaPrincFrame(){
-                        checkLogin(casella_nome.getText(), casella_pwd.getText());
-                        FramePrincipale mainFrame = new FramePrincipale();
-                        mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                        mainFrame.setVisible(true);
-                        //mainFrame.setResizable(false);
-                        mainFrame.setTitle("$tock managemenT");  
-                        //mainFrame.setSize(1750, 1050);
+                        if(checkLogin(casella_nome.getText(), casella_pwd.getText())){
+                            FramePrincipale mainFrame = new FramePrincipale();
+                            mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                            mainFrame.setVisible(true);
+                            //mainFrame.setResizable(false);
+                            mainFrame.setTitle("$tock managemenT");  
+                            //mainFrame.setSize(1750, 1050);
 
-                        mainFrame.setMinimumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
-                        mainFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-                        dispose();       
+                            mainFrame.setMinimumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
+                            mainFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+                            dispose();   
+                        }   
+                        
+                        else System.err.println("ERRORE ACCESSO ");
+                        
             }
+            
+            
+            
+                    
+
 }

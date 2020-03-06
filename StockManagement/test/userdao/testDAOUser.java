@@ -22,7 +22,7 @@ public class testDAOUser {
            java.util.concurrent.TimeUnit.SECONDS.sleep(3);
            UtenteDAO  dao = new UtenteDAO();
 //                                Utente(fullname, CF, indirizzo, telefono, email, pwd, permessi, note)
-           Utente u = new Utente ("flabio caino ","cf","via della capocchia","333","mail","pwd", 1 ,"note");
+           Utente u = new Utente ("pier lig ","cf","via della seta","333","gmail","cane", 1 ,"note");
           
                    
            dao.add(u);
