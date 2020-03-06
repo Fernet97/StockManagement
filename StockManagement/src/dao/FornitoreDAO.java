@@ -6,7 +6,6 @@
 package dao;
 
 import beans.Fornitore;
-import beans.Prodotto;
 import database.DriverManagerConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,12 +17,11 @@ import java.util.LinkedList;
 
 /**
  *
- * @author Fernet
- * @author LittleJoke95
+ * @author LittleJoke
  */
 public class FornitoreDAO {
 
-    private final String TABLE_NAME = "fornitori";
+    private final String TABLE_NAME = "fornitore";
 
     public synchronized Collection<Fornitore> getAll() throws SQLException {
 
@@ -32,7 +30,7 @@ public class FornitoreDAO {
 
         Collection<Fornitore> fornitori = new LinkedList<Fornitore>();
 
-        String selectSQL = "SELECT * FROM " + this.TABLE_NAME+ " order by datareg";
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " order by datareg";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -51,7 +49,7 @@ public class FornitoreDAO {
                 bean.setIndirizzo(rs.getString("indirizzo"));
                 bean.setTel(rs.getString("tel"));
                 bean.setEmail(rs.getString("email"));
-                bean.setDesc(rs.getString("description"));
+                bean.setNote(rs.getString("note"));
 
                 fornitori.add(bean);
 
@@ -94,7 +92,7 @@ public class FornitoreDAO {
                 bean.setIndirizzo(rs.getString("indirizzo"));
                 bean.setTel(rs.getString("tel"));
                 bean.setEmail(rs.getString("email"));
-                bean.setDesc(rs.getString("description"));
+                bean.setNote(rs.getString("note"));
 
             }
         } finally {
@@ -110,14 +108,13 @@ public class FornitoreDAO {
         return bean;
     }
 
-    // INSERT INTO `db_stock`.`fornitori` (`idfornitori`, `p_iva`, `nome`, `cognome`, `nome_azienda`, `stato`, `tel`, `email`, `description`) VALUES ('1', 'xxxxx', 'Mimmo', 'Mimmetti', 'Mimmo corp', 'Italia', '367267267123', 'mimmo@gmail.com', 'scriviamo una descriziona a caso per mimmo');
     public synchronized void add(Fornitore b) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         String insertSQL = "INSERT INTO " + TABLE_NAME
                 + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        System.out.println("fornitore add "+insertSQL);
+        System.out.println("fornitore add " + insertSQL);
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -130,8 +127,7 @@ public class FornitoreDAO {
             preparedStatement.setString(5, b.getIndirizzo());
             preparedStatement.setString(6, b.getTel());
             preparedStatement.setString(7, b.getEmail());
-            preparedStatement.setString(8, b.getDesc());
-
+            preparedStatement.setString(8, b.getNote());
 
             preparedStatement.executeUpdate();
 
@@ -148,46 +144,30 @@ public class FornitoreDAO {
 
     }
 
-    /**
-     * ogni volta che si richiama il metodo update, VA' SEMPRE RICHIAMATO IL
-     * METODO remove per eliminare il vecchio record che doveva essere
-     * aggiornato
-     *
-     * es:
-     * <pre>
-     * ProdottoDAO dao = new ProdottoDAO();
-     * Prodotto pr1 = new Prodotto("test1", "test1");
-     * dao.add(pr1);
-     * Prodotto pr2 = new Prodotto("test2", "test2");
-     * dao.update(pr2); //richiama metodo update
-     * dao.remove(pr1); //richiama metodo remove
-     * </pre>
-     *
-     * @param p
-     * @throws SQLException
-     */
+  
     public synchronized void update(Fornitore b) throws SQLException {
-		Connection connection = null;
-		Statement statement = null;
+        Connection connection = null;
+        Statement statement = null;
 
-		Fornitore f = b;
-		
-                System.out.println("Id del fornitore da modificare: "+ f.getIdfornitore());
-		String query = "UPDATE fornitori SET   `fullname` = '"+f.getFullname()+"', `p_iva` = '"+f.getP_iva()+"', `indirizzo` = '"+f.getIndirizzo()+"', `tel` = '"+f.getTel()+"', `email` = '"+f.getEmail()+"', `description` = '"+f.getDesc()+"' WHERE (`idfornitori` = '"+f.getIdfornitore()+"');";
-		      System.out.println("fornitore update "+ query);		
-		try {
-			connection = DriverManagerConnectionPool.getConnection();
-			statement = connection.createStatement();
-			statement.executeUpdate(query);
-			connection.commit();
-		} finally {
-			try {
-				if (statement != null)
-					statement.close();
-			} finally {
-				DriverManagerConnectionPool.releaseConnection(connection);
-			}
-		}	
+        Fornitore f = b;
+
+        System.out.println("Id del fornitore da modificare: " + f.getIdfornitore());
+        String query = "UPDATE fornitori SET   `fullname` = '" + f.getFullname() + "', `p_iva` = '" + f.getP_iva() + "', `indirizzo` = '" + f.getIndirizzo() + "', `tel` = '" + f.getTel() + "', `email` = '" + f.getEmail() + "', `note` = '" + f.getNote() + "' WHERE (`idfornitori` = '" + f.getIdfornitore() + "');";
+        System.out.println("fornitore update " + query);
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+            connection.commit();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+        }
 
     }
 
@@ -196,8 +176,8 @@ public class FornitoreDAO {
         Connection connection = null;
         Statement statement = null;
 //DELETE FROM `db_stock`.`prodotti` WHERE (`sku` = 'mi1-13/12/2019 11:21:41');
-        String query = "DELETE FROM " + this.TABLE_NAME + " WHERE (`idfornitori` = '"+idFornitore+"')";
-        System.out.println("fornitori remove "+query);
+        String query = "DELETE FROM " + this.TABLE_NAME + " WHERE (`idfornitori` = '" + idFornitore + "')";
+        System.out.println("fornitori remove " + query);
         try {
             connection = DriverManagerConnectionPool.getConnection();
             statement = connection.createStatement();
@@ -215,46 +195,44 @@ public class FornitoreDAO {
         }
 
     }
-    
-    public synchronized Fornitore getLastID() throws SQLException{
-        
-            Connection connection = null;
-            Statement  ps = null;
-            Fornitore bean = new Fornitore();
 
+    public synchronized Fornitore getLastID() throws SQLException {
 
-            String query = "select* from fornitori order by datareg DESC LIMIT 1";      
-                 		try  {
-                                                        connection = DriverManagerConnectionPool.getConnection();
-                                                        ps = connection.prepareStatement(query);
+        Connection connection = null;
+        Statement ps = null;
+        Fornitore bean = new Fornitore();
 
-                                                        ResultSet rs = ps.executeQuery(query);
-                                                        
-                                                        while (rs.next()) {
-                                                                                                
-                                                            bean.setIdfornitore(rs.getString("idfornitori"));
-                                                            bean.setDatareg(rs.getString("datareg"));
-                                                            bean.setFullname(rs.getString("fullname"));
-                                                            bean.setP_iva(rs.getString("p_iva"));
-                                                            bean.setIndirizzo(rs.getString("indirizzo"));
-                                                            bean.setTel(rs.getString("tel"));
-                                                            bean.setEmail(rs.getString("email"));
-                                                            bean.setDesc(rs.getString("description"));
+        String query = "select* from fornitori order by datareg DESC LIMIT 1";
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            ps = connection.prepareStatement(query);
 
-                                                                                                  
-                                                                                    }
-                                }
-                                                finally {
-			try {
-                                                                                if (ps != null)
-                                                                                    ps.close();
-                                                                            }
-                                                                          finally {
-                                                                                    DriverManagerConnectionPool.releaseConnection(connection);
-                                                                                    }
-                        
-                                                  }
-                                                return bean;
-        
+            ResultSet rs = ps.executeQuery(query);
+
+            while (rs.next()) {
+
+                bean.setIdfornitore(rs.getString("idfornitori"));
+                bean.setDatareg(rs.getString("datareg"));
+                bean.setFullname(rs.getString("fullname"));
+                bean.setP_iva(rs.getString("p_iva"));
+                bean.setIndirizzo(rs.getString("indirizzo"));
+                bean.setTel(rs.getString("tel"));
+                bean.setEmail(rs.getString("email"));
+                bean.setNote(rs.getString("note"));
+
+            }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+
         }
+        return bean;
+
+    }
+
 }

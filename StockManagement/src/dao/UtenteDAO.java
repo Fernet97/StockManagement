@@ -21,7 +21,7 @@ import static others.Passwordgen.generateRandomPassword;
  * @author LittleJoke
  */
 public class UtenteDAO {
-    private final String TABLE_NAME = "utenti";
+    private final String TABLE_NAME = "utente";
         
     public synchronized Collection<Utente> getAll() throws SQLException {
 
@@ -42,7 +42,7 @@ public class UtenteDAO {
                     
                         Utente bean = new Utente();
                         
-                        bean.setId(rs.getString("id"));
+                        bean.setIdutente(rs.getString("idutente"));
                         bean.setDatareg(rs.getString("datareg"));
                         bean.setFullname(rs.getString("fullname"));
                         bean.setCF(rs.getString("CF"));
@@ -75,7 +75,7 @@ public class UtenteDAO {
 
                         Utente bean = new Utente();
 
-                        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE id = ?";
+                        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE idutente = ?";
 
                           try {
                         connection = DriverManagerConnectionPool.getConnection();
@@ -86,7 +86,7 @@ public class UtenteDAO {
                         while (rs.next()) {
 
 
-                        bean.setId(rs.getString("id"));
+                        bean.setIdutente(rs.getString("idutente"));
                         bean.setDatareg(rs.getString("datareg"));
                         bean.setFullname(rs.getString("fullname"));
                         bean.setCF(rs.getString("CF"));
@@ -124,7 +124,7 @@ public class UtenteDAO {
                                 connection = DriverManagerConnectionPool.getConnection();
                                 preparedStatement = connection.prepareStatement(insertSQL);
 
-                                preparedStatement.setString(1, u.getId());
+                                preparedStatement.setString(1, u.getIdutente());
                                 preparedStatement.setString(2, u.getDatareg());
                                 preparedStatement.setString(3, u.getFullname());
                                 preparedStatement.setString(4, u.getCF());
@@ -160,10 +160,13 @@ public class UtenteDAO {
                         Connection connection = null;
                         Statement st = null;  
                         
-                         System.out.println("id dell'utente da modificare"+u.getId());	                                                   
+                         System.out.println("id dell'utente da modificare"+u.getIdutente());	                                                   
 
                                                           
-                        String insertSQL = "UPDATE " +TABLE_NAME+ " SET `fullname` = '"+u.getFullname()+"', `CF` = '"+u.getCF()+"', `indirizzo` = '"+u.getIndirizzo()+"', `tel` = '"+u.getTelefono()+"', `email` = '"+u.getEmail()+"', `pwd` = '"+u.getPwd()+"', `permessi` = '"+u.getPermessi()+"', `note` = '"+u.getNote()+"' WHERE (`id` = '"+u.getId()+"')";
+                        String insertSQL = "UPDATE " +TABLE_NAME+ " SET `fullname` = '"+u.getFullname()+"', `CF` = '"+u.getCF()+"', "
+                                + "`indirizzo` = '"+u.getIndirizzo()+"', `tel` = '"+u.getTelefono()+"', `email` = '"+u.getEmail()+"',"
+                                + " `pwd` = '"+u.getPwd()+"', `permessi` = '"+u.getPermessi()+"', `note` = '"+u.getNote()+""
+                                + "' WHERE (`idutente` = '"+u.getIdutente()+"')";
             System.out.println("utente update "+ insertSQL);
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
@@ -185,7 +188,7 @@ public synchronized void remove (String id) throws SQLException{
                         Connection connection = null;
                         Statement  statement = null;
 
-		String query = "DELETE FROM " + this.TABLE_NAME + " WHERE id='"+id+"'";
+		String query = "DELETE FROM " + this.TABLE_NAME + " WHERE idutente='"+id+"'";
                 System.out.println("utenti remove "+query);
 
                         try {
@@ -215,7 +218,7 @@ public synchronized void remove (String id) throws SQLException{
            Utente bean = new Utente();
 
 
-            String query = "select* from utenti order by datareg DESC LIMIT 1";      
+            String query = "select* from "+this.TABLE_NAME+" order by datareg DESC LIMIT 1";      
                  		try  {
                                                         connection = DriverManagerConnectionPool.getConnection();
                                                         ps = connection.prepareStatement(query);
@@ -224,7 +227,7 @@ public synchronized void remove (String id) throws SQLException{
                                                         
                                                         while (rs.next()) {
                                                                                                 
-                                                            bean.setId(rs.getString("id"));
+                                                            bean.setIdutente(rs.getString("idutente"));
                                                             bean.setDatareg(rs.getString("datareg"));
                                                             bean.setFullname(rs.getString("fullname"));
                                                             bean.setCF(rs.getString("CF"));

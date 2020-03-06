@@ -1,3 +1,5 @@
+package userdao;
+
 
 import dao.UtenteDAO;
 import beans.Utente;
@@ -19,14 +21,17 @@ public class testDAOUser {
                                System.out.println("/*add*/");
            java.util.concurrent.TimeUnit.SECONDS.sleep(3);
            UtenteDAO  dao = new UtenteDAO();
-           Utente u = new Utente ("gesu bambino ","1","1","1","1","1", 1 ,"10");
+//                                Utente(fullname, CF, indirizzo, telefono, email, pwd, permessi, note)
+           Utente u = new Utente ("flabio caino ","cf","via della capocchia","333","mail","pwd", 1 ,"note");
+          
+                   
            dao.add(u);
            System.out.println("pswd md5 "+ u.getPwd());
            java.util.concurrent.TimeUnit.SECONDS.sleep(3);
            System.out.println("//*update*//");
                    UtenteDAO  dao2 = new UtenteDAO();
                    java.util.concurrent.TimeUnit.SECONDS.sleep(10);
-      Utente u2 = dao2.getByID(u.getId());
+      Utente u2 = dao2.getByID(u.getIdutente());
       u2.setTelefono("miiiiaaaao");
                dao2.update(u2);
                    }

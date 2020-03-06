@@ -1,3 +1,5 @@
+package userdao;
+
 import beans.Utente;
 import dao.UtenteDAO;
 import java.sql.SQLException;
@@ -28,7 +30,7 @@ public class TestDAOUserGet {
            Collection<Utente> utenti = dao.getAll();
             
             for(Utente getall : utenti){
-              System.out.println("testdaoprint " +getall.getId());
+              System.out.println("testdaoprint " +getall.getIdutente());
             }
             
             
@@ -38,7 +40,7 @@ public class TestDAOUserGet {
                 
                 UtenteDAO dao3 = new UtenteDAO();
                 Utente last = dao3.getLastID();
-                System.out.println("last "+ last.getId());
+                System.out.println("last "+ last.getIdutente());
             }
                 catch (SQLException ex) {
                     Logger.getLogger(TestDAOUserGet.class.getName()).log(Level.SEVERE, null, ex);

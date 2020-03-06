@@ -17,72 +17,73 @@ import java.util.logging.Logger;
  * @author LittleJoke
  */
 public class Fornitore {
-
-
+    
+    
     private static int code = 0 ;
     private String idfornitore;
     private String datareg;
-    private String fullname;   
+    private String fullname;
     private String p_iva;
     private String indirizzo;
     private String tel;
     private String email;
-    private String desc;
-    
-    //constructor
+    private String note;
 
-   // Costruttore senza specificare ID ==> Genera ID automaticamente (In genere x ADD)
-    /** 
-     * costruttore senza id
-     * usato per l'add
-     * add non necessita di id perche
-     * autogenera il codice id univoco
-     * **end**
+    
+    /**
+     * 
+     * @param idfornitore
+     * @param datareg
+     * @param fullname
+     * @param p_iva
+     * @param indirizzo
+     * @param tel
+     * @param email
+     * @param note 
      */
-    public Fornitore(String fullname, String p_iva, String indirizzo, String tel, String email, String desc) {
-         
-        setCode(leggiUltimoID() +1);
+    public Fornitore(String idfornitore, String datareg, String fullname, String p_iva, String indirizzo, String tel, String email, String note) {
+       
+         setCode(leggiUltimoID() +1);
+        this.idfornitore = idfornitore;
+        this.datareg = datareg;
         this.fullname = fullname;
         this.p_iva = p_iva;
         this.indirizzo = indirizzo;
         this.tel = tel;
         this.email = email;
-        this.desc = desc;
+        this.note = note;
         
-        setDatareg(generateData());
+          setDatareg(generateData());
         setIdfornitore(generateID());
         System.out.println("ID del nuovo fornitore:"+getIdfornitore());
     }
-    
-    
-    
-    //Costruttore CON ID specificato ===> (In genere usato x UPDATE)
-     /** 
-     * costruttore con id
-     * usato in genere per l'update
-     * Necessita di id perche serve alla ricerca del codice univoco di identificazione
-     * **end**
+
+    /**
+     * per update
+     * @param fullname
+     * @param p_iva
+     * @param indirizzo
+     * @param tel
+     * @param email
+     * @param note 
      */
-        public Fornitore(String idfornitore, String fullname, String p_iva, String indirizzo, String tel, String email, String desc) {
-            
-            this.idfornitore = idfornitore;
-            this.datareg = datareg;
-            this.fullname = fullname;
-            this.p_iva = p_iva;
-            this.indirizzo = indirizzo;
-            this.tel = tel;
-            this.email = email;
-            this.desc = desc;
-            
-            setDatareg(generateData());
-
-
+    public Fornitore(String fullname, String p_iva, String indirizzo, String tel, String email, String note) {
+        this.fullname = fullname;
+        this.p_iva = p_iva;
+        this.indirizzo = indirizzo;
+        this.tel = tel;
+        this.email = email;
+        this.note = note;
+        
+         setDatareg(generateData());
     }
 
-
-    public Fornitore() { }
+    public Fornitore() {
+       
+    }
     
-  //getter & setter
+    
+    // getter & setter
 
     public String getIdfornitore() {
         return idfornitore;
@@ -140,15 +141,15 @@ public class Fornitore {
         this.email = email;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getNote() {
+        return note;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setNote(String note) {
+        this.note = note;
     }
     
-        public static int getCode() {
+           public static int getCode() {
         return code;
     }
 
@@ -191,14 +192,12 @@ public class Fornitore {
     }
                 
          catch (SQLException ex) {
-            Logger.getLogger(Prodotto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Fornitore.class.getName()).log(Level.SEVERE, null, ex);
             idlast = -99999;
         }
         
         return  idlast;
 
     }
-}
-
     
-
+}
