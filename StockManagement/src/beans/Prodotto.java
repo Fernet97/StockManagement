@@ -21,23 +21,35 @@ import java.util.logging.Logger;
  * @author LittleJoke
  */
 public class Prodotto {
-   
+
     private static int code;
     String sku;
     String datareg;
     String nome;
     int qty;
     String Categoria;
-    boolean instock;
+    int instock;
     float costo;
     int qty_min;
     String note;
     String foto;
-    boolean negozio;
-    
+    int negozio;
 
-    // costruttore completo
-    public Prodotto(String sku, String datareg, String nome, int qty, String Categoria, boolean instock, float costo, int qty_min, String note, String foto, boolean negozio) {
+    /**
+     * costruttore completo
+     * @param sku
+     * @param datareg
+     * @param nome
+     * @param qty
+     * @param Categoria
+     * @param instock
+     * @param costo
+     * @param qty_min
+     * @param note
+     * @param foto
+     * @param negozio 
+     */
+    public Prodotto(String sku, String datareg, String nome, int qty, String Categoria, int instock, float costo, int qty_min, String note, String foto, int negozio) {
         this.sku = sku;
         this.datareg = datareg;
         this.nome = nome;
@@ -49,17 +61,53 @@ public class Prodotto {
         this.note = note;
         this.foto = foto;
         this.negozio = negozio;
-        setDatareg(generateData());
 
     }
 
-    //costruttore senza id utente
-    public Prodotto(String datareg, String nome, int qty, String Categoria, boolean instock, float costo, int qty_min, String note, String foto, boolean negozio) {
+    /**
+     * per add
+     * @param nome
+     * @param qty
+     * @param Categoria
+     * @param instock
+     * @param costo
+     * @param qty_min
+     * @param note
+     * @param foto
+     * @param negozio 
+     */
+    public Prodotto(String nome, int qty, String Categoria, int instock, float costo, int qty_min, String note, String foto, int negozio) {
 
-        setCode(leggiUltimoSku() + 1);
+        this.nome = nome;
+        this.qty = qty;
+        this.Categoria = Categoria;
+        this.instock = instock;
+        this.costo = costo;
+        this.qty_min = qty_min;
+        this.note = note;
+        this.foto = foto;
+        this.negozio = negozio;
         setDatareg(generateData());
+        setCode(leggiUltimoSku() + 1);
         setSku(generateSKU());
-        this.datareg = datareg;
+
+    }
+
+    /**
+     * per update
+     * @param sku
+     * @param nome
+     * @param qty
+     * @param Categoria
+     * @param instock
+     * @param costo
+     * @param qty_min
+     * @param note
+     * @param foto
+     * @param negozio 
+     */
+    public Prodotto(String sku, String nome, int qty, String Categoria, int instock, float costo, int qty_min, String note, String foto, int negozio) {
+        this.sku = sku;
         this.nome = nome;
         this.qty = qty;
         this.Categoria = Categoria;
@@ -70,12 +118,12 @@ public class Prodotto {
         this.foto = foto;
         this.negozio = negozio;
     }
+    
+    
 
     public Prodotto() {
 
     }
-
-  
 
     // getter & setter senza code
     public String getSku() {
@@ -118,11 +166,11 @@ public class Prodotto {
         this.Categoria = Categoria;
     }
 
-    public boolean isInstock() {
+    public int isInstock() {
         return instock;
     }
 
-    public void setInstock(boolean instock) {
+    public void setInstock(int instock) {
         this.instock = instock;
     }
 
@@ -158,11 +206,11 @@ public class Prodotto {
         this.foto = foto;
     }
 
-    public boolean isNegozio() {
+    public int isNegozio() {
         return negozio;
     }
 
-    public void setNegozio(boolean negozio) {
+    public void setNegozio(int negozio) {
         this.negozio = negozio;
     }
 
@@ -176,11 +224,13 @@ public class Prodotto {
     }
 
     public int getCode() {
+        System.out.println("getcode " + code);
         return code;
     }
 
     public void setCode(int c) {
         code = c;
+        System.out.println("setcode " + c);
     }
 
     public String generateSKU() {
@@ -188,7 +238,7 @@ public class Prodotto {
         String skuGenerato = getCategoria().substring(0, 2);
         skuGenerato += getCode() + "-";
         skuGenerato += getDatareg();
-
+        System.out.println("skugenerato " + skuGenerato);
         return skuGenerato;
 
     }
@@ -208,8 +258,10 @@ public class Prodotto {
             }
 
             int index;
-            index = ultimosku.indexOf("-");
+            index = ultimosku.indexOf('-');
+            System.out.println("index" + index);
             tmp = ultimosku.substring(2, index);
+            System.out.println("tmp " + tmp);
             idlast = Integer.parseInt(tmp);
 
         } catch (SQLException ex) {
@@ -220,5 +272,10 @@ public class Prodotto {
         return idlast;
 
     }
-}
 
+    @Override
+    public String toString() {
+        return "Prodotto{" + "sku=" + sku + ", datareg=" + datareg + ", nome=" + nome + ", qty=" + qty + ", Categoria=" + Categoria + ", instock=" + instock + ", costo=" + costo + ", qty_min=" + qty_min + ", note=" + note + ", foto=" + foto + ", negozio=" + negozio + '}';
+    }
+
+}

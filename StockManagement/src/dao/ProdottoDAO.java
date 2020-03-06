@@ -31,7 +31,7 @@ public class ProdottoDAO {
 
         Collection<Prodotto> prodotti = new LinkedList<Prodotto>();
 
-        String selectSQL = "select* from prodotti";
+        String selectSQL = "select* from "+this.TABLE_NAME+"";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -46,12 +46,12 @@ public class ProdottoDAO {
                 bean.setNome(rs.getString("nome"));
                 bean.setQty(rs.getInt("qty"));
                 bean.setCategoria(rs.getString("categoria"));
-                bean.setInstock(rs.getBoolean("instock"));
+                bean.setInstock(rs.getInt("instock"));
                 bean.setCosto(rs.getFloat("costo"));
                 bean.setQty_min(rs.getInt("qty_min"));
                 bean.setNote(rs.getString("note"));
                 bean.setFoto(rs.getString("foto"));
-                bean.setNegozio(rs.getBoolean("negozio"));
+                bean.setNegozio(rs.getInt("negozio"));
 
                 prodotti.add(bean);
 
@@ -76,8 +76,8 @@ public class ProdottoDAO {
         PreparedStatement ps = null;
 
         Prodotto bean = new Prodotto();
-        //SELECT * FROM prodotti WHERE sku = 1;
-        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + "WHERE sku = "+sku+"";
+        //SELECT * FROM prodotti WHERE sku = '1';
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE sku = ?";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -88,7 +88,18 @@ public class ProdottoDAO {
 
             while (rs.next()) {
 
-             
+                bean.setSku(rs.getString("sku"));
+                bean.setDatareg(rs.getString("datareg"));
+                bean.setNome(rs.getString("nome"));
+                bean.setQty(rs.getInt("qty"));
+                bean.setCategoria(rs.getString("categoria"));
+                bean.setInstock(rs.getInt("instock"));
+                bean.setCosto(rs.getFloat("costo"));
+                bean.setQty_min(rs.getInt("qty_min"));
+                bean.setNote(rs.getString("note"));
+                bean.setFoto(rs.getString("foto"));
+                bean.setNegozio(rs.getInt("negozio"));
+
 
             }
         } finally {
@@ -104,11 +115,11 @@ public class ProdottoDAO {
         return bean;
     }
 
-    public synchronized void add(Prodotto b, String IdFornitore) throws SQLException {
+    public synchronized void add(Prodotto b) throws SQLException {
         Connection connection = null;
         PreparedStatement ps = null;
 
-        String insertSQL = "INSERT INTO " + TABLE_NAME + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertSQL = "INSERT INTO " + this.TABLE_NAME + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -119,15 +130,15 @@ public class ProdottoDAO {
                 ps.setString(3, b.getNome());
                 ps.setInt(4, b.getQty());
                 ps.setString(5, b.getCategoria());
-                ps.setBoolean(6, b.isInstock());
+                ps.setInt(6, b.isInstock());
                 ps.setFloat(7, b.getCosto());
                 ps.setInt(8, b.getQty_min());
                 ps.setString(9, b.getNote());
                 ps.setString(10, b.getFoto());
-                ps.setBoolean(11, b.isNegozio());
+                ps.setInt(11, b.isNegozio());
            
 
-            System.out.println("prodotto add " + insertSQL);
+            System.out.println("prodotto add " + b.toString());
 
             ps.executeUpdate();
 
@@ -178,7 +189,7 @@ public class ProdottoDAO {
 
     }
 
-    public synchronized void remove(String sku, String fornitoreID) throws SQLException {
+    public synchronized void remove(String sku) throws SQLException {
         Connection connection = null;
         Statement statement = null;
         String query = "DELETE FROM " + this.TABLE_NAME + " WHERE  (`sku` = '" + sku + "');";
@@ -208,7 +219,8 @@ public class ProdottoDAO {
         Statement ps = null;
         Prodotto bean = new Prodotto();
 
-        String query = "select* from prodotti order by datareg DESC LIMIT 1";
+        String query = "select* from "+this.TABLE_NAME+" order by datareg DESC LIMIT 1";
+        
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -223,12 +235,12 @@ public class ProdottoDAO {
                 bean.setNome(rs.getString("nome"));
                 bean.setQty(rs.getInt("qty"));
                 bean.setCategoria(rs.getString("categoria"));
-                bean.setInstock(rs.getBoolean("instock"));
+                bean.setInstock(rs.getInt("instock"));
                 bean.setCosto(rs.getFloat("costo"));
                 bean.setQty_min(rs.getInt("qty_min"));
                 bean.setNote(rs.getString("note"));
                 bean.setFoto(rs.getString("foto"));
-                bean.setNegozio(rs.getBoolean("negozio"));
+                bean.setNegozio(rs.getInt("negozio"));
             }
         } finally {
             try {
@@ -250,7 +262,7 @@ public class ProdottoDAO {
         Prodotto bean = new Prodotto();
         Hashtable<String, String> hashtable = new Hashtable<String, String>();
 
-        String query = "select categoria, sum(qty) from prodotti GROUP BY categoria;";
+        String query = "select categoria, sum(qty) from"+this.TABLE_NAME+"GROUP BY categoria;";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
