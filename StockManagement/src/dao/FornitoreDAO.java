@@ -42,7 +42,7 @@ public class FornitoreDAO {
 
                 Fornitore bean = new Fornitore();
 
-                bean.setIdfornitore(rs.getString("idfornitori"));
+                bean.setIdfornitore(rs.getString("idfornitore"));
                 bean.setDatareg(rs.getString("datareg"));
                 bean.setFullname(rs.getString("fullname"));
                 bean.setP_iva(rs.getString("p_iva"));
@@ -74,7 +74,7 @@ public class FornitoreDAO {
 
         Fornitore bean = new Fornitore();
 
-        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE idfornitori = ?";
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE idfornitore = ?";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -85,7 +85,7 @@ public class FornitoreDAO {
 
             while (rs.next()) {
 
-                bean.setIdfornitore(rs.getString("idfornitori"));
+                bean.setIdfornitore(rs.getString("idfornitore"));
                 bean.setDatareg(rs.getString("datareg"));
                 bean.setFullname(rs.getString("fullname"));
                 bean.setP_iva(rs.getString("p_iva"));
@@ -152,7 +152,9 @@ public class FornitoreDAO {
         Fornitore f = b;
 
         System.out.println("Id del fornitore da modificare: " + f.getIdfornitore());
-        String query = "UPDATE fornitori SET   `fullname` = '" + f.getFullname() + "', `p_iva` = '" + f.getP_iva() + "', `indirizzo` = '" + f.getIndirizzo() + "', `tel` = '" + f.getTel() + "', `email` = '" + f.getEmail() + "', `note` = '" + f.getNote() + "' WHERE (`idfornitori` = '" + f.getIdfornitore() + "');";
+        String query = "UPDATE "+this.TABLE_NAME+" SET   `fullname` = '" + f.getFullname() + "', `p_iva` = '" + f.getP_iva() + "',"
+                + " `indirizzo` = '" + f.getIndirizzo() + "', `tel` = '" + f.getTel() + "', `email` = '" + f.getEmail() + "', "
+                + "`note` = '" + f.getNote() + "' WHERE (`idfornitore` = '" + f.getIdfornitore() + "');";
         System.out.println("fornitore update " + query);
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -176,7 +178,7 @@ public class FornitoreDAO {
         Connection connection = null;
         Statement statement = null;
 //DELETE FROM `db_stock`.`prodotti` WHERE (`sku` = 'mi1-13/12/2019 11:21:41');
-        String query = "DELETE FROM " + this.TABLE_NAME + " WHERE (`idfornitori` = '" + idFornitore + "')";
+        String query = "DELETE FROM " + this.TABLE_NAME + " WHERE (`idfornitore` = '" + idFornitore + "')";
         System.out.println("fornitori remove " + query);
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -202,7 +204,7 @@ public class FornitoreDAO {
         Statement ps = null;
         Fornitore bean = new Fornitore();
 
-        String query = "select* from fornitori order by datareg DESC LIMIT 1";
+        String query = "select* from "+this.TABLE_NAME+" order by datareg DESC LIMIT 1";
         try {
             connection = DriverManagerConnectionPool.getConnection();
             ps = connection.prepareStatement(query);
@@ -211,7 +213,7 @@ public class FornitoreDAO {
 
             while (rs.next()) {
 
-                bean.setIdfornitore(rs.getString("idfornitori"));
+                bean.setIdfornitore(rs.getString("idfornitore"));
                 bean.setDatareg(rs.getString("datareg"));
                 bean.setFullname(rs.getString("fullname"));
                 bean.setP_iva(rs.getString("p_iva"));
