@@ -163,7 +163,10 @@ public class UtenteDAO {
                          System.out.println("id dell'utente da modificare"+u.getIdutente());	                                                   
 
                                                           
-                        String insertSQL = "UPDATE " +TABLE_NAME+ " SET `fullname` = '"+u.getFullname()+"', `CF` = '"+u.getCF()+"', `indirizzo` = '"+u.getIndirizzo()+"', `tel` = '"+u.getTelefono()+"', `email` = '"+u.getEmail()+"', `pwd` = '"+u.getPwd()+"', `permessi` = '"+u.getPermessi()+"', `note` = '"+u.getNote()+"' WHERE (`idutente` = '"+u.getIdutente()+"')";
+                        String insertSQL = "UPDATE " +TABLE_NAME+ " SET `fullname` = '"+u.getFullname()+"', `CF` = '"+u.getCF()+"', "
+                                + "`indirizzo` = '"+u.getIndirizzo()+"', `tel` = '"+u.getTelefono()+"', `email` = '"+u.getEmail()+"',"
+                                + " `pwd` = '"+u.getPwd()+"', `permessi` = '"+u.getPermessi()+"', `note` = '"+u.getNote()+""
+                                + "' WHERE (`idutente` = '"+u.getIdutente()+"')";
             System.out.println("utente update "+ insertSQL);
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
