@@ -83,30 +83,6 @@ public class Utente {
            System.out.println("id utente nuovo "+getIdutente());
     }
 
-     
-     /**
-      * test
-      * 
-      * @param fullname
-      * @param CF
-      * @param indirizzo
-      * @param telefono
-      * @param email
-      * @param permessi
-      * @param note 
-      */
-    public Utente(String fullname, String CF, String indirizzo, String telefono, String email, int permessi, String note) {
-        this.fullname = fullname;
-        this.CF = CF;
-        this.indirizzo = indirizzo;
-        this.telefono = telefono;
-        this.email = email;
-        this.permessi = permessi;
-        this.note = note;
-    }
-     
-     
-
     public Utente() { }
 
 // getter & setter 
