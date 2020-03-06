@@ -357,7 +357,7 @@ public class AddCategoriaDialog extends JDialog {
                     System.out.println("Hai aggiunto la categoria"+ name.getText());
                     model.addRow(new Object[]{name.getText(),  "DA DEFINIRE", "Vai a prodotti"} ); 
                     list_cat_new.add(name.getText());                
-                    frameprinc.prodotti.list_cat_new.add(name.getText());                
+//                    frameprinc.prodotti.list_cat_new.add(name.getText());                
                     close(); 
                 }
             }

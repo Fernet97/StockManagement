@@ -44,6 +44,7 @@ import others.RoundedPanel;
  */
 public class OrdiniPanel extends JPanel {
 
+    /*
     public Prodotto prodottoCorrente;
     private final ProdottoDAO dao;
     private final JLabel infosku;
@@ -170,6 +171,8 @@ public class OrdiniPanel extends JPanel {
         princ.add(info);
 
         /*** PRENDI E CONFERMA **********/
+    
+    /*
         JPanel SXdown = new RoundedPanel();
         SXdown.setLayout(new GridLayout(6, 1));
         SXdown.add(new JLabel(""));        
@@ -308,7 +311,7 @@ public class OrdiniPanel extends JPanel {
     
     
     
-    }
+    }*/
 }
 
 

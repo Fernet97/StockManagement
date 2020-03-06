@@ -118,13 +118,13 @@ public class FramePrincipale extends JFrame{
                         
 
         // Aggiungi la carta "CATEGORIE"
-        categorie =new CategoriePanel();
-        HomePanel.add(categorie, "Categorie"); 
-        categorie.setComunicator(this);
+//        categorie =new CategoriePanel();
+  //      HomePanel.add(categorie, "Categorie"); 
+    //    categorie.setComunicator(this);
         
         // Aggiungi la carta "PRODOTTO"
-        prodotti = new ProdottiPanel();
-        HomePanel.add(prodotti, "Prodotti");
+//        prodotti = new ProdottiPanel();
+  //      HomePanel.add(prodotti, "Prodotti");
   
         // Aggiungi la carta "CODICI"
         //codici =new CodiciPanel();
@@ -239,10 +239,10 @@ public class FramePrincipale extends JFrame{
                     model.addRow(new Object[]{prod.getNome(), prod.getQty()});  
         
                 }
-                if(prod.getGiorni_alla_consegna() <=7){
+              /*  if(prod.getGiorni_alla_consegna() <=7){
                      model2.addRow(new Object[]{prod.getNome(), prod.getQty()});          
                
-                }
+                }*/
             }
         } catch (SQLException ex) {
             Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
@@ -320,7 +320,7 @@ public class FramePrincipale extends JFrame{
     public void  VaiAProdotti(String query){            
             //prodotti.casella
             cardlayout.show(HomePanel, "Prodotti");
-            prodotti.casella.setText(query);
+//            prodotti.casella.setText(query);
     
     }
     
@@ -536,10 +536,10 @@ public class FramePrincipale extends JFrame{
                     model.addRow(new Object[]{prod.getNome(), prod.getQty()});  
         
                 }
-                if(prod.getGiorni_alla_consegna() <=7){
+/*                if(prod.getGiorni_alla_consegna() <=7){
                      model2.addRow(new Object[]{prod.getNome(), prod.getQty()});          
                
-                }
+                }*/
             }
         } catch (SQLException ex) {
             Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
@@ -623,7 +623,7 @@ public class FramePrincipale extends JFrame{
             ProdottoDAO dao = new ProdottoDAO();
             try {
                 for(Prodotto p : dao.getAll() ){
-                    if(p.getGiorni_alla_consegna() <=7)number = number + p.getQty();
+                    /*if(p.getGiorni_alla_consegna() <=7)number = number + p.getQty();*/
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
