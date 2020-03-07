@@ -113,14 +113,14 @@ public class FramePrincipale extends JFrame{
         HomePanel.add(dashboard, "Dashboard");
 
         //Aggiungi la carta "ANAGRAFICHE"
-        //AnagrafichePanel anagrafiche =new AnagrafichePanel();
-        //HomePanel.add(anagrafiche, "Anagrafiche");
+        AnagrafichePanel anagrafiche =new AnagrafichePanel();
+        HomePanel.add(anagrafiche, "Anagrafiche");
                         
 
         // Aggiungi la carta "CATEGORIE"
-//        categorie =new CategoriePanel();
-  //      HomePanel.add(categorie, "Categorie"); 
-    //    categorie.setComunicator(this);
+          categorie =new CategoriePanel();
+          HomePanel.add(categorie, "Categorie"); 
+          categorie.setComunicator(this);
         
         // Aggiungi la carta "PRODOTTO"
 //        prodotti = new ProdottiPanel();
