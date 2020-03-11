@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -34,6 +35,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -88,7 +90,14 @@ public class AnagrafichePanel extends JPanel {
         cerca.add(casella);
         panSopra.add(cerca);
         
-        panSopra.add(new JLabel(" ")); 
+        JPanel panelradio = new JPanel();
+        JRadioButton r1=new JRadioButton("Fornitori");    
+        JRadioButton r2=new JRadioButton("Utenti");  
+        JRadioButton r3=new JRadioButton("Clienti");  
+        ButtonGroup bg=new ButtonGroup();    
+        bg.add(r1);bg.add(r2); bg.add(r3);  
+        panelradio.add(r1); panelradio.add(r2); panelradio.add(r3);
+        panSopra.add(panelradio); 
         
         JButton buttonNew = new JButton("ADD NEW");
         //*************+* BOTTONE AGGIUNGI NUOVA RIGA**************************

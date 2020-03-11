@@ -137,7 +137,7 @@ public class ProdottiPanel extends JPanel{
 
                 public boolean isCellEditable(int row, int column)
                 {
-                  return column >= 11; //il numero di celle editabili...
+                  return column >= 10; //il numero di celle editabili...
                 }
               };
              table = new JTable(model);
