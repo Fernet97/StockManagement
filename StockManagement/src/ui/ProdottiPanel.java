@@ -62,7 +62,7 @@ import javax.swing.table.TableRowSorter;
  */
 public class ProdottiPanel extends JPanel{
   
-    /*
+    
     private final DefaultTableModel model;
     public static Object[] nuovaRiga;
     public final JTextField casella;
@@ -126,11 +126,10 @@ public class ProdottiPanel extends JPanel{
         TitoloTab1.setLayout(new GridLayout(1,1));
         TitoloTab1.setBorder (new EmptyBorder(0, 100, 20, 100));
 
-          String[] columnNames = { "sku", "Data reg.", "Nome", "Categoria","Quantità","Fornitore","In Stock?", "giorni alla consegna", "Costo","Note","Quantità in arrivo", "Quantità minima", "Modifica","Cancella" };
-          //Object[][] data = { { "XXXXX", "10/12/2019", "YYYYYY", "XXXXXXX","34", "Amazon", "Sì", "3", "23$","una descrizione a caso","33", "13", "Modifica","Cancella"   } };
-          Object[][] data = {};  
+          String[] columnNames = { "sku", "Data reg.", "Nome", "Categoria","Quantità","Fornitore","In Stock?", "Costo","Note", "Quantità minima", "Modifica","Cancella", "Ordina"};
+
    
-           
+            Object[][] data = {};
            
            model = new DefaultTableModel(data, columnNames)
               {
@@ -138,12 +137,13 @@ public class ProdottiPanel extends JPanel{
 
                 public boolean isCellEditable(int row, int column)
                 {
-                  return column >= 12; //il numero di celle editabili...
+                  return column >= 11; //il numero di celle editabili...
                 }
               };
              table = new JTable(model);
              table.getTableHeader().setReorderingAllowed(false);
 
+             model.addRow(data); // DA CANCELLARE
 
         try {
             refreshTab(); // Aggiorna tavola con  i fornitori del db;
@@ -159,12 +159,15 @@ public class ProdottiPanel extends JPanel{
              table.getColumnModel().getColumn(4).setCellRenderer(new CustomRender());
             
              table.getColumnModel().getColumn(6).setCellRenderer(new CustomStockRender());                     
-             
-             table.getColumnModel().getColumn(12).setCellRenderer(new ClientsTableButtonRenderer());
-             table.getColumnModel().getColumn(12).setCellEditor(new ClientsTableRenderer(new JCheckBox()));
 
-             table.getColumnModel().getColumn(13).setCellRenderer(new ClientsTableButtonRenderer());
-             table.getColumnModel().getColumn(13).setCellEditor(new ClientsTableRenderer(new JCheckBox()));             
+             table.getColumnModel().getColumn(10).setCellRenderer(new ClientsTableButtonRenderer());
+             table.getColumnModel().getColumn(10).setCellEditor(new ClientsTableRenderer(new JCheckBox()));             
+
+             table.getColumnModel().getColumn(11).setCellRenderer(new ClientsTableButtonRenderer());
+             table.getColumnModel().getColumn(11).setCellEditor(new ClientsTableRenderer(new JCheckBox()));
+
+             table.getColumnModel().getColumn(12).setCellRenderer(new ClientsTableButtonRenderer());
+             table.getColumnModel().getColumn(12).setCellEditor(new ClientsTableRenderer(new JCheckBox()));             
 
             JScrollPane sp = new JScrollPane(table); 
             TitoloTab1.add(sp);  
@@ -235,7 +238,7 @@ public class ProdottiPanel extends JPanel{
             
             ProdottoDAO dao = new ProdottoDAO();
             
-            // Aggiorno con le nuove
+            /* Aggiorno con le nuove
             for(Prodotto pro: dao.getAll()){
                System.out.println(pro.getSku() +" "+ pro.getDatareg()+" "+ pro.getNome()+" "+pro.getCategoria()+" "+ pro.getQty()+" "+pro.getId_fornitore()+" "+pro.isInstock()+" "+ pro.getGiorni_alla_consegna()+" "+pro.getCosto()+" "+ pro.getDescrizione()+" "+pro.getQty_inarrivo()+" "+ pro.getQty_min());
                model.addRow(new Object[]{ pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), pro.getId_fornitore(), pro.isInstock(), pro.getGiorni_alla_consegna(), pro.getCosto(), pro.getDescrizione(), pro.getQty_inarrivo(), pro.getQty_min(),"Modifica","Cancella"});
@@ -243,8 +246,11 @@ public class ProdottiPanel extends JPanel{
             
             }
             System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
+      */
+            //DA CANCELLARE
+            model.addRow(new Object[]{ "XXXXX", "10/12/2019", "YYYYYY", "XXXXXXX","34", "Amazon", "true", "3", "una descrizione a caso", "50", "Modifica","Cancella", "Ordina"  });
+            model.addRow(new Object[]{ "XXXXX", "10/12/2019", "YYYYYY", "XXXXXXX","90", "Amazon", "false", "3", "una descrizione a caso", "50", "Modifica","Cancella", "Ordina"  });
       
-
         
         }
 
@@ -260,8 +266,12 @@ public class ProdottiPanel extends JPanel{
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        
             
-           if(Integer.parseInt(table.getValueAt(row, 4).toString()) <= Integer.parseInt(table.getValueAt(row, 11).toString())){
+            for(int i=0; i<= 12; i++)
+                System.out.println("Valore colonna"+i+ " "+table.getValueAt(row, i) );
+            
+           if(Integer.parseInt(table.getValueAt(row, 4).toString()) <= Integer.parseInt(table.getValueAt(row, 9).toString())){
            
                 setBackground(new Color(244, 80, 37));    // ROSSO        
            }
@@ -319,6 +329,7 @@ public class ProdottiPanel extends JPanel{
       setText((value == null) ? "" : value.toString());
       if(getText().equals("Modifica"))setIcon(ImpostaImg("/res/img/pencil.png"));
       else if(getText().equals("Cancella")) setIcon(ImpostaImg("/res/img/eraser.png"));
+      else if(getText().equals("Ordina")) setIcon(ImpostaImg("/res/img/ordini.png"));
       
 
       return this;
@@ -363,6 +374,7 @@ public class ProdottiPanel extends JPanel{
       button.setText(label);
       if(button.getText().equals("Modifica"))  button.setIcon(ImpostaImg("/res/img/pencil.png"));
       else if(button.getText().equals("Cancella"))button.setIcon(ImpostaImg("/res/img/eraser.png"));
+      else if(button.getText().equals("Ordina"))button.setIcon(ImpostaImg("/res/img/ordini.png"));
       clicked = true;
       return button;
     }
@@ -391,7 +403,7 @@ public class ProdottiPanel extends JPanel{
                         System.out.println("OOOOOOOOKKKKKK CANCELLO");  
                         ProdottoDAO daor = new ProdottoDAO();
                     try {
-                        daor.remove(table.getValueAt(row, 0).toString(), table.getValueAt(row, 5).toString());
+                        //daor.remove(table.getValueAt(row, 0).toString(), table.getValueAt(row, 5).toString());
                         
                         refreshTab();
                     } catch (SQLException ex) {
@@ -407,6 +419,10 @@ public class ProdottiPanel extends JPanel{
                     form.setVisible(true);
               
               }
+              else if(button.getText().equals("Ordina")) { // APRI FORM PER MODIFICARE RECORD
+                   JOptionPane.showMessageDialog(getComponent(), "Vai in ORDINI");
+              }
+              
               
               
       }
@@ -439,7 +455,7 @@ class FormProdotti extends javax.swing.JFrame {
      * Creates new form FormProdotti
      */
     
-    /*
+    
     public FormProdotti() {
         try {
             initComponents();
@@ -476,7 +492,7 @@ class FormProdotti extends javax.swing.JFrame {
      * regenerated by the Form Editor.
      */
     
-    /*
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() throws SQLException {
@@ -640,7 +656,7 @@ class FormProdotti extends javax.swing.JFrame {
                 pop.show(getParent(), 30, 30);
              */                    
                
-    /*
+    
                 }
               });
               
@@ -930,7 +946,7 @@ class FormProdotti extends javax.swing.JFrame {
             
     
     public void getOggettoforFormSave(){
-        
+        /*
             Prodotto prod = new Prodotto(jTextField2.getText() , jList1.getSelectedValue(),Integer.parseInt(jTextField6.getText()),jCheckBox1.isSelected(),Integer.parseInt(jTextField5.getText()), Float.valueOf(jTextField7.getText()), jTextField8.getText(), Integer.parseInt(jTextField9.getText()), Integer.parseInt(jTextField4.getText()),"foto.png");
             ProdottoDAO dao = new ProdottoDAO();
             
@@ -953,7 +969,7 @@ class FormProdotti extends javax.swing.JFrame {
             Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
             
-         
+        */ 
     
     }    
     
@@ -961,8 +977,9 @@ class FormProdotti extends javax.swing.JFrame {
     private String setFormAsID(String idSelected) {
             
             ProdottoDAO dao = new ProdottoDAO();
-    
+     /*
         try {
+           
             Prodotto prodotto = dao.getBySku(idSelected);
             jTextField1.setText(prodotto.getSku());
             jTextField2.setText(prodotto.getNome());
@@ -979,7 +996,7 @@ class FormProdotti extends javax.swing.JFrame {
                        
         } catch (SQLException ex) {
             Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-        }   
+        }   */
         
         return jList2.getSelectedValue();
         
@@ -987,6 +1004,8 @@ class FormProdotti extends javax.swing.JFrame {
     
     
    public void getOggettoforFormUpdate(){
+       
+       /*
        
             Prodotto prod = new Prodotto(jTextField1.getText(), FornitoreCorrente, jTextField2.getText() , jList1.getSelectedValue(),Integer.parseInt(jTextField6.getText()),jCheckBox1.isSelected(),Integer.parseInt(jTextField5.getText()), Float.valueOf(jTextField7.getText()), jTextField8.getText(), Integer.parseInt(jTextField9.getText()), Integer.parseInt(jTextField4.getText()),"foto.png");
             ProdottoDAO dao = new ProdottoDAO();       
@@ -1009,6 +1028,7 @@ class FormProdotti extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+*/
    }
         
     
@@ -1055,7 +1075,7 @@ class FormProdotti extends javax.swing.JFrame {
     // End of variables declaration                   
     }
     
-*/
+
     
     
 }

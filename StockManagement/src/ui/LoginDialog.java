@@ -22,6 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -142,7 +143,7 @@ public class LoginDialog extends javax.swing.JDialog {
                     Logger.getLogger(LoginDialog.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                
+                try{
                     System.out.println("nome utente nel db:"+utente.getIdutente()+ " nome utente inserita adesso:"+user);
 
                     if(utente.getIdutente().equals(user)){
@@ -151,11 +152,12 @@ public class LoginDialog extends javax.swing.JDialog {
                             System.out.println("pwd nel db:"+utente.getPwd()+ " pwd inserita adesso:"+password);
                             return true;
                         }
-                         System.out.println("PASSWORD SBAGLIATA");
-
                     }   
-                    System.out.println("NOME UTENTE NON TROVATO");    
-                    return false;
+                    JOptionPane.showMessageDialog(this, "Password sbagliata!");
+                    return false;}
+                catch(NullPointerException e ){ 
+                    JOptionPane.showMessageDialog(this, "nome utente non valido!");
+                    return false;}
             }
             
             

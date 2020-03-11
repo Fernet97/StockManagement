@@ -123,8 +123,8 @@ public class FramePrincipale extends JFrame{
           categorie.setComunicator(this);
         
         // Aggiungi la carta "PRODOTTO"
-//        prodotti = new ProdottiPanel();
-  //      HomePanel.add(prodotti, "Prodotti");
+          prodotti = new ProdottiPanel();
+          HomePanel.add(prodotti, "Prodotti");
   
         // Aggiungi la carta "CODICI"
         //codici =new CodiciPanel();
@@ -576,9 +576,10 @@ public class FramePrincipale extends JFrame{
         vai.setForeground(Color.black);
         vai.setLayout(new GridLayout(1, 1));
 
-
+/*
           
         if(type.equals("Totale prodotti in magazzino")){
+          
             
             ProdottoDAO dao = new ProdottoDAO();
             Enumeration names;
@@ -623,7 +624,7 @@ public class FramePrincipale extends JFrame{
             ProdottoDAO dao = new ProdottoDAO();
             try {
                 for(Prodotto p : dao.getAll() ){
-                    /*if(p.getGiorni_alla_consegna() <=7)number = number + p.getQty();*/
+                    if(p.getGiorni_alla_consegna() <=7)number = number + p.getQty();
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
@@ -649,7 +650,7 @@ public class FramePrincipale extends JFrame{
             
             JLabel scrittaVai =  new JLabel(ImpostaImg("/res/img/prodotti.png"));     
             vai.add(scrittaVai);
-        } 
+        } */
       
  
         JLabel num = new JLabel(String.valueOf(number)); //Per dare ampiezza al jpanel
