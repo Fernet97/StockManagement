@@ -76,7 +76,7 @@ public class Prodotto {
      * @param foto
      * @param negozio 
      */
-    public Prodotto(String nome, int qty, String Categoria, int instock, float costo, int qty_min, String note, String foto, int negozio) {
+    public Prodotto(String nome, int qty, String Categoria, int instock, float costo, int qty_min, String note, String foto, int negozio) throws InterruptedException {
 
         this.nome = nome;
         this.qty = qty;
@@ -209,12 +209,13 @@ public class Prodotto {
         System.out.println("setcode " + c);
     }
 
-    public String generateSKU() {
+    public String generateSKU() throws InterruptedException {
         System.out.println("Categoria del nuovo prodotto: " + getCategoria());
         String skuGenerato = getCategoria().substring(0, 2);
         skuGenerato += getCode() + "-";
         skuGenerato += getDatareg();
         System.out.println("skugenerato " + skuGenerato);
+        Thread.sleep(1000);
         return skuGenerato;
 
     }

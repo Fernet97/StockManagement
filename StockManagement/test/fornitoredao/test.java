@@ -19,7 +19,7 @@ public class test {
 
        FornitoreDAO dao = new FornitoreDAO();
        //Fornitore(String idfornitore, String datareg, String fullname, String p_iva, String indirizzo, String tel, String email, String note)
-       Fornitore f = new Fornitore("for", "data", "fullmane", "piva", "indirizzo", "tel", "email", "note");
+       Fornitore f = new Fornitore( "fullmane", "piva", "indirizzo", "tel", "email", "note");
         dao.add(f);
         
        

@@ -23,7 +23,7 @@ public class dbcleaner {
    
            Connection connection = null;
         Statement statement = null;
-                String query = "DELETE FROM prodotti_has_fornitori; DELETE FROM prodotti; DELETE FROM fornitori; DELETE FROM utenti;";
+                String query = "  DELETE FROM ordine; DELETE FROM cliente; DELETE FROM prodotto_has_prodotto; DELETE FROM prodotto; DELETE FROM fornitore; DELETE FROM utente;  ";
         System.out.println(query);
         try   {
             connection = DriverManagerConnectionPool.getConnection();

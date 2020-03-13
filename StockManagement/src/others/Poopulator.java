@@ -19,33 +19,35 @@ import java.sql.SQLException;
  */
 public class Poopulator {
     
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, InterruptedException {
+
+        dbcleaner.main(args);//richiama un depopulator 
 /**
  * utente add
  */
         UtenteDAO dao = new UtenteDAO();
 //        (fullname, CF, indirizzo, telefono, email, pwd, permessi, note)
         Utente u= new Utente("v ii", "cf", "via1", "121", "@1", "pwd",0 , "note");
-        Utente u2= new Utente("g ii", "cf", "via1", "121", "@1", "pwd",0 , "note");
-        Utente u3= new Utente("v nn", "cf", "via1", "121", "@1", "pwd",0 , "note");
-        Utente u4= new Utente("v jj", "cf", "via1", "121", "@1", "pwd",0 , "note");
-        Utente u5= new Utente("r ds", "cf", "via1", "121", "@1", "pwd",0 , "note");
-        Utente u6= new Utente("ef gg", "cf", "via1", "121", "@1", "pwd",0 , "note");
-        Utente u7= new Utente("vitordf ll", "cf", "via1", "121", "@1", "pwd",0 , "note");
-        Utente u8= new Utente("x hh", "cf", "via1", "121", "@1", "pwd",0 , "note");
-        Utente u9= new Utente("q jj", "cf", "via1", "121", "@1", "pwd",0 , "note");
-        Utente u10= new Utente("p gwe", "cf", "via1", "121", "@1", "pwd",0 , "note");
-        
         dao.add(u);
+        Utente u2= new Utente("g ii", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u2);
+        Utente u3= new Utente("v nn", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u3);
+        Utente u4= new Utente("v jj", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u4);
+        Utente u5= new Utente("r ds", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u5);
+        Utente u6= new Utente("ef gg", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u6);
+        Utente u7= new Utente("vitordf ll", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u7);
+        Utente u8= new Utente("x hh", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u8);
+        Utente u9= new Utente("q jj", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u9);
+        Utente u10= new Utente("p gwe", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u10);
+      
        // System.out.println(+u.toString()+"\n"+u2.toString()+"\n"+u3.toString()+"\n"+u4.toString()+"\n"+u5.toString()+"\n"+u6.toString()+"\n"+u7.toString()+"\n"+u8.toString()+"\n"+u9.toString()+"\n"+u10.toString()+"\n");
     
     
@@ -56,31 +58,32 @@ public class Poopulator {
      */
     FornitoreDAO daof = new FornitoreDAO();
 //        Fornitore f = new Fornitore(fullname, p_iva, indirizzo, tel, email, note)
+//(idfornitore, datareg, fullname, p_iva, indirizzo, tel, email, note)
+        Fornitore b = new Fornitore( "alixpresas", "piva", "via", "333", "@1", "note");
+        daof.add(b);
+        Fornitore b2 = new Fornitore("amanoz", "piva", "via", "333", "@1", "note");
+        daof.add(b2);
+        Fornitore b3 = new Fornitore( "miao", "pina", "via", "333", "@1", "note");
+        daof.add(b3);
+        Fornitore b4 = new Fornitore( "alixpress", "piva", "via", "333", "@1", "note");
+        daof.add(b4);
+        Fornitore b5 = new Fornitore( "alixpreas", "piva", "via", "333", "@1", "note");
+        daof.add(b5);
+        Fornitore b6 = new Fornitore( "alixprsas", "piva", "via", "333", "@1", "note");
+        daof.add(b6);
+        Fornitore b7 = new Fornitore( "alixresas", "piva", "via", "333", "@1", "note");
+        daof.add(b7);
+        Fornitore b8 = new Fornitore("alxpresas", "piva", "via", "333", "@1", "note");
+        daof.add(b8);
+        Fornitore b9 = new Fornitore("lixpresas", "piva", "via", "333", "@1", "note");
+        daof.add(b9);
+        Fornitore b10 = new Fornitore("presas", "piva", "via", "333", "@1", "note");
+        daof.add(b10);
 
-      Fornitore b= new Fornitore("v ii", "cf", "via1", "121", "@1", "pwd");
-        Fornitore b2= new Fornitore("alixpress", "piva", "indirizzo", "tel", "email", "note");
-        Fornitore b3= new Fornitore("alixpress", "piva", "indirizzo", "tel", "email", "note");
-        Fornitore b4= new Fornitore("alixpress", "piva", "indirizzo", "tel", "email", "note");
-        Fornitore b5= new Fornitore("alixpress", "piva", "indirizzo", "tel", "email", "note");
-        Fornitore b6= new Fornitore("alixpress", "piva", "indirizzo", "tel", "email", "note");
-        Fornitore b7= new Fornitore("alixpress", "piva", "indirizzo", "tel", "email", "note");
-        Fornitore b8= new Fornitore("alixpress", "piva", "indirizzo", "tel", "email", "note");
-        Fornitore b9= new Fornitore("alixpress", "piva", "indirizzo", "tel", "email", "note");
-        Fornitore b10= new Fornitore("alixpress", "piva", "indirizzo", "tel", "email", "note");
-        
+  
 
-    daof.add(b);
-    daof.add(b2);
-    daof.add(b3);
-    daof.add(b4);
-    daof.add(b5);
-    daof.add(b6);
-    daof.add(b7);
-    daof.add(b8);
-    daof.add(b9);
-    daof.add(b10);
-    
-    
+
+
         
     
 /**
@@ -89,15 +92,15 @@ public class Poopulator {
 ProdottoDAO daop =new ProdottoDAO();
 //public Prodotto(String nome int qty,String Categoria,int instock, float costo,int qty_min,String note,String foto,int negozio)
     Prodotto p = new Prodotto("1n5088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
-    Prodotto p2 = new Prodotto("1n5088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
-    Prodotto p3 = new Prodotto("1n5088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
-    Prodotto p4 = new Prodotto("1n5088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
-    Prodotto p5 = new Prodotto("1n5088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
-    Prodotto p6 = new Prodotto("1n5088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
-    Prodotto p7 = new Prodotto("1n5088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
-    Prodotto p8 = new Prodotto("1n5088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
-    Prodotto p9 = new Prodotto("1n5088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
-    Prodotto p10 = new Prodotto("1n5088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
+    Prodotto p2 = new Prodotto("1n5098", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
+    Prodotto p3 = new Prodotto("1n508", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
+    Prodotto p4 = new Prodotto("1n88", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
+    Prodotto p5 = new Prodotto("15088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
+    Prodotto p6 = new Prodotto("n5088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
+    Prodotto p7 = new Prodotto("1", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
+    Prodotto p8 = new Prodotto("188", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
+    Prodotto p9 = new Prodotto("1088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
+    Prodotto p10 = new Prodotto("1n58", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
         
         daop.add(p);
         daop.add(p2);
