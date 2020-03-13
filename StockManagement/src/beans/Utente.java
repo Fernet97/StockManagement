@@ -176,26 +176,26 @@ public class Utente {
     }
     
     
-    public String generateData(){
+    public synchronized String generateData(){
           DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 	LocalDateTime now = LocalDateTime.now();
 	System.out.println(dtf.format(now)); //11/11/2019 11:11
         return dtf.format(now);
     }
     
-     public String usergen(){
+     public synchronized String usergen(){
     
             String[] name = getFullname().split(" ");
             name[0] = name[0].substring(0, 1) + "."; 
             return name[0]+name[1];
     }
     
-    private String generateID(){
+    private synchronized String generateID(){
          String idgenerato = usergen() +getCode();
       return idgenerato;
     }
     
-    private int leggiUltimoID(){
+    private synchronized int leggiUltimoID(){
           
              String tmp;
         int idlast;
