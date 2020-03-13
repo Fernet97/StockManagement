@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -34,6 +35,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -88,7 +90,14 @@ public class AnagrafichePanel extends JPanel {
         cerca.add(casella);
         panSopra.add(cerca);
         
-        panSopra.add(new JLabel(" ")); 
+        JPanel panelradio = new JPanel();
+        JRadioButton r1=new JRadioButton("Fornitori");    
+        JRadioButton r2=new JRadioButton("Utenti");  
+        JRadioButton r3=new JRadioButton("Clienti");  
+        ButtonGroup bg=new ButtonGroup();    
+        bg.add(r1);bg.add(r2); bg.add(r3);  
+        panelradio.add(r1); panelradio.add(r2); panelradio.add(r3);
+        panSopra.add(panelradio); 
         
         JButton buttonNew = new JButton("ADD NEW");
         //*************+* BOTTONE AGGIUNGI NUOVA RIGA**************************
@@ -113,7 +122,7 @@ public class AnagrafichePanel extends JPanel {
         TitoloTab1.setLayout(new GridLayout(1,1));
         TitoloTab1.setBorder (new EmptyBorder(0, 100, 20, 100));
 
-          String[] columnNames = { "ID", "Data reg.", "Fullname", "P.IVA/CF","Indirizzo", "Tel/Fax", "email", "Note","Modifica","Cancella"};
+          String[] columnNames = { "ID", "Data reg.", "Fullname", "P.IVA/CF","Indirizzo", "Tel/Fax", "email", "Note","Modifica","Cancella", "Ordina"};
           //Object[][] data = { { "1", "10/12/2019", "Gianfranco Colil", "XXXXXXX","Via campo san giovanni, ITa", "398737892", "cacio@gmail.com", "una descrizione","Modifica","Cancella"} };
           Object[][] data = {};  
           
@@ -146,7 +155,10 @@ public class AnagrafichePanel extends JPanel {
              table.getColumnModel().getColumn(8).setCellEditor(new ClientsTableRenderer(new JCheckBox()));
 
              table.getColumnModel().getColumn(9).setCellRenderer(new ClientsTableButtonRenderer());
-             table.getColumnModel().getColumn(9).setCellEditor(new ClientsTableRenderer(new JCheckBox()));             
+             table.getColumnModel().getColumn(9).setCellEditor(new ClientsTableRenderer(new JCheckBox()));     
+             
+             table.getColumnModel().getColumn(10).setCellRenderer(new ClientsTableButtonRenderer());
+             table.getColumnModel().getColumn(10).setCellEditor(new ClientsTableRenderer(new JCheckBox()));    
 
         JScrollPane sp = new JScrollPane(table); 
         TitoloTab1.add(sp);  
@@ -212,7 +224,7 @@ public class AnagrafichePanel extends JPanel {
             // Aggiorno con le nuove
             for(Fornitore forn: dao.getAll()){
                 
-               model.addRow(new Object[]{ forn.getIdfornitore(), forn.getDatareg(), forn.getFullname(), forn.getP_iva(),forn.getIndirizzo(), forn.getTel(), forn.getEmail(), forn.getNote(),"Modifica","Cancella"});
+               model.addRow(new Object[]{ forn.getIdfornitore(), forn.getDatareg(), forn.getFullname(), forn.getP_iva(),forn.getIndirizzo(), forn.getTel(), forn.getEmail(), forn.getNote(),"Modifica","Cancella", "Ordina"});
 
             
             }
@@ -240,6 +252,7 @@ public class AnagrafichePanel extends JPanel {
       setText((value == null) ? "" : value.toString());
       if(getText().equals("Modifica"))setIcon(ImpostaImg("/res/img/pencil.png")); 
       else if(getText().equals("Cancella")) setIcon(ImpostaImg("/res/img/eraser.png"));
+      else if(getText().equals("Ordina")) setIcon(ImpostaImg("/res/img/ordini.png"));
       
 
       return this;
@@ -279,6 +292,7 @@ public class AnagrafichePanel extends JPanel {
       button.setText(label);
       if(button.getText().equals("Modifica"))  button.setIcon(ImpostaImg("/res/img/pencil.png"));
       else if(button.getText().equals("Cancella"))button.setIcon(ImpostaImg("/res/img/eraser.png"));
+      else if(button.getText().equals("Ordini"))button.setIcon(ImpostaImg("/res/img/ordini.png"));
       clicked = true;
       return button;
     }
@@ -316,11 +330,11 @@ public class AnagrafichePanel extends JPanel {
                     form = new Formanagrafiche("UPDATE", table.getValueAt(row, 0).toString());
                     form.setResizable(false);
                     form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    form.setVisible(true);
+                    form.setVisible(true);              
+              }
               
-              
-              
-              
+             else if(button.getText().equals("Ordina")) { // APRI FORM PER MODIFICARE RECORD
+                   JOptionPane.showMessageDialog(getComponent(), "Vai in ORDINI");
               }
               
               

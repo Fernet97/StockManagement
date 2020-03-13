@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -24,9 +25,13 @@ import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -36,11 +41,13 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import others.RoundedPanel;
 
 /**
@@ -54,6 +61,8 @@ public class OrdiniAdminPanel  extends JPanel{
     private javax.swing.JComboBox<String> jComboBox;
     private DefaultTableModel model;
     private JTable table;
+    private final DefaultTableModel model2;
+    private final JTable table2;
 
     
 
@@ -118,11 +127,20 @@ public class OrdiniAdminPanel  extends JPanel{
         info.setBackground(new Color(151, 109, 248));
         info.add(Box.createRigidArea(new Dimension(50, 10)));
         info.setLayout(new BoxLayout(info, BoxLayout.PAGE_AXIS));
-        JList listcar = new JList(new DefaultListModel<>());
-        JScrollPane scrollPanecar = new JScrollPane(listcar);
-        for (int i = 0; i < 6; i++) ((DefaultListModel) listcar.getModel()).addElement("Prodottoscelto"+String.valueOf(i+"  x2  arriva tra 7 giorni da Amazon"));
-        for (int i = 7; i < 14; i++) ((DefaultListModel) listcar.getModel()).addElement("Prodottoscelto"+String.valueOf(i)+" x1 arriva tra 5 giorni da Ebay");
-        info.add(scrollPanecar);
+  
+        table = new JTable(); 
+        table.setEnabled(false);
+        model = new DefaultTableModel();
+        model.addColumn("SKU");
+        model.addColumn("quantità da ordinare");
+        model.addColumn("Giorni all'arrivo");
+        model.addColumn("Fornitore");
+        table.setModel(model);
+        JScrollPane sp = new JScrollPane(table); 
+        for(int i = 0; i < 40; i++)
+             model.addRow(new Object[]{"XXXXX","8", "Arrivo tra 7 giorni", "Amazon" });  
+        
+        info.add(sp);
         info.add(new JButton("Rimuovi prodotto selezionato"));
 
         infolabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -134,25 +152,40 @@ public class OrdiniAdminPanel  extends JPanel{
         /*** tabella ordin**********/
         JPanel SXdown = new JPanel();
         SXdown.setLayout(new BoxLayout(SXdown, BoxLayout.PAGE_AXIS));    
-        table = new JTable(); 
-        table.setEnabled(false);
-        model = new DefaultTableModel();
-        model.addColumn("ID ordine");
-        model.addColumn("# ordine");    
-        model.addColumn("Data");  
-        model.addColumn("Quantità in arrivo");
-        model.addColumn("Giorni alla consegna");    
-        model.addColumn("Utente ordinante");   
-        model.addColumn("Sku prodotto");  
-        model.addColumn("ID cliente");  
-        model.addColumn("ID Fornitore");  
-        table.setModel(model);
-        JScrollPane sp = new JScrollPane(table); 
-        sp.setBorder(BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (EtchedBorder.RAISED, Color.red, Color.red),"Riepilogo ordini effettuati", TitledBorder.CENTER,TitledBorder.TOP));
-        SXdown.add(sp);
-        for(int i = 0; i < 40; i++)
-             model.addRow(new Object[]{"XXXXX","XXXXX", "XXXXX", "XXXXX","XXXXX","XXXXX", "XXXXX", "XXXXX", "XXXXX" });  
         
+        
+        String[] columnNames = { "# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale ordine","In spedizione", "Riepilogo ordine", "Lista prodotti"};
+
+   
+        Object[][] data = {};
+           
+       model2 = new DefaultTableModel(data, columnNames)
+        {
+            private static final long serialVersionUID = 1L;
+            
+            public boolean isCellEditable(int row, int column)
+            {
+                return column >= 5; //il numero di celle editabili...
+            }
+        };
+        table2 = new JTable(model2); 
+        table2.getTableHeader().setReorderingAllowed(false);
+        model2.addRow(data); // DA CANCELLARE
+        refreshTab(); // Aggiorna tavola con  i fornitori del db;
+
+        table2.getColumnModel().getColumn(4).setCellRenderer(new CustomStockRender());                     
+        
+        table2.getColumnModel().getColumn(5).setCellRenderer(new TableButtonRenderer());
+        table2.getColumnModel().getColumn(5).setCellEditor(new TableRenderer(new JCheckBox()));             
+
+        table2.getColumnModel().getColumn(6).setCellRenderer(new TableButtonRenderer());
+        table2.getColumnModel().getColumn(6).setCellEditor(new TableRenderer(new JCheckBox()));
+
+        
+        JScrollPane sp2 = new JScrollPane(table2); 
+        sp2.setBorder(BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (EtchedBorder.RAISED, Color.red, Color.red),"Riepilogo ordini effettuati", TitledBorder.CENTER,TitledBorder.TOP));
+        SXdown.add(sp2);
+
         princ.add(SXdown);
         
         
@@ -187,6 +220,154 @@ public class OrdiniAdminPanel  extends JPanel{
         super.add(princ);
         
     }
+    
+    
+    public ImageIcon ImpostaImg(String nomeImmag) {
 
+                ImageIcon icon = new ImageIcon((getClass().getResource(nomeImmag)));
+		Image ImmagineScalata = icon.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT);
+		icon.setImage(ImmagineScalata);
+                return icon;
+	}
+
+    private void refreshTab() {
+       model2.setRowCount(0);
+       model2.addRow(new Object[]{"XXXXX","XXXXX", "XXXXX", "154$","true", "view", "" });  
+       model2.addRow(new Object[]{"XXXXX","XXXXX", "XXXXX", "154$","true","view", "" });  
+       model2.addRow(new Object[]{"XXXXX","XXXXX", "XXXXX", "154$","true", "view", "" });  
+       model2.addRow(new Object[]{"XXXXX","XXXXX", "XXXXX", "154$","true", "view", "" });  
+       model2.addRow(new Object[]{"XXXXX","XXXXX", "XXXXX", "154$","true", "view", "" });  
+       model2.addRow(new Object[]{"XXXXX","XXXXX", "XXXXX", "154$","true","view", "" });  
+       model2.addRow(new Object[]{"XXXXX","XXXXX", "XXXXX", "154$","true","view", "" });  
+       model2.addRow(new Object[]{"XXXXX","XXXXX", "XXXXX", "154$","true","view", "" });  
+              
+    }
+
+    
+ 
+ class TableButtonRenderer extends JButton implements TableCellRenderer
+  {
+    public TableButtonRenderer()
+    {
+      setOpaque(true);
+    }
+
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+    {
+      setText((value == null) ? "" : value.toString());
+      if(getText().equals("view"))setIcon(ImpostaImg("/res/img/ordini.png"));
+      else if(getText().equals("")) setIcon(ImpostaImg("/res/img/prodotti.png"));
+      
+
+      return this;
+    }
+    
+  
+    
+  }
+  public class TableRenderer extends DefaultCellEditor
+  {
+    private JButton button;
+    private String label;
+    private boolean clicked;
+    private int row, col;
+    private JTable table;
+
+    public TableRenderer(JCheckBox checkBox)
+    {
+      super(checkBox);
+      button = new JButton();    // ECCO IL BOTTONE
+      button.setOpaque(true);
+      button.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {         
+          System.out.println("APRI FORMMMMm");
+          fireEditingStopped();
+        }
+      });
+    }
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
+    {
+      this.table = table;
+      this.row = row;
+      this.col = column;
+
+   
+      button.setForeground(Color.black);
+      button.setBackground(UIManager.getColor("Button.background"));
+      
+      label = (value == null) ? "" : value.toString();
+      button.setText(label);
+      if(button.getText().equals("view"))button.setIcon(ImpostaImg("/res/img/ordini.png"));
+      else if(button.getText().equals("")) button.setIcon(ImpostaImg("/res/img/prodotti.png"));
+      
+      clicked = true;
+      return button;
+    }
+    
+    public Object getCellEditorValue()
+    {
+      if (clicked)  // SE CLICCATO QUEL BOTTONE:::::::::::::
+      {
+             if(button.getText().equals("Riepilogo ordine")) {
+              
+                   JOptionPane.showMessageDialog(getComponent(), "Vai Riepilogo ordini");
+
+              
+              }
+              else if(button.getText().equals("Lista prodotti")) {
+                   JOptionPane.showMessageDialog(getComponent(), "Vai Lista prodotti");
+              }
+              
+              
+              
+      }
+      clicked = false;
+      return new String(label);
+    }
+
+    public boolean stopCellEditing()
+    {
+      clicked = false;
+      return super.stopCellEditing();
+    }
+
+    protected void fireEditingStopped()
+    {
+      super.fireEditingStopped();
+    }
+  }  
+    
+    
+    
+    
+ class CustomStockRender  extends JButton implements TableCellRenderer {
+
+        public CustomStockRender() {
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            
+           
+           if(Boolean.parseBoolean(table2.getValueAt(row, 4).toString())){
+                setBackground(new Color(126, 169, 93));  // VERDE          
+                       
+           }
+           
+           else setBackground(new Color(244, 80, 37));    // ROSSO 
+           
+            
+           
+           setText("");
+            
+        
+            return this;
+        }        
+    }    
+    
+    
 }
+
 

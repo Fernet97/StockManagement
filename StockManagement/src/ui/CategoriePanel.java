@@ -207,7 +207,7 @@ class CategoriePanel extends JPanel {
 
         public void  refreshTab() throws SQLException{
           
-     
+     /*
             //Cancello vecchie righe...
             System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
             model.setRowCount(0);
@@ -238,7 +238,7 @@ class CategoriePanel extends JPanel {
                 model.addRow(new Object[]{catDinamica,  "DA DEFINIRE", "Vai a prodotti"} ); 
      
             }
-                
+           */     
         }
 
 
@@ -343,28 +343,25 @@ public class AddCategoriaDialog extends JDialog {
         this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
         this.setMinimumSize(new Dimension(500, 100));
         this.name = new JTextField();
+        name.addKeyListener(new KeyAdapter() {
+                    public void keyPressed(java.awt.event.KeyEvent e) {
+                      if (e.getKeyCode()==java.awt.event.KeyEvent.VK_ENTER){
+                           confermaCategoria();
+                      }
+                    }
+                  });
 
         JButton add = new JButton("Conferma nuova categoria");
         add.setForeground(Color.white);
         add.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                if(name.getText().length() < 2) {
-                    JOptionPane.showMessageDialog(getParent(),"La categoria deve avere almeno 2 lettere!");
-                    close();
-                }
-                else{
-                    System.out.println("Hai aggiunto la categoria"+ name.getText());
-                    model.addRow(new Object[]{name.getText(),  "DA DEFINIRE", "Vai a prodotti"} ); 
-                    list_cat_new.add(name.getText());                
-//                    frameprinc.prodotti.list_cat_new.add(name.getText());                
-                    close(); 
-                }
+                confermaCategoria();
             }
         });
                      
                 
-        this.setLayout(new GridLayout(1, 2, 5, 5));
+        this.setLayout(new GridLayout(2, 1, 5, 5));
 
         this.add(name);
         this.add(add);
@@ -375,6 +372,21 @@ public class AddCategoriaDialog extends JDialog {
     private void close(){   this.dispose(); }
 
     public String getName(){    return this.name.getText(); }
+    
+    public void confermaCategoria(){
+   
+                    if(name.getText().length() < 2) {
+                    JOptionPane.showMessageDialog(getParent(),"La categoria deve avere almeno 2 lettere!");
+                    close();
+                }
+                else{
+                    System.out.println("Hai aggiunto la categoria"+ name.getText());
+                    model.addRow(new Object[]{name.getText(),  "DA DEFINIRE", "Vai a prodotti"} ); 
+                    list_cat_new.add(name.getText());                
+//                    frameprinc.prodotti.list_cat_new.add(name.getText());                
+                    close(); 
+                }
+    }
 }  
 
     
