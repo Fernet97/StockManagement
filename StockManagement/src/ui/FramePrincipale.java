@@ -8,6 +8,7 @@ package ui;
 import beans.Prodotto;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
 import dao.ProdottoDAO;
+import dao.UtenteDAO;
 import database.DriverManagerConnectionPool;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -85,10 +86,12 @@ public class FramePrincipale extends JFrame{
     private JTable table;
     private DefaultTableModel model2;
     private JTable table2;
+    public String nomeuser;
     
 
     
-    public FramePrincipale(){
+    public FramePrincipale(String nomeutente){
+           nomeuser = nomeutente;
            CreaGUI();
     }
 
@@ -152,7 +155,9 @@ public class FramePrincipale extends JFrame{
         JLabel TitleLaterale = new JLabel("       DASHBOARD       "); //Per dare ampiezza al jpanel
         TitleLaterale.setFont(new Font("Arial Black", Font.BOLD, 20));
         pannellolaterale.setLayout(new BoxLayout(pannellolaterale, BoxLayout.Y_AXIS));
-        TitleLaterale.setAlignmentX(CENTER_ALIGNMENT);  
+        TitleLaterale.setAlignmentX(CENTER_ALIGNMENT);
+        
+        pannellolaterale.add(new JLabel("Accesso come "+nomeuser));
         pannellolaterale.add(TitleLaterale);
         
         pannelloOpzioni = new JPanel();

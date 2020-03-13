@@ -38,6 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
@@ -397,8 +398,7 @@ public class AnagrafichePanel extends JPanel {
         }       
 
         private void initComponents() {
-            
-            
+                
             // Cliente
             if(tipologia  == 0){
                 
@@ -409,75 +409,90 @@ public class AnagrafichePanel extends JPanel {
                 l.setAlignmentX(CENTER_ALIGNMENT);
                 pancliente.add(l);
                 
-                
-                
+                              
                 JPanel main = new JPanel();
                 main.setLayout(new GridLayout(3, 3, 20, 10));
        
                 JPanel pid = new JPanel();
-                JLabel lid = new JLabel("ID");
+                JLabel lid = new JLabel("    ID ");
                 JTextField casid = new JTextField(15);
+                casid.setAlignmentX(RIGHT_ALIGNMENT);
                 pid.add(lid); pid.add(casid);
                 main.add(pid);
                 
                 JPanel pdatareg = new JPanel();
-                JLabel ldatareg = new JLabel("Data reg.");
+                JLabel ldatareg = new JLabel("Data reg");
                 JTextField casdatareg = new JTextField(15);
+                casdatareg.setAlignmentX(RIGHT_ALIGNMENT);
                 pdatareg.add(ldatareg); pdatareg.add(casdatareg);            
                 main.add(pdatareg);
                 
                 JPanel pfullname = new JPanel();
                 JLabel lfullname = new JLabel("Fullname");
                 JTextField casfullname = new JTextField(15);
+                casfullname.setAlignmentX(RIGHT_ALIGNMENT);
                 pfullname.add(lfullname); pfullname.add(casfullname);
                 main.add(pfullname);
   
                 JPanel piva = new JPanel();
-                JLabel liva = new JLabel("p. IVA");
+                JLabel liva = new JLabel("p.IVA");
                 JTextField casiva = new JTextField(15);
+                casiva.setAlignmentX(RIGHT_ALIGNMENT);
                 piva.add(liva); piva.add(casiva);
                 main.add(piva);  
                 
                 JPanel pindirizzo = new JPanel();
                 JLabel lindirizzo = new JLabel("Indirizzo");
                 JTextField casindirizzo = new JTextField(15);
+                casindirizzo.setAlignmentX(RIGHT_ALIGNMENT);
                 pindirizzo.add(lindirizzo); pindirizzo.add(casindirizzo);
                 main.add(pindirizzo);                  
               
                 JPanel ptel = new JPanel();
-                JLabel ltel = new JLabel("Tel");
+                JLabel ltel = new JLabel("          Tel.");
                 JTextField castel = new JTextField(15);
+                castel.setAlignmentX(RIGHT_ALIGNMENT);
                 ptel.add(ltel); ptel.add(castel);
                 main.add(ptel);                  
     
-               main.add(new JLabel(""));  // PER DARE SPAZIO
-               main.add(new JLabel("")); // PER DARE SPAZIO
+                main.add(new JLabel(""));  // PER DARE SPAZIO
+                main.add(new JLabel("")); // PER DARE SPAZIO
 
                 JPanel pemail = new JPanel();
-                JLabel lemail = new JLabel("Email");
+                JLabel lemail = new JLabel("      Email");
                 JTextField casemail = new JTextField(15);
+                casemail.setAlignmentX(RIGHT_ALIGNMENT);
                 pemail.add(lemail); pemail.add(casemail);
                 main.add(pemail);
                 
-             
-                      
                 pancliente.add(main);
                 
-                JPanel pannote = new JPanel();           
-                JLabel notext = new JLabel("Email");           
-                JTextField note = new JTextField("");
-                pannote.add(notext);
-                pannote.add(note);
-                pancliente.add(pannote);    
+                JPanel pandown = new JPanel();  
+                JLabel notext = new JLabel("Note");           
+                JTextArea note = new JTextArea("");
+                note.setAlignmentX(LEFT_ALIGNMENT);
+                note.setLineWrap (true);
+                note.setRows(5);
+                note.setColumns(20);
+                pandown.add(notext);
+                JScrollPane scrollPane = new JScrollPane(note);
+                pandown.add(scrollPane);
+                
+                pandown.add(new JLabel("                        "));
                 
                 JButton salva = new JButton("Conferma");
                 JButton annulla = new JButton("Annulla");
-                pancliente.add(salva);
-                pancliente.add(annulla);
+   
+                pandown.add(salva);
+                pandown.add(annulla);
                 
+                pancliente.add(pandown);    
+        
+                     
                 add(pancliente);                 
             
             }
+            
              // Fornitore
             if(tipologia  == 1){
 
