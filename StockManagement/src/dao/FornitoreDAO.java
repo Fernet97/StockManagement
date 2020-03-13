@@ -78,8 +78,9 @@ public class FornitoreDAO {
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
-            ps = connection.prepareStatement(selectSQL);
             ps.setString(1, id);// FA RIFERIMENTO AL NOME ED AL NUMERO DELLA COLONNA NEL DB
+            ps = connection.prepareStatement(selectSQL);
+          
 
             ResultSet rs = ps.executeQuery();
 
@@ -114,7 +115,6 @@ public class FornitoreDAO {
 
         String insertSQL = "INSERT INTO " + TABLE_NAME
                 + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        System.out.println("fornitore add " + insertSQL);
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -130,6 +130,7 @@ public class FornitoreDAO {
             preparedStatement.setString(8, b.getNote());
 
             preparedStatement.executeUpdate();
+        System.out.println("fornitore add " + preparedStatement.toString());
 
             connection.commit();
         } finally {
