@@ -34,6 +34,7 @@ public class Utente {
    private String pwd; 
    private int permessi; 
    private String note; 
+   public static  String lastusergen = "";
 
 
    //contructor
@@ -69,8 +70,9 @@ public class Utente {
      */
      public Utente( String fullname, String CF, String indirizzo, String telefono, String email, String pwd, int permessi, String note) {
         
-        this.datareg = datareg;
+//        this.datareg = datareg;;
         this.fullname = fullname;
+         System.out.println("fullname"+ getFullname());
         this.CF = CF;
         this.indirizzo = indirizzo;
         this.telefono = telefono;
@@ -78,9 +80,10 @@ public class Utente {
         this.pwd = pwd;
         this.permessi = permessi;
         this.note = note;
-                 setCode(leggiUltimoID() +1);
+               
 
            setDatareg(generateData());
+           setCode(leggiUltimoID()+1);
            setIdutente(generateID());
            System.out.println("id utente nuovo "+getIdutente());
     }
@@ -90,7 +93,7 @@ public class Utente {
 // getter & setter 
 
     public String getIdutente() {
-        return idutente;
+        return this.idutente;
     }
 
     public void setIdutente(String idutente) {
@@ -106,6 +109,7 @@ public class Utente {
     }
 
     public String getFullname() {
+        System.out.println("diocane"+fullname);
         return fullname;
     }
 
@@ -178,18 +182,16 @@ public class Utente {
     }
     
     
-      public synchronized String generateData(){
-          DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-	LocalDateTime now = LocalDateTime.now();
-	System.out.println(dtf.format(now)); //11/11/2019 11:11
-        return dtf.format(now);
-    }
+
     
-     public synchronized String usergen(){
-    
+     public String usergen(){
+            
+         System.out.println("gtfn "+getFullname());
             String[] name = getFullname().split(" ");
+            
             name[0] = name[0].substring(0, 1) + "."; 
-            return name[0]+name[1];
+            lastusergen = name[0]+name[1];
+            return lastusergen;
     }
      
          public synchronized int leggiUltimoID(){
@@ -200,7 +202,8 @@ public class Utente {
         try {
             UtenteDAO dao = new UtenteDAO();
             
-            String lastid = dao.getLastID().getIdutente();
+            String lastid = dao.getLastID(lastusergen).getIdutente();
+            System.out.println("last id bean "+ lastid);
             //v.manisera1
             if(lastid == null) return 0;
             
@@ -218,9 +221,16 @@ public class Utente {
         return idlast;
     }
          
-              private synchronized String generateID(){
+              private String generateID(){
          String idgenerato = usergen()+getCode();
       return idgenerato;
+    }
+              
+                    public synchronized String generateData(){
+          DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+	LocalDateTime now = LocalDateTime.now();
+	System.out.println(dtf.format(now)); //11/11/2019 11:11
+        return dtf.format(now);
     }
     
 }

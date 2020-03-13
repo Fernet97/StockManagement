@@ -211,53 +211,53 @@ public synchronized void remove (String id) throws SQLException{
 	
 	}
 
-  public synchronized Utente getLastID() throws SQLException{
+  public synchronized Utente getLastID(String id) throws SQLException{
         
-            Connection connection = null;
-            Statement  ps = null;
-           Utente bean = new Utente();
+
+                        Connection connection = null;
+                        PreparedStatement preparedStatement = null;
+
+                        Utente bean = new Utente();
+
+                        String selectSQL = "select * from "+this.TABLE_NAME+"where idutente like '%"+Utente.lastusergen+"%' order by idutente desc limit 1";
+
+                          try {
+                        connection = DriverManagerConnectionPool.getConnection();
+                        preparedStatement = connection.prepareStatement(selectSQL);
+                        preparedStatement.setString(1, id);
+                        ResultSet rs = preparedStatement.executeQuery();
+
+                        while (rs.next()) {
 
 
-//            String query = "select* from "+this.TABLE_NAME+" order by datareg DESC LIMIT 1"; 
-            
-            String query = "select * from "+this.TABLE_NAME+"where idutente like '%"+bean.usergen()+"%' order by idutente desc limit 1";
-                 		try  {
-                                                        connection = DriverManagerConnectionPool.getConnection();
-                                                        ps = connection.prepareStatement(query);
-
-                                                        ResultSet rs = ps.executeQuery(query);
-                                                        
-                                                        while (rs.next()) {
-                                                                                                
-                                                            bean.setIdutente(rs.getString("idutente"));
-                                                            bean.setDatareg(rs.getString("datareg"));
-                                                            bean.setFullname(rs.getString("fullname"));
-                                                            bean.setCF(rs.getString("CF"));
-                                                            bean.setIndirizzo(rs.getString("indirizzo"));
-                                                            bean.setTelefono(rs.getString("tel"));
-                                                            bean.setEmail(rs.getString("email"));
-                                                            bean.setPwd(rs.getString("pwd"));
-                                                            bean.setPermessi(rs.getInt("permessi"));
-                                                            bean.setNote(rs.getString("note"));
+                        bean.setIdutente(rs.getString("idutente"));
+                        bean.setDatareg(rs.getString("datareg"));
+                        bean.setFullname(rs.getString("fullname"));
+                        bean.setCF(rs.getString("CF"));
+                        bean.setIndirizzo(rs.getString("indirizzo"));
+                        bean.setTelefono(rs.getString("tel"));
+                        bean.setEmail(rs.getString("email"));
+                        bean.setPwd(rs.getString("pwd"));
+                        bean.setPermessi(rs.getInt("permessi"));
+                        bean.setNote(rs.getString("note"));
 
 
-                                                                                                  
-                                                                                    }
-                                }
-                                                finally {
-			try {
-                                                                                if (ps != null)
-                                                                                    ps.close();
-                                                                            }
-                                                                          finally {
-                                                                                    DriverManagerConnectionPool.releaseConnection(connection);
-                                                                                    }
-                        
-                                                  }
-                                                return bean;
-        
-        }
-  
+                        }
+
+                } finally {
+                        try {
+                                if (preparedStatement != null)
+                                        preparedStatement.close();
+                        } finally {
+                                DriverManagerConnectionPool.releaseConnection(connection);
+                        }
+                }
+
+                    return bean;          
+            }
+      
+      
+      
   
    
   
