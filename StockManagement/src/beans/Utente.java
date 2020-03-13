@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import static others.Passwordgen.generateRandomPassword;
 
 /**
@@ -67,7 +69,6 @@ public class Utente {
      */
      public Utente( String fullname, String CF, String indirizzo, String telefono, String email, String pwd, int permessi, String note) {
         
-         setCode(leggiUltimoID() +1);
         this.datareg = datareg;
         this.fullname = fullname;
         this.CF = CF;
@@ -77,7 +78,8 @@ public class Utente {
         this.pwd = pwd;
         this.permessi = permessi;
         this.note = note;
-        
+                 setCode(leggiUltimoID() +1);
+
            setDatareg(generateData());
            setIdutente(generateID());
            System.out.println("id utente nuovo "+getIdutente());
@@ -176,7 +178,7 @@ public class Utente {
     }
     
     
-    public synchronized String generateData(){
+      public synchronized String generateData(){
           DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 	LocalDateTime now = LocalDateTime.now();
 	System.out.println(dtf.format(now)); //11/11/2019 11:11
@@ -189,13 +191,8 @@ public class Utente {
             name[0] = name[0].substring(0, 1) + "."; 
             return name[0]+name[1];
     }
-    
-    private synchronized String generateID(){
-         String idgenerato = usergen() +getCode();
-      return idgenerato;
-    }
-    
-    private synchronized int leggiUltimoID(){
+     
+         public synchronized int leggiUltimoID(){
           
              String tmp;
         int idlast;
@@ -220,7 +217,10 @@ public class Utente {
     
         return idlast;
     }
-    
-   
+         
+              private synchronized String generateID(){
+         String idgenerato = usergen()+getCode();
+      return idgenerato;
+    }
     
 }

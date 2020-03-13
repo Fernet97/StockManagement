@@ -219,7 +219,7 @@ public class ProdottoDAO {
         Statement ps = null;
         Prodotto bean = new Prodotto();
 
-        String query = "select* from "+this.TABLE_NAME+" order by datareg DESC LIMIT 1";
+        String query = "select* from "+this.TABLE_NAME+" order by id DESC LIMIT 1";
         
 
         try {

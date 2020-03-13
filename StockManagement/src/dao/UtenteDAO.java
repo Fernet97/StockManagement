@@ -218,7 +218,9 @@ public synchronized void remove (String id) throws SQLException{
            Utente bean = new Utente();
 
 
-            String query = "select* from "+this.TABLE_NAME+" order by datareg DESC LIMIT 1";      
+//            String query = "select* from "+this.TABLE_NAME+" order by datareg DESC LIMIT 1"; 
+            
+            String query = "select * from "+this.TABLE_NAME+"where idutente like '%"+bean.usergen()+"%' order by idutente desc limit 1";
                  		try  {
                                                         connection = DriverManagerConnectionPool.getConnection();
                                                         ps = connection.prepareStatement(query);
@@ -255,4 +257,9 @@ public synchronized void remove (String id) throws SQLException{
                                                 return bean;
         
         }
+  
+  
+   
+  
+
 }

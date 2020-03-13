@@ -27,25 +27,25 @@ public class Poopulator {
  */
         UtenteDAO dao = new UtenteDAO();
 //        (fullname, CF, indirizzo, telefono, email, pwd, permessi, note)
-        Utente u= new Utente("v ii", "cf", "via1", "121", "@1", "pwd",0 , "note");
+        Utente u= new Utente("vittorio manisera", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u);
-        Utente u2= new Utente("g ii", "cf", "via1", "121", "@1", "pwd",0 , "note");
+        Utente u2= new Utente("vittorio manisera", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u2);
-        Utente u3= new Utente("v nn", "cf", "via1", "121", "@1", "pwd",0 , "note");
+        Utente u3= new Utente("pielurigi liguori", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u3);
-        Utente u4= new Utente("v jj", "cf", "via1", "121", "@1", "pwd",0 , "note");
+        Utente u4= new Utente("dario traifuochi", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u4);
-        Utente u5= new Utente("r ds", "cf", "via1", "121", "@1", "pwd",0 , "note");
+        Utente u5= new Utente("labio faino", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u5);
-        Utente u6= new Utente("ef gg", "cf", "via1", "121", "@1", "pwd",0 , "note");
+        Utente u6= new Utente("fabbio caino", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u6);
-        Utente u7= new Utente("vitordf ll", "cf", "via1", "121", "@1", "pwd",0 , "note");
+        Utente u7= new Utente("zoccola puttana", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u7);
-        Utente u8= new Utente("x hh", "cf", "via1", "121", "@1", "pwd",0 , "note");
+        Utente u8= new Utente("meshon cancro", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u8);
-        Utente u9= new Utente("q jj", "cf", "via1", "121", "@1", "pwd",0 , "note");
+        Utente u9= new Utente("vincenzo manisera", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u9);
-        Utente u10= new Utente("p gwe", "cf", "via1", "121", "@1", "pwd",0 , "note");
+        Utente u10= new Utente("babbeo nato", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u10);
       
        // System.out.println(+u.toString()+"\n"+u2.toString()+"\n"+u3.toString()+"\n"+u4.toString()+"\n"+u5.toString()+"\n"+u6.toString()+"\n"+u7.toString()+"\n"+u8.toString()+"\n"+u9.toString()+"\n"+u10.toString()+"\n");

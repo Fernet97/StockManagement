@@ -190,7 +190,7 @@ public class Prodotto {
         this.negozio = negozio;
     }
 
-    public String generateData() {
+    public synchronized String generateData() {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
@@ -199,7 +199,7 @@ public class Prodotto {
 
     }
 
-    public int getCode() {
+    public synchronized int getCode() {
         System.out.println("getcode " + code);
         return code;
     }
@@ -209,18 +209,17 @@ public class Prodotto {
         System.out.println("setcode " + c);
     }
 
-    public String generateSKU() throws InterruptedException {
+    public String generateSKU()  {
         System.out.println("Categoria del nuovo prodotto: " + getCategoria());
         String skuGenerato = getCategoria().substring(0, 2);
         skuGenerato += getCode() + "-";
         skuGenerato += getDatareg();
         System.out.println("skugenerato " + skuGenerato);
-        Thread.sleep(1000);
         return skuGenerato;
 
     }
 
-    public int leggiUltimoSku() {
+    public synchronized int leggiUltimoSku() {
 
         String tmp;
         int idlast;
