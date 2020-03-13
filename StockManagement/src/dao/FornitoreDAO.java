@@ -205,7 +205,7 @@ public class FornitoreDAO {
         Statement ps = null;
         Fornitore bean = new Fornitore();
 
-        String query = "select* from "+this.TABLE_NAME+" order by datareg DESC LIMIT 1";
+        String query = "select* from "+this.TABLE_NAME+" order by idfornitore DESC LIMIT 1";
         try {
             connection = DriverManagerConnectionPool.getConnection();
             ps = connection.prepareStatement(query);

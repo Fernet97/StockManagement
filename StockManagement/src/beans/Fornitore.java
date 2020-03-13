@@ -156,7 +156,7 @@ public class Fornitore {
         Fornitore.code = code;
     }
     
-      private int leggiUltimoID() {
+      private synchronized int leggiUltimoID() {
         String tmp;
         int idlast;
 
@@ -184,7 +184,7 @@ public class Fornitore {
       
       
 
-    public String generateData() {
+    public synchronized String generateData() {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
@@ -195,7 +195,7 @@ public class Fornitore {
     private String generateID() throws InterruptedException {
 
         String idgenerato = "FR-" + getCode();
-        Thread.sleep(1000);
+//        Thread.sleep(1000);
         return idgenerato;
     }
 
