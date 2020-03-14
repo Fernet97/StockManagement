@@ -184,45 +184,41 @@ public class Utente {
     
 
     
-     public String usergen(){
-            
-         System.out.println("gtfn "+getFullname());
-            String[] name = getFullname().split(" ");
-            
-            name[0] = name[0].substring(0, 1) + "."; 
-            lastusergen = name[0]+name[1];
-            return lastusergen;
-    }
+
      
-         public synchronized int leggiUltimoID(){
+         public synchronized int leggiUltimoID() throws NullPointerException{
           
              String tmp;
-        int idlast;
+        int idlast = 0;
+        String lastid;
 
         try {
             UtenteDAO dao = new UtenteDAO();
             
-            String lastid = dao.getLastID(lastusergen).getIdutente();
+             
+                 lastid = dao.getLastID(this.fullname).getIdutente().toString();
             System.out.println("last id bean "+ lastid);
             //v.manisera1
-            if(lastid == null) return 0;
+            
+            if(lastid == null) idlast = 1;
             
 //             String numberOnly= str.replaceAll("[^0-9]", "")
             tmp = lastid.replaceAll("[^0-9]", "");
+            System.out.println("tmp"+ tmp);
             idlast= Integer.parseInt(tmp);
             System.out.println("ID dell'ultimo utente:"+idlast);
     }
                     
          catch (SQLException ex) {
             Logger.getLogger(Utente.class.getName()).log(Level.SEVERE, null, ex);
-            idlast = -99999;
          }
     
         return idlast;
     }
          
               private String generateID(){
-         String idgenerato = usergen()+getCode();
+                  UtenteDAO dao = new UtenteDAO();
+         String idgenerato = UtenteDAO.usergen+getCode();
       return idgenerato;
     }
               

@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static others.Passwordgen.generateRandomPassword;
 
 /**
@@ -22,6 +24,7 @@ import static others.Passwordgen.generateRandomPassword;
  */
 public class UtenteDAO {
     private final String TABLE_NAME = "utente";
+    public static String usergen = "";
         
     public synchronized Collection<Utente> getAll() throws SQLException {
 
@@ -211,20 +214,23 @@ public synchronized void remove (String id) throws SQLException{
 	
 	}
 
-  public synchronized Utente getLastID(String id) throws SQLException{
+  public synchronized Utente getLastID(String fullname) throws SQLException{
         
 
                         Connection connection = null;
                         PreparedStatement preparedStatement = null;
 
                         Utente bean = new Utente();
+                        
+                                    String[] name = fullname.split(" ");
+                                    name[0] = name[0].substring(0, 1) + ".";
+                                    usergen = name[0]+name[1];
 
-                        String selectSQL = "select * from "+this.TABLE_NAME+"where idutente like '%"+Utente.lastusergen+"%' order by idutente desc limit 1";
-
+                        String selectSQL = "select * from "+this.TABLE_NAME+" where idutente like '%"+usergen+"%' order by idutente desc limit 1";
+                        System.out.println("sql "+selectSQL);
                           try {
                         connection = DriverManagerConnectionPool.getConnection();
                         preparedStatement = connection.prepareStatement(selectSQL);
-                        preparedStatement.setString(1, id);
                         ResultSet rs = preparedStatement.executeQuery();
 
                         while (rs.next()) {
@@ -257,7 +263,7 @@ public synchronized void remove (String id) throws SQLException{
             }
       
       
-      
+
   
    
   
