@@ -21,7 +21,7 @@ public class Poopulator {
     
     public static void main(String[] args) throws SQLException, InterruptedException {
 
-//        dbcleaner.main(args);//richiama un depopulator 
+         dbcleaner.main(args);//richiama un depopulator 
 /**
  * utente add
  */

@@ -186,7 +186,7 @@ public class Utente {
     
 
      
-         public synchronized int leggiUltimoID() throws NullPointerException{
+         public synchronized int leggiUltimoID(){
           
              String tmp;
         int idlast = 0;
@@ -197,10 +197,11 @@ public class Utente {
             
              
                  lastid = dao.getLastID(this.fullname).getIdutente().toString();
+                 
             System.out.println("last id bean "+ lastid);
             //v.manisera1
             
-            if(lastid == null) idlast = 1;
+           // if(lastid == null) idlast = 1;
             
 //             String numberOnly= str.replaceAll("[^0-9]", "")
             tmp = lastid.replaceAll("[^0-9]", "");
@@ -211,7 +212,12 @@ public class Utente {
                     
          catch (SQLException ex) {
             Logger.getLogger(Utente.class.getName()).log(Level.SEVERE, null, ex);
+            
          }
+        catch(NullPointerException en){
+        
+            return idlast = 0;
+        }
     
         return idlast;
     }
