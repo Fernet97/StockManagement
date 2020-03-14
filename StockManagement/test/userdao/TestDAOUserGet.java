@@ -38,9 +38,7 @@ public class TestDAOUserGet {
                 Utente byid = dao2.getByID("g.bambino1");
                 System.out.println("getbyid "+byid.getTelefono());
                 
-                UtenteDAO dao3 = new UtenteDAO();
-                Utente last = dao3.getLastID();
-                System.out.println("last "+ last.getIdutente());
+     
             }
                 catch (SQLException ex) {
                     Logger.getLogger(TestDAOUserGet.class.getName()).log(Level.SEVERE, null, ex);

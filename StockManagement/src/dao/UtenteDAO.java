@@ -121,7 +121,7 @@ public class UtenteDAO {
                         PreparedStatement preparedStatement = null;
                         
                         String insertSQL =  "INSERT INTO " +TABLE_NAME
-                                + " VALUES (?, ?, ?, ?, ?, ?, ?, md5(?), ?, ?)";
+                                + " VALUES (?, ?, ?, ?, ?, ?, ?, md5(?), ?, ?, ?)";
                         
                         try {
                                 connection = DriverManagerConnectionPool.getConnection();
@@ -137,6 +137,7 @@ public class UtenteDAO {
                                 preparedStatement.setString(8, generateRandomPassword(10));
                                 preparedStatement.setInt(9, u.getPermessi());
                                 preparedStatement.setString(10, u.getNote());
+                                preparedStatement.setInt(11, u.getCode());
                             
                         
 		
@@ -226,7 +227,7 @@ public synchronized void remove (String id) throws SQLException{
                                     name[0] = name[0].substring(0, 1) + ".";
                                     usergen = name[0]+name[1];
 
-                        String selectSQL = "select * from "+this.TABLE_NAME+" where idutente like '%"+usergen+"%' order by idutente desc limit 1";
+                        String selectSQL = "select * from "+this.TABLE_NAME+" where idutente like '%"+usergen+"%' order by id desc limit 1";
                         System.out.println("sql "+selectSQL);
                           try {
                         connection = DriverManagerConnectionPool.getConnection();
@@ -246,10 +247,11 @@ public synchronized void remove (String id) throws SQLException{
                         bean.setPwd(rs.getString("pwd"));
                         bean.setPermessi(rs.getInt("permessi"));
                         bean.setNote(rs.getString("note"));
+                        bean.setCode(rs.getInt("id"));
 
 
                         }
-
+                              System.out.println("bean to string"+bean.toString());
                 } finally {
                         try {
                                 if (preparedStatement != null)

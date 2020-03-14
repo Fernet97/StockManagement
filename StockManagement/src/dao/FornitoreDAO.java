@@ -114,7 +114,7 @@ public class FornitoreDAO {
         PreparedStatement preparedStatement = null;
 
         String insertSQL = "INSERT INTO " + TABLE_NAME
-                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -128,6 +128,7 @@ public class FornitoreDAO {
             preparedStatement.setString(6, b.getTel());
             preparedStatement.setString(7, b.getEmail());
             preparedStatement.setString(8, b.getNote());
+            preparedStatement.setInt(9, b.getCode());
 
             preparedStatement.executeUpdate();
         System.out.println("fornitore add " + preparedStatement.toString());
@@ -205,7 +206,7 @@ public class FornitoreDAO {
         Statement ps = null;
         Fornitore bean = new Fornitore();
 
-        String query = "select* from "+this.TABLE_NAME+" order by idfornitore DESC LIMIT 1";
+        String query = "select* from "+this.TABLE_NAME+" order by id DESC LIMIT 1";
         try {
             connection = DriverManagerConnectionPool.getConnection();
             ps = connection.prepareStatement(query);
@@ -222,6 +223,7 @@ public class FornitoreDAO {
                 bean.setTel(rs.getString("tel"));
                 bean.setEmail(rs.getString("email"));
                 bean.setNote(rs.getString("note"));
+                bean.setCode(rs.getInt("id"));
 
             }
         } finally {

@@ -22,6 +22,10 @@ public class Poopulator {
     public static void main(String[] args) throws SQLException, InterruptedException {
 
          dbcleaner.main(args);//richiama un depopulator 
+
+
+            
+        
 /**
  * utente add
  */
@@ -92,25 +96,27 @@ public class Poopulator {
 ProdottoDAO daop =new ProdottoDAO();
 //public Prodotto(String nome int qty,String Categoria,int instock, float costo,int qty_min,String note,String foto,int negozio)
     Prodotto p = new Prodotto("1n5088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
+           daop.add(p);
     Prodotto p2 = new Prodotto("1n5098", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
-    Prodotto p3 = new Prodotto("1n508", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
-    Prodotto p4 = new Prodotto("1n88", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
-    Prodotto p5 = new Prodotto("15088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
-    Prodotto p6 = new Prodotto("n5088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
+            daop.add(p2);
+    Prodotto p3 = new Prodotto("1n508", 10, "transistor", 1, 10.5f, 2, "note","foto", 1);
+            daop.add(p3);
+    Prodotto p4 = new Prodotto("1n88", 10, "reisitenzasii", 1, 10.5f, 2, "note","foto", 1);
+            daop.add(p4);
+    Prodotto p5 = new Prodotto("15088", 10, "optocpo", 1, 10.5f, 2, "note","foto", 1);
+            daop.add(p5);
+    Prodotto p6 = new Prodotto("n5088", 10, "condens pol", 1, 10.5f, 2, "note","foto", 1);
+            daop.add(p6);
     Prodotto p7 = new Prodotto("1", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
+            daop.add(p7);
     Prodotto p8 = new Prodotto("188", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
+            daop.add(p8);
     Prodotto p9 = new Prodotto("1088", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
+            daop.add(p9);
     Prodotto p10 = new Prodotto("1n58", 10, "diodi", 1, 10.5f, 2, "note","foto", 1);
-        
-        daop.add(p);
-        daop.add(p2);
-        daop.add(p3);
-        daop.add(p4);
-        daop.add(p5);
-        daop.add(p6);
-        daop.add(p7);
-        daop.add(p8);
-        daop.add(p9);
-        daop.add(p10);
+            daop.add(p10);
+
         }  
+        
+    
 }

@@ -119,7 +119,7 @@ public class ProdottoDAO {
         Connection connection = null;
         PreparedStatement ps = null;
 
-        String insertSQL = "INSERT INTO " + this.TABLE_NAME + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertSQL = "INSERT INTO " + this.TABLE_NAME + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -136,6 +136,7 @@ public class ProdottoDAO {
                 ps.setString(9, b.getNote());
                 ps.setString(10, b.getFoto());
                 ps.setInt(11, b.isNegozio());
+                ps.setInt(12, b.getCode());
            
 
             System.out.println("prodotto add " + b.toString());
@@ -241,6 +242,7 @@ public class ProdottoDAO {
                 bean.setNote(rs.getString("note"));
                 bean.setFoto(rs.getString("foto"));
                 bean.setNegozio(rs.getInt("negozio"));
+                bean.setCode(rs.getInt("id"));
             }
         } finally {
             try {

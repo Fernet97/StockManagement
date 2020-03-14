@@ -223,7 +223,6 @@ public class Utente {
     }
          
               private String generateID(){
-                  UtenteDAO dao = new UtenteDAO();
          String idgenerato = UtenteDAO.usergen+getCode();
       return idgenerato;
     }
