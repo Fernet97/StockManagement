@@ -20,6 +20,7 @@ public class Ordine {
     private String prodotto_sku;
     private int fk_cliente;
     private String fk_fornitore;
+    String tipo;
     
 /**
  * 
@@ -58,6 +59,83 @@ public class Ordine {
         this.giorni_alla_consegna = giorni_alla_consegna;
         this.prodotto_sku = prodotto_sku;
         this.fk_cliente = fk_cliente;
+        this.fk_fornitore = fk_fornitore;
+    }
+
+    public Ordine() {
+    }
+    
+    
+
+    public int getIdordine() {
+        return idordine;
+    }
+
+    public void setIdordine(int idordine) {
+        this.idordine = idordine;
+    }
+
+    public String getN_ordine() {
+        return n_ordine;
+    }
+
+    public void setN_ordine(String n_ordine) {
+        this.n_ordine = n_ordine;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public int getQty_in_arrivo() {
+        return qty_in_arrivo;
+    }
+
+    public void setQty_in_arrivo(int qty_in_arrivo) {
+        this.qty_in_arrivo = qty_in_arrivo;
+    }
+
+    public int getGiorni_alla_consegna() {
+        return giorni_alla_consegna;
+    }
+
+    public void setGiorni_alla_consegna(int giorni_alla_consegna) {
+        this.giorni_alla_consegna = giorni_alla_consegna;
+    }
+
+    public String getFk_utente() {
+        return fk_utente;
+    }
+
+    public void setFk_utente(String fk_utente) {
+        this.fk_utente = fk_utente;
+    }
+
+    public String getProdotto_sku() {
+        return prodotto_sku;
+    }
+
+    public void setProdotto_sku(String prodotto_sku) {
+        this.prodotto_sku = prodotto_sku;
+    }
+
+    public int getFk_cliente() {
+        return fk_cliente;
+    }
+
+    public void setFk_cliente(int fk_cliente) {
+        this.fk_cliente = fk_cliente;
+    }
+
+    public String getFk_fornitore() {
+        return fk_fornitore;
+    }
+
+    public void setFk_fornitore(String fk_fornitore) {
         this.fk_fornitore = fk_fornitore;
     }
     

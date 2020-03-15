@@ -5,16 +5,12 @@
  */
 package beans;
 
-import static com.sun.org.apache.xalan.internal.lib.ExsltStrings.split;
 import dao.UtenteDAO;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import static others.Passwordgen.generateRandomPassword;
 
 /**
  *
@@ -33,8 +29,7 @@ public class Utente {
     private String pwd;
     private int permessi;
     private String note;
-    public static String lastusergen = "";
-    private String tipo;
+    public static final String tipo = "Utente";
 
     //contructor
 //costruttore con utente
@@ -55,9 +50,9 @@ public class Utente {
         this.note = note;
 
         setDatareg(generateData());
-        
-        tipo = "Utente";
-        
+
+
+
     }
 
     /**
@@ -81,21 +76,19 @@ public class Utente {
         setCode(leggiUltimoID() + 1);
         setIdutente(generateID());
         System.out.println("id utente nuovo " + getIdutente());
-        
-        tipo = "Utente";
+
+
 
     }
 
     public Utente() {
-      tipo = "Utente";
-
     }
 
+// getter & setter 
     public String getTipo() {
         return tipo;
     }
 
-// getter & setter 
     public String getIdutente() {
         return this.idutente;
     }
