@@ -19,6 +19,7 @@ public class Cliente {
     private String tel;
     private String email;
     private String note;
+    private String tipo;
 
     /**
      * 
@@ -40,6 +41,7 @@ public class Cliente {
         this.tel = tel;
         this.email = email;
         this.note = note;
+        tipo = "Cliente";
     }
 
     
@@ -59,6 +61,13 @@ public class Cliente {
         this.tel = tel;
         this.email = email;
         this.note = note;
+        tipo = "Cliente";
+
+    }
+    
+   
+    public String getTipo(){
+        return tipo;
     }
 
     public int getIdcliente() {

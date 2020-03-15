@@ -5,7 +5,6 @@
  */
 package beans;
 
-
 import static com.sun.org.apache.xalan.internal.lib.ExsltStrings.split;
 import dao.UtenteDAO;
 import java.sql.SQLException;
@@ -22,32 +21,29 @@ import static others.Passwordgen.generateRandomPassword;
  * @author LittleJoke
  */
 public class Utente {
-   
-   private static int code = 0 ;
-   private String idutente; 
-   private String datareg;
-   private String fullname; 
-   private String CF;
-   private String indirizzo; 
-   private String telefono; 
-   private String email; 
-   private String pwd; 
-   private int permessi; 
-   private String note; 
-   public static  String lastusergen = "";
 
+    private static int code = 0;
+    private String idutente;
+    private String datareg;
+    private String fullname;
+    private String CF;
+    private String indirizzo;
+    private String telefono;
+    private String email;
+    private String pwd;
+    private int permessi;
+    private String note;
+    public static String lastusergen = "";
+    private String tipo;
 
-   //contructor
+    //contructor
 //costruttore con utente
-   
-       /** 
-     * costruttore con id
-     * usato in genere per l'update
-     * Necessita di id perche serve alla ricerca del codice univoco di identificazione
-     * **end**
+    /**
+     * costruttore con id usato in genere per l'update Necessita di id perche
+     * serve alla ricerca del codice univoco di identificazione **end**
      */
-    public Utente(String idutente, String fullname, String CF, String indirizzo, String telefono, String email, String pwd, int permessi, String note) {
-      
+    public Utente(String idutente, String datareg, String fullname, String CF, String indirizzo, String telefono, String email, String pwd, int permessi, String note) {
+
         this.datareg = datareg;
         this.fullname = fullname;
         this.CF = CF;
@@ -57,22 +53,22 @@ public class Utente {
         this.pwd = pwd;
         this.permessi = permessi;
         this.note = note;
+
+        setDatareg(generateData());
         
-           setDatareg(generateData());
+        tipo = "Utente";
+        
     }
-    
-    /** 
-     * costruttore senza id
-     * usato per l'add
-     * add non necessita di id perche
-     * autogenera il codice id univoco
-     * **end**
+
+    /**
+     * costruttore senza id usato per l'add add non necessita di id perche
+     * autogenera il codice id univoco **end**
      */
-     public Utente( String fullname, String CF, String indirizzo, String telefono, String email, String pwd, int permessi, String note) {
-        
+    public Utente(String fullname, String CF, String indirizzo, String telefono, String email, String pwd, int permessi, String note) {
+
 //        this.datareg = datareg;;
         this.fullname = fullname;
-         System.out.println("fullname"+ getFullname());
+        System.out.println("fullname" + getFullname());
         this.CF = CF;
         this.indirizzo = indirizzo;
         this.telefono = telefono;
@@ -80,18 +76,26 @@ public class Utente {
         this.pwd = pwd;
         this.permessi = permessi;
         this.note = note;
-               
 
-           setDatareg(generateData());
-           setCode(leggiUltimoID()+1);
-           setIdutente(generateID());
-           System.out.println("id utente nuovo "+getIdutente());
+        setDatareg(generateData());
+        setCode(leggiUltimoID() + 1);
+        setIdutente(generateID());
+        System.out.println("id utente nuovo " + getIdutente());
+        
+        tipo = "Utente";
+
     }
 
-    public Utente() { }
+    public Utente() {
+      tipo = "Utente";
+
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
 
 // getter & setter 
-
     public String getIdutente() {
         return this.idutente;
     }
@@ -109,7 +113,7 @@ public class Utente {
     }
 
     public String getFullname() {
-        System.out.println("diocane"+fullname);
+        System.out.println("diocane" + fullname);
         return fullname;
     }
 
@@ -180,58 +184,48 @@ public class Utente {
     public static void setCode(int code) {
         Utente.code = code;
     }
-    
-    
 
-    
+    public synchronized int leggiUltimoID() {
 
-     
-         public synchronized int leggiUltimoID(){
-          
-             String tmp;
+        String tmp;
         int idlast = 0;
         String lastid;
 
         try {
             UtenteDAO dao = new UtenteDAO();
-            
-             
-                 lastid = dao.getLastID(this.fullname).getIdutente().toString();
-                 
-            System.out.println("last id bean "+ lastid);
+
+            lastid = dao.getLastID(this.fullname).getIdutente().toString();
+
+            System.out.println("last id bean " + lastid);
             //v.manisera1
-            
-           // if(lastid == null) idlast = 1;
-            
+
+            // if(lastid == null) idlast = 1;
 //             String numberOnly= str.replaceAll("[^0-9]", "")
             tmp = lastid.replaceAll("[^0-9]", "");
-            System.out.println("tmp"+ tmp);
-            idlast= Integer.parseInt(tmp);
-            System.out.println("ID dell'ultimo utente:"+idlast);
-    }
-                    
-         catch (SQLException ex) {
+            System.out.println("tmp" + tmp);
+            idlast = Integer.parseInt(tmp);
+            System.out.println("ID dell'ultimo utente:" + idlast);
+        } catch (SQLException ex) {
             Logger.getLogger(Utente.class.getName()).log(Level.SEVERE, null, ex);
-            
-         }
-        catch(NullPointerException en){
-        
+
+        } catch (NullPointerException en) {
+
             return idlast = 0;
         }
-    
+
         return idlast;
     }
-         
-              private String generateID(){
-         String idgenerato = UtenteDAO.usergen+getCode();
-      return idgenerato;
+
+    private String generateID() {
+        String idgenerato = UtenteDAO.usergen + getCode();
+        return idgenerato;
     }
-              
-                    public synchronized String generateData(){
-          DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-	LocalDateTime now = LocalDateTime.now();
-	System.out.println(dtf.format(now)); //11/11/2019 11:11
+
+    public synchronized String generateData() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(dtf.format(now)); //11/11/2019 11:11
         return dtf.format(now);
     }
-    
+
 }

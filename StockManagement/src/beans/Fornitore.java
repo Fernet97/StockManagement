@@ -27,6 +27,7 @@ public class Fornitore {
     private String tel;
     private String email;
     private String note;
+    private String tipo;
 
     /**
      *
@@ -41,7 +42,6 @@ public class Fornitore {
      */
     public Fornitore(String idfornitore, String datareg, String fullname, String p_iva, String indirizzo, String tel, String email, String note) throws InterruptedException {
 
-
         this.datareg = datareg;
         this.fullname = fullname;
         this.p_iva = p_iva;
@@ -53,10 +53,13 @@ public class Fornitore {
         setIdfornitore(generateID());
         setDatareg(generateData());
         System.out.println("ID del nuovo fornitore:" + getIdfornitore());
+        
+        tipo = "Fornitore";
+
     }
 
     /**
-     * 
+     *
      *
      * @param fullname
      * @param p_iva
@@ -73,14 +76,21 @@ public class Fornitore {
         this.email = email;
         this.note = note;
 
-         setCode(leggiUltimoID() + 1);
+        setCode(leggiUltimoID() + 1);
         setIdfornitore(generateID());
-         setDatareg(generateData());
+        setDatareg(generateData());
         System.out.println("ID del nuovo fornitore:" + getIdfornitore());
+        tipo = "Fornitore";
+        
     }
 
     public Fornitore() {
+        tipo = "Fornitore";
 
+    }
+
+    public String getTipo() {
+        return tipo;
     }
 
     // getter & setter
@@ -155,8 +165,8 @@ public class Fornitore {
     public static void setCode(int code) {
         Fornitore.code = code;
     }
-    
-      private synchronized int leggiUltimoID() {
+
+    private synchronized int leggiUltimoID() {
         String tmp;
         int idlast;
 
@@ -181,8 +191,6 @@ public class Fornitore {
         return idlast;
 
     }
-      
-      
 
     public synchronized String generateData() {
 
@@ -198,7 +206,5 @@ public class Fornitore {
 //        Thread.sleep(1000);
         return idgenerato;
     }
-
-  
 
 }
