@@ -287,52 +287,56 @@ public class AnagrafichePanel extends JPanel {
                         System.out.println("OOOOOOOOKKKKKK CANCELLO");
 
                         if (table.getValueAt(row, 0).toString().equals("Fornitore")) {
-                            FornitoreDAO dao = new FornitoreDAO();                       
+                            FornitoreDAO dao = new FornitoreDAO();
                             try {
-                            dao.remove(table.getValueAt(row, 1).toString());
-                            refreshTab();
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(getComponent(), "Se vuoi cancellare un fornitore, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");
-                            e.printStackTrace();
+                                dao.remove(table.getValueAt(row, 1).toString());
+                                refreshTab();
+                            } catch (Exception e) {
+                                JOptionPane.showMessageDialog(getComponent(), "Se vuoi cancellare un fornitore, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");
+                                e.printStackTrace();
 
-                        }
+                            }
                         }
 
                         if (table.getValueAt(row, 0).toString().equals("Utente")) {
-                            UtenteDAO dao = new UtenteDAO();                       
+                            UtenteDAO dao = new UtenteDAO();
                             try {
-                            dao.remove(table.getValueAt(row, 1).toString());
-                            refreshTab();
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(getComponent(), "Se vuoi cancellare un Utente, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");
-                            e.printStackTrace();
+                                dao.remove(table.getValueAt(row, 1).toString());
+                                refreshTab();
+                            } catch (Exception e) {
+                                JOptionPane.showMessageDialog(getComponent(), "Se vuoi cancellare un Utente, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");
+                                e.printStackTrace();
 
+                            }
                         }
-                        }                        
 
                         if (table.getValueAt(row, 0).toString().equals("Cliente")) {
-                            ClienteDAO dao = new ClienteDAO();                       
+                            ClienteDAO dao = new ClienteDAO();
                             try {
-                            //dao.remove(table.getValueAt(row, 1).toString());
-                            refreshTab();
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(getComponent(), "Se vuoi cancellare un cliente, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");
-                            e.printStackTrace();
+                                //dao.remove(table.getValueAt(row, 1).toString());
+                                refreshTab();
+                            } catch (Exception e) {
+                                JOptionPane.showMessageDialog(getComponent(), "Se vuoi cancellare un cliente, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");
+                                e.printStackTrace();
 
+                            }
                         }
-                        }                           
-                        
 
                     }
-                } else if (button.getText().equals("Modifica")) { 
-                    
-                    if (table.getValueAt(row, 0).toString().equals("Cliente")) form = new Formanagrafiche(0, "UPDATE", table.getValueAt(row, 1).toString());
-                    if (table.getValueAt(row, 0).toString().equals("Fornitore")) form = new Formanagrafiche(1, "UPDATE", table.getValueAt(row, 1).toString());                    
-                    if (table.getValueAt(row, 0).toString().equals("Utente")) form = new Formanagrafiche(2, "UPDATE", table.getValueAt(row, 1).toString());                         
-                        form.setResizable(false);
-                        form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                        form.setVisible(true);
-                    
+                } else if (button.getText().equals("Modifica")) {
+
+                    if (table.getValueAt(row, 0).toString().equals("Cliente")) {
+                        form = new Formanagrafiche(0, "UPDATE", table.getValueAt(row, 1).toString());
+                    }
+                    if (table.getValueAt(row, 0).toString().equals("Fornitore")) {
+                        form = new Formanagrafiche(1, "UPDATE", table.getValueAt(row, 1).toString());
+                    }
+                    if (table.getValueAt(row, 0).toString().equals("Utente")) {
+                        form = new Formanagrafiche(2, "UPDATE", table.getValueAt(row, 1).toString());
+                    }
+                    form.setResizable(false);
+                    form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    form.setVisible(true);
 
                 } else if (button.getText().equals("Ordina")) { // APRI FORM PER MODIFICARE RECORD
                     JOptionPane.showMessageDialog(getComponent(), "Vai in ORDINI");
@@ -511,7 +515,9 @@ public class AnagrafichePanel extends JPanel {
                 JButton annulla = new JButton("Annulla");
                 annulla.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                       
+                        form.setVisible(false);
+                        form = null;
+
                     }
                 });
 
@@ -628,6 +634,9 @@ public class AnagrafichePanel extends JPanel {
                 JButton annulla = new JButton("Annulla");
                 annulla.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
+                        form.setVisible(false);
+                        form = null;
+
                     }
                 });
 
@@ -768,6 +777,9 @@ public class AnagrafichePanel extends JPanel {
                 JButton annulla = new JButton("Annulla");
                 annulla.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
+                        form.setVisible(false);
+                        form = null;
+
                     }
                 });
 
@@ -783,7 +795,9 @@ public class AnagrafichePanel extends JPanel {
         }
 
         private void setFormAsID(String idSelected) {
-
+            
+            // FORNITORE
+            if(tipologia == 1){
             FornitoreDAO dao = new FornitoreDAO();
 
             try {
@@ -803,6 +817,42 @@ public class AnagrafichePanel extends JPanel {
             }
 
         }
+            
+            // UTENTE
+            if(tipologia == 2){
+            
+              UtenteDAO dao = new UtenteDAO();
+
+            try {
+                Utente u = dao.getByID(idSelected);
+
+                casid.setText(u.getIdutente());
+                casdatareg.setText(u.getDatareg());
+                casfullname.setText(u.getFullname());
+                cascfiva.setText(u.getCF());
+                caspwd.setText(u.getPwd());
+                casindirizzo.setText(u.getIndirizzo());
+                castel.setText(u.getTelefono());
+                casemail.setText(u.getEmail());
+                note.setText(u.getNote());
+
+            } catch (SQLException ex) {
+                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }          
+             
+            
+            }
+        
+        
+        
+        
+        
+        
+        
+        }
+        
+        
+        
 
         public boolean check() {
 
@@ -811,10 +861,15 @@ public class AnagrafichePanel extends JPanel {
                 JOptionPane.showMessageDialog(this, "Riempi tutti i campi! ['Note' è opzionale]");
                 if (castel.getText().length() >= 15) {
                     JOptionPane.showMessageDialog(this, "Numero di telefono troppo lungo");
-
                     return false;
                 }
                 return false;
+            }
+            
+            // SE NON C'E' UN NOME E UN COGNOME (CI DEVE ESSERE UNO SPAZIO)
+            if(casfullname.getText().matches("\\S+")){
+                    JOptionPane.showMessageDialog(this, "Bisogna specificare un nome e un cognome!");
+                    return false;                
             }
 
             return true;
@@ -855,6 +910,7 @@ public class AnagrafichePanel extends JPanel {
                 // Utente
                 if (tipologia == 2) {
                     UtenteDAO dao = new UtenteDAO();
+                    System.out.println("Utente che sto per scrivere:"+casfullname.getText()+""+cascfiva.getText()+""+casindirizzo.getText()+""+castel.getText()+""+casemail.getText()+""+caspwd.getText()+""+permess.getSelectedIndex()+""+note.getText());
                     uten = new Utente(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), caspwd.getText(), permess.getSelectedIndex(), note.getText());
 
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
@@ -942,14 +998,26 @@ public class AnagrafichePanel extends JPanel {
         System.out.println("Numero di  record prima dell'aggiornamento  " + model.getRowCount());
         model.setRowCount(0);
 
-        FornitoreDAO dao = new FornitoreDAO();
+        FornitoreDAO daof = new FornitoreDAO();
+        UtenteDAO daou = new UtenteDAO();
 
         // Aggiorno con le nuove
-        for (Fornitore forn : dao.getAll()) {
+        for (Fornitore forn : daof.getAll()) {
 
             model.addRow(new Object[]{forn.getTipo(), forn.getIdfornitore(), forn.getDatareg(), forn.getFullname(), forn.getP_iva(), forn.getIndirizzo(), forn.getTel(), forn.getEmail(), forn.getNote(), "Modifica", "Cancella", "Ordina"});
 
         }
+
+        // Aggiorno con le nuove
+        for (Utente utente : daou.getAll()) {
+
+            model.addRow(new Object[]{utente.getTipo(), utente.getIdutente(), utente.getDatareg(), utente.getFullname(), utente.getCF(), utente.getIndirizzo(), utente.getTelefono(), utente.getEmail(), utente.getNote(), "Modifica", "Cancella", "Ordina"});
+
+        }        
+        
+        
+        
+        
         System.out.println("Numero di  record prima dell'aggiornamento  " + model.getRowCount());
 
     }

@@ -74,11 +74,11 @@ public class FornitoreDAO {
 
         Fornitore bean = new Fornitore();
 
-        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE idfornitore = ?";
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE idfornitore = '"+id+"'";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
-            ps.setString(1, id);// FA RIFERIMENTO AL NOME ED AL NUMERO DELLA COLONNA NEL DB
+            //ps.setString(1, id);// FA RIFERIMENTO AL NOME ED AL NUMERO DELLA COLONNA NEL DB
             ps = connection.prepareStatement(selectSQL);
           
 

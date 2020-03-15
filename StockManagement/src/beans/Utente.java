@@ -39,6 +39,7 @@ public class Utente {
      */
     public Utente(String idutente, String datareg, String fullname, String CF, String indirizzo, String telefono, String email, String pwd, int permessi, String note) {
 
+        this.idutente = idutente;
         this.datareg = datareg;
         this.fullname = fullname;
         this.CF = CF;
