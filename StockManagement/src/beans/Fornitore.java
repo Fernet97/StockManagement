@@ -49,8 +49,7 @@ public class Fornitore {
         this.tel = tel;
         this.email = email;
         this.note = note;
-        setCode(leggiUltimoID() + 1);
-        setIdfornitore(generateID());
+        this.idfornitore = idfornitore;
         setDatareg(generateData());
         System.out.println("ID del nuovo fornitore:" + getIdfornitore());
         

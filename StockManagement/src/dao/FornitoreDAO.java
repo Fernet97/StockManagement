@@ -73,12 +73,11 @@ public class FornitoreDAO {
         PreparedStatement ps = null;
 
         Fornitore bean = new Fornitore();
-
-        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE idfornitore = ?";
-
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE idfornitore ='"+id+"'";
+        System.out.println("QUERY:"+selectSQL);
         try {
             connection = DriverManagerConnectionPool.getConnection();
-            ps.setString(1, id);// FA RIFERIMENTO AL NOME ED AL NUMERO DELLA COLONNA NEL DB
+//            ps.setString(1, id);// FA RIFERIMENTO AL NOME ED AL NUMERO DELLA COLONNA NEL DB
             ps = connection.prepareStatement(selectSQL);
           
 
@@ -222,7 +221,6 @@ public class FornitoreDAO {
                 bean.setTel(rs.getString("tel"));
                 bean.setEmail(rs.getString("email"));
                 bean.setNote(rs.getString("note"));
-                bean.setCode(rs.getInt("id"));
 
             }
         } finally {
