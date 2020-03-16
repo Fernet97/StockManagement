@@ -27,7 +27,7 @@ public class Fornitore {
     private String tel;
     private String email;
     private String note;
-    private String tipo;
+public static final String tipo = "Fornitore";
 
     /**
      *
@@ -53,7 +53,7 @@ public class Fornitore {
         setDatareg(generateData());
         System.out.println("ID del nuovo fornitore:" + getIdfornitore());
         
-        tipo = "Fornitore";
+       
 
     }
 
@@ -79,12 +79,11 @@ public class Fornitore {
         setIdfornitore(generateID());
         setDatareg(generateData());
         System.out.println("ID del nuovo fornitore:" + getIdfornitore());
-        tipo = "Fornitore";
+
         
     }
 
     public Fornitore() {
-        tipo = "Fornitore";
 
     }
 

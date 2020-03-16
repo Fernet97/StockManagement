@@ -19,7 +19,7 @@ public class Cliente {
     private String tel;
     private String email;
     private String note;
-    private String tipo;
+public static final String tipo = "Cliente";
 
     /**
      * 
@@ -41,7 +41,7 @@ public class Cliente {
         this.tel = tel;
         this.email = email;
         this.note = note;
-        tipo = "Cliente";
+
     }
 
     
@@ -61,7 +61,7 @@ public class Cliente {
         this.tel = tel;
         this.email = email;
         this.note = note;
-        tipo = "Cliente";
+
 
     }
 
