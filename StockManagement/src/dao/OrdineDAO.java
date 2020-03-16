@@ -20,8 +20,7 @@ import java.util.LinkedList;
  * @author LittleJoke
  */
 public class OrdineDAO {
-    
-    
+
     private final String TABLE_NAME = "ordine";
 
     public synchronized Collection<Ordine> getAll() throws SQLException {
@@ -31,7 +30,7 @@ public class OrdineDAO {
 
         Collection<Ordine> ordini = new LinkedList<Ordine>();
 
-        String selectSQL = "select* from "+this.TABLE_NAME+"";
+        String selectSQL = "select* from " + this.TABLE_NAME + "";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -41,15 +40,14 @@ public class OrdineDAO {
 
             while (rs.next()) {
                 Ordine bean = new Ordine();
-              bean.setIdordine(rs.getInt("idordine"));
-              bean.setN_ordine(rs.getString("n_ordine"));
-              bean.setData(rs.getString("data"));
-              bean.setQty_in_arrivo(rs.getInt("qty_in_arrivo"));
-              bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
-              bean.setFk_utente(rs.getString("fk_utente"));
-              bean.setProdotto_sku(rs.getString("prodotto_sku"));
-              bean.setFk_cliente(rs.getInt("fk_cliente"));
-              bean.setFk_fornitore(rs.getString("fk_fornitore"));
+                bean.setN_ordine(rs.getString("n_ordine"));
+                bean.setData(rs.getString("data"));
+                bean.setQty_in_arrivo(rs.getInt("qty_in_arrivo"));
+                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
+                bean.setFk_utente(rs.getString("fk_utente"));
+                bean.setProdotto_sku(rs.getString("prodotto_sku"));
+                bean.setFk_cliente(rs.getInt("fk_cliente"));
+                bean.setFk_fornitore(rs.getString("fk_fornitore"));
 
                 ordini.add(bean);
 
@@ -75,7 +73,7 @@ public class OrdineDAO {
 
         Ordine bean = new Ordine();
         //SELECT * FROM prodotti WHERE sku = '1';
-        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE n_ordine = "+n_ordine+"";
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE n_ordine = " + n_ordine + "";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -85,15 +83,14 @@ public class OrdineDAO {
 
             while (rs.next()) {
 
-                         bean.setIdordine(rs.getInt("idordine"));
-              bean.setN_ordine(rs.getString("n_ordine"));
-              bean.setData(rs.getString("data"));
-              bean.setQty_in_arrivo(rs.getInt("qty_in_arrivo"));
-              bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
-              bean.setFk_utente(rs.getString("fk_utente"));
-              bean.setProdotto_sku(rs.getString("prodotto_sku"));
-              bean.setFk_cliente(rs.getInt("fk_cliente"));
-              bean.setFk_fornitore(rs.getString("fk_fornitore"));
+                bean.setN_ordine(rs.getString("n_ordine"));
+                bean.setData(rs.getString("data"));
+                bean.setQty_in_arrivo(rs.getInt("qty_in_arrivo"));
+                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
+                bean.setFk_utente(rs.getString("fk_utente"));
+                bean.setProdotto_sku(rs.getString("prodotto_sku"));
+                bean.setFk_cliente(rs.getInt("fk_cliente"));
+                bean.setFk_fornitore(rs.getString("fk_fornitore"));
 
             }
         } finally {
@@ -110,63 +107,41 @@ public class OrdineDAO {
     }
 
     public synchronized void add(Ordine o) throws SQLException {
-        Connection connection = null;
-        PreparedStatement ps = null;
-        
+       Connection connection = null;
+        Statement statement = null;
 
-Collection<Ordine> ordini = new LinkedList<Ordine>();
-        String insertSQL = "INSERT INTO " + this.TABLE_NAME + " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO "+this.TABLE_NAME+" (`n_ordine`, `data`, `qty_in_arrivo`, `giorni_alla_consegna`, "
+                                                                                + "`fk_utente`, `prodotto_sku`, `fk_cliente`, `fk_fornitore`, `id`) "
+                                                                                         + "VALUES ('"+o.getN_ordine()+"', '"+o.getData()+"', '"
+                                                                                        + ""+o.getQty_in_arrivo()+"', '"+o.getGiorni_alla_consegna()+"',"
+                                                                                        + " '"+o.getFk_utente()+"', '"+o.getProdotto_sku()+"',"
+                                                                                        + " '"+o.getFk_cliente()+"', '"+o.getFk_fornitore()+"', '"+o.getCode()+"')";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
-            ps = connection.prepareStatement(insertSQL);
-
-               ps.setString(2, o.getN_ordine());
-               ps.setString(3, o.getData());
-               while (ps.getResultSet().next()){
-               ps.setInt(4, o.getQty_in_arrivo());
-               ps.setInt(5, o.getGiorni_alla_consegna());
-               ps.setString(6, o.getFk_utente());
-               ps.setString(6, o.getProdotto_sku());
-               ps.setInt(8, o.getFk_cliente());
-               ps.setString(9, o.getFk_fornitore());
-               //id da aggiungere
-               }
-               
-               
-           
-
-            System.out.println("ordine add " + ordini.toString());
-
-            ps.executeUpdate();
-
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
             connection.commit();
-
         } finally {
             try {
-                if (ps != null) {
-                    ps.close();
+                if (statement != null) {
+                    statement.close();
                 }
-
             } finally {
                 DriverManagerConnectionPool.releaseConnection(connection);
             }
         }
+
     }
 
-    
-    
     // NB: ma se vuoi cambiare la categoria .. ma poi dovrei cambiare anche lo sku? DA RISCRIVERE
     public synchronized void update(Ordine o) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
         Connection connection = null;
         Statement statement = null;
 
-
-
-
         System.out.println("sku del ordine da modificare: " + o.getN_ordine());
 //UPDATE `db_stock`.`ordine` SET `n_ordine` = '2', `data` = '2', `qty_in_arrivo` = '2', `giorni_alla_consegna` = '2', `fk_utente` = '2', `prodotto_sku` = '2', `fk_cliente` = '2', `fk_fornitore` = '2', `id` = '2' WHERE (`idordine` = '10')
-        String query = "UPDATE "+this.TABLE_NAME+" SET `data` = '2', `qty_in_arrivo` = '2', `giorni_alla_consegna` = '2', `fk_utente` = '2', `prodotto_sku` = '2', `fk_cliente` = '2', `fk_fornitore` = '2', `id` = '2' WHERE (`idordine` = '10')";
+        String query = "UPDATE " + this.TABLE_NAME + " SET `data` = '2', `qty_in_arrivo` = '2', `giorni_alla_consegna` = '2', `fk_utente` = '2', `prodotto_sku` = '2', `fk_cliente` = '2', `fk_fornitore` = '2', `id` = '2' WHERE (`idordine` = '10')";
         System.out.println("ordine update " + query);
 
         try {
@@ -210,7 +185,7 @@ Collection<Ordine> ordini = new LinkedList<Ordine>();
 
     }
 
-     public synchronized void removePr(String n_ordine, String prodotto_sku) throws SQLException {
+    public synchronized void removePr(String n_ordine, String prodotto_sku) throws SQLException {
         Connection connection = null;
         Statement statement = null;
         String query = "DELETE FROM " + this.TABLE_NAME + " WHERE  `n_ordine` = '" + n_ordine + "' and `prodotto_sku` = '" + prodotto_sku + "";
@@ -233,15 +208,14 @@ Collection<Ordine> ordini = new LinkedList<Ordine>();
         }
 
     }
-    
+
     public synchronized Ordine getLastOrdine() throws SQLException {
 
         Connection connection = null;
         Statement ps = null;
         Ordine bean = new Ordine();
-   
-        String query = "select* from "+this.TABLE_NAME+" order by id DESC LIMIT 1";
-        
+
+        String query = "select* from " + this.TABLE_NAME + " order by id DESC LIMIT 1";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -251,15 +225,15 @@ Collection<Ordine> ordini = new LinkedList<Ordine>();
 
             while (rs.next()) {
 
-                            bean.setIdordine(rs.getInt("idordine"));
-              bean.setN_ordine(rs.getString("n_ordine"));
-              bean.setData(rs.getString("data"));
-              bean.setQty_in_arrivo(rs.getInt("qty_in_arrivo"));
-              bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
-              bean.setFk_utente(rs.getString("fk_utente"));
-              bean.setProdotto_sku(rs.getString("prodotto_sku"));
-              bean.setFk_cliente(rs.getInt("fk_cliente"));
-              bean.setFk_fornitore(rs.getString("fk_fornitore"));
+                bean.setN_ordine(rs.getString("n_ordine"));
+                bean.setData(rs.getString("data"));
+                bean.setQty_in_arrivo(rs.getInt("qty_in_arrivo"));
+                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
+                bean.setFk_utente(rs.getString("fk_utente"));
+                bean.setProdotto_sku(rs.getString("prodotto_sku"));
+                bean.setFk_cliente(rs.getInt("fk_cliente"));
+                bean.setFk_fornitore(rs.getString("fk_fornitore"));
+                 bean.setCode(rs.getInt("id"));
             }
         } finally {
             try {
