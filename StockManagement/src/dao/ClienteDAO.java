@@ -21,14 +21,14 @@ import java.util.LinkedList;
  */
 public class ClienteDAO {
     
-    private final String TABLE_NAME = "prodotto";
+    private final String TABLE_NAME = "cliente";
 
     public synchronized Collection<Cliente> getAll() throws SQLException {
 
         Connection connection = null;
         PreparedStatement ps = null;
 
-        Collection<Cliente> prodotti = new LinkedList<Cliente>();
+        Collection<Cliente> clienti = new LinkedList<Cliente>();
 
         String selectSQL = "select* from "+this.TABLE_NAME+"";
 
@@ -40,19 +40,16 @@ public class ClienteDAO {
 
             while (rs.next()) {
                 Cliente bean = new Cliente();
-                bean.setSku(rs.getString("sku"));
-                bean.setDatareg(rs.getString("datareg"));
-                bean.setNome(rs.getString("nome"));
-                bean.setQty(rs.getInt("qty"));
-                bean.setCategoria(rs.getString("categoria"));
-                bean.setInstock(rs.getInt("instock"));
-                bean.setCosto(rs.getFloat("costo"));
-                bean.setQty_min(rs.getInt("qty_min"));
-                bean.setNote(rs.getString("note"));
-                bean.setFoto(rs.getString("foto"));
-                bean.setNegozio(rs.getInt("negozio"));
+               bean.setIdcliente(rs.getInt("idcliente"));
+               bean.setDatareg(rs.getString("datareg"));
+               bean.setFullname(rs.getString("fullname"));
+               bean.setCf(rs.getString("cf"));
+               bean.setIndirizzo(rs.getString("indirizzo"));
+               bean.setTel(rs.getString("tel"));
+               bean.setEmail(rs.getString("email"));
+               bean.setNote(rs.getString("note"));
 
-                prodotti.add(bean);
+                clienti.add(bean);
 
             }
         } finally {
@@ -65,39 +62,35 @@ public class ClienteDAO {
             }
 
         }
-        return prodotti;
+        return clienti;
 
     }
 
-    public synchronized Cliente getBySku(String sku) throws SQLException {
+    public synchronized Cliente getByID(String id) throws SQLException {
 
         Connection connection = null;
         PreparedStatement ps = null;
 
         Cliente bean = new Cliente();
         //SELECT * FROM prodotti WHERE sku = '1';
-        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE sku = ?";
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE idcliente = "+id+"";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
             ps = connection.prepareStatement(selectSQL);
-            ps.setString(1, sku);// FA RIFERIMENTO AL NOME ED AL NUMERO DELLA COLONNA NEL DB
 
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
 
-                bean.setSku(rs.getString("sku"));
-                bean.setDatareg(rs.getString("datareg"));
-                bean.setNome(rs.getString("nome"));
-                bean.setQty(rs.getInt("qty"));
-                bean.setCategoria(rs.getString("categoria"));
-                bean.setInstock(rs.getInt("instock"));
-                bean.setCosto(rs.getFloat("costo"));
-                bean.setQty_min(rs.getInt("qty_min"));
-                bean.setNote(rs.getString("note"));
-                bean.setFoto(rs.getString("foto"));
-                bean.setNegozio(rs.getInt("negozio"));
+               bean.setIdcliente(rs.getInt("idcliente"));
+               bean.setDatareg(rs.getString("datareg"));
+               bean.setFullname(rs.getString("fullname"));
+               bean.setCf(rs.getString("cf"));
+               bean.setIndirizzo(rs.getString("indirizzo"));
+               bean.setTel(rs.getString("tel"));
+               bean.setEmail(rs.getString("email"));
+               bean.setNote(rs.getString("note"));
 
 
             }
@@ -114,31 +107,28 @@ public class ClienteDAO {
         return bean;
     }
 
-    public synchronized void add(Cliente b) throws SQLException {
+    public synchronized void add(Cliente c) throws SQLException {
         Connection connection = null;
         PreparedStatement ps = null;
 
-        String insertSQL = "INSERT INTO " + this.TABLE_NAME + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertSQL = "INSERT INTO "+this.TABLE_NAME+" (`datareg`, `fullname`, `cf`, `indirizzo`, `tel`, `email`, `note`) VALUES ( '?', '?', '?', '?', '?', '?', '?')";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
             ps = connection.prepareStatement(insertSQL);
 
-                ps.setString(1, b.getSku());
-                ps.setString(2, b.getDatareg());
-                ps.setString(3, b.getNome());
-                ps.setInt(4, b.getQty());
-                ps.setString(5, b.getCategoria());
-                ps.setInt(6, b.isInstock());
-                ps.setFloat(7, b.getCosto());
-                ps.setInt(8, b.getQty_min());
-                ps.setString(9, b.getNote());
-                ps.setString(10, b.getFoto());
-                ps.setInt(11, b.isNegozio());
-                ps.setInt(12, b.getCode());
+                ps.setInt(1, c.getIdcliente());
+                ps.setString(2, c.getDatareg());
+                ps.setString(3, c.getFullname());
+                ps.setString(4, c.getCf());
+                ps.setString(5, c.getIndirizzo());
+                ps.setString(6, c.getTel());
+                ps.setString(7, c.getEmail());
+                ps.setString(0, c.getNote());
+
            
 
-            System.out.println("prodotto add " + b.toString());
+            System.out.println("prodotto add " + c.toString());
 
             ps.executeUpdate();
 
@@ -157,20 +147,18 @@ public class ClienteDAO {
     }
 
     // NB: ma se vuoi cambiare la categoria .. ma poi dovrei cambiare anche lo sku? DA RISCRIVERE
-    public synchronized void update(Cliente p) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
+    public synchronized void update(Cliente c) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
         Connection connection = null;
         Statement statement = null;
 
 
 
 
-        System.out.println("sku del prodoto da modificare: " + p.getSku());
-       // UPDATE `db_stock`.`prodotto` SET `sku` = '1', `datareg` = '2', `nome` = '2', `qty` = '2', `categoria` = '2', `instock` = '2', `costo` = '2', `qty_min` = '2', `note` = '2', `foto` = '2', `negozio` = '2' WHERE (`sku` = '1');
+        System.out.println("sku del prodoto da modificare: " + c.getIdcliente());
+//UPDATE `db_stock`.`cliente` SET `idcliente` = '2', `datareg` = '?', `fullname` = '?', `cf` = '?', `indirizzo` = '?', `tel` = '?', `email` = '?', `note` = '?' WHERE (`idcliente` = '1');
 
-        String query = "UPDATE "+this.TABLE_NAME+" SET `nome` = '"+p.getNome()+"', `qty` = '"+p.getQty()+"', `categoria` = '"+p.getCategoria()+"', "
-                + "`instock` = '"+p.isInstock()+"', `costo` = '"+p.getCosto()+"', `qty_min` = '"+p.getQty_min()+"', `note` = '"+p.getNote()+"', "
-                + "`foto` = '"+p.getNote()+"', `negozio` = '"+p.isNegozio()+"' WHERE (`sku` = '"+p.getSku()+"')";
-        System.out.println("prodotto update " + query);
+        String query = "UPDATE "+this.TABLE_NAME+" SET  `datareg` = '"+c.getDatareg()+"', `fullname` = '"+c.getFullname()+"', `cf` = '"+c.getCf()+"', `indirizzo` = '"+c.getIndirizzo()+"', `tel` = '"+c.getTel()+"', `email` = '"+c.getEmail()+"', `note` = '"+c.getNote()+"' WHERE (`idcliente` = '"+c.getIdcliente()+"')";
+        System.out.println("cliente update " + query);
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -189,10 +177,10 @@ public class ClienteDAO {
 
     }
 
-    public synchronized void remove(String sku) throws SQLException {
+    public synchronized void remove(int id) throws SQLException {
         Connection connection = null;
         Statement statement = null;
-        String query = "DELETE FROM " + this.TABLE_NAME + " WHERE  (`sku` = '" + sku + "');";
+        String query = "DELETE FROM " + this.TABLE_NAME + " WHERE  (`idcliente` = '" + id + "');";
         System.out.println("prodotto remove " + query);
 
         try {
@@ -219,7 +207,7 @@ public class ClienteDAO {
         Statement ps = null;
         Cliente bean = new Cliente();
 
-        String query = "select* from "+this.TABLE_NAME+" order by id DESC LIMIT 1";
+        String query = "select* from "+this.TABLE_NAME+" order by idcliente DESC LIMIT 1";
         
 
         try {
@@ -230,18 +218,14 @@ public class ClienteDAO {
 
             while (rs.next()) {
 
-                bean.setSku(rs.getString("sku"));
-                bean.setDatareg(rs.getString("datareg"));
-                bean.setNome(rs.getString("nome"));
-                bean.setQty(rs.getInt("qty"));
-                bean.setCategoria(rs.getString("categoria"));
-                bean.setInstock(rs.getInt("instock"));
-                bean.setCosto(rs.getFloat("costo"));
-                bean.setQty_min(rs.getInt("qty_min"));
-                bean.setNote(rs.getString("note"));
-                bean.setFoto(rs.getString("foto"));
-                bean.setNegozio(rs.getInt("negozio"));
-                bean.setCode(rs.getInt("id"));
+               bean.setIdcliente(rs.getInt("idcliente"));
+               bean.setDatareg(rs.getString("datareg"));
+               bean.setFullname(rs.getString("fullname"));
+               bean.setCf(rs.getString("cf"));
+               bean.setIndirizzo(rs.getString("indirizzo"));
+               bean.setTel(rs.getString("tel"));
+               bean.setEmail(rs.getString("email"));
+               bean.setNote(rs.getString("note"));
             }
         } finally {
             try {

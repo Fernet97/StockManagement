@@ -64,6 +64,10 @@ public class Cliente {
         tipo = "Cliente";
 
     }
+
+    public Cliente() {
+       
+    }
     
    
     public String getTipo(){

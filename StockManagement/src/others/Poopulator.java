@@ -51,6 +51,7 @@ public class Poopulator {
         dao.add(u9);
         Utente u10= new Utente("babbeo nato", "cf", "via1", "121", "@1", "pwd",0 , "note");
         dao.add(u10);
+       
       
        // System.out.println(+u.toString()+"\n"+u2.toString()+"\n"+u3.toString()+"\n"+u4.toString()+"\n"+u5.toString()+"\n"+u6.toString()+"\n"+u7.toString()+"\n"+u8.toString()+"\n"+u9.toString()+"\n"+u10.toString()+"\n");
     

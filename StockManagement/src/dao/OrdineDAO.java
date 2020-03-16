@@ -29,7 +29,7 @@ public class OrdineDAO {
         Connection connection = null;
         PreparedStatement ps = null;
 
-        Collection<Ordine> prodotti = new LinkedList<Ordine>();
+        Collection<Ordine> ordini = new LinkedList<Ordine>();
 
         String selectSQL = "select* from "+this.TABLE_NAME+"";
 
@@ -51,7 +51,7 @@ public class OrdineDAO {
               bean.setFk_cliente(rs.getInt("fk_cliente"));
               bean.setFk_fornitore(rs.getString("fk_fornitore"));
 
-                prodotti.add(bean);
+                ordini.add(bean);
 
             }
         } finally {
@@ -64,7 +64,7 @@ public class OrdineDAO {
             }
 
         }
-        return prodotti;
+        return ordini;
 
     }
 
@@ -75,12 +75,11 @@ public class OrdineDAO {
 
         Ordine bean = new Ordine();
         //SELECT * FROM prodotti WHERE sku = '1';
-        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE sku = ?";
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE n_ordine = "+n_ordine+"";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
             ps = connection.prepareStatement(selectSQL);
-//            ps.setString(1, sku);// FA RIFERIMENTO AL NOME ED AL NUMERO DELLA COLONNA NEL DB
 
             ResultSet rs = ps.executeQuery();
 
@@ -110,31 +109,31 @@ public class OrdineDAO {
         return bean;
     }
 
-    public synchronized void add(Ordine b) throws SQLException {
+    public synchronized void add(Ordine o) throws SQLException {
         Connection connection = null;
         PreparedStatement ps = null;
 
-        String insertSQL = "INSERT INTO " + this.TABLE_NAME + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertSQL = "INSERT INTO " + this.TABLE_NAME + " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
             ps = connection.prepareStatement(insertSQL);
 
-                ps.setString(1, b.getSku());
-                ps.setString(2, b.getDatareg());
-                ps.setString(3, b.getNome());
-                ps.setInt(4, b.getQty());
-                ps.setString(5, b.getCategoria());
-                ps.setInt(6, b.isInstock());
-                ps.setFloat(7, b.getCosto());
-                ps.setInt(8, b.getQty_min());
-                ps.setString(9, b.getNote());
-                ps.setString(10, b.getFoto());
-                ps.setInt(11, b.isNegozio());
-                ps.setInt(12, b.getCode());
+               ps.setString(2, o.getN_ordine());
+               ps.setString(3, o.getData());
+               ps.setInt(4, o.getQty_in_arrivo());
+               ps.setInt(5, o.getGiorni_alla_consegna());
+               ps.setString(6, o.getFk_utente());
+               ps.setString(6, o.getProdotto_sku());
+               ps.setInt(8, o.getFk_cliente());
+               ps.setString(9, o.getFk_fornitore());
+               //id da aggiungere
+               
+               
+               
            
 
-            System.out.println("prodotto add " + b.toString());
+            System.out.println("ordine add " + o.toString());
 
             ps.executeUpdate();
 
@@ -152,21 +151,20 @@ public class OrdineDAO {
         }
     }
 
+    
+    
     // NB: ma se vuoi cambiare la categoria .. ma poi dovrei cambiare anche lo sku? DA RISCRIVERE
-    public synchronized void update(Ordine p) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
+    public synchronized void update(Ordine o) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
         Connection connection = null;
         Statement statement = null;
 
 
 
 
-        System.out.println("sku del prodoto da modificare: " + p.getSku());
-       // UPDATE `db_stock`.`prodotto` SET `sku` = '1', `datareg` = '2', `nome` = '2', `qty` = '2', `categoria` = '2', `instock` = '2', `costo` = '2', `qty_min` = '2', `note` = '2', `foto` = '2', `negozio` = '2' WHERE (`sku` = '1');
-
-        String query = "UPDATE "+this.TABLE_NAME+" SET `nome` = '"+p.getNome()+"', `qty` = '"+p.getQty()+"', `categoria` = '"+p.getCategoria()+"', "
-                + "`instock` = '"+p.isInstock()+"', `costo` = '"+p.getCosto()+"', `qty_min` = '"+p.getQty_min()+"', `note` = '"+p.getNote()+"', "
-                + "`foto` = '"+p.getNote()+"', `negozio` = '"+p.isNegozio()+"' WHERE (`sku` = '"+p.getSku()+"')";
-        System.out.println("prodotto update " + query);
+        System.out.println("sku del ordine da modificare: " + o.getN_ordine());
+//UPDATE `db_stock`.`ordine` SET `n_ordine` = '2', `data` = '2', `qty_in_arrivo` = '2', `giorni_alla_consegna` = '2', `fk_utente` = '2', `prodotto_sku` = '2', `fk_cliente` = '2', `fk_fornitore` = '2', `id` = '2' WHERE (`idordine` = '10')
+        String query = "UPDATE "+this.TABLE_NAME+" SET `data` = '2', `qty_in_arrivo` = '2', `giorni_alla_consegna` = '2', `fk_utente` = '2', `prodotto_sku` = '2', `fk_cliente` = '2', `fk_fornitore` = '2', `id` = '2' WHERE (`idordine` = '10')";
+        System.out.println("ordine update " + query);
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -246,7 +244,7 @@ public class OrdineDAO {
             }
 
         }
-        return bean;
+        return ordini;
 
     }
 }
