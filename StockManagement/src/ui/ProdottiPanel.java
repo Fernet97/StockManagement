@@ -498,7 +498,7 @@ public class ProdottiPanel extends JPanel {
                 main.add(pcosto);
 
                 JPanel pmin = new JPanel();
-                JLabel lmin = new JLabel("Quantità minima");
+                JLabel lmin = new JLabel("Qty. min");
                 cmin = new JTextField(15);
                 cmin.setAlignmentX(RIGHT_ALIGNMENT);
                 pmin.add(lmin);
@@ -513,9 +513,7 @@ public class ProdottiPanel extends JPanel {
                 pforn.add(cforn);
                 main.add(pforn);
                 
-                JPanel panelcat = new JPanel();
-                panelcat.setLayout(new BoxLayout(panelcat, BoxLayout.Y_AXIS));
-                
+                JPanel panelcat = new JPanel();                
                 JLabel lcat = new JLabel("Categoria"); 
                 panelcat.add(lcat);
                     
@@ -531,6 +529,7 @@ public class ProdottiPanel extends JPanel {
                 
                 panelcat.add(cat);   
                 main.add(panelcat);
+                
 
                 panmain.add(main);
                 add(panmain);
