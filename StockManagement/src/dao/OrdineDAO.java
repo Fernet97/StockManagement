@@ -112,7 +112,9 @@ public class OrdineDAO {
     public synchronized void add(Ordine o) throws SQLException {
         Connection connection = null;
         PreparedStatement ps = null;
+        
 
+Collection<Ordine> ordini = new LinkedList<Ordine>();
         String insertSQL = "INSERT INTO " + this.TABLE_NAME + " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
@@ -121,6 +123,7 @@ public class OrdineDAO {
 
                ps.setString(2, o.getN_ordine());
                ps.setString(3, o.getData());
+               while (ps.getResultSet().next()){
                ps.setInt(4, o.getQty_in_arrivo());
                ps.setInt(5, o.getGiorni_alla_consegna());
                ps.setString(6, o.getFk_utente());
@@ -128,12 +131,12 @@ public class OrdineDAO {
                ps.setInt(8, o.getFk_cliente());
                ps.setString(9, o.getFk_fornitore());
                //id da aggiungere
-               
+               }
                
                
            
 
-            System.out.println("ordine add " + o.toString());
+            System.out.println("ordine add " + ordini.toString());
 
             ps.executeUpdate();
 
@@ -183,11 +186,11 @@ public class OrdineDAO {
 
     }
 
-    public synchronized void remove(String n_ordine) throws SQLException {
+    public synchronized void removeOrd(String n_ordine) throws SQLException {
         Connection connection = null;
         Statement statement = null;
         String query = "DELETE FROM " + this.TABLE_NAME + " WHERE  (`n_ordine` = '" + n_ordine + "');";
-        System.out.println("prodotto remove " + query);
+        System.out.println("ordine remove " + query);
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -207,12 +210,36 @@ public class OrdineDAO {
 
     }
 
-    public synchronized Collection<Ordine> getLastOrdine() throws SQLException {
+     public synchronized void removePr(String n_ordine, String prodotto_sku) throws SQLException {
+        Connection connection = null;
+        Statement statement = null;
+        String query = "DELETE FROM " + this.TABLE_NAME + " WHERE  `n_ordine` = '" + n_ordine + "' and `prodotto_sku` = '" + prodotto_sku + "";
+        System.out.println("prodotto ord remove " + query);
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+            connection.commit();
+
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+        }
+
+    }
+    
+    public synchronized Ordine getLastOrdine() throws SQLException {
 
         Connection connection = null;
         Statement ps = null;
         Ordine bean = new Ordine();
-   Collection<Ordine> ordini = new LinkedList<Ordine>();
+   
         String query = "select* from "+this.TABLE_NAME+" order by id DESC LIMIT 1";
         
 
@@ -244,7 +271,7 @@ public class OrdineDAO {
             }
 
         }
-        return ordini;
+        return bean;
 
     }
 }
