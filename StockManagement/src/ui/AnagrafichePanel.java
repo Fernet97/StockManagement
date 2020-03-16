@@ -871,12 +871,15 @@ public class AnagrafichePanel extends JPanel {
             if (casfullname.getText().isEmpty() || cascfiva.getText().isEmpty() || casindirizzo.getText().isEmpty()
                     || castel.getText().isEmpty() || casemail.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Riempi tutti i campi! ['Note' è opzionale]");
+
+                return false;
+            }
+            
                 if (castel.getText().length() >= 15) {
                     JOptionPane.showMessageDialog(this, "Numero di telefono troppo lungo");
                     return false;
                 }
-                return false;
-            }
+                            
 
             // SE NON C'E' UN NOME E UN COGNOME X UTENTE (CI DEVE ESSERE UNO SPAZIO)
             if (casfullname.getText().matches("\\S+") && tipologia == 2 ) {
