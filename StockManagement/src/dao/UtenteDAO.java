@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import others.Cryptorr;
 import static others.Passwordgen.generateRandomPassword;
 
 /**
@@ -120,6 +121,8 @@ public class UtenteDAO {
                         Connection connection = null;
                         PreparedStatement preparedStatement = null;
                         
+                       // System.out.println("Pwd utente nuovo:"+u.getPwd()+"->"+Cryptorr.MD5(u.getPwd()));
+                        
                         String insertSQL =  "INSERT INTO " +TABLE_NAME
                                 + " VALUES (?, ?, ?, ?, ?, ?, ?, md5(?), ?, ?, ?)";
                         
@@ -134,7 +137,7 @@ public class UtenteDAO {
                                 preparedStatement.setString(5, u.getIndirizzo());
                                 preparedStatement.setString(6, u.getTelefono());    
                                 preparedStatement.setString(7, u.getEmail());
-                                preparedStatement.setString(8, generateRandomPassword(10));
+                                preparedStatement.setString(8, u.getPwd());
                                 preparedStatement.setInt(9, u.getPermessi());
                                 preparedStatement.setString(10, u.getNote());
                                 preparedStatement.setInt(11, u.getCode());

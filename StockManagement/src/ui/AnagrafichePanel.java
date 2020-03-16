@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractButton;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -74,6 +75,9 @@ public class AnagrafichePanel extends JPanel {
     private static DefaultTableModel model;
     public static Object[] nuovaRiga;
     public static Formanagrafiche form;
+    public static JCheckBox checkforn;
+    public static JCheckBox checkuten;
+    public static JCheckBox checkclient;
 
     public AnagrafichePanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -94,12 +98,29 @@ public class AnagrafichePanel extends JPanel {
         panSopra.add(cerca);
 
         JPanel panelcheck = new JPanel();
-        JCheckBox r1 = new JCheckBox("Fornitori");
-        JCheckBox r2 = new JCheckBox("Utenti");
-        JCheckBox r3 = new JCheckBox("Clienti");
-        panelcheck.add(r1);
-        panelcheck.add(r2);
-        panelcheck.add(r3);
+        
+        ActionListener actionListener = new ActionListener() {
+        public void actionPerformed(ActionEvent actionEvent) {
+            try {
+                refreshTab();
+            } catch (SQLException ex) {
+                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+          }
+        };
+        checkforn = new JCheckBox("Fornitori");
+        checkforn.setSelected(true);
+        checkforn.addActionListener(actionListener);
+        checkuten = new JCheckBox("Utenti");
+        checkuten.setSelected(true);
+        checkuten.addActionListener(actionListener);
+        checkclient = new JCheckBox("Clienti");
+        checkclient.setSelected(true);
+        checkclient.addActionListener(actionListener);
+
+        panelcheck.add(checkforn);
+        panelcheck.add(checkuten);
+        panelcheck.add(checkclient);
         panSopra.add(panelcheck);
 
         JButton buttonNew = new JButton("ADD NEW");
@@ -795,64 +816,55 @@ public class AnagrafichePanel extends JPanel {
         }
 
         private void setFormAsID(String idSelected) {
-            
+
             // FORNITORE
-            if(tipologia == 1){
-            FornitoreDAO dao = new FornitoreDAO();
+            if (tipologia == 1) {
+                FornitoreDAO dao = new FornitoreDAO();
 
-            try {
-                Fornitore fornitore = dao.getByID(idSelected);
+                try {
+                    Fornitore fornitore = dao.getByID(idSelected);
 
-                casid.setText(fornitore.getIdfornitore());
-                casdatareg.setText(fornitore.getDatareg());
-                casfullname.setText(fornitore.getFullname());
-                cascfiva.setText(fornitore.getP_iva());
-                casindirizzo.setText(fornitore.getIndirizzo());
-                castel.setText(fornitore.getTel());
-                casemail.setText(fornitore.getEmail());
-                note.setText(fornitore.getNote());
+                    casid.setText(fornitore.getIdfornitore());
+                    casdatareg.setText(fornitore.getDatareg());
+                    casfullname.setText(fornitore.getFullname());
+                    cascfiva.setText(fornitore.getP_iva());
+                    casindirizzo.setText(fornitore.getIndirizzo());
+                    castel.setText(fornitore.getTel());
+                    casemail.setText(fornitore.getEmail());
+                    note.setText(fornitore.getNote());
 
-            } catch (SQLException ex) {
-                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
 
-        }
-            
             // UTENTE
-            if(tipologia == 2){
-            
-              UtenteDAO dao = new UtenteDAO();
+            if (tipologia == 2) {
 
-            try {
-                Utente u = dao.getByID(idSelected);
+                UtenteDAO dao = new UtenteDAO();
 
-                casid.setText(u.getIdutente());
-                casdatareg.setText(u.getDatareg());
-                casfullname.setText(u.getFullname());
-                cascfiva.setText(u.getCF());
-                caspwd.setText(u.getPwd());
-                casindirizzo.setText(u.getIndirizzo());
-                castel.setText(u.getTelefono());
-                casemail.setText(u.getEmail());
-                note.setText(u.getNote());
+                try {
+                    Utente u = dao.getByID(idSelected);
 
-            } catch (SQLException ex) {
-                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-            }          
-             
-            
+                    casid.setText(u.getIdutente());
+                    casdatareg.setText(u.getDatareg());
+                    casfullname.setText(u.getFullname());
+                    cascfiva.setText(u.getCF());
+                    caspwd.setText(u.getPwd());
+                    casindirizzo.setText(u.getIndirizzo());
+                    castel.setText(u.getTelefono());
+                    casemail.setText(u.getEmail());
+                    note.setText(u.getNote());
+                    permess.setSelectedIndex(u.getPermessi());
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
-        
-        
-        
-        
-        
-        
-        
+
         }
-        
-        
-        
 
         public boolean check() {
 
@@ -865,11 +877,11 @@ public class AnagrafichePanel extends JPanel {
                 }
                 return false;
             }
-            
-            // SE NON C'E' UN NOME E UN COGNOME (CI DEVE ESSERE UNO SPAZIO)
-            if(casfullname.getText().matches("\\S+")){
-                    JOptionPane.showMessageDialog(this, "Bisogna specificare un nome e un cognome!");
-                    return false;                
+
+            // SE NON C'E' UN NOME E UN COGNOME X UTENTE (CI DEVE ESSERE UNO SPAZIO)
+            if (casfullname.getText().matches("\\S+") && tipologia == 2 ) {
+                JOptionPane.showMessageDialog(this, "Bisogna specificare un nome e un cognome!");
+                return false;
             }
 
             return true;
@@ -910,7 +922,7 @@ public class AnagrafichePanel extends JPanel {
                 // Utente
                 if (tipologia == 2) {
                     UtenteDAO dao = new UtenteDAO();
-                    System.out.println("Utente che sto per scrivere:"+casfullname.getText()+""+cascfiva.getText()+""+casindirizzo.getText()+""+castel.getText()+""+casemail.getText()+""+caspwd.getText()+""+permess.getSelectedIndex()+""+note.getText());
+                    System.out.println("Utente che sto per scrivere:" + casfullname.getText() + "" + cascfiva.getText() + "" + casindirizzo.getText() + "" + castel.getText() + "" + casemail.getText() + "" + caspwd.getText() + "" + permess.getSelectedIndex() + "" + note.getText());
                     uten = new Utente(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), caspwd.getText(), permess.getSelectedIndex(), note.getText());
 
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
@@ -1001,23 +1013,20 @@ public class AnagrafichePanel extends JPanel {
         FornitoreDAO daof = new FornitoreDAO();
         UtenteDAO daou = new UtenteDAO();
 
-        // Aggiorno con le nuove
-        for (Fornitore forn : daof.getAll()) {
-
-            model.addRow(new Object[]{forn.getTipo(), forn.getIdfornitore(), forn.getDatareg(), forn.getFullname(), forn.getP_iva(), forn.getIndirizzo(), forn.getTel(), forn.getEmail(), forn.getNote(), "Modifica", "Cancella", "Ordina"});
-
+        if (checkforn.isSelected()) {
+            // Aggiorno con le nuove
+            for (Fornitore forn : daof.getAll()) {
+                model.addRow(new Object[]{forn.getTipo(), forn.getIdfornitore(), forn.getDatareg(), forn.getFullname(), forn.getP_iva(), forn.getIndirizzo(), forn.getTel(), forn.getEmail(), forn.getNote(), "Modifica", "Cancella", "Ordina"});
+            }
         }
 
-        // Aggiorno con le nuove
-        for (Utente utente : daou.getAll()) {
+        if (checkuten.isSelected()) {
+            // Aggiorno con le nuove
+            for (Utente utente : daou.getAll()) {
+                model.addRow(new Object[]{utente.getTipo(), utente.getIdutente(), utente.getDatareg(), utente.getFullname(), utente.getCF(), utente.getIndirizzo(), utente.getTelefono(), utente.getEmail(), utente.getNote(), "Modifica", "Cancella", "Ordina"});
+            }
+        }
 
-            model.addRow(new Object[]{utente.getTipo(), utente.getIdutente(), utente.getDatareg(), utente.getFullname(), utente.getCF(), utente.getIndirizzo(), utente.getTelefono(), utente.getEmail(), utente.getNote(), "Modifica", "Cancella", "Ordina"});
-
-        }        
-        
-        
-        
-        
         System.out.println("Numero di  record prima dell'aggiornamento  " + model.getRowCount());
 
     }
