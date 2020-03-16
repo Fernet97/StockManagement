@@ -22,7 +22,8 @@ public class dbcleaner {
 
         Connection connection = null;
         Statement statement = null;
-        String query = "  DELETE FROM ordine; DELETE FROM cliente; DELETE FROM prodotto_has_prodotto; DELETE FROM prodotto; DELETE FROM fornitore; DELETE FROM utente;  ";
+        String query = "  DELETE FROM ordine; DELETE FROM cliente; DELETE FROM prodotto_has_prodotto; DELETE FROM prodotto; DELETE FROM fornitore; DELETE FROM utente;INSERT INTO `db_stock`.`utente` (`idutente`, `datareg`, `fullname`, `cf`, `indirizzo`, `tel`, `email`, `pwd`, `permessi`, `note`, `id`) VALUES ('admin', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'admin', '0', 'null', '0')";
+  
         System.out.println(query);
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -38,9 +39,6 @@ public class dbcleaner {
             } finally {
                 DriverManagerConnectionPool.releaseConnection(connection);
             }
-        }
-        UtenteDAO dao = new UtenteDAO();
-        Utente admin = new Utente("admin", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "pwd", 0, "note");
-        dao.add(admin);
+        }       
     }
 }
