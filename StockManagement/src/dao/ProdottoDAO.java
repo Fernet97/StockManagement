@@ -264,7 +264,7 @@ public class ProdottoDAO {
         Prodotto bean = new Prodotto();
         Hashtable<String, String> hashtable = new Hashtable<String, String>();
 
-        String query = "select categoria, sum(qty) from"+this.TABLE_NAME+"GROUP BY categoria;";
+        String query= "select categoria, sum(qty) from "+this.TABLE_NAME+" GROUP BY categoria;";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();

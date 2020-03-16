@@ -238,18 +238,14 @@ public class ProdottiPanel extends JPanel{
             
             ProdottoDAO dao = new ProdottoDAO();
             
-            /* Aggiorno con le nuove
             for(Prodotto pro: dao.getAll()){
-               System.out.println(pro.getSku() +" "+ pro.getDatareg()+" "+ pro.getNome()+" "+pro.getCategoria()+" "+ pro.getQty()+" "+pro.getId_fornitore()+" "+pro.isInstock()+" "+ pro.getGiorni_alla_consegna()+" "+pro.getCosto()+" "+ pro.getDescrizione()+" "+pro.getQty_inarrivo()+" "+ pro.getQty_min());
-               model.addRow(new Object[]{ pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), pro.getId_fornitore(), pro.isInstock(), pro.getGiorni_alla_consegna(), pro.getCosto(), pro.getDescrizione(), pro.getQty_inarrivo(), pro.getQty_min(),"Modifica","Cancella"});
+               System.out.println(pro.getSku() +" "+ pro.getDatareg()+" "+ pro.getNome()+" "+pro.getCategoria()+" "+ pro.getQty()+" fornitore "+pro.isInstock()+"  "+pro.getCosto()+" "+ pro.getNote()+"  "+ pro.getQty_min());
+               model.addRow(new Object[]{ pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), "fornitore", pro.isInstock(), pro.getCosto(), pro.getNote(), pro.getQty_min(),"Modifica","Cancella","Ordina"  });
                
             
             }
             System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
-      */
-            //DA CANCELLARE
-            model.addRow(new Object[]{ "XXXXX", "10/12/2019", "YYYYYY", "XXXXXXX","34", "Amazon", "true", "3", "una descrizione a caso", "50", "Modifica","Cancella", "Ordina"  });
-            model.addRow(new Object[]{ "XXXXX", "10/12/2019", "YYYYYY", "XXXXXXX","90", "Amazon", "false", "3", "una descrizione a caso", "50", "Modifica","Cancella", "Ordina"  });
+
       
         
         }
