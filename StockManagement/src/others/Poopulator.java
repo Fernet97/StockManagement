@@ -24,7 +24,10 @@ public class Poopulator {
          dbcleaner.main(args);//richiama un depopulator 
 
 
+          for (int i = 0; i < 2; i++) {
+  
             
+     
         
 /**
  * utente add
@@ -119,5 +122,5 @@ ProdottoDAO daop =new ProdottoDAO();
 
         }  
         
-    
+    }
 }
