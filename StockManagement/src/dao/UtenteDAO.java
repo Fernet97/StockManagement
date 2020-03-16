@@ -172,7 +172,7 @@ public class UtenteDAO {
                                                           
                         String insertSQL = "UPDATE " +TABLE_NAME+ " SET `fullname` = '"+u.getFullname()+"', `CF` = '"+u.getCF()+"', "
                                 + "`indirizzo` = '"+u.getIndirizzo()+"', `tel` = '"+u.getTelefono()+"', `email` = '"+u.getEmail()+"',"
-                                + " `pwd` = 'md5("+u.getPwd()+")', `permessi` = '"+u.getPermessi()+"', `note` = '"+u.getNote()+""
+                                + " `pwd` = md5('"+u.getPwd()+"'), `permessi` = '"+u.getPermessi()+"', `note` = '"+u.getNote()+""
                                 + "' WHERE (`idutente` = '"+u.getIdutente()+"')";
             System.out.println("utente update "+ insertSQL);
 		try {

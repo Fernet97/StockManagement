@@ -22,7 +22,7 @@ public class dbcleaner {
 
         Connection connection = null;
         Statement statement = null;
-        String query = "  DELETE FROM ordine; DELETE FROM cliente; DELETE FROM prodotto_has_prodotto; DELETE FROM prodotto; DELETE FROM fornitore; DELETE FROM utente;INSERT INTO `db_stock`.`utente` (`idutente`, `datareg`, `fullname`, `cf`, `indirizzo`, `tel`, `email`, `pwd`, `permessi`, `note`, `id`) VALUES ('admin', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'admin', '0', 'null', '0')";
+        String query = "  DELETE FROM ordine; DELETE FROM cliente; DELETE FROM prodotto_has_prodotto; DELETE FROM prodotto; DELETE FROM fornitore; DELETE FROM utente;INSERT INTO `db_stock`.`utente` (`idutente`, `datareg`, `fullname`, `cf`, `indirizzo`, `tel`, `email`, `pwd`, `permessi`, `note`, `id`) VALUES ('admin', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', md5('admin'), '0', 'null', '0')";
   
         System.out.println(query);
         try {
