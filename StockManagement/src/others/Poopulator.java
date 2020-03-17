@@ -5,10 +5,12 @@
  */
 package others;
 
+import beans.Cliente;
 import beans.Fornitore;
 import beans.Ordine;
 import beans.Prodotto;
 import beans.Utente;
+import dao.ClienteDAO;
 import dao.FornitoreDAO;
 import dao.OrdineDAO;
 import dao.ProdottoDAO;
@@ -107,9 +109,9 @@ public class Poopulator {
             Prodotto p10 = new Prodotto("1n58", 10, "diodi", 1, 10.5f, 2, "note", "foto", 1);
             daop.add(p10);
 
-            /**
-             * add ordine
-             */
+/**
+ * add ordine
+ */
             Ordine bean = new Ordine();
             OrdineDAO daoo = new OrdineDAO();
 
@@ -123,7 +125,34 @@ public class Poopulator {
                 daoo.add(o);
                 daoo.add(o2);
             }
+            
+            
+            
+/**
+ * add cliente
+ */           
 
+       ClienteDAO daoc = new ClienteDAO();
+       Cliente c = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+       daoc.add(c);
+       Cliente c2 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+       daoc.add(c2);
+       Cliente c3 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+       daoc.add(c3);
+       Cliente c4 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+       daoc.add(c4);
+       Cliente c5 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+       daoc.add(c5);
+       Cliente c6 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+       daoc.add(c6);
+       Cliente c7 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+       daoc.add(c7);
+       Cliente c8 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+       daoc.add(c8);
+       Cliente c9 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+       daoc.add(c9);
+       Cliente c10 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+       daoc.add(c10);
         }
 
     }
