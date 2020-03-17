@@ -17,9 +17,8 @@ import java.util.logging.Logger;
  * @author LittleJoke
  */
 public class Ordine {
-    
+
     private static int code = 0;
-    private int idordine;
     private String n_ordine;
     private String data;
     private int qty_in_arrivo;
@@ -29,19 +28,18 @@ public class Ordine {
     private int fk_cliente;
     private String fk_fornitore;
     String tipo;
-    
-/**
- * 
- * @param idordine
- * @param n_ordine
- * @param data
- * @param qty_in_arrivo
- * @param giorni_alla_consegna
- * @param fk_utente
- * @param prodotto_sku
- * @param fk_cliente
- * @param fk_fornitore 
- */
+
+    /**
+     *
+     * @param n_ordine
+     * @param data
+     * @param qty_in_arrivo
+     * @param giorni_alla_consegna
+     * @param fk_utente
+     * @param prodotto_sku
+     * @param fk_cliente
+     * @param fk_fornitore
+     */
     public Ordine(String n_ordine, String data, int qty_in_arrivo, int giorni_alla_consegna, String fk_utente, String prodotto_sku, int fk_cliente, String fk_fornitore) throws InterruptedException {
 
         this.n_ordine = n_ordine;
@@ -52,38 +50,29 @@ public class Ordine {
         this.prodotto_sku = prodotto_sku;
         this.fk_cliente = fk_cliente;
         this.fk_fornitore = fk_fornitore;
-        setData(generateData());
-         setCode(leggiUltimoID() + 1);
-        setN_ordine(generateID());
+
     }
 
     /**
      * per update
+     *
      * @param qty_in_arrivo
      * @param giorni_alla_consegna
      * @param prodotto_sku
      * @param fk_cliente
-     * @param fk_fornitore 
+     * @param fk_fornitore
      */
-    public Ordine(int qty_in_arrivo, int giorni_alla_consegna, String prodotto_sku, int fk_cliente, String fk_fornitore) {
+    public Ordine(int qty_in_arrivo, int giorni_alla_consegna, String fk_utente, String prodotto_sku, int fk_cliente, String fk_fornitore) throws InterruptedException {
         this.qty_in_arrivo = qty_in_arrivo;
         this.giorni_alla_consegna = giorni_alla_consegna;
         this.prodotto_sku = prodotto_sku;
+        this.fk_utente = fk_utente;
         this.fk_cliente = fk_cliente;
         this.fk_fornitore = fk_fornitore;
+        ordine();
     }
 
     public Ordine() {
-    }
-    
-    
-
-    public int getIdordine() {
-        return idordine;
-    }
-
-    public void setIdordine(int idordine) {
-        this.idordine = idordine;
     }
 
     public String getN_ordine() {
@@ -157,47 +146,57 @@ public class Ordine {
     public static void setCode(int code) {
         Ordine.code = code;
     }
-    
-     private synchronized int leggiUltimoID() {
-        String tmp;
-        int idlast;
+
+    private synchronized int leggiUltimoID() {
+//        String tmp;
+        int lastid;
 
         try {
             OrdineDAO dao = new OrdineDAO();
 
-            String lastid = dao.getLastOrdine().toString();
+            lastid = dao.getLastOrdine().getCode();
             //ORD-000
-            if (lastid == null) {
-                return 0;
-            }
-
-            tmp = lastid.substring(3);
-            idlast = Integer.parseInt(tmp);
-            System.out.println("ID dell'ultimo ordine:" + idlast);
+//            if (lastid == null) {
+//                return 0;
+//            }
+//
+//            tmp = lastid.substring(4);
+//            idlast = Integer.parseInt(tmp);
+            System.out.println("ID dell'ultimo ordine:" + lastid);
 
         } catch (SQLException ex) {
             Logger.getLogger(Ordine.class.getName()).log(Level.SEVERE, null, ex);
-            idlast = -99999;
+            lastid = -99999;
         }
 
-        return idlast;
+        return lastid;
 
     }
-    
-     public synchronized String generateData() {
+
+    public synchronized String generateData() {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         System.out.println(dtf.format(now)); //11/11/2019 11:11
         return dtf.format(now);
     }
-     
-     private String generateID() throws InterruptedException {
+
+    private String generateID() throws InterruptedException {
 
         String idgenerato = "ORD-" + getCode();
 //        Thread.sleep(1000);
         return idgenerato;
     }
-    
-    
+
+    public void startOrdine() throws InterruptedException {
+        setData(generateData());
+        setCode(leggiUltimoID() + 1);
+        setN_ordine(generateID());
+    }
+
+    public void ordine() throws InterruptedException {
+        setData(generateData());
+        setCode(leggiUltimoID());
+        setN_ordine(generateID());
+    }
 }
