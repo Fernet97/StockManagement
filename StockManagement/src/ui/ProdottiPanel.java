@@ -17,6 +17,7 @@ import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Component.RIGHT_ALIGNMENT;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -24,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +33,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.stage.FileChooser;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
@@ -38,6 +41,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -210,10 +214,6 @@ public class ProdottiPanel extends JPanel {
         icon.setImage(ImmagineScalata);
         return icon;
     }
-
-
-        
-    
 
     public void refreshTab() throws SQLException {
 
@@ -405,21 +405,27 @@ public class ProdottiPanel extends JPanel {
         public String modalita;
         public String IdSelezionato;
         public JTextField casku;
-        public JTextField casdatareg;      
+        public JTextField casdatareg;
         public JTextField casname;
-        public JTextField casqty;        
+        public JTextField casqty;
         public JTextField ccosto;
         public JTextField cmin;
         public JTextField cforn;
         public JComboBox cat;
-        
+        public String percorsofoto;
+
         private String FornitoreCorrente;
         private JTextArea note;
+        private JCheckBox inStock;
+        private JCheckBox negozio;
+        private JButton bfoto;
 
         /**
          * Creates new form FormProdotti
          */
         public FormProdotti() {
+            
+            
             try {
                 initComponents();
             } catch (SQLException ex) {
@@ -431,284 +437,248 @@ public class ProdottiPanel extends JPanel {
         private FormProdotti(String mod, String idSelected) {
             modalita = mod;
             IdSelezionato = idSelected;
+            
+
 
             try {
                 initComponents();
+                casku.setEditable(false);
+                casdatareg.setEditable(false);
+                casku.setBackground(Color.DARK_GRAY);
+                casdatareg.setBackground(Color.DARK_GRAY);
+                
             } catch (SQLException ex) {
                 Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
-            setSize(600, 600);
+            setSize(600, (650));
             this.setIconImage(img.getImage());
 
             if (modalita.equals("UPDATE")) {
                 System.out.println("Sono in modalità update ...");
                 System.out.println(" Id selezionato: " + idSelected);
-                FornitoreCorrente = setFormAsID(idSelected);
+                setFormAsID(idSelected);
             }
 
         }
-
 
         private void initComponents() throws SQLException {
-            
-                JPanel panmain = new JPanel();
-                panmain.setLayout(new BoxLayout(panmain, BoxLayout.Y_AXIS));
-                JLabel l = new JLabel("PRODOTTO");
-                l.setFont(new Font("Arial Black", Font.BOLD, 20));
-                l.setAlignmentX(CENTER_ALIGNMENT);
-                panmain.add(l);
 
-                JPanel main = new JPanel();
-                main.setLayout(new GridLayout(3, 3, 20, 10));
+            JPanel panmain = new JPanel();
+            panmain.setLayout(new BoxLayout(panmain, BoxLayout.Y_AXIS));
+            JLabel l = new JLabel("PRODOTTO");
+            l.setFont(new Font("Arial Black", Font.BOLD, 20));
+            l.setAlignmentX(CENTER_ALIGNMENT);
+            panmain.add(l);
 
-                JPanel psku = new JPanel();
-                JLabel lsku = new JLabel("    SKU");
-                casku = new JTextField(15);
-                casku.setAlignmentX(RIGHT_ALIGNMENT);
-                psku.add(lsku);
-                psku.add(casku);
-                main.add(psku);
+            JPanel main = new JPanel();
+            main.setLayout(new GridLayout(3, 3, 20, 10));
 
-                JPanel pdatareg = new JPanel();
-                JLabel ldatareg = new JLabel("Data reg");
-                casdatareg = new JTextField(15);
-                casdatareg.setAlignmentX(RIGHT_ALIGNMENT);
-                pdatareg.add(ldatareg);
-                pdatareg.add(casdatareg);
-                main.add(pdatareg);
+            JPanel psku = new JPanel();
+            JLabel lsku = new JLabel("    SKU");
+            casku = new JTextField(15);
+            casku.setAlignmentX(RIGHT_ALIGNMENT);
+            psku.add(lsku);
+            psku.add(casku);
+            main.add(psku);
 
-                JPanel pname = new JPanel();
-                JLabel lname = new JLabel("Nome");
-                casname = new JTextField(15);
-                casname.setAlignmentX(RIGHT_ALIGNMENT);
-                pname.add(lname);
-                pname.add(casname);
-                main.add(pname);
+            JPanel pdatareg = new JPanel();
+            JLabel ldatareg = new JLabel("Data reg");
+            casdatareg = new JTextField(15);
+            casdatareg.setAlignmentX(RIGHT_ALIGNMENT);
+            pdatareg.add(ldatareg);
+            pdatareg.add(casdatareg);
+            main.add(pdatareg);
 
-                JPanel pqty = new JPanel();
-                JLabel lqty = new JLabel("Quantità");
-                casqty = new JTextField(15);
-                casqty.setAlignmentX(RIGHT_ALIGNMENT);
-                pqty.add(lqty);
-                pqty.add(casqty);
-                main.add(pqty);
+            JPanel pname = new JPanel();
+            JLabel lname = new JLabel("Nome");
+            casname = new JTextField(15);
+            casname.setAlignmentX(RIGHT_ALIGNMENT);
+            pname.add(lname);
+            pname.add(casname);
+            main.add(pname);
 
-                JPanel pcosto = new JPanel();
-                JLabel lcosto = new JLabel("Costo");
-                ccosto = new JTextField(15);
-                ccosto.setAlignmentX(RIGHT_ALIGNMENT);
-                pcosto.add(lcosto);
-                pcosto.add(ccosto);
-                main.add(pcosto);
+            JPanel pqty = new JPanel();
+            JLabel lqty = new JLabel("Quantità");
+            casqty = new JTextField(15);
+            casqty.setAlignmentX(RIGHT_ALIGNMENT);
+            pqty.add(lqty);
+            pqty.add(casqty);
+            main.add(pqty);
 
-                JPanel pmin = new JPanel();
-                JLabel lmin = new JLabel("Qty. min");
-                cmin = new JTextField(15);
-                cmin.setAlignmentX(RIGHT_ALIGNMENT);
-                pmin.add(lmin);
-                pmin.add(cmin);
-                main.add(pmin);
- 
-                JPanel pforn = new JPanel();
-                JLabel lforn = new JLabel("Fornitore");
-                cforn = new JTextField(15);
-                cforn.setText("DA DEFINIRE");
-                cforn.setBackground(Color.darkGray);
-                cforn.setEditable(false);
-                cforn.setAlignmentX(RIGHT_ALIGNMENT);
-                pforn.add(lforn);
-                pforn.add(cforn);
-                main.add(pforn);
-                
-                JPanel panelcat = new JPanel();                
-                JLabel lcat = new JLabel("Categoria"); 
-                panelcat.add(lcat);
-                    
-                cat = new JComboBox<>();
-                cat.setFont(new Font("Arial Black", Font.BOLD, 15));
-                cat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Categoria 1", "categoria2"}));
-                cat.setForeground(Color.black);
-                cat.setBackground(Color.DARK_GRAY);
-                cat.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    }
-                });
-                panelcat.add(cat);   
-                main.add(panelcat);
+            JPanel pcosto = new JPanel();
+            JLabel lcosto = new JLabel("Costo");
+            ccosto = new JTextField(15);
+            ccosto.setAlignmentX(RIGHT_ALIGNMENT);
+            pcosto.add(lcosto);
+            pcosto.add(ccosto);
+            main.add(pcosto);
 
-                
-               JCheckBox negozio = new JCheckBox("Negozio");
-               negozio.setSelected(false);
-               main.add(negozio);
-               
-               panmain.add(main);
+            JPanel pmin = new JPanel();
+            JLabel lmin = new JLabel("Qty. min");
+            cmin = new JTextField(15);
+            cmin.setAlignmentX(RIGHT_ALIGNMENT);
+            pmin.add(lmin);
+            pmin.add(cmin);
+            main.add(pmin);
 
-               panmain.setBackground(Color.red);
-               main.setBackground(Color.yellow);
-   
-    // PAN DOWN CHE HA NOTE E JPANEL X FOTO           
-               JPanel pandown = new JPanel();
-               pandown.setBackground(Color.green);
-               pandown.setLayout(new GridLayout(2, 2, 20, 10));
+            JPanel pforn = new JPanel();
+            JLabel lforn = new JLabel("Fornitore");
+            cforn = new JTextField(15);
+            cforn.setText("DA DEFINIRE");
+            cforn.setBackground(Color.darkGray);
+            cforn.setEditable(false);
+            cforn.setAlignmentX(RIGHT_ALIGNMENT);
+            pforn.add(lforn);
+            pforn.add(cforn);
+            main.add(pforn);
 
-                JPanel pnote = new JPanel();
-                JLabel notext = new JLabel("Note");
-                note = new JTextArea("");
-                note.setAlignmentX(LEFT_ALIGNMENT);
-                note.setLineWrap(true);
-                note.setRows(5);
-                note.setColumns(20);
-                pandown.add(notext);
-                JScrollPane scrollPane = new JScrollPane(note);
-                pnote.add(notext);
-                pnote.add(scrollPane);  
-                pandown.add(pnote);
-                
-                JButton bfoto = new JButton();
-                ImageIcon icon = new ImageIcon((getClass().getResource("/res/img/upload.png")));
-                Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
-                icon.setImage(ImmagineScalata);
-                bfoto.setIcon(icon);
-                
-                pandown.add(bfoto);
-                
-                
-                  
-               JPanel panstock = new JPanel();
-               panstock.add(new JLabel("        "));
-               JCheckBox inStock = new JCheckBox("In Stock");
-               inStock.setSelected(false);  
-               panstock.add(inStock);
-               pandown.add(panstock);
-               
+            JPanel panelcat = new JPanel();
+            JLabel lcat = new JLabel("Categoria");
+            panelcat.add(lcat);
 
-               JPanel Buttons = new JPanel();
-               JButton salva = new JButton("Conferma");
-               salva.setFont(new Font("Arial Black", Font.BOLD, 15));
-
-                salva.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        if (modalita.equals("ADD")) {
-                            if (check()) {
-                                getOggettoforFormSave();
-                            }
-                        } else if (check()) {
-                            getOggettoforFormUpdate();
-                        }
-
-                    }
-                });
-
-                JButton annulla = new JButton("Annulla");
-                annulla.setFont(new Font("Arial Black", Font.BOLD, 15));
-                annulla.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        form.setVisible(false);
-                        form = null;
-
-                    }
-                });
-
-                Buttons.add(salva);
-                Buttons.add(annulla);     
-                pandown.add(Buttons);
-                
-       
-                panmain.add(main);
-                panmain.add(pandown);
-
-               
-               
-               
-               
-               add(panmain);
-                
-                
-/*
-                JPanel pandown = new JPanel();
-                JLabel notext = new JLabel("Note");
-                note = new JTextArea("");
-                note.setAlignmentX(LEFT_ALIGNMENT);
-                note.setLineWrap(true);
-                note.setRows(5);
-                note.setColumns(20);
-                pandown.add(notext);
-                JScrollPane scrollPane = new JScrollPane(note);
-                pandown.add(scrollPane);
-
-                pandown.add(new JLabel("                        "));
-
-                JButton salva = new JButton("Conferma");
-                salva.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        if (modalita.equals("ADD")) {
-                            if (check()) {
-                                getOggettoforFormSave();
-                            }
-                        } else if (check()) {
-                            getOggettoforFormUpdate();
-                        }
-
-                    }
-                });
-
-                JButton annulla = new JButton("Annulla");
-                annulla.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        form.setVisible(false);
-                        form = null;
-
-                    }
-                });
-
-                pandown.add(salva);
-                pandown.add(annulla);
-
-                pancliente.add(pandown);
-
-                add(pancliente);      
-                 */
-
-        }
-
-        private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
-            form.setVisible(false);
-
-        }
-
-        private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
-            if (check()) {
-                //Aggiungi riga
-                if (modalita.equals("UPDATE")) {
-                    getOggettoforFormUpdate();
-                } else {
-                    getOggettoforFormSave();
+            cat = new JComboBox<>();
+            cat.setFont(new Font("Arial Black", Font.BOLD, 15));
+            cat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Categoria 1", "categoria2"}));
+            cat.setForeground(Color.black);
+            cat.setBackground(Color.DARK_GRAY);
+            cat.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
                 }
-            }
+            });
+            panelcat.add(cat);
+            main.add(panelcat);
+
+            negozio = new JCheckBox("Negozio");
+            negozio.setFont(new Font("Arial Black", Font.BOLD, 15));
+            negozio.setSelected(false);
+            main.add(negozio);
+
+            panmain.add(main);
+
+            // PAN DOWN CHE HA NOTE E JPANEL X FOTO           
+            JPanel pandown = new JPanel();
+            pandown.setLayout(new GridLayout(2, 2, 20, 10));
+
+            JPanel pnote = new JPanel();
+            JLabel notext = new JLabel("Note");
+            note = new JTextArea("");
+            note.setAlignmentX(LEFT_ALIGNMENT);
+            note.setLineWrap(true);
+            note.setRows(5);
+            note.setColumns(20);
+            pandown.add(notext);
+            JScrollPane scrollPane = new JScrollPane(note);
+            pnote.add(notext);
+            pnote.add(scrollPane);
+            pandown.add(pnote);
+
+            bfoto = new JButton();
+            bfoto.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Upload foto....");
+
+                    JFileChooser jFileChooser = new JFileChooser();
+                    jFileChooser.setCurrentDirectory(new File("./"));
+                    JFrame f = new JFrame();
+                    ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
+                    f.setIconImage(img.getImage());
+                    int result = jFileChooser.showOpenDialog(new JFrame());
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        File selectedFile = jFileChooser.getSelectedFile();
+                        System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+                        percorsofoto = selectedFile.getAbsolutePath();
+
+                        ImageIcon icon = new ImageIcon(percorsofoto);
+                        Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
+                        icon.setImage(ImmagineScalata);
+                        bfoto.setIcon(icon);
+
+                    }
+
+                }
+            });
+
+            ImageIcon icon = new ImageIcon((getClass().getResource("/res/img/upload.png")));
+            Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
+            icon.setImage(ImmagineScalata);
+            bfoto.setIcon(icon);
+
+            pandown.add(bfoto);
+
+            JPanel panstock = new JPanel();
+            panstock.add(new JLabel("        "));
+            inStock = new JCheckBox("In Stock");
+            inStock.setFont(new Font("Arial Black", Font.BOLD, 15));
+            inStock.setSelected(false);
+            panstock.add(inStock);
+            pandown.add(panstock);
+
+            JPanel Buttons = new JPanel(new GridBagLayout());
+            Buttons.add(new JLabel("     "));
+            JButton salva = new JButton("Conferma");
+            salva.setFont(new Font("Arial Black", Font.BOLD, 15));
+
+            salva.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if (check()) {
+                        if (modalita.equals("UPDATE")) {
+                            try {
+                                getOggettoforFormUpdate();
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else {
+                            getOggettoforFormSave();
+                        }
+                    }
+
+                }
+            });
+
+            JButton annulla = new JButton("Annulla");
+            annulla.setFont(new Font("Arial Black", Font.BOLD, 15));
+            annulla.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    form.setVisible(false);
+                    form = null;
+
+                }
+            });
+
+            Buttons.add(salva);
+            Buttons.add(annulla);
+            Buttons.add(new JLabel("     "));
+
+            pandown.add(Buttons);
+
+            panmain.add(main);
+            panmain.add(pandown);
+
+            add(panmain);
 
         }
 
+        // casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), Innegozio, Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, InStock);
         private boolean check() {
-            if (jTextField2.getText().isEmpty() || jList1.isSelectionEmpty() || jList2.isSelectionEmpty() || jTextField6.getText().isEmpty() || jTextField5.getText().isEmpty() || jTextField7.getText().isEmpty() || jTextField9.getText().isEmpty() || jTextField9.getText().isEmpty() || jTextField4.getText().isEmpty()) {
+            if (casname.getText().isEmpty() || casqty.getText().isEmpty() || ccosto.getText().isEmpty() || cmin.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Compila tutti i campi! ['Note' è opzionale]");
                 return false;
             }
 
             try { //Controlla se sono interi...
-                Integer.parseInt(jTextField6.getText());
-                Integer.parseInt(jTextField5.getText());
-                Integer.parseInt(jTextField9.getText());
-                Integer.parseInt(jTextField4.getText());
+                Integer.parseInt(casqty.getText());
+                Integer.parseInt(cmin.getText());
+
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Controlla che \"Quantità\", \"Gioni alla consegna\", \"qty minima\", \"qty in arrivo\", siano numeri validi. [ Per il costo usare \".\" per indicare la parte decimale ]");
+                JOptionPane.showMessageDialog(this, "Controlla che \"Quantità\",  \"qty minima\",  siano numeri validi. [ Per il costo usare \".\" per indicare la parte decimale ]");
                 return false;
             }
 
             //controlla se sono float ...
             try {
-                Float.parseFloat(jTextField7.getText());
+                Float.parseFloat(ccosto.getText());
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Controlla che le quantità ed il costo siano numeri validi! [Per il costo usare '.' per indicare la parte decimale]");
                 return false;
@@ -718,70 +688,111 @@ public class ProdottiPanel extends JPanel {
         }
 
         public void getOggettoforFormSave() {
-            /*
-            Prodotto prod = new Prodotto(jTextField2.getText() , jList1.getSelectedValue(),Integer.parseInt(jTextField6.getText()),jCheckBox1.isSelected(),Integer.parseInt(jTextField5.getText()), Float.valueOf(jTextField7.getText()), jTextField8.getText(), Integer.parseInt(jTextField9.getText()), Integer.parseInt(jTextField4.getText()),"foto.png");
-            ProdottoDAO dao = new ProdottoDAO();
-            
-       
+
+
+            // public Prodotto(String nome, int qty, String Categoria, int instock, float costo, int qty_min, String note, String foto, int negozio)
+            int Innegozio;
+            int InStock;
+
+            if (negozio.isSelected()) {
+                Innegozio = 1;
+            } else {
+                Innegozio = 0;
+            }
+
+            if (inStock.isSelected()) {
+                InStock = 1;
+            } else {
+                InStock = 0;
+            }
+
+            Prodotto prod;
             try {
-                int a= JOptionPane.showConfirmDialog(this,"Dario, sei proprio sicuro?");
-                 if(a==JOptionPane.YES_OPTION){
-                    dao.add(prod, jList2.getSelectedValue()); 
+                prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), Innegozio, Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, InStock);
+
+                ProdottoDAO dao = new ProdottoDAO();
+
+                int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
+                if (a == JOptionPane.YES_OPTION) {
+                    dao.add(prod);
                     form.setVisible(false);
 
-                  }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    
-        try {
-            refreshTab();
-        } catch (SQLException ex) {
-            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            
-             */
+                }
+                                refreshTab();
+  
+            } catch (SQLException ex) {
+                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         }
 
-        private String setFormAsID(String idSelected) {
+        
+        private void setFormAsID(String idSelected) {
 
             ProdottoDAO dao = new ProdottoDAO();
-            /*
+            
         try {
-           
+      
             Prodotto prodotto = dao.getBySku(idSelected);
-            jTextField1.setText(prodotto.getSku());
-            jTextField2.setText(prodotto.getNome());
-            jTextField3.setText(prodotto.getDatareg());
-            jTextField4.setText(Integer.toString(prodotto.getQty_min()));
-            jTextField5.setText(Integer.toString(prodotto.getGiorni_alla_consegna()));
-            jTextField6.setText(Integer.toString(prodotto.getQty()));
-            jTextField7.setText(String.valueOf(prodotto.getCosto()));
-            jTextField8.setText(prodotto.getDescrizione());
-            jTextField9.setText(Integer.toString(prodotto.getQty_inarrivo()));
-            jCheckBox1.setSelected(prodotto.isInstock());
-            jList1.setSelectedValue(prodotto.getCategoria(), true);
-            jList2.setSelectedValue(prodotto.getId_fornitore(), true);
+            casku.setText(prodotto.getSku());
+            casname.setText(prodotto.getNome());
+            casdatareg.setText(prodotto.getDatareg());
+            cmin.setText(Integer.toString(prodotto.getQty_min()));
+            casqty.setText(Integer.toString(prodotto.getQty()));
+            ccosto.setText(String.valueOf(prodotto.getCosto()));
+            note.setText(prodotto.getNote());
+            if(prodotto.isInstock() == 1) inStock.setSelected(true);
+            else  inStock.setSelected(false);
+            cat.setSelectedItem(prodotto.getCategoria());
+
+            if(prodotto.isNegozio() == 1) negozio.setSelected(true);
+            else  negozio.setSelected(false);
+            
+            cat.setSelectedItem(prodotto.getCategoria());            
+
+            ImageIcon icon = new ImageIcon(percorsofoto);
+            Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
+            icon.setImage(ImmagineScalata);
+            bfoto.setIcon(icon);
+
+            
+            
                        
         } catch (SQLException ex) {
             Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-        }   */
+        }   
 
-            return jList2.getSelectedValue();
 
         }
 
-        public void getOggettoforFormUpdate() {
+        public void getOggettoforFormUpdate() throws InterruptedException {
+            
+            int Innegozio;
+            int InStock;
 
-            /*
-            Prodotto prod = new Prodotto(jTextField1.getText(), FornitoreCorrente, jTextField2.getText() , jList1.getSelectedValue(),Integer.parseInt(jTextField6.getText()),jCheckBox1.isSelected(),Integer.parseInt(jTextField5.getText()), Float.valueOf(jTextField7.getText()), jTextField8.getText(), Integer.parseInt(jTextField9.getText()), Integer.parseInt(jTextField4.getText()),"foto.png");
-            ProdottoDAO dao = new ProdottoDAO();       
+            if (negozio.isSelected()) {
+                Innegozio = 1;
+            } else {
+                Innegozio = 0;
+            }
+
+            if (inStock.isSelected()) {
+                InStock = 1;
+            } else {
+                InStock = 0;
+            }
+
+
+            ProdottoDAO dao = new ProdottoDAO();
+            Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), Innegozio , Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, InStock);
         try {            
            int a= JOptionPane.showConfirmDialog(this,"Dario, sei proprio sicuro?");
            if(a==JOptionPane.YES_OPTION){
-            dao.update(prod, jList2.getSelectedValue());               
+               
+               System.out.println("Prodotto modificato: "+casname.getText()+" "+ Integer.parseInt(casqty.getText())+" "+ cat.getSelectedItem().toString()+" "+Innegozio+" "+Float.valueOf(ccosto.getText())+" "+Integer.parseInt(cmin.getText())+" "+note.getText() +" "+ percorsofoto+" "+InStock);
+            dao.update(prod);               
              form.setVisible(false);
              System.out.println("La form:"+ form);
 
@@ -797,45 +808,10 @@ public class ProdottiPanel extends JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-             */
+             
         }
 
-        // Variables declaration - do not modify                     
-        private javax.swing.ButtonGroup buttonGroup1;
-        private javax.swing.ButtonGroup buttonGroup2;
-        private javax.swing.ButtonGroup buttonGroup3;
-        private javax.swing.ButtonGroup buttonGroup4;
-        private javax.swing.ButtonGroup buttonGroup5;
-        private javax.swing.JButton jButton3;
-        private javax.swing.JButton jButton4;
-        private javax.swing.JCheckBox jCheckBox1;
-        private javax.swing.JLabel jLabel1;
-        private javax.swing.JLabel jLabel10;
-        private javax.swing.JLabel jLabel11;
-        private javax.swing.JLabel jLabel2;
-        private javax.swing.JLabel jLabel3;
-        private javax.swing.JLabel jLabel4;
-        private javax.swing.JLabel jLabel5;
-        private javax.swing.JLabel jLabel6;
-        private javax.swing.JLabel jLabel7;
-        private javax.swing.JLabel jLabel8;
-        private javax.swing.JLabel jLabel9;
-        private javax.swing.JList<String> jList1;
-        private javax.swing.JList<String> jList2;
-        private javax.swing.JPanel jPanel1;
-        private javax.swing.JScrollPane jScrollPane1;
-        private javax.swing.JScrollPane jScrollPane2;
-        private javax.swing.JTextField jTextField1;
-        private javax.swing.JTextField jTextField2;
-        private javax.swing.JTextField jTextField3;
-        private javax.swing.JTextField jTextField4;
-        private javax.swing.JTextField jTextField5;
-        private javax.swing.JTextField jTextField6;
-        private javax.swing.JTextField jTextField7;
-        private javax.swing.JTextField jTextField8;
-        private javax.swing.JTextField jTextField9;
-        private java.awt.Label label1;
-        // End of variables declaration                   
+               
     }
 
 }

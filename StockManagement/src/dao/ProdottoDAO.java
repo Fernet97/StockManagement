@@ -162,9 +162,6 @@ public class ProdottoDAO {
         Connection connection = null;
         Statement statement = null;
 
-
-
-
         System.out.println("sku del prodoto da modificare: " + p.getSku());
        // UPDATE `db_stock`.`prodotto` SET `sku` = '1', `datareg` = '2', `nome` = '2', `qty` = '2', `categoria` = '2', `instock` = '2', `costo` = '2', `qty_min` = '2', `note` = '2', `foto` = '2', `negozio` = '2' WHERE (`sku` = '1');
 
