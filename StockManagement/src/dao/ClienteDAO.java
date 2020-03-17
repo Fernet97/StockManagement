@@ -109,37 +109,22 @@ public class ClienteDAO {
 
     public synchronized void add(Cliente c) throws SQLException {
         Connection connection = null;
-        PreparedStatement ps = null;
+        Statement statement = null;
 
-        String insertSQL = "INSERT INTO "+this.TABLE_NAME+" (`datareg`, `fullname`, `cf`, `indirizzo`, `tel`, `email`, `note`) VALUES ( '?', '?', '?', '?', '?', '?', '?')";
-
+        String insertSQL = "INSERT INTO "+this.TABLE_NAME+" (`datareg`, `fullname`, `cf`, `indirizzo`, `tel`, `email`, `note`) "
+                + "VALUES ( '"+c.getDatareg()+"', '"+c.getFullname()+"', '"+c.getCf()+"', '"+c.getIndirizzo()+"', '"+c.getTel()+"', "
+                + "'"+c.getEmail()+"', '"+c.getNote()+"')";
+        System.out.println("add cliente "+ insertSQL);
         try {
             connection = DriverManagerConnectionPool.getConnection();
-            ps = connection.prepareStatement(insertSQL);
-
-                ps.setInt(1, c.getIdcliente());
-                ps.setString(2, c.getDatareg());
-                ps.setString(3, c.getFullname());
-                ps.setString(4, c.getCf());
-                ps.setString(5, c.getIndirizzo());
-                ps.setString(6, c.getTel());
-                ps.setString(7, c.getEmail());
-                ps.setString(0, c.getNote());
-
-           
-
-            System.out.println("prodotto add " + c.toString());
-
-            ps.executeUpdate();
-
+            statement = connection.createStatement();
+            statement.executeUpdate(insertSQL);
             connection.commit();
-
         } finally {
             try {
-                if (ps != null) {
-                    ps.close();
+                if (statement != null) {
+                    statement.close();
                 }
-
             } finally {
                 DriverManagerConnectionPool.releaseConnection(connection);
             }

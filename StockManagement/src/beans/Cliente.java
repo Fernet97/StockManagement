@@ -5,6 +5,9 @@
  */
 package beans;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author LittleJoke
@@ -32,9 +35,9 @@ public static final String tipo = "Cliente";
      * @param email
      * @param note 
      */
-    public Cliente(int idcliente, String datareg, String fullname, String cf, String indirizzo, String tel, String email, String note) {
-        this.idcliente = idcliente;
-        this.datareg = datareg;
+    public Cliente(String datareg, String fullname, String cf, String indirizzo, String tel, String email, String note) {
+
+         setDatareg(generateData());
         this.fullname = fullname;
         this.cf = cf;
         this.indirizzo = indirizzo;
@@ -61,7 +64,7 @@ public static final String tipo = "Cliente";
         this.tel = tel;
         this.email = email;
         this.note = note;
-
+  setDatareg(generateData());
 
     }
 
@@ -138,6 +141,12 @@ public static final String tipo = "Cliente";
         this.note = note;
     }
     
-    
+     public synchronized String generateData() {
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(dtf.format(now)); //11/11/2019 11:11
+        return dtf.format(now);
+    }
     
 }
