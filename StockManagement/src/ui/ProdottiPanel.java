@@ -33,6 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -209,6 +210,10 @@ public class ProdottiPanel extends JPanel {
         icon.setImage(ImmagineScalata);
         return icon;
     }
+
+
+        
+    
 
     public void refreshTab() throws SQLException {
 
@@ -409,6 +414,7 @@ public class ProdottiPanel extends JPanel {
         public JComboBox cat;
         
         private String FornitoreCorrente;
+        private JTextArea note;
 
         /**
          * Creates new form FormProdotti
@@ -433,7 +439,7 @@ public class ProdottiPanel extends JPanel {
             }
 
             ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
-            setSize(900, 600);
+            setSize(600, 600);
             this.setIconImage(img.getImage());
 
             if (modalita.equals("UPDATE")) {
@@ -508,6 +514,9 @@ public class ProdottiPanel extends JPanel {
                 JPanel pforn = new JPanel();
                 JLabel lforn = new JLabel("Fornitore");
                 cforn = new JTextField(15);
+                cforn.setText("DA DEFINIRE");
+                cforn.setBackground(Color.darkGray);
+                cforn.setEditable(false);
                 cforn.setAlignmentX(RIGHT_ALIGNMENT);
                 pforn.add(lforn);
                 pforn.add(cforn);
@@ -526,13 +535,97 @@ public class ProdottiPanel extends JPanel {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                     }
                 });
-                
                 panelcat.add(cat);   
                 main.add(panelcat);
-                
 
+                
+               JCheckBox negozio = new JCheckBox("Negozio");
+               negozio.setSelected(false);
+               main.add(negozio);
+               
+               panmain.add(main);
+
+               panmain.setBackground(Color.red);
+               main.setBackground(Color.yellow);
+   
+    // PAN DOWN CHE HA NOTE E JPANEL X FOTO           
+               JPanel pandown = new JPanel();
+               pandown.setBackground(Color.green);
+               pandown.setLayout(new GridLayout(2, 2, 20, 10));
+
+                JPanel pnote = new JPanel();
+                JLabel notext = new JLabel("Note");
+                note = new JTextArea("");
+                note.setAlignmentX(LEFT_ALIGNMENT);
+                note.setLineWrap(true);
+                note.setRows(5);
+                note.setColumns(20);
+                pandown.add(notext);
+                JScrollPane scrollPane = new JScrollPane(note);
+                pnote.add(notext);
+                pnote.add(scrollPane);  
+                pandown.add(pnote);
+                
+                JButton bfoto = new JButton();
+                ImageIcon icon = new ImageIcon((getClass().getResource("/res/img/upload.png")));
+                Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
+                icon.setImage(ImmagineScalata);
+                bfoto.setIcon(icon);
+                
+                pandown.add(bfoto);
+                
+                
+                  
+               JPanel panstock = new JPanel();
+               panstock.add(new JLabel("        "));
+               JCheckBox inStock = new JCheckBox("In Stock");
+               inStock.setSelected(false);  
+               panstock.add(inStock);
+               pandown.add(panstock);
+               
+
+               JPanel Buttons = new JPanel();
+               JButton salva = new JButton("Conferma");
+               salva.setFont(new Font("Arial Black", Font.BOLD, 15));
+
+                salva.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (modalita.equals("ADD")) {
+                            if (check()) {
+                                getOggettoforFormSave();
+                            }
+                        } else if (check()) {
+                            getOggettoforFormUpdate();
+                        }
+
+                    }
+                });
+
+                JButton annulla = new JButton("Annulla");
+                annulla.setFont(new Font("Arial Black", Font.BOLD, 15));
+                annulla.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        form.setVisible(false);
+                        form = null;
+
+                    }
+                });
+
+                Buttons.add(salva);
+                Buttons.add(annulla);     
+                pandown.add(Buttons);
+                
+       
                 panmain.add(main);
-                add(panmain);
+                panmain.add(pandown);
+
+               
+               
+               
+               
+               add(panmain);
+                
+                
 /*
                 JPanel pandown = new JPanel();
                 JLabel notext = new JLabel("Note");

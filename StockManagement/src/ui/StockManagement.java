@@ -23,12 +23,17 @@ public class StockManagement {
   public static void main(String[] args) {
       
       
-       // CRE CARTELLA QRCODE
+       // CREA CARTELLA QRCODE
        File directory = new File("./QRCODE/");
        if (!directory.mkdir()) {
        System.out.println("Impossibile creare la directory!");
        }
-      
+       
+       // CREA CARTELLA QRCODE
+       File directory2 = new File("./IMG/");
+       if (!directory2.mkdir()) {
+       System.out.println("Impossibile creare la directory!");
+       }      
       
 
         UIManager.put( "control", new Color( 27, 32, 36) );
