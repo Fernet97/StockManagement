@@ -170,7 +170,7 @@ public class ProdottoDAO {
 
         String query = "UPDATE "+this.TABLE_NAME+" SET `nome` = '"+p.getNome()+"', `qty` = '"+p.getQty()+"', `categoria` = '"+p.getCategoria()+"', "
                 + "`instock` = '"+p.isInstock()+"', `costo` = '"+p.getCosto()+"', `qty_min` = '"+p.getQty_min()+"', `note` = '"+p.getNote()+"', "
-                + "`foto` = '"+p.getNote()+"', `negozio` = '"+p.isNegozio()+"' WHERE (`sku` = '"+p.getSku()+"')";
+                + "`foto` = '"+p.getFoto()+"', `negozio` = '"+p.isNegozio()+"' WHERE (`sku` = '"+p.getSku()+"')";
         System.out.println("prodotto update " + query);
 
         try {
