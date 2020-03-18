@@ -103,7 +103,7 @@ public class CodiciPanel extends JPanel{
                 }
                 
             try {
-                          Desktop.getDesktop().open(new File("./QRCODE/"));
+                          Desktop.getDesktop().open(new File("./DATA/QRCODE/"));
                       } catch (IOException ex) {
                           Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
                       }
