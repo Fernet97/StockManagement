@@ -207,7 +207,7 @@ class CategoriePanel extends JPanel {
 
         public void  refreshTab() throws SQLException{
           
-     /*
+  
             //Cancello vecchie righe...
             System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
             model.setRowCount(0);
@@ -238,7 +238,7 @@ class CategoriePanel extends JPanel {
                 model.addRow(new Object[]{catDinamica,  "DA DEFINIRE", "Vai a prodotti"} ); 
      
             }
-           */     
+            
         }
 
 
@@ -371,7 +371,7 @@ public class AddCategoriaDialog extends JDialog {
 
     private void close(){   this.dispose(); }
 
-    public String getName(){    return this.name.getText(); }
+    public String getName(){    return this.name.getText().toUpperCase(); }
     
     public void confermaCategoria(){
    
@@ -381,9 +381,9 @@ public class AddCategoriaDialog extends JDialog {
                 }
                 else{
                     System.out.println("Hai aggiunto la categoria"+ name.getText());
-                    model.addRow(new Object[]{name.getText(),  "DA DEFINIRE", "Vai a prodotti"} ); 
-                    list_cat_new.add(name.getText());                
-//                    frameprinc.prodotti.list_cat_new.add(name.getText());                
+                    model.addRow(new Object[]{name.getText().toUpperCase(),  "DA DEFINIRE", "Vai a prodotti"} ); 
+                    list_cat_new.add(name.getText().toUpperCase());                
+                    frameprinc.prodotti.list_cat_new.add(name.getText().toUpperCase());                
                     close(); 
                 }
     }

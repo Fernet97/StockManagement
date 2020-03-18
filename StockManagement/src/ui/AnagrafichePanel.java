@@ -308,10 +308,10 @@ public class AnagrafichePanel extends JPanel {
                         System.out.println("OOOOOOOOKKKKKK CANCELLO");
 
                         if (table.getValueAt(row, 0).toString().equals("Fornitore")) {
+                            System.out.println("Sto cancellando un fornitore...");
                             FornitoreDAO dao = new FornitoreDAO();
                             try {
                                 dao.remove(table.getValueAt(row, 1).toString());
-                                refreshTab();
                             } catch (Exception e) {
                                 JOptionPane.showMessageDialog(getComponent(), "Se vuoi cancellare un fornitore, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");
                                 e.printStackTrace();
@@ -320,10 +320,10 @@ public class AnagrafichePanel extends JPanel {
                         }
 
                         if (table.getValueAt(row, 0).toString().equals("Utente")) {
+                            System.out.println("Sto cancellando un Utente...");
                             UtenteDAO dao = new UtenteDAO();
                             try {
                                 dao.remove(table.getValueAt(row, 1).toString());
-                                refreshTab();
                             } catch (Exception e) {
                                 JOptionPane.showMessageDialog(getComponent(), "Se vuoi cancellare un Utente, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");
                                 e.printStackTrace();
@@ -335,7 +335,6 @@ public class AnagrafichePanel extends JPanel {
                             ClienteDAO dao = new ClienteDAO();
                             try {
                                 //dao.remove(table.getValueAt(row, 1).toString());
-                                refreshTab();
                             } catch (Exception e) {
                                 JOptionPane.showMessageDialog(getComponent(), "Se vuoi cancellare un cliente, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");
                                 e.printStackTrace();
@@ -363,6 +362,11 @@ public class AnagrafichePanel extends JPanel {
                     JOptionPane.showMessageDialog(getComponent(), "Vai in ORDINI");
                 }
 
+            }
+            try {
+                refreshTab();
+            } catch (SQLException ex) {
+                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
             }
             clicked = false;
             return new String(label);

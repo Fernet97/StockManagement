@@ -26,6 +26,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,6 +80,9 @@ public class ProdottiPanel extends JPanel {
     public FormProdotti form;
     public ArrayList<String> list_cat_new;
     private final JTable table;
+    public  String percorsofoto;
+
+    
 
     public ProdottiPanel() {
         list_cat_new = new ArrayList<>();
@@ -242,9 +246,6 @@ public class ProdottiPanel extends JPanel {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
-            for (int i = 0; i <= 12; i++) {
-                System.out.println("Valore colonna" + i + " " + table.getValueAt(row, i));
-            }
 
             if (Integer.parseInt(table.getValueAt(row, 4).toString()) <= Integer.parseInt(table.getValueAt(row, 9).toString())) {
 
@@ -268,7 +269,7 @@ public class ProdottiPanel extends JPanel {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
-            if (Boolean.parseBoolean(table.getValueAt(row, 6).toString())) {
+            if ((table.getValueAt(row, 6).toString().equals("1"))) {
                 setBackground(new Color(126, 169, 93));  // VERDE          
 
             } else {
@@ -412,9 +413,7 @@ public class ProdottiPanel extends JPanel {
         public JTextField cmin;
         public JTextField cforn;
         public JComboBox cat;
-        public String percorsofoto;
 
-        private String FornitoreCorrente;
         private JTextArea note;
         private JCheckBox inStock;
         private JCheckBox negozio;
@@ -447,6 +446,12 @@ public class ProdottiPanel extends JPanel {
                 casku.setBackground(Color.DARK_GRAY);
                 casdatareg.setBackground(Color.DARK_GRAY);
                 
+            if (modalita.equals("UPDATE")) {
+                System.out.println("Sono in modalità update ...");
+                System.out.println(" Id selezionato: " + idSelected);
+                setFormAsID(idSelected);
+            }
+                
             } catch (SQLException ex) {
                 Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -455,16 +460,10 @@ public class ProdottiPanel extends JPanel {
             setSize(600, (650));
             this.setIconImage(img.getImage());
 
-            if (modalita.equals("UPDATE")) {
-                System.out.println("Sono in modalità update ...");
-                System.out.println(" Id selezionato: " + idSelected);
-                setFormAsID(idSelected);
-            }
 
         }
 
         private void initComponents() throws SQLException {
-
             JPanel panmain = new JPanel();
             panmain.setLayout(new BoxLayout(panmain, BoxLayout.Y_AXIS));
             JLabel l = new JLabel("PRODOTTO");
@@ -540,7 +539,25 @@ public class ProdottiPanel extends JPanel {
 
             cat = new JComboBox<>();
             cat.setFont(new Font("Arial Black", Font.BOLD, 15));
-            cat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Categoria 1", "categoria2"}));
+            
+            ProdottoDAO dao = new ProdottoDAO();
+        // Cat dal db + Cat dinamiche aggiunte prima in java
+        String[] list_prod = new String[dao.getAll().size()+ list_cat_new.size()+1];
+        for(int y =0; y<list_cat_new.size(); y++){ //Aggiungo le categorie aggiunte prima dinamicamente..
+            list_prod[y] = list_cat_new.get(y);
+            System.out.println("size:" + list_cat_new.get(y));        
+        }        
+             
+        Iterator<Prodotto> iter = dao.getAll().iterator();
+        int i =0;
+        int sum = list_cat_new.size();
+        while(iter.hasNext()){ //Aggiungo prima le categorie estrapolate dal db..
+            list_prod[sum+i] = iter.next().getCategoria();
+            i++;
+        }
+        String[] stringsP = Arrays.stream(list_prod).distinct().toArray(String[]:: new);;
+         
+            cat.setModel(new javax.swing.DefaultComboBoxModel<>(stringsP));
             cat.setForeground(Color.black);
             cat.setBackground(Color.DARK_GRAY);
             cat.addActionListener(new java.awt.event.ActionListener() {
@@ -552,7 +569,6 @@ public class ProdottiPanel extends JPanel {
 
             negozio = new JCheckBox("Negozio");
             negozio.setFont(new Font("Arial Black", Font.BOLD, 15));
-            negozio.setSelected(false);
             main.add(negozio);
 
             panmain.add(main);
@@ -581,9 +597,6 @@ public class ProdottiPanel extends JPanel {
 
                     JFileChooser jFileChooser = new JFileChooser();
                     jFileChooser.setCurrentDirectory(new File("./"));
-                    JFrame f = new JFrame();
-                    ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
-                    f.setIconImage(img.getImage());
                     int result = jFileChooser.showOpenDialog(new JFrame());
                     if (result == JFileChooser.APPROVE_OPTION) {
                         File selectedFile = jFileChooser.getSelectedFile();
@@ -599,8 +612,7 @@ public class ProdottiPanel extends JPanel {
 
                 }
             });
-
-            ImageIcon icon = new ImageIcon((getClass().getResource("/res/img/upload.png")));
+            ImageIcon icon = new ImageIcon(getClass().getResource("/res/img/upload.png"));
             Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
             icon.setImage(ImmagineScalata);
             bfoto.setIcon(icon);
@@ -611,7 +623,6 @@ public class ProdottiPanel extends JPanel {
             panstock.add(new JLabel("        "));
             inStock = new JCheckBox("In Stock");
             inStock.setFont(new Font("Arial Black", Font.BOLD, 15));
-            inStock.setSelected(false);
             panstock.add(inStock);
             pandown.add(panstock);
 
@@ -633,16 +644,16 @@ public class ProdottiPanel extends JPanel {
                             getOggettoforFormSave();
                         }
                     }
-
                 }
-            });
+            }
+                    
+            );
 
             JButton annulla = new JButton("Annulla");
             annulla.setFont(new Font("Arial Black", Font.BOLD, 15));
             annulla.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     form.setVisible(false);
-                    form = null;
 
                 }
             });
@@ -665,6 +676,11 @@ public class ProdottiPanel extends JPanel {
             if (casname.getText().isEmpty() || casqty.getText().isEmpty() || ccosto.getText().isEmpty() || cmin.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Compila tutti i campi! ['Note' è opzionale]");
                 return false;
+            }
+            
+            if(cat.getSelectedItem() == null){
+                            JOptionPane.showMessageDialog(this, "Devi scegliere una categoria!!");
+
             }
 
             try { //Controlla se sono interi...
@@ -699,6 +715,7 @@ public class ProdottiPanel extends JPanel {
             } else {
                 Innegozio = 0;
             }
+            
 
             if (inStock.isSelected()) {
                 InStock = 1;
@@ -752,11 +769,18 @@ public class ProdottiPanel extends JPanel {
             
             cat.setSelectedItem(prodotto.getCategoria());            
 
-            ImageIcon icon = new ImageIcon(percorsofoto);
+            percorsofoto = prodotto.getFoto();
+            ImageIcon icon;
+            if(percorsofoto == null){
+                icon = new ImageIcon(getClass().getResource("/res/img/upload.png"));
+                System.err.println("Non ho trovato una foto per questo prodotto");
+            }
+            else icon = new ImageIcon(percorsofoto);
             Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
             icon.setImage(ImmagineScalata);
             bfoto.setIcon(icon);
-
+            
+            System.out.println("Prodotto:"+prodotto.getSku() +" "+prodotto.getDatareg()+" "+prodotto.getQty()+ " "+prodotto.getFoto()+ "  inStock:"+prodotto.isInstock());
             
             
                        
