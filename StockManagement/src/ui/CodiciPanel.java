@@ -91,7 +91,7 @@ public class CodiciPanel extends JPanel{
             public void actionPerformed(ActionEvent e) {  
                 
                 //Cancella tutti i qr code png vecchi:
-                File directory = new File("./QRCODE");
+                File directory = new File("./DATA/QRCODE");
                 File[] files = directory.listFiles();
                 for (File f : files) f.delete();
                       
@@ -325,7 +325,7 @@ public class CodiciPanel extends JPanel{
               else if(button.getText().equals("Stampa")) {
                             String path = table.getValueAt(row, 0).toString();
                   try {
-                      Desktop.getDesktop().open(new File("./QRCODE/"+path.substring(0, path.indexOf("-"))+".png"));
+                      Desktop.getDesktop().open(new File("./DATA/QRCODE/"+path.substring(0, path.indexOf("-"))+".png"));
                   } catch (IOException ex) {
                       Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
                   }
@@ -359,9 +359,9 @@ public class CodiciPanel extends JPanel{
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(sku, BarcodeFormat.QR_CODE, 130, 130);
 
-        Path path = FileSystems.getDefault().getPath("./QRCODE/"+sku.substring(0, sku.indexOf("-"))+".png");
+        Path path = FileSystems.getDefault().getPath("./DATA/QRCODE/"+sku.substring(0, sku.indexOf("-"))+".png");
         MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);              
             
-            return "./QRCODE/"+sku.substring(0, sku.indexOf("-"))+".png"; //Ritorna il percorso del QR generato
+            return "./DATA/QRCODE/"+sku.substring(0, sku.indexOf("-"))+".png"; //Ritorna il percorso del QR generato
         } 
 }
