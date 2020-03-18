@@ -318,7 +318,11 @@ public class ProdottiPanel extends JPanel {
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("APRI FORMMMMm");
+                    try{
                     fireEditingStopped();
+                    }catch(IndexOutOfBoundsException es) {
+                        System.out.println("- - - - - Bug supremo della rimozione - - - - ");}
+                    
                 }
             });
         }
