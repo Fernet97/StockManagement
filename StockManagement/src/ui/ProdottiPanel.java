@@ -450,6 +450,8 @@ public class ProdottiPanel extends JPanel {
                 System.out.println("Sono in modalità update ...");
                 System.out.println(" Id selezionato: " + idSelected);
                 setFormAsID(idSelected);
+                cat.setEnabled(false);
+                cat.setBackground(Color.darkGray);
             }
                 
             } catch (SQLException ex) {
@@ -603,7 +605,7 @@ public class ProdottiPanel extends JPanel {
                         File selectedFile = jFileChooser.getSelectedFile();
                         System.out.println("Selected file: " + selectedFile.getAbsolutePath());
                         percorsofoto = selectedFile.getAbsolutePath();
-
+                        System.err.println("Percorso foto appena caricata:"+percorsofoto);
                         ImageIcon icon = new ImageIcon(percorsofoto);
                         Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
                         icon.setImage(ImmagineScalata);
