@@ -28,12 +28,12 @@ public class Prodotto {
     String nome;
     int qty;
     String Categoria;
-    int instock;
+    boolean instock;
     float costo;
     int qty_min;
     String note;
     String foto;
-    int negozio;
+    boolean negozio;
 
     /**
      * costruttore completo
@@ -49,7 +49,7 @@ public class Prodotto {
      * @param foto
      * @param negozio 
      */
-    public Prodotto(String sku, String datareg, String nome, int qty, String Categoria, int instock, float costo, int qty_min, String note, String foto, int negozio) {
+    public Prodotto(String sku, String datareg, String nome, int qty, String Categoria, boolean instock, float costo, int qty_min, String note, String foto, boolean negozio) {
         this.sku = sku;
         this.datareg = datareg;
         this.nome = nome;
@@ -76,7 +76,7 @@ public class Prodotto {
      * @param foto
      * @param negozio 
      */
-    public Prodotto(String nome, int qty, String Categoria, int instock, float costo, int qty_min, String note, String foto, int negozio) throws InterruptedException {
+    public Prodotto(String nome, int qty, String Categoria, boolean instock, float costo, int qty_min, String note, String foto, boolean negozio) throws InterruptedException {
 
         this.nome = nome;
         this.qty = qty;
@@ -142,11 +142,11 @@ public class Prodotto {
         this.Categoria = Categoria;
     }
 
-    public int isInstock() {
+    public boolean isInstock() {
         return instock;
     }
 
-    public void setInstock(int instock) {
+    public void setInstock(boolean instock) {
         this.instock = instock;
     }
 
@@ -182,11 +182,11 @@ public class Prodotto {
         this.foto = foto;
     }
 
-    public int isNegozio() {
+    public boolean isNegozio() {
         return negozio;
     }
 
-    public void setNegozio(int negozio) {
+    public void setNegozio(boolean negozio) {
         this.negozio = negozio;
     }
 
