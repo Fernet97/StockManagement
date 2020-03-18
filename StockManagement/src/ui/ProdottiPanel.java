@@ -464,6 +464,7 @@ public class ProdottiPanel extends JPanel {
         }
 
         private void initComponents() throws SQLException {
+            percorsofoto = null;
             JPanel panmain = new JPanel();
             panmain.setLayout(new BoxLayout(panmain, BoxLayout.Y_AXIS));
             JLabel l = new JLabel("PRODOTTO");
@@ -636,6 +637,7 @@ public class ProdottiPanel extends JPanel {
                     if (check()) {
                         if (modalita.equals("UPDATE")) {
                             try {
+                                setFormAsID(IdSelezionato); // da cancellare
                                 getOggettoforFormUpdate();
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -768,8 +770,9 @@ public class ProdottiPanel extends JPanel {
             else  negozio.setSelected(false);
             
             cat.setSelectedItem(prodotto.getCategoria());            
-
+            System.err.println("percorso foto prima di prenderla daldb:"+percorsofoto);
             percorsofoto = prodotto.getFoto();
+            System.err.println("percorso foto DOPO di prenderla daldb:"+percorsofoto);
             ImageIcon icon;
             if(percorsofoto == null){
                 icon = new ImageIcon(getClass().getResource("/res/img/upload.png"));
