@@ -31,7 +31,7 @@ public class ProdottoDAO {
 
         Collection<Prodotto> prodotti = new LinkedList<Prodotto>();
 
-        String selectSQL = "select* from "+this.TABLE_NAME+"";
+        String selectSQL = "select* from " + this.TABLE_NAME + "";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -100,7 +100,6 @@ public class ProdottoDAO {
                 bean.setFoto(rs.getString("foto"));
                 bean.setNegozio(rs.getBoolean("negozio"));
 
-
             }
         } finally {
             try {
@@ -112,6 +111,7 @@ public class ProdottoDAO {
             }
 
         }
+        System.out.println("foto getby "+bean.getFoto());
         return bean;
     }
 
@@ -125,19 +125,18 @@ public class ProdottoDAO {
             connection = DriverManagerConnectionPool.getConnection();
             ps = connection.prepareStatement(insertSQL);
 
-                ps.setString(1, b.getSku());
-                ps.setString(2, b.getDatareg());
-                ps.setString(3, b.getNome());
-                ps.setInt(4, b.getQty());
-                ps.setString(5, b.getCategoria());
-                ps.setBoolean(6, b.isInstock());
-                ps.setFloat(7, b.getCosto());
-                ps.setInt(8, b.getQty_min());
-                ps.setString(9, b.getNote());
-                ps.setString(10, b.getFoto());
-                ps.setBoolean(11, b.isNegozio());
-                ps.setInt(12, b.getCode());
-           
+            ps.setString(1, b.getSku());
+            ps.setString(2, b.getDatareg());
+            ps.setString(3, b.getNome());
+            ps.setInt(4, b.getQty());
+            ps.setString(5, b.getCategoria());
+            ps.setBoolean(6, b.isInstock());
+            ps.setFloat(7, b.getCosto());
+            ps.setInt(8, b.getQty_min());
+            ps.setString(9, b.getNote());
+            ps.setString(10, b.getFoto());
+            ps.setBoolean(11, b.isNegozio());
+            ps.setInt(12, b.getCode());
 
             System.out.println("prodotto add " + b.toString());
 
@@ -161,14 +160,20 @@ public class ProdottoDAO {
     public synchronized void update(Prodotto p) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
         Connection connection = null;
         Statement statement = null;
-int inStock = p.isInstock()? 1 : 0;
-int isNegozio = p.isNegozio()? 1 : 0;
+        System.out.println("foto "+p.getFoto());
+        /*
+ * inStock & isNegozio sono variabili in che servono per il db fanno il
+ * cast del valore "true","false" (booleano) ad int "1","0"
+         */
+        int inStock = p.isInstock() ? 1 : 0;
+        int isNegozio = p.isNegozio() ? 1 : 0;
+        String foto = p.getFoto().replace("\\", "\\\\");
         System.out.println("sku del prodoto da modificare: " + p.getSku());
-       // UPDATE `db_stock`.`prodotto` SET `sku` = '1', `datareg` = '2', `nome` = '2', `qty` = '2', `categoria` = '2', `instock` = '2', `costo` = '2', `qty_min` = '2', `note` = '2', `foto` = '2', `negozio` = '2' WHERE (`sku` = '1');
+        // UPDATE `db_stock`.`prodotto` SET `sku` = '1', `datareg` = '2', `nome` = '2', `qty` = '2', `categoria` = '2', `instock` = '2', `costo` = '2', `qty_min` = '2', `note` = '2', `foto` = '2', `negozio` = '2' WHERE (`sku` = '1');
 
-        String query = "UPDATE "+this.TABLE_NAME+" SET `nome` = '"+p.getNome()+"', `qty` = '"+p.getQty()+"', `categoria` = '"+p.getCategoria()+"', "
-                + "`instock` = '"+inStock+"', `costo` = '"+p.getCosto()+"', `qty_min` = '"+p.getQty_min()+"', `note` = '"+p.getNote()+"', "
-                + "`foto` = '"+p.getFoto()+"', `negozio` = '"+isNegozio+"' WHERE (`sku` = '"+p.getSku()+"')";
+        String query = "UPDATE " + this.TABLE_NAME + " SET `nome` = '" + p.getNome() + "', `qty` = '" + p.getQty() + "', `categoria` = '" + p.getCategoria() + "', "
+                + "`instock` = '" + inStock + "', `costo` = '" + p.getCosto() + "', `qty_min` = '" + p.getQty_min() + "', `note` = '" + p.getNote() + "', "
+                + "`foto` = '" + foto + "', `negozio` = '" + isNegozio + "' WHERE (`sku` = '" + p.getSku() + "')";
         System.out.println("prodotto update " + query);
 
         try {
@@ -218,8 +223,7 @@ int isNegozio = p.isNegozio()? 1 : 0;
         Statement ps = null;
         Prodotto bean = new Prodotto();
 
-        String query = "select* from "+this.TABLE_NAME+" order by id DESC LIMIT 1";
-        
+        String query = "select* from " + this.TABLE_NAME + " order by id DESC LIMIT 1";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -262,7 +266,7 @@ int isNegozio = p.isNegozio()? 1 : 0;
         Prodotto bean = new Prodotto();
         Hashtable<String, String> hashtable = new Hashtable<String, String>();
 
-        String query= "select categoria, sum(qty) from "+this.TABLE_NAME+" GROUP BY categoria;";
+        String query = "select categoria, sum(qty) from " + this.TABLE_NAME + " GROUP BY categoria;";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
