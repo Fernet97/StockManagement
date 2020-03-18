@@ -22,15 +22,20 @@ public class StockManagement {
     	
   public static void main(String[] args) {
       
-      
-       // CREA CARTELLA QRCODE
-       File directory = new File("./QRCODE/");
+       // CREA CARTELLA DI ROOT DEI DATI
+       File directory = new File("./DATA/");
        if (!directory.mkdir()) {
        System.out.println("Impossibile creare la directory!");
        }
-       
+      
        // CREA CARTELLA QRCODE
-       File directory2 = new File("./IMG/");
+       File directory1 = new File("./DATA/QRCODE/");
+       if (!directory1.mkdir()) {
+       System.out.println("Impossibile creare la directory!");
+       }
+       
+       // CREA CARTELLA IMG
+       File directory2 = new File("./DATA/IMG/");
        if (!directory2.mkdir()) {
        System.out.println("Impossibile creare la directory!");
        }      
