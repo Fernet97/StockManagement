@@ -269,7 +269,7 @@ public class ProdottiPanel extends JPanel {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
-            if ((table.getValueAt(row, 6).toString().equals("1"))) {
+            if ((table.getValueAt(row, 6).toString().equals("true"))) {
                 setBackground(new Color(126, 169, 93));  // VERDE          
 
             } else {
@@ -637,7 +637,6 @@ public class ProdottiPanel extends JPanel {
                     if (check()) {
                         if (modalita.equals("UPDATE")) {
                             try {
-                                setFormAsID(IdSelezionato); // da cancellare
                                 getOggettoforFormUpdate();
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -709,25 +708,11 @@ public class ProdottiPanel extends JPanel {
 
 
             // public Prodotto(String nome, int qty, String Categoria, int instock, float costo, int qty_min, String note, String foto, int negozio)
-            int Innegozio;
-            int InStock;
-
-            if (negozio.isSelected()) {
-                Innegozio = 1;
-            } else {
-                Innegozio = 0;
-            }
-            
-
-            if (inStock.isSelected()) {
-                InStock = 1;
-            } else {
-                InStock = 0;
-            }
 
             Prodotto prod;
             try {
-                prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), Innegozio, Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, InStock);
+                System.out.println("Percorso foto prima di salvarlo: "+percorsofoto );
+                prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
 
                 ProdottoDAO dao = new ProdottoDAO();
 
@@ -762,12 +747,11 @@ public class ProdottiPanel extends JPanel {
             casqty.setText(Integer.toString(prodotto.getQty()));
             ccosto.setText(String.valueOf(prodotto.getCosto()));
             note.setText(prodotto.getNote());
-            if(prodotto.isInstock() == 1) inStock.setSelected(true);
-            else  inStock.setSelected(false);
+            inStock.setSelected(prodotto.isInstock());
+            
             cat.setSelectedItem(prodotto.getCategoria());
 
-            if(prodotto.isNegozio() == 1) negozio.setSelected(true);
-            else  negozio.setSelected(false);
+            negozio.setSelected(prodotto.isNegozio());
             
             cat.setSelectedItem(prodotto.getCategoria());            
             System.err.println("percorso foto prima di prenderla daldb:"+percorsofoto);
@@ -795,30 +779,14 @@ public class ProdottiPanel extends JPanel {
         }
 
         public void getOggettoforFormUpdate() throws InterruptedException {
-            
-            int Innegozio;
-            int InStock;
-
-            if (negozio.isSelected()) {
-                Innegozio = 1;
-            } else {
-                Innegozio = 0;
-            }
-
-            if (inStock.isSelected()) {
-                InStock = 1;
-            } else {
-                InStock = 0;
-            }
-
 
             ProdottoDAO dao = new ProdottoDAO();
-            Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), Innegozio , Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, InStock);
+            Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected() , Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
         try {            
            int a= JOptionPane.showConfirmDialog(this,"Dario, sei proprio sicuro?");
            if(a==JOptionPane.YES_OPTION){
                
-               System.out.println("Prodotto modificato: "+casname.getText()+" "+ Integer.parseInt(casqty.getText())+" "+ cat.getSelectedItem().toString()+" "+Innegozio+" "+Float.valueOf(ccosto.getText())+" "+Integer.parseInt(cmin.getText())+" "+note.getText() +" "+ percorsofoto+" "+InStock);
+               System.out.println("Prodotto modificato: "+casname.getText()+" "+ Integer.parseInt(casqty.getText())+" "+ cat.getSelectedItem().toString()+" "+inStock.isSelected()+" "+Float.valueOf(ccosto.getText())+" "+Integer.parseInt(cmin.getText())+" "+note.getText() +" "+ percorsofoto+" "+ negozio.isSelected());
             dao.update(prod);               
              form.setVisible(false);
              System.out.println("La form:"+ form);
