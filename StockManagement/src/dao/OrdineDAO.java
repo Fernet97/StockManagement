@@ -66,14 +66,17 @@ public class OrdineDAO {
 
     }
 
-    public synchronized Ordine getByNum(String n_ordine) throws SQLException {
+    public synchronized Collection<Ordine> getByNum(String o) throws SQLException {
 
         Connection connection = null;
         PreparedStatement ps = null;
 
-        Ordine bean = new Ordine();
+        
+
+        Collection<Ordine> ordini = new LinkedList<Ordine>();
         //SELECT * FROM prodotti WHERE sku = '1';
-        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE n_ordine = " + n_ordine + "";
+        
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE n_ordine = '"+o+"'";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -82,7 +85,7 @@ public class OrdineDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-
+                Ordine bean = new Ordine();
                 bean.setN_ordine(rs.getString("n_ordine"));
                 bean.setData(rs.getString("data"));
                 bean.setQty_in_arrivo(rs.getInt("qty_in_arrivo"));
@@ -92,6 +95,7 @@ public class OrdineDAO {
                 bean.setFk_cliente(rs.getInt("fk_cliente"));
                 bean.setFk_fornitore(rs.getString("fk_fornitore"));
 
+                ordini.add(bean);
             }
         } finally {
             try {
@@ -103,7 +107,7 @@ public class OrdineDAO {
             }
 
         }
-        return bean;
+        return ordini;
     }
 
     public synchronized void add(Ordine o) throws SQLException {

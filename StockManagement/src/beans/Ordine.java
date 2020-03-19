@@ -199,4 +199,11 @@ public class Ordine {
         setCode(leggiUltimoID());
         setN_ordine(generateID());
     }
+
+    @Override
+    public String toString() {
+        return "Ordine{" + "n_ordine=" + n_ordine + ", data=" + data + ", qty_in_arrivo=" + qty_in_arrivo + ", giorni_alla_consegna=" + giorni_alla_consegna + ", fk_utente=" + fk_utente + ", prodotto_sku=" + prodotto_sku + ", fk_cliente=" + fk_cliente + ", fk_fornitore=" + fk_fornitore + ", tipo=" + tipo + '}';
+    }
+    
+    
 }
