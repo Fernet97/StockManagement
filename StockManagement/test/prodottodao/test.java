@@ -19,18 +19,18 @@ public class test {
 
     public static void main(String[] args) throws InterruptedException, SQLException {
                         ProdottoDAO daop = new ProdottoDAO();
- Prodotto p = new Prodotto("1n5088", 10, "diodi", true, 10.5f, 2, "note", "foto", true);
+ Prodotto p = new Prodotto("1aaa", 1, "dican", true, 111.0f, 2, "note", "foto", true);
             daop.add(p);
             System.out.println("add ok wait for update");
-            Thread.sleep(5000);
+//            Thread.sleep(5000);
             
-             ProdottoDAO daopu = new ProdottoDAO();
-            
-             Prodotto p2 = daopu.getBySku(p.getSku());
-             
-             p2.setNegozio(false);
-             p2.setInstock(false);
-             daopu.update(p2);
+//             ProdottoDAO daopu = new ProdottoDAO();
+//            
+//             Prodotto p2 = daopu.getBySku(p.getSku());
+//             
+//             p2.setNegozio(false);
+//             p2.setInstock(false);
+//             daopu.update(p2);
                      
                      
     }
