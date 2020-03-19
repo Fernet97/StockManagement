@@ -335,9 +335,28 @@ public class FramePrincipale extends JFrame  {
     }
 
     public void riavviaStockManagement() throws IOException, InterruptedException {
-       Process pr2 = Runtime.getRuntime().exec("java -jar StockManagement.jar");
-        chiudiStockManagement();
-        
+
+        System.out.println("STO PER RiaVVIARE");
+        Connection con = null;
+
+        try {
+            con = DriverManagerConnectionPool.getConnection();
+            System.out.println("La connessione: " + con);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(getParent(), "Non trovo nessuna connesione :(");
+            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            DriverManagerConnectionPool.releaseConnection(con);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println("La connessione dopo averla chiusa: " + con);
+        dispose();
+        StockManagement.main(new String[1]);
     }
 
     public void chiudiStockManagement() throws IOException, InterruptedException {
