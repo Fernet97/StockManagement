@@ -73,7 +73,7 @@ import others.RoundedPanel;
  *
  * @author Fernet
  */
-public class FramePrincipale extends JFrame  {
+public class FramePrincipale extends JFrame {
 
     private JPanel HomePanel;
     private CardLayout cardlayout;
@@ -126,8 +126,7 @@ public class FramePrincipale extends JFrame  {
             //Aggiungi la carta "ORDINI"    
             ordini = new OrdiniPanel();
             HomePanel.add(ordini, "Ordini");
-            
-            
+
         } else {
             //Aggiungi la carta "ANAGRAFICHE"
             AnagrafichePanel anagrafiche = new AnagrafichePanel();
@@ -143,10 +142,9 @@ public class FramePrincipale extends JFrame  {
             HomePanel.add(prodotti, "Prodotti");
 
             // Aggiungi la carta "CODICI"
-            codici =new CodiciPanel();
-            HomePanel.add(codici, "Codici");       
-            
-            
+            codici = new CodiciPanel();
+            HomePanel.add(codici, "Codici");
+
             //Aggiungi la carta "ORDINIADMIN"
             ordiniadmin = new OrdiniAdminPanel();
             HomePanel.add(ordiniadmin, "Ordini"); //Se è admin allora va sempre con etichetta "ordini"
@@ -382,7 +380,7 @@ public class FramePrincipale extends JFrame  {
         System.out.println("La connessione dopo averla chiusa: " + con);
         dispose();
         JavaProcessId.kILL();
-      
+
     }
 
     class ButtonLaterale extends JPanel { //BOTTONI NAVIGAZIONE DASHBOARD/ANAGRAFICHE ECC
@@ -472,16 +470,16 @@ public class FramePrincipale extends JFrame  {
                     pan.setBackground(color_etichetta);
                     System.out.println("Codice tasto premuto:" + code);
 
-                        try {
-                            
-                            codici.refreshTab();
-                            prodotti.refreshTab();
-                            categorie.refreshTab();
-                            refreshTab();
-                            
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                    try {
+
+                        codici.refreshTab();
+                        prodotti.refreshTab();
+                        categorie.refreshTab();
+                        refreshTab();
+
+                    } catch (SQLException ex) {
+                        Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     disattivaTuttiIBottoniTranne(bottonepremuto.code);
 
                     cardlayout.show(HomePanel, tipo);
@@ -578,49 +576,60 @@ public class FramePrincipale extends JFrame  {
             vai.setForeground(Color.black);
             vai.setLayout(new GridLayout(1, 1));
 
-            
-          
-        if(type.equals("Totale prodotti in magazzino")){
-          
-            
-            ProdottoDAO dao = new ProdottoDAO();
-            Enumeration names;
-            String key;       
-         try {
-            names = dao.getCatAndSum().keys();
-            while(names.hasMoreElements()) {
-                key = (String) names.nextElement();
-                number += Integer.parseInt(dao.getCatAndSum().get(key));
-            }} catch (SQLException ex) {
+            if (type.equals("Totale utenti registrati")) {
+
+                UtenteDAO dao = new UtenteDAO();
+                try {
+                    number = dao.getAll().size();
+                } catch (SQLException ex) {
                     Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
                 }
-         
-           vai.addMouseListener(new MouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    VaiAProdotti("");
+            }
+
+            if (type.equals("Totale prodotti in magazzino")) {
+
+                ProdottoDAO dao = new ProdottoDAO();
+                Enumeration names;
+                String key;
+                try {
+                    names = dao.getCatAndSum().keys();
+                    while (names.hasMoreElements()) {
+                        key = (String) names.nextElement();
+                        number += Integer.parseInt(dao.getCatAndSum().get(key));
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                @Override
-                public void mousePressed(MouseEvent e) {}
 
-                @Override
-                public void mouseReleased(MouseEvent e) {}
+                vai.addMouseListener(new MouseListener() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        VaiAProdotti("");
+                    }
 
-                @Override
-                public void mouseEntered(MouseEvent e) {}
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                    }
 
-                @Override
-                public void mouseExited(MouseEvent e) {}
-            });
-           
-            
-            JLabel scrittaVai =  new JLabel(ImpostaImg("/res/img/prodotti.png"));     
-            vai.add(scrittaVai);
-            
-            
-        }     
-        
-       /* 
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                    }
+                });
+
+                JLabel scrittaVai = new JLabel(ImpostaImg("/res/img/prodotti.png"));
+                vai.add(scrittaVai);
+
+            }
+
+            /* 
         if(type.equals("Totale prodotti in arrivo")){
             
             ProdottoDAO dao = new ProdottoDAO();
