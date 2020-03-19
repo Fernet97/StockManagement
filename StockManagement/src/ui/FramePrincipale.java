@@ -5,6 +5,7 @@
  */
 package ui;
 
+import others.JavaProcessId;
 import beans.Prodotto;
 import beans.Utente;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
@@ -37,6 +38,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.RoundRectangle2D;
 import java.io.File;
 import java.io.IOException;
+import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Enumeration;
@@ -71,7 +73,7 @@ import others.RoundedPanel;
  *
  * @author Fernet
  */
-public class FramePrincipale extends JFrame {
+public class FramePrincipale extends JFrame  {
 
     private JPanel HomePanel;
     private CardLayout cardlayout;
@@ -292,7 +294,13 @@ public class FramePrincipale extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 JOptionPane.showMessageDialog(null, "Riavvio programma ...");
-                riavviaStockManagement();
+                try {
+                    riavviaStockManagement();
+                } catch (IOException ex) {
+                    Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             }
         });
@@ -300,7 +308,13 @@ public class FramePrincipale extends JFrame {
         itemChiudi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                chiudiStockManagement();
+                try {
+                    chiudiStockManagement();
+                } catch (IOException ex) {
+                    Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             }
         });
@@ -320,12 +334,13 @@ public class FramePrincipale extends JFrame {
 
     }
 
-    public void riavviaStockManagement() {
+    public void riavviaStockManagement() throws IOException, InterruptedException {
+       Process pr2 = Runtime.getRuntime().exec("java -jar StockManagement.jar");
         chiudiStockManagement();
-        StockManagement.main(new String[1]);
+        
     }
 
-    public void chiudiStockManagement() {
+    public void chiudiStockManagement() throws IOException, InterruptedException {
 
         System.out.println("STO PER CHIUDERE");
         Connection con = null;
@@ -347,6 +362,8 @@ public class FramePrincipale extends JFrame {
 
         System.out.println("La connessione dopo averla chiusa: " + con);
         dispose();
+        JavaProcessId.kILL();
+      
     }
 
     class ButtonLaterale extends JPanel { //BOTTONI NAVIGAZIONE DASHBOARD/ANAGRAFICHE ECC

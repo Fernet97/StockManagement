@@ -5,6 +5,7 @@
  */
 package ui;
 
+import others.JavaProcessId;
 import database.DriverManagerConnectionPool;
 import java.awt.Color;
 import java.awt.Font;
@@ -20,7 +21,9 @@ import javax.swing.UIManager;
 public class StockManagement {
     
     	
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException {
+      
+      JavaProcessId.jPID();
       
        // CREA CARTELLA DI ROOT DEI DATI
        File directory = new File("./DATA/");
