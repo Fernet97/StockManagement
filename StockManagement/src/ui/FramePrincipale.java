@@ -335,9 +335,8 @@ public class FramePrincipale extends JFrame  {
     }
 
     public void riavviaStockManagement() throws IOException, InterruptedException {
-       Process pr2 = Runtime.getRuntime().exec("java -jar StockManagement.jar");
         chiudiStockManagement();
-        
+        StockManagement.main(new String[1]);
     }
 
     public void chiudiStockManagement() throws IOException, InterruptedException {
