@@ -133,12 +133,13 @@ public class OrdiniAdminPanel  extends JPanel{
         model = new DefaultTableModel();
         model.addColumn("SKU");
         model.addColumn("quantità da ordinare");
+        model.addColumn("Costo unitario");
         model.addColumn("Giorni all'arrivo");
         model.addColumn("Fornitore");
         table.setModel(model);
         JScrollPane sp = new JScrollPane(table); 
         for(int i = 0; i < 40; i++)
-             model.addRow(new Object[]{"XXXXX","8", "Arrivo tra 7 giorni", "Amazon" });  
+             model.addRow(new Object[]{"XXXXX","8","12 euro", "Arrivo tra 7 giorni", "Amazon" });  
         
         info.add(sp);
         info.add(new JButton("Rimuovi prodotto selezionato"));
@@ -154,7 +155,7 @@ public class OrdiniAdminPanel  extends JPanel{
         SXdown.setLayout(new BoxLayout(SXdown, BoxLayout.PAGE_AXIS));    
         
         
-        String[] columnNames = { "# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale ordine","In spedizione", "Riepilogo ordine", "Lista prodotti"};
+        String[] columnNames = { "# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale ordine","In spedizione", "Controlla ordine", "Ricarica ordine"};
 
    
         Object[][] data = {};
@@ -185,7 +186,7 @@ public class OrdiniAdminPanel  extends JPanel{
         JScrollPane sp2 = new JScrollPane(table2); 
         sp2.setBorder(BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (EtchedBorder.RAISED, Color.red, Color.red),"Riepilogo ordini effettuati", TitledBorder.CENTER,TitledBorder.TOP));
         SXdown.add(sp2);
-
+        SXdown.add(new JButton("Cancella ordine selezionato"));
         princ.add(SXdown);
         
         
@@ -256,7 +257,7 @@ public class OrdiniAdminPanel  extends JPanel{
     {
       setText((value == null) ? "" : value.toString());
       if(getText().equals("view"))setIcon(ImpostaImg("/res/img/ordini.png"));
-      else if(getText().equals("")) setIcon(ImpostaImg("/res/img/prodotti.png"));
+      else if(getText().equals("")) setIcon(ImpostaImg("/res/img/categorie.png"));
       
 
       return this;
