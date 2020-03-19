@@ -18,10 +18,10 @@ import dao.UtenteDAO;
 import java.sql.SQLException;
 
 /**
- *
+ * questa classe aggiunge 20 utenti, 10 fornitori, 1000 prodotti
  * @author LittleJoke
  */
-public class Poopulator {
+public class HARDPoopulator {
 
     public static void main(String[] args) throws SQLException, InterruptedException {
 
@@ -54,7 +54,7 @@ public class Poopulator {
             dao.add(u9);
             Utente u10 = new Utente("babbeo nato", "cf", "via1", "121", "@1", "pwd", 0, "note");
             dao.add(u10);
-
+        }
             // System.out.println(+u.toString()+"\n"+u2.toString()+"\n"+u3.toString()+"\n"+u4.toString()+"\n"+u5.toString()+"\n"+u6.toString()+"\n"+u7.toString()+"\n"+u8.toString()+"\n"+u9.toString()+"\n"+u10.toString()+"\n");
             /**
              * fornitore add
@@ -86,6 +86,9 @@ public class Poopulator {
             /**
              * prodotto add
              */
+            for (int i = 0; i < 1000; i++) {
+            
+        
             ProdottoDAO daop = new ProdottoDAO();
 //public Prodotto(String nome int qty,String Categoria,int instock, float costo,int qty_min,String note,String foto,int negozio)
             Prodotto p = new Prodotto("1n5088", 10, "diodi", true, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", false);
@@ -108,23 +111,23 @@ public class Poopulator {
             daop.add(p9);
             Prodotto p10 = new Prodotto("1n58", 10, "diodi", false, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", true);
             daop.add(p10);
-
+    }
 /**
  * add ordine
  */
-            Ordine bean = new Ordine();
-            OrdineDAO daoo = new OrdineDAO();
-
-            for (int j = 0; j < 4; j++) {
-                bean.startOrdine();
-
-//            Ordine o = new Ordine(qty in arrivo, gg alla cons, fk_utente, prodotto_sku, cliente, fk_fornitore)
-                Ordine o = new Ordine(0, 0, "admin", "di18-16/03/2020 16:07:16", 0, "FR-1");
-                Ordine o2 = new Ordine(0, 0, "admin", "op15-16/03/2020 16:07:16", 0, "FR-1");
-
-                daoo.add(o);
-                daoo.add(o2);
-            }
+//            Ordine bean = new Ordine();
+//            OrdineDAO daoo = new OrdineDAO();
+//
+//            for (int j = 0; j < 4; j++) {
+//                bean.startOrdine();
+//
+////            Ordine o = new Ordine(qty in arrivo, gg alla cons, fk_utente, prodotto_sku, cliente, fk_fornitore)
+//                Ordine o = new Ordine(0, 0, "admin", "di18-16/03/2020 16:07:16", 0, "FR-1");
+//                Ordine o2 = new Ordine(0, 0, "admin", "op15-16/03/2020 16:07:16", 0, "FR-1");
+//
+//                daoo.add(o);
+//                daoo.add(o2);
+//            }
             
             
             
@@ -132,28 +135,28 @@ public class Poopulator {
  * add cliente
  */           
 
-       ClienteDAO daoc = new ClienteDAO();
-       Cliente c = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
-       daoc.add(c);
-       Cliente c2 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
-       daoc.add(c2);
-       Cliente c3 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
-       daoc.add(c3);
-       Cliente c4 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
-       daoc.add(c4);
-       Cliente c5 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
-       daoc.add(c5);
-       Cliente c6 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
-       daoc.add(c6);
-       Cliente c7 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
-       daoc.add(c7);
-       Cliente c8 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
-       daoc.add(c8);
-       Cliente c9 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
-       daoc.add(c9);
-       Cliente c10 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
-       daoc.add(c10);
+//       ClienteDAO daoc = new ClienteDAO();
+//       Cliente c = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+//       daoc.add(c);
+//       Cliente c2 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+//       daoc.add(c2);
+//       Cliente c3 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+//       daoc.add(c3);
+//       Cliente c4 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+//       daoc.add(c4);
+//       Cliente c5 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+//       daoc.add(c5);
+//       Cliente c6 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+//       daoc.add(c6);
+//       Cliente c7 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+//       daoc.add(c7);
+//       Cliente c8 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+//       daoc.add(c8);
+//       Cliente c9 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+//       daoc.add(c9);
+//       Cliente c10 = new Cliente("nome", "cf", "indirizzo", "tel", "email", "note");
+//       daoc.add(c10);
         }
 
-    }
+    
 }
