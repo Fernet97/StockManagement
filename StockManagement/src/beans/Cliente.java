@@ -22,7 +22,7 @@ public class Cliente {
     private String tel;
     private String email;
     private String note;
-public static final String tipo = "Cliente";
+    public static final String tipo = "Cliente";
 
     /**
      * 
@@ -148,5 +148,12 @@ public static final String tipo = "Cliente";
         System.out.println(dtf.format(now)); //11/11/2019 11:11
         return dtf.format(now);
     }
+
+    @Override
+    public String toString() {
+        return "Cliente{" + "idcliente=" + idcliente + ", datareg=" + datareg + ", fullname=" + fullname + ", cf=" + cf + ", indirizzo=" + indirizzo + ", tel=" + tel + ", email=" + email + ", note=" + note + '}';
+    }
+     
+     
     
 }

@@ -27,7 +27,7 @@ public class Fornitore {
     private String tel;
     private String email;
     private String note;
-public static final String tipo = "Fornitore";
+    public static final String tipo = "Fornitore";
 
     /**
      *
@@ -204,5 +204,12 @@ public static final String tipo = "Fornitore";
 //        Thread.sleep(1000);
         return idgenerato;
     }
+
+    @Override
+    public String toString() {
+        return "Fornitore{" + "idfornitore=" + idfornitore + ", datareg=" + datareg + ", fullname=" + fullname + ", p_iva=" + p_iva + ", indirizzo=" + indirizzo + ", tel=" + tel + ", email=" + email + ", note=" + note + '}';
+    }
+    
+    
 
 }
