@@ -237,7 +237,7 @@ public class OrdineDAO {
                 bean.setProdotto_sku(rs.getString("prodotto_sku"));
                 bean.setFk_cliente(rs.getInt("fk_cliente"));
                 bean.setFk_fornitore(rs.getString("fk_fornitore"));
-                 bean.setCode(rs.getInt("id"));
+                bean.setCode(rs.getInt("id"));
             }
         } finally {
             try {
