@@ -20,7 +20,7 @@ public class Ordine {
 
     private static int code = 0;
     private static String n_ordine;
-    private static String data;
+    private static String data = " ";
     private int qty_in_arrivo;
     private int giorni_alla_consegna;
     private String fk_utente;
@@ -42,10 +42,9 @@ public class Ordine {
      */
     public Ordine(String n_ordine, String data, int qty_in_arrivo, int giorni_alla_consegna, String fk_utente, String prodotto_sku, int fk_cliente, String fk_fornitore) throws InterruptedException {
 
-         setData(generateData());
-        setCode(leggiUltimoID());
-        setN_ordine(generateID());
-
+       
+        this.n_ordine = n_ordine;
+        this.data = data;
         this.qty_in_arrivo = qty_in_arrivo;
         this.giorni_alla_consegna = giorni_alla_consegna;
         this.fk_utente = fk_utente;
@@ -178,6 +177,7 @@ public class Ordine {
         return lastid;
 
     }
+    
 
     public synchronized String generateData() {
 
@@ -195,10 +195,11 @@ public class Ordine {
     }
 
     public void startOrdine() throws InterruptedException {
-        setData(generateData());
+        
+//        System.out.println("data start "+getData());
         setCode(leggiUltimoID() + 1);
         setN_ordine(generateID());
-
+setData(generateData());
     }
     
   

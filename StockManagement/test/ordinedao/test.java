@@ -22,7 +22,11 @@ public class test {
             Ordine bean = new Ordine();
             OrdineDAO dao =new OrdineDAO();
             
-                    bean.startOrdine();
+                    
+
+        for (int i = 1; i < 3; i++) {
+            
+        bean.startOrdine();
 
 //            Ordine o = new Ordine(qty in arrivo, gg alla cons, fk_utente, prodotto_sku, cliente, fk_fornitore)
         Ordine o = new Ordine(0, 0, "admin", "di18-16/03/2020 16:07:16", 0, "FR-1");
@@ -32,35 +36,19 @@ public class test {
         dao.add(o);
         dao.add(o2);
         dao.add(o3);
-//           bean.setData(bean.generateData());
-//           bean.setCode(bean.leggiUltimoID()+1);
-//           bean.setN_ordine(bean.generateID());
-//
-////        bean.setCode(bean.leggiUltimoID() +1);
-//
-//        for (int i = 0; i < 2; i++) {
-//            
-//        
-////            Ordine o = new Ordine(qty in arrivo, gg alla cons, fk_utente, prodotto_sku, cliente, fk_fornitore)
-//        Ordine o = new Ordine(0, 0, "admin", "di18-16/03/2020 16:07:16", 0, "FR-1");
-//            System.out.println("o "+o.toString());
-//        Ordine o2 = new Ordine(0, 0, "admin", "op15-16/03/2020 16:07:16", 0, "FR-1");
-//        Ordine o3 = new Ordine(0, 0, "admin", "re4-16/03/2020 16:07:16", 0, "FR-1");
-//
-//        dao.add(o);
-//        dao.add(o2);
-//        dao.add(o3);
-
-//        }
+            System.out.println("aspetta 15 secondi , giro= "+i);
+        Thread.sleep(15000);
+        }
 
 //        String n = "1";
 //           Collection<Ordine> ordini = dao.getByNum(n);
 //            
 //            for(Ordine getall : ordini){
 //              System.out.println("testdaoprint " +getall.toString());
-            }
-//            
+//            }
+            
             
             
     }
+}
 
