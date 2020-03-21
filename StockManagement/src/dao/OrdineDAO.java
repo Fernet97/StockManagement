@@ -141,13 +141,13 @@ public class OrdineDAO {
     }
 
     // NB: ma se vuoi cambiare la categoria .. ma poi dovrei cambiare anche lo sku? DA RISCRIVERE
-    public synchronized void update(Ordine o) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
+    public synchronized void updateGG(Ordine o) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
         Connection connection = null;
         Statement statement = null;
 
         System.out.println("sku del ordine da modificare: " + o.getN_ordine());
 //UPDATE `db_stock`.`ordine` SET `n_ordine` = '2', `data` = '2', `qty_in_arrivo` = '2', `giorni_alla_consegna` = '2', `fk_utente` = '2', `prodotto_sku` = '2', `fk_cliente` = '2', `fk_fornitore` = '2', `id` = '2' WHERE (`idordine` = '10')
-        String query = "UPDATE " + this.TABLE_NAME + " SET `data` = '2', `qty_in_arrivo` = '2', `giorni_alla_consegna` = '2', `fk_utente` = '2', `prodotto_sku` = '2', `fk_cliente` = '2', `fk_fornitore` = '2', `id` = '2' WHERE (`idordine` = '10')";
+        String query = "UPDATE " + this.TABLE_NAME + " SET  `giorni_alla_consegna` = '-1',  WHERE (`n_ordine` = '"+o.getN_ordine()+"' AND `prodotto_sku` = '"+o.getProdotto_sku()+"' )";
         System.out.println("ordine update " + query);
 
         try {
@@ -191,29 +191,6 @@ public class OrdineDAO {
 
     }
 
-    public synchronized void removePr(String n_ordine, String prodotto_sku) throws SQLException {
-        Connection connection = null;
-        Statement statement = null;
-        String query = "DELETE FROM " + this.TABLE_NAME + " WHERE  `n_ordine` = '" + n_ordine + "' and `prodotto_sku` = '" + prodotto_sku + "";
-        System.out.println("prodotto ord remove " + query);
-
-        try {
-            connection = DriverManagerConnectionPool.getConnection();
-            statement = connection.createStatement();
-            statement.executeUpdate(query);
-            connection.commit();
-
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-            } finally {
-                DriverManagerConnectionPool.releaseConnection(connection);
-            }
-        }
-
-    }
 
     public synchronized Ordine getLastOrdine() throws SQLException {
 
@@ -335,5 +312,44 @@ public class OrdineDAO {
 
         }
         return ordini;
+    }
+         /**
+          * add metodo che getta il fornitore collegato al prodotto
+          * @param pr
+          * @return
+          * @throws SQLException 
+          */ 
+        public synchronized String getFPr(String pr) throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+
+        
+
+        String fornitore = "";
+        //SELECT * FROM prodotti WHERE sku = '1';
+        
+        String selectSQL = "SELECT fk_fornitore FROM " + this.TABLE_NAME + " WHERE prodotto_sku = '"+pr+"'";
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            ps = connection.prepareStatement(selectSQL);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                fornitore = rs.getString("fr_fornitore");
+            }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+
+        }
+        return fornitore;
     }
 }
