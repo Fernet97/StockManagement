@@ -297,4 +297,43 @@ public class OrdineDAO {
     }
         
         
+        /**
+         * metodo che getta i prodotti in base al fornitore collegato
+         * @param fr
+         * @return
+         * @throws SQLException 
+         */
+          public synchronized Collection<String> getPFr(String fr) throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+
+        
+
+        Collection<String> ordini = new LinkedList<String>();
+        //SELECT * FROM prodotti WHERE sku = '1';
+        
+        String selectSQL = "SELECT prodotto_sku FROM " + this.TABLE_NAME + " WHERE fk_fornitore = '"+fr+"'";
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            ps = connection.prepareStatement(selectSQL);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ordini.add(rs.getString("prodotto_sku"));
+            }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+
+        }
+        return ordini;
+    }
 }
