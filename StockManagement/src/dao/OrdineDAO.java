@@ -12,8 +12,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Hashtable;
 
 /**
  *
@@ -252,4 +254,47 @@ public class OrdineDAO {
         return bean;
 
     }
+    
+    
+        public synchronized ArrayList<ArrayList<String>> groupByOrdini() throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+
+        ArrayList<ArrayList<String>> ordini = new ArrayList<>(5);
+        
+        String selectSQL = "select n_ordine , sum(qty_in_arrivo), sum(costo), giorni_alla_consegna ,data from db_stock.ordine,"
+                + " db_stock.prodotto where prodotto_sku = sku group by n_ordine, giorni_alla_consegna";
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            ps = connection.prepareStatement(selectSQL);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ArrayList<String> record = new ArrayList<String>();
+                record.add(rs.getString("n_ordine"));
+                record.add(rs.getString("sum(qty_in_arrivo)"));
+                record.add(rs.getString("sum(costo)"));
+                record.add(rs.getString("giorni_alla_consegna"));
+                record.add(rs.getString("data"));
+                
+                ordini.add(record);
+                
+            }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+
+        }
+        return ordini;
+    }
+        
+        
 }

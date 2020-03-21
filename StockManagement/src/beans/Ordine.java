@@ -28,7 +28,6 @@ public class Ordine {
     private int fk_cliente;
     private String fk_fornitore;
 
-
     /**
      *
      * @param n_ordine
@@ -42,7 +41,6 @@ public class Ordine {
      */
     public Ordine(String n_ordine, String data, int qty_in_arrivo, int giorni_alla_consegna, String fk_utente, String prodotto_sku, int fk_cliente, String fk_fornitore) throws InterruptedException {
 
-       
         this.n_ordine = n_ordine;
         this.data = data;
         this.qty_in_arrivo = qty_in_arrivo;
@@ -64,7 +62,7 @@ public class Ordine {
      * @param fk_fornitore
      */
     public Ordine(int qty_in_arrivo, int giorni_alla_consegna, String fk_utente, String prodotto_sku, int fk_cliente, String fk_fornitore) throws InterruptedException {
-       
+
         setN_ordine(this.n_ordine);
         setData(this.data);
         setCode(this.code);
@@ -177,7 +175,6 @@ public class Ordine {
         return lastid;
 
     }
-    
 
     public synchronized String generateData() {
 
@@ -195,20 +192,16 @@ public class Ordine {
     }
 
     public void startOrdine() throws InterruptedException {
-        
+
 //        System.out.println("data start "+getData());
         setCode(leggiUltimoID() + 1);
         setN_ordine(generateID());
-setData(generateData());
+        setData(generateData());
     }
-    
-  
-
 
     @Override
     public String toString() {
-        return "Ordine{" + "n_ordine=" + n_ordine + ", data=" + data + ", qty_in_arrivo=" + qty_in_arrivo + ", giorni_alla_consegna=" + giorni_alla_consegna + ", fk_utente=" + fk_utente + ", prodotto_sku=" + prodotto_sku + ", fk_cliente=" + fk_cliente + ", fk_fornitore=" + fk_fornitore +'}';
+        return "Ordine{" + "n_ordine=" + n_ordine + ", data=" + data + ", qty_in_arrivo=" + qty_in_arrivo + ", giorni_alla_consegna=" + giorni_alla_consegna + ", fk_utente=" + fk_utente + ", prodotto_sku=" + prodotto_sku + ", fk_cliente=" + fk_cliente + ", fk_fornitore=" + fk_fornitore + '}';
     }
-    
-    
+
 }
