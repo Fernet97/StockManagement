@@ -82,6 +82,8 @@ public class ProdottiPanel extends JPanel {
     public ArrayList<String> list_cat_new;
     private final JTable table;
     public  String percorsofoto;
+    private FramePrincipale frameprinc;
+
 
     
 
@@ -316,6 +318,9 @@ public class ProdottiPanel extends JPanel {
         private boolean clicked;
         private int row, col;
         private JTable table;
+        private String prodSceltoxOrdine;
+        private JFrame vaiarod;
+        private JComboBox<String> jComboBox;
 
         public ClientsTableRenderer(JCheckBox checkBox) {
             super(checkBox);
@@ -392,7 +397,44 @@ public class ProdottiPanel extends JPanel {
                     form.setVisible(true);
 
                 } else if (button.getText().equals("Ordina")) { // APRI FORM PER MODIFICARE RECORD
-                    JOptionPane.showMessageDialog(getComponent(), "Vai in ORDINI");
+                        //Se un fornitore non è definito
+                        if(table.getValueAt(row, 5).toString().equals("null|  null")){
+                        vaiarod = new JFrame();
+                        vaiarod.setResizable(false);
+                        vaiarod.setSize(new Dimension(300, 300));
+                        vaiarod.setVisible(true);
+                        vaiarod.setLayout(new GridLayout(2, 1));
+                        vaiarod.add(new JLabel("Seleziona un fornitore a cui associare il prodotto"));
+                        FornitoreDAO forndao = new FornitoreDAO();
+                        jComboBox = new JComboBox<>();
+                        vaiarod.add(jComboBox);
+                        
+                        prodSceltoxOrdine = table.getValueAt(row, 0).toString();
+                        
+                    try {
+                        for(Fornitore f :forndao.getAll()){
+                            jComboBox.addItem(f.getIdfornitore() +"|"+f.getFullname());
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    jComboBox.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        frameprinc.VaiAOrdiniconProd( jComboBox.getSelectedItem().toString(), prodSceltoxOrdine);
+                        vaiarod.setVisible(false);
+                        
+                    }
+                    });
+                
+                   } 
+                   // SE IL FORNITORE ERA GIA' DEFINITO
+                   else  {
+                        
+                        frameprinc.VaiAOrdiniconProd( table.getValueAt(row, 5).toString() , table.getValueAt(row, 0).toString());
+
+                        
+                   }   
                 }
 
             }
@@ -824,6 +866,11 @@ public class ProdottiPanel extends JPanel {
         }
 
                
+    }
+    
+    public void  setComunicator(FramePrincipale princ){
+        frameprinc  = princ;
+        
     }
 
 }

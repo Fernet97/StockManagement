@@ -45,6 +45,7 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -131,6 +132,7 @@ public class FramePrincipale extends JFrame {
             //Aggiungi la carta "ANAGRAFICHE"
             AnagrafichePanel anagrafiche = new AnagrafichePanel();
             HomePanel.add(anagrafiche, "Anagrafiche");
+            anagrafiche.setComunicator(this);
 
             // Aggiungi la carta "CATEGORIE"
             categorie = new CategoriePanel();
@@ -140,13 +142,15 @@ public class FramePrincipale extends JFrame {
             // Aggiungi la carta "PRODOTTO"
             prodotti = new ProdottiPanel();
             HomePanel.add(prodotti, "Prodotti");
+            prodotti.setComunicator(this);
+
 
             // Aggiungi la carta "CODICI"
             codici = new CodiciPanel();
             HomePanel.add(codici, "Codici");
 
             //Aggiungi la carta "ORDINIADMIN"
-            ordiniadmin = new OrdiniAdminPanel();
+            ordiniadmin = new OrdiniAdminPanel(nomeuser);
             HomePanel.add(ordiniadmin, "Ordini"); //Se è admin allora va sempre con etichetta "ordini"
 
             //Aggiungi la carta "REPORT"
@@ -331,6 +335,21 @@ public class FramePrincipale extends JFrame {
         prodotti.casella.setText(query);
 
     }
+    
+        public void VaiAOrdini(String forn) {
+           cardlayout.show(HomePanel, "Ordini");
+           ordiniadmin.jComboBox.getModel().setSelectedItem(forn);
+        
+        }
+        
+        public void VaiAOrdiniconProd(String forn, String prod) {
+           cardlayout.show(HomePanel, "Ordini");
+           
+           ordiniadmin.jComboBox.getModel().setSelectedItem(forn);
+           ordiniadmin.casella.setText(prod);
+        
+        }        
+    
 
     public void riavviaStockManagement() throws IOException, InterruptedException {
 
@@ -382,6 +401,8 @@ public class FramePrincipale extends JFrame {
         JavaProcessId.kILL();
 
     }
+
+
 
     class ButtonLaterale extends JPanel { //BOTTONI NAVIGAZIONE DASHBOARD/ANAGRAFICHE ECC
 

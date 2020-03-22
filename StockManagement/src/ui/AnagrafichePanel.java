@@ -78,6 +78,7 @@ public class AnagrafichePanel extends JPanel {
     public static JCheckBox checkforn;
     public static JCheckBox checkuten;
     public static JCheckBox checkclient;
+    private FramePrincipale frameprinc;
 
     public AnagrafichePanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -358,8 +359,9 @@ public class AnagrafichePanel extends JPanel {
                     form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     form.setVisible(true);
 
-                } else if (button.getText().equals("Ordina")) { // APRI FORM PER MODIFICARE RECORD
-                    JOptionPane.showMessageDialog(getComponent(), "Vai in ORDINI");
+                } else if (button.getText().equals("Ordina")) { // VAI A ORDINI
+                     frameprinc.VaiAOrdini(table.getValueAt(row, 1).toString()+"|"+table.getValueAt(row, 3).toString());
+                    
                 }
 
             }
@@ -1037,5 +1039,12 @@ public class AnagrafichePanel extends JPanel {
         System.out.println("Numero di  record prima dell'aggiornamento  " + model.getRowCount());
 
     }
+    
+    
+        public void  setComunicator(FramePrincipale princ){
+        frameprinc  = princ;
+        
+    }
+    
 
 }

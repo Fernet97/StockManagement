@@ -46,12 +46,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import others.RoundedPanel;
@@ -62,17 +65,22 @@ import others.RoundedPanel;
  */
 public class OrdiniAdminPanel extends JPanel {
 
+    public String nomeutente;
     public Prodotto prodottoCorrente;
-    private javax.swing.JComboBox<String> jComboBox;
+    public javax.swing.JComboBox<String> jComboBox;
     private DefaultTableModel model;
     private JTable table;
     private final DefaultTableModel model2;
     private final JTable table2;
     private final JList list;
     private final DefaultListModel listModel;
+    private final JLabel costot;
+    private float costocarrell = 0;
+    private final JLabel numordine;
+    public  JTextField casella;
 
-    public OrdiniAdminPanel() {
-
+    public OrdiniAdminPanel(String user) {
+        nomeutente =  user;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JLabel title = new JLabel("ORDINI ADMIN");
         title.setFont(new Font("Arial Black", Font.BOLD, 40));
@@ -93,8 +101,36 @@ public class OrdiniAdminPanel extends JPanel {
         prodtext.setFont(new Font("Arial Black", Font.BOLD, 20));
         orizontalprod.add(prodtext);
 
-        JTextField casella = new JTextField();
+        casella = new JTextField();
         casella.setColumns(30);
+        casella.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void changedUpdate(DocumentEvent arg0) {}
+
+            @Override
+            public void insertUpdate(DocumentEvent arg0) {
+                String text = casella.getText();
+                OrdineDAO ordinedao = new OrdineDAO();
+                String forny ="";
+                try {
+                    forny = ordinedao.getFPr(text);
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                //ORA è IL MOMENTO DI AGGIUNGERE NEL MODEL DELLA LISTA IL RECORD NEL CARRELLO
+                //ANCHE SE PRIMA NE DEVO SPECIFICARE LA QTY E GIORNI ALL'ARRIVO
+                
+                
+                
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent arg0) {
+            }
+        });
+
         orizontalprod.add(casella);
         sxpan.add(orizontalprod);
 
@@ -139,9 +175,12 @@ public class OrdiniAdminPanel extends JPanel {
                 //TORNA I PRODOTTI DI QUEL FORNITORE
                 System.err.println("Fornitore selezionato:"+idfornitore);
                 OrdineDAO daoo = new OrdineDAO();
+                ProdottoDAO prodao = new ProdottoDAO();
+                
                 try {
                     for(String sku : daoo.getPFr(idfornitore)){
-                    ((DefaultListModel) list.getModel()).addElement(sku); 
+                        Prodotto pp = prodao.getBySku(sku);
+                    ((DefaultListModel) list.getModel()).addElement(pp.getSku() + "|  "+ pp.getNome()); 
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -199,6 +238,10 @@ public class OrdiniAdminPanel extends JPanel {
                         try {   
                             Prodotto p = pdao.getBySku(list.getSelectedValue().toString());
                             model.addRow(new Object[]{list.getSelectedValue(), casellaqty.getText(), p.getCosto(), ggallacons.getText(), jComboBox.getSelectedItem().toString()});                      
+                            costocarrell += p.getCosto()*Integer.parseInt(casellaqty.getText());
+                            costot.setText("Costo totale: "+costocarrell+" euro");
+                            Ordine o = new Ordine();
+                            numordine.setText("#Ordine: ORD-"+o.leggiUltimoID());
                             popup.setVisible(false);
                         } catch (SQLException ex) {
                             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -210,7 +253,6 @@ public class OrdiniAdminPanel extends JPanel {
               
               popup.add(ButtonConferma);
               popup.setVisible(true);
-              add(popup);
           }
     });
         sxpan.add(scrollPane);
@@ -227,6 +269,7 @@ public class OrdiniAdminPanel extends JPanel {
         info.setLayout(new BoxLayout(info, BoxLayout.PAGE_AXIS));
 
         table = new JTable();
+        table.getTableHeader().setReorderingAllowed(false);
         table.setEnabled(false);
         model = new DefaultTableModel();
         model.addColumn("SKU");
@@ -241,7 +284,14 @@ public class OrdiniAdminPanel extends JPanel {
         }*/
 
         info.add(sp);
-        info.add(new JButton("Rimuovi prodotto selezionato"));
+        JButton rimuoviprod = new JButton("Svuota carrello");
+        rimuoviprod.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        costot.setText("Costo totale: 0 euro");
+                        model.setRowCount(0);
+                    }
+                });
+        info.add(rimuoviprod);
 
         infolabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         dxpan.add(infolabel);
@@ -268,8 +318,7 @@ public class OrdiniAdminPanel extends JPanel {
         };
         table2 = new JTable(model2);
         table2.getTableHeader().setReorderingAllowed(false);
-        model2.addRow(data); // DA CANCELLARE
-        refreshTab(); // Aggiorna tavola con  i fornitori del db;
+       // model2.addRow(data); // DA CANCELLARE
 
         table2.getColumnModel().getColumn(4).setCellRenderer(new CustomStockRender());
 
@@ -292,15 +341,17 @@ public class OrdiniAdminPanel extends JPanel {
         riepilogo.setAlignmentX(Component.CENTER_ALIGNMENT);
         DXdown.add(riepilogo);
 
-        JLabel numordine = new JLabel("#Ordine: N23");
+        numordine = new JLabel("#Ordine: ORD-X");
+        numordine.setForeground(Color.red);
         numordine.setFont(new Font("Arial Black", Font.BOLD, 15));
         numordine.setAlignmentX(Component.CENTER_ALIGNMENT);
         DXdown.add(numordine);
 
-        JLabel tot = new JLabel("Costo totale: 431.31$");
-        tot.setFont(new Font("Arial Black", Font.BOLD, 15));
-        tot.setAlignmentX(Component.CENTER_ALIGNMENT);
-        DXdown.add(tot);
+        costot = new JLabel("Costo totale: 0 euro");
+        costot.setFont(new Font("Arial Black", Font.BOLD, 15));
+        costot.setAlignmentX(Component.CENTER_ALIGNMENT);
+        costot.setForeground(Color.red);
+        DXdown.add(costot);
 
         JButton conferma = new JButton("   Effettua ordine    ");
         conferma.setFont(new Font("Arial Black", Font.ITALIC, 40));
@@ -339,7 +390,9 @@ public class OrdiniAdminPanel extends JPanel {
                             String subselezionato = "";
                             selezionato =  model.getValueAt(i, 4).toString();
                             subselezionato = selezionato.substring(0, selezionato.lastIndexOf("|"));
-                            Ordine o = new Ordine(Integer.parseInt(model.getValueAt(i, 1).toString()), Integer.parseInt(model.getValueAt(i, 3).toString()), "UTENTE ORDINE", model.getValueAt(i, 0).toString(), 0, subselezionato);
+                            String selezionatoP = model.getValueAt(i, 0).toString();
+                            String subselezionatoP = selezionatoP.substring(0, selezionato.lastIndexOf("|"));
+                            Ordine o = new Ordine(Integer.parseInt(model.getValueAt(i, 1).toString()), Integer.parseInt(model.getValueAt(i, 3).toString()), user, subselezionatoP, 0, subselezionato);
                             ordao.add(o);  
                         } catch (SQLException ex) {
                             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -349,6 +402,8 @@ public class OrdiniAdminPanel extends JPanel {
 
 
                     }
+                                              refreshTab();
+
 
                 }
 
@@ -371,16 +426,14 @@ public class OrdiniAdminPanel extends JPanel {
         return icon;
     }
 
-    private void refreshTab() {
-        model2.setRowCount(0);
-        model2.addRow(new Object[]{"XXXXX", "XXXXX", "XXXXX", "154$", "true", "view", ""});
-        model2.addRow(new Object[]{"XXXXX", "XXXXX", "XXXXX", "154$", "true", "view", ""});
-        model2.addRow(new Object[]{"XXXXX", "XXXXX", "XXXXX", "154$", "true", "view", ""});
-        model2.addRow(new Object[]{"XXXXX", "XXXXX", "XXXXX", "154$", "true", "view", ""});
-        model2.addRow(new Object[]{"XXXXX", "XXXXX", "XXXXX", "154$", "true", "view", ""});
-        model2.addRow(new Object[]{"XXXXX", "XXXXX", "XXXXX", "154$", "true", "view", ""});
-        model2.addRow(new Object[]{"XXXXX", "XXXXX", "XXXXX", "154$", "true", "view", ""});
-        model2.addRow(new Object[]{"XXXXX", "XXXXX", "XXXXX", "154$", "true", "view", ""});
+    public void refreshTab() {
+        
+        costot.setText("Costo totale: 0 euro");
+        numordine.setText("#Ordine:");
+        jComboBox.setSelectedIndex(0);
+        listModel.clear();
+        model.setRowCount(0);
+        
 
     }
 
