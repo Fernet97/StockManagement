@@ -6,16 +6,26 @@
 package dao;
 
 import beans.Ordine;
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.dateTime;
 import database.DriverManagerConnectionPool;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Hashtable;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import static java.time.temporal.ChronoUnit.DAYS;
+import java.time.temporal.TemporalAccessor;
+
 
 /**
  *
@@ -238,10 +248,9 @@ public class OrdineDAO {
         Connection connection = null;
         PreparedStatement ps = null;
 
-        ArrayList<ArrayList<String>> ordini = new ArrayList<>(5);
+        ArrayList<ArrayList<String>> ordini = new ArrayList<>(4);
         
-        String selectSQL = "select n_ordine , sum(qty_in_arrivo), sum(costo), giorni_alla_consegna ,data from db_stock.ordine,"
-                + " db_stock.prodotto where prodotto_sku = sku group by n_ordine, giorni_alla_consegna";
+        String selectSQL = "select n_ordine ,data , sum(qty_in_arrivo), sum(costo) from db_stock.ordine,  db_stock.prodotto where prodotto_sku = sku group by n_ordine";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -254,7 +263,6 @@ public class OrdineDAO {
                 record.add(rs.getString("n_ordine"));
                 record.add(rs.getString("sum(qty_in_arrivo)"));
                 record.add(rs.getString("sum(costo)"));
-                record.add(rs.getString("giorni_alla_consegna"));
                 record.add(rs.getString("data"));
                 
                 ordini.add(record);
@@ -351,5 +359,139 @@ public class OrdineDAO {
 
         }
         return fornitore;
-    }
+    
+        }
+        
+        
+        /**
+         * returna true o false se il giorno della consegna e uguale alla data attuale oppure se il valore in db di gg alla consegna é uguale a -1
+         * @param o
+         * @return
+         * @throws SQLException
+         * @throws ParseException 
+         */
+        public synchronized boolean isArrivato(String o) throws SQLException, ParseException  {
+        
+            Connection connection = null;
+            PreparedStatement ps = null;
+
+            Ordine bean =new Ordine();
+
+            String sql = "select n_ordine ,data , giorni_alla_consegna from ordine where n_ordine = '"+o+"' order by giorni_alla_consegna desc limit 1";
+            
+             try {
+            connection = DriverManagerConnectionPool.getConnection();
+            ps = connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+           while (rs.next()) {
+                bean.setN_ordine(rs.getString("n_ordine"));
+                bean.setData(rs.getString("data"));
+                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
+                
+             }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            //get data attuale
+            String [] nows= bean.generateData().split(" ");
+            LocalDate now = LocalDate.parse(nows[0], formatter);
+            
+            //get data ordine
+            String [] dbs= bean.getData().split(" ");
+            LocalDate db = LocalDate.parse(dbs[0], formatter);
+            
+            // get data della consegna
+            LocalDate consegna = db.plusDays(bean.getGiorni_alla_consegna());
+            
+             System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(formatter)+ " consegna "+ consegna.format(formatter));
+             
+            if (now.format(formatter).equals(consegna.format(formatter))){
+                return true;
+            }
+           else if  (bean.getGiorni_alla_consegna() == -1 ){
+                return true;
+            }
+            return false;
+            
+//             now.format(nowf); questo mi serve per far apparire la data come stringa per confrontarla con db.format(dbf);
+            }
+        }
+        
+        /**
+         * returna il numero di giorni che mancano alla consegna dell ordine
+         * @param o
+         * @return
+         * @throws SQLException
+         * @throws ParseException 
+         */
+        public synchronized int ggConsegna(String o) throws SQLException, ParseException  {
+            
+                    
+            Connection connection = null;
+            PreparedStatement ps = null;
+
+            Ordine bean =new Ordine();
+
+            String sql = "select n_ordine ,data , giorni_alla_consegna from ordine where n_ordine = '"+o+"' order by giorni_alla_consegna desc limit 1";
+            
+             try {
+            connection = DriverManagerConnectionPool.getConnection();
+            ps = connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+           while (rs.next()) {
+                bean.setN_ordine(rs.getString("n_ordine"));
+                bean.setData(rs.getString("data"));
+                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
+                
+             }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+        
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            
+            //get data ordine
+            String [] dbs= bean.getData().split(" ");
+            LocalDate db = LocalDate.parse(dbs[0], formatter);
+            
+            //get data attuale
+            String [] nows= bean.generateData().split(" ");
+            LocalDate now = LocalDate.parse(nows[0], formatter);
+            
+            // get giorni mancanti consegna
+            LocalDate consegna = db.plusDays(bean.getGiorni_alla_consegna());
+            
+            int gg = (int) DAYS.between(consegna,  now);
+            
+System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(formatter)+ " consegna "+ consegna.format(formatter) + " giorni mancanti  " + gg);
+             
+            return gg;
+
+             }
+        
+        }
+             
 }
+
+  
+    
+        
+        
+
+        
+
