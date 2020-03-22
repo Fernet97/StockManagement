@@ -86,6 +86,8 @@ public class Poopulator {
             /**
              * prodotto add
              */
+            
+            
             ProdottoDAO daop = new ProdottoDAO();
 //public Prodotto(String nome int qty,String Categoria,int instock, float costo,int qty_min,String note,String foto,int negozio)
             Prodotto p = new Prodotto("1n5088", 10, "diodi", true, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", false);
@@ -114,16 +116,22 @@ public class Poopulator {
  */
             Ordine bean = new Ordine();
             OrdineDAO daoo = new OrdineDAO();
-
-            for (int j = 0; j < 4; j++) {
+            String sku = daop.getLastProdotto().getSku().toString();
+            for (int j = 0; j < 3; j++) {
                 bean.startOrdine();
 
 //            Ordine o = new Ordine(qty in arrivo, gg alla cons, fk_utente, prodotto_sku, cliente, fk_fornitore)
-                Ordine o = new Ordine(0, 0, "admin", "op15-16/03/2020 16:07:16", 0, "FR-1");
-                Ordine o2 = new Ordine(0, 0, "admin", "op15-16/03/2020 16:07:16", 0, "FR-2");
+                Ordine o = new Ordine(5, 5, "admin", sku, 0, "FR-10");
+                Ordine o2 = new Ordine(5, 6, "admin", sku, 0, "FR-2");
+                Ordine o3 = new Ordine(5, 7, "admin", sku, 0, "FR-1");
+                Ordine o4 = new Ordine(5, 8, "admin", sku, 0, "FR-14");
+                Ordine o5 = new Ordine(5, 10, "admin", sku, 0, "FR-19");
 
                 daoo.add(o);
                 daoo.add(o2);
+                daoo.add(o3);
+                daoo.add(o4);
+                daoo.add(o5);
             }
             
             
