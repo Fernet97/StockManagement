@@ -8,6 +8,7 @@ package ui;
 import beans.Fornitore;
 import beans.Prodotto;
 import dao.FornitoreDAO;
+import dao.OrdineDAO;
 import dao.ProdottoDAO;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -226,10 +227,15 @@ public class ProdottiPanel extends JPanel {
         model.setRowCount(0);
 
         ProdottoDAO dao = new ProdottoDAO();
+         FornitoreDAO forndao = new FornitoreDAO();
+         
+        OrdineDAO daoo = new OrdineDAO();
+
 
         for (Prodotto pro : dao.getAll()) {
-            System.out.println(pro.getSku() + " " + pro.getDatareg() + " " + pro.getNome() + " " + pro.getCategoria() + " " + pro.getQty() + " DA DEFINIRE " + pro.isInstock() + "  " + pro.getCosto() + " " + pro.getNote() + "  " + pro.getQty_min());
-            model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), "DA DEFINIRE", pro.isInstock(), pro.getCosto(), pro.getNote(), pro.getQty_min(), "Modifica", "Cancella", "Ordina"});
+            Fornitore forni = forndao.getByID( daoo.getFPr(pro.getSku()));
+            String forny = forni.getIdfornitore()+"|  "+ forni.getFullname();
+            model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), pro.getCosto(), pro.getNote(), pro.getQty_min(), "Modifica", "Cancella", "Ordina"});
 
         }
         System.out.println("Numero di  record prima dell'aggiornamento  " + model.getRowCount());
@@ -754,6 +760,11 @@ public class ProdottiPanel extends JPanel {
             ccosto.setText(String.valueOf(prodotto.getCosto()));
             note.setText(prodotto.getNote());
             inStock.setSelected(prodotto.isInstock());
+            
+            OrdineDAO daoo = new OrdineDAO();
+            FornitoreDAO forndao = new FornitoreDAO();
+            Fornitore forni = forndao.getByID( daoo.getFPr(prodotto.getSku()));
+            cforn.setText(forni.getIdfornitore()+"|   "+forni.getFullname());
             
             cat.setSelectedItem(prodotto.getCategoria());
 
