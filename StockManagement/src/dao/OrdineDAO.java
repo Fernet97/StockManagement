@@ -364,13 +364,16 @@ public class OrdineDAO {
         
         
         /**
-         * returna true o false se il giorno della consegna e uguale alla data attuale oppure se il valore in db di gg alla consegna é uguale a -1
+         * returna 0 se non é ancora il giorno della consegna rosso
+         * returna 2 se il giorno della consegna e uguale o maggiore alla data attuale giallo
+         * returna 3 se il valore in db di gg alla consegna é uguale a -1
+         * returna -1 errore
          * @param o
          * @return
          * @throws SQLException
          * @throws ParseException 
          */
-        public synchronized boolean isArrivato(String o) throws SQLException, ParseException  {
+        public synchronized int isArrivato(String o) throws SQLException, ParseException  {
         
             Connection connection = null;
             PreparedStatement ps = null;
@@ -413,13 +416,16 @@ public class OrdineDAO {
             
              System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(formatter)+ " consegna "+ consegna.format(formatter));
              
-            if (now.format(formatter).equals(consegna.format(formatter))){
-                return true;
+             if (bean.getGiorni_alla_consegna() == -1 ){
+                return  3;//verde
+            }else if (now.format(formatter).equals(consegna.format(formatter))){
+                return 2; //giallo
+            }else if (now.isAfter(consegna)){
+                return  2; //giallo
+            }else if (now.isBefore(consegna)){
+                return  0; //rosso
             }
-           else if  (bean.getGiorni_alla_consegna() == -1 ){
-                return true;
-            }
-            return false;
+            return -1;
             
 //             now.format(nowf); questo mi serve per far apparire la data come stringa per confrontarla con db.format(dbf);
             }
@@ -432,38 +438,31 @@ public class OrdineDAO {
          * @throws SQLException
          * @throws ParseException 
          */
-        public synchronized int ggConsegna(String o) throws SQLException, ParseException  {
+        public synchronized int[] ggConsegnaxprod(String o, String p) throws SQLException, ParseException  { // da definire (query OK)
             
-                    
+             int[] array = new int [15];//valore da definire         
             Connection connection = null;
             PreparedStatement ps = null;
 
             Ordine bean =new Ordine();
 
-            String sql = "select n_ordine ,data , giorni_alla_consegna from ordine where n_ordine = '"+o+"' order by giorni_alla_consegna desc limit 1";
+            String sql = "select n_ordine ,data , giorni_alla_consegna, prodotto_sku from "+this.TABLE_NAME+" "
+                    + "where n_ordine = '"+o+"'  and prodotto_sku = '"+p+"' order by giorni_alla_consegna";
             
              try {
             connection = DriverManagerConnectionPool.getConnection();
             ps = connection.prepareStatement(sql);
 
             ResultSet rs = ps.executeQuery();
-
+            int i =0;
            while (rs.next()) {
+               
                 bean.setN_ordine(rs.getString("n_ordine"));
                 bean.setData(rs.getString("data"));
                 bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
+                // manca prodottosku
                 
-             }
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } finally {
-                DriverManagerConnectionPool.releaseConnection(connection);
-            }
-        
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             
             //get data ordine
             String [] dbs= bean.getData().split(" ");
@@ -477,16 +476,31 @@ public class OrdineDAO {
             LocalDate consegna = db.plusDays(bean.getGiorni_alla_consegna());
             
             int gg = (int) DAYS.between(consegna,  now);
-            
+            array [i] = gg;
 System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(formatter)+ " consegna "+ consegna.format(formatter) + " giorni mancanti  " + gg);
-             
-            return gg;
+                    i++;
+           }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+        
+                         
+            return array;
 
              }
         
         }
+        
+        
+                }
+
              
-}
+}// chiude la classe
 
   
     
