@@ -338,7 +338,7 @@ public class OrdineDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                fornitore = rs.getString("fr_fornitore");
+                fornitore = rs.getString("fk_fornitore");
             }
         } finally {
             try {
