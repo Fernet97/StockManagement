@@ -440,7 +440,7 @@ public class OrdineDAO {
          * @throws SQLException
          * @throws ParseException 
          */
-        public synchronized int[] ggConsegnaxprod(String o, String p) throws SQLException, ParseException  { // da definire (query OK)
+        public synchronized int[] ggConsegnaPR(String o, String p) throws SQLException, ParseException  { // da definire (query OK)
             
              int[] array = new int [15];//valore da definire         
             Connection connection = null;
