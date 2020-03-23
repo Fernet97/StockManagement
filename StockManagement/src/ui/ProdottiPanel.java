@@ -409,7 +409,7 @@ public class ProdottiPanel extends JPanel {
                         jComboBox = new JComboBox<>();
                         vaiarod.add(jComboBox);
                         
-                        prodSceltoxOrdine = table.getValueAt(row, 0).toString();
+                        prodSceltoxOrdine = table.getValueAt(row, 0).toString()+"|"+table.getValueAt(row, 2).toString();
                         
                     try {
                         for(Fornitore f :forndao.getAll()){
@@ -421,7 +421,8 @@ public class ProdottiPanel extends JPanel {
                     
                     jComboBox.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        frameprinc.VaiAOrdiniconProd( jComboBox.getSelectedItem().toString(), prodSceltoxOrdine);
+                        System.out.println("FOrnitore scelto da un prodotto che non nessun forny associato:"+jComboBox.getSelectedItem());
+                        frameprinc.VaiAOrdiniconProdFORNULL( jComboBox.getSelectedItem().toString(), prodSceltoxOrdine);
                         vaiarod.setVisible(false);
                         
                     }
@@ -429,10 +430,8 @@ public class ProdottiPanel extends JPanel {
                 
                    } 
                    // SE IL FORNITORE ERA GIA' DEFINITO
-                   else  {
-                        
-                        frameprinc.VaiAOrdiniconProd( table.getValueAt(row, 5).toString() , table.getValueAt(row, 0).toString());
-
+                   else  {       
+                        frameprinc.VaiAOrdiniconProdFornCEH(table.getValueAt(row, 0).toString());
                         
                    }   
                 }

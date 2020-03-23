@@ -69,11 +69,11 @@ public class OrdiniAdminPanel extends JPanel {
     public String nomeutente;
     public Prodotto prodottoCorrente;
     public javax.swing.JComboBox<String> jComboBox;
-    private DefaultTableModel model;
+    public DefaultTableModel model;
     private JTable table;
     private final DefaultTableModel model2;
     private final JTable table2;
-    private JList list;
+    public JList list;
     private final DefaultListModel listModel;
     private final JLabel costot;
     private float costocarrell = 0;
@@ -559,13 +559,17 @@ public class OrdiniAdminPanel extends JPanel {
 
                 try {
                     Prodotto p = pdao.getBySku(skusel);
-                    model.addRow(new Object[]{skusel, casellaqty.getText(), p.getCosto(), ggallacons.getText(), jComboBox.getSelectedItem().toString()});
+                    
+                    if(casellaqty.getText().matches("-?\\d+(\\.\\d+)?") && ggallacons.getText().matches("-?\\d+(\\.\\d+)?")){
+                        model.addRow(new Object[]{skusel, casellaqty.getText(), p.getCosto(), ggallacons.getText(), jComboBox.getSelectedItem().toString()});
+                    
                     costocarrell += p.getCosto() * Integer.parseInt(casellaqty.getText());
                     costot.setText("Costo totale: " + costocarrell + " euro");
                     Ordine o = new Ordine();
                     int prossimoord = o.leggiUltimoID() + 1;
                     numordine.setText("#Ordine: ORD-" + prossimoord);
-                    popup.setVisible(false);
+                    popup.setVisible(false);}
+                    else JOptionPane.showMessageDialog(getParent(), "Scegliere un formato numerico per la quantità ed i giorni all consegna");
                 } catch (SQLException ex) {
                     Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
                 }

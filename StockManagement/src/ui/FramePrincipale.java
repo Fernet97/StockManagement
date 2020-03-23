@@ -51,6 +51,7 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -344,14 +345,20 @@ public class FramePrincipale extends JFrame {
         
         }
         
-        public void VaiAOrdiniconProd(String forn, String prod) {
+        public void VaiAOrdiniconProdFORNULL(String forn, String prod) {
            cardlayout.show(HomePanel, "Ordini");
-           
-           ordiniadmin.jComboBox.getModel().setSelectedItem(forn);
-           ordiniadmin.casella.setText(prod);
+            System.out.println("aaaaaaaaaaaaaaah "+forn);
+            ordiniadmin.jComboBox.getModel().setSelectedItem(forn); 
+            ((DefaultListModel) ordiniadmin.list.getModel()).addElement(prod);
+            ordiniadmin.aggiungiTOcarrello(prod);
+            
+        }   
         
-        }        
-    
+         public void VaiAOrdiniconProdFornCEH(String prod){
+           cardlayout.show(HomePanel, "Ordini");
+           ordiniadmin.casella.setText(prod);
+         }
+        
 
     public void riavviaStockManagement() throws IOException, InterruptedException {
 
