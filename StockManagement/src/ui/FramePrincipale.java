@@ -496,7 +496,7 @@ public class FramePrincipale extends JFrame {
                         codici.refreshTab();
                         prodotti.refreshTab();
                         categorie.refreshTab();
-                        //ordiniadmin.refreshTab();
+                        ordiniadmin.refreshTab();
                         refreshTab();
 
                     } catch (SQLException ex) {
