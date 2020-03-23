@@ -288,6 +288,7 @@ public class OrdineDAO {
          * @return
          * @throws SQLException 
          */
+        // MI TORNA ANCHE DUPLICATI?
           public synchronized Collection<String> getPFr(String fr) throws SQLException {
 
         Connection connection = null;
@@ -319,6 +320,7 @@ public class OrdineDAO {
             }
 
         }
+        
         return ordini;
     }
          /**
