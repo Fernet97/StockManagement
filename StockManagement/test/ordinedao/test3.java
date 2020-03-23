@@ -22,13 +22,13 @@ import java.util.Hashtable;
 public class test3 {
 
     public static void main(String[] args) throws InterruptedException, SQLException, ParseException {
-Ordine bean = new Ordine();
+//Ordine bean = new Ordine();
             OrdineDAO dao =new OrdineDAO();
 
             
-//            System.out.println(dao.isArrivato("ord-1"));
+            System.out.println(dao.isArrivato("ord-1"));
 
-        System.out.println(dao.ggConsegna("ord-1"));
+//        System.out.println(dao.ggConsegna());
             
             
     }

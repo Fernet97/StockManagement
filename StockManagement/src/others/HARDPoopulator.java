@@ -27,7 +27,7 @@ public class HARDPoopulator {
 
         dbcleaner.main(args);//richiama un depopulator 
 
-        for (int i = 0; i <=50 ; i++) {
+        for (int i = 0; i <=150 ; i++) {
 
             /**
              * utente add
@@ -91,25 +91,25 @@ public class HARDPoopulator {
         
             ProdottoDAO daop = new ProdottoDAO();
 //public Prodotto(String nome int qty,String Categoria,int instock, float costo,int qty_min,String note,String foto,int negozio)
-            Prodotto p = new Prodotto("1n5088", 10, "diodi", true, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", false);
+            Prodotto p = new Prodotto("1n5088", 1000, "diodi", true, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", false);
             daop.add(p);
-            Prodotto p2 = new Prodotto("1n5098", 10, "diodi", false, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", false);
+            Prodotto p2 = new Prodotto("1n5098", 5110, "diodi", false, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", false);
             daop.add(p2);
-            Prodotto p3 = new Prodotto("1n508", 10, "transistor", false, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", true);
+            Prodotto p3 = new Prodotto("1n508", 15000, "transistor", false, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", true);
             daop.add(p3);
-            Prodotto p4 = new Prodotto("1n88", 10, "reisitenzasii", true, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", true);
+            Prodotto p4 = new Prodotto("1n88", 1210, "reisitenzasii", true, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", true);
             daop.add(p4);
-            Prodotto p5 = new Prodotto("15088", 10, "optocpo", true, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", false);
+            Prodotto p5 = new Prodotto("15088", 110, "optocpo", true, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", false);
             daop.add(p5);
-            Prodotto p6 = new Prodotto("n5088", 10, "condens pol", false, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", true);
+            Prodotto p6 = new Prodotto("n5088", 1110, "condens pol", false, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", true);
             daop.add(p6);
-            Prodotto p7 = new Prodotto("1", 10, "diodi", true, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", true);
+            Prodotto p7 = new Prodotto("1", 1230, "diodi", true, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", true);
             daop.add(p7);
-            Prodotto p8 = new Prodotto("188", 10, "diodi", true, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", false);
+            Prodotto p8 = new Prodotto("188", 1870, "diodi", true, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", false);
             daop.add(p8);
-            Prodotto p9 = new Prodotto("1088", 10, "diodi", false, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", false);
+            Prodotto p9 = new Prodotto("1088", 10980, "diodi", false, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", false);
             daop.add(p9);
-            Prodotto p10 = new Prodotto("1n58", 10, "diodi", false, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", true);
+            Prodotto p10 = new Prodotto("1n58", 12000, "diodi", false, 10.5f, 2, "note", "./DATA/IMG/prodotti.png", true);
             daop.add(p10);
     
             
