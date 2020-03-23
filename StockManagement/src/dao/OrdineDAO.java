@@ -448,7 +448,7 @@ public class OrdineDAO {
 
             Ordine bean =new Ordine();
 
-            String sql = "select n_ordine ,data , giorni_alla_consegna, prodotto_sku from "+this.TABLE_NAME+" "
+            String sql = "select distinct n_ordine ,data , giorni_alla_consegna, prodotto_sku from "+this.TABLE_NAME+" "
                     + "where n_ordine = '"+o+"'  and prodotto_sku = '"+p+"' order by giorni_alla_consegna";
             
              try {
