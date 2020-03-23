@@ -160,6 +160,7 @@ public class ProdottoDAO {
     public synchronized void update(Prodotto p) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
         Connection connection = null;
         Statement statement = null;
+        String foto = null;
         System.out.println("foto "+p.getFoto());
         /*
  * inStock & isNegozio sono variabili in che servono per il db fanno il
@@ -167,7 +168,10 @@ public class ProdottoDAO {
          */
         int inStock = p.isInstock() ? 1 : 0;
         int isNegozio = p.isNegozio() ? 1 : 0;
-        String foto = p.getFoto().replace("\\", "\\\\");
+        if (p.getFoto() == null){
+        }else{
+            foto = p.getFoto().replace("\\", "\\\\");
+        }
         System.out.println("sku del prodoto da modificare: " + p.getSku());
         // UPDATE `db_stock`.`prodotto` SET `sku` = '1', `datareg` = '2', `nome` = '2', `qty` = '2', `categoria` = '2', `instock` = '2', `costo` = '2', `qty_min` = '2', `note` = '2', `foto` = '2', `negozio` = '2' WHERE (`sku` = '1');
 
