@@ -460,7 +460,7 @@ public class OrdineDAO {
                 bean.setN_ordine(rs.getString("n_ordine"));
                 bean.setData(rs.getString("data"));
                 bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
-                // manca prodottosku
+                bean.setProdotto_sku(rs.getString("prodotto_sku"));
                 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             
@@ -497,7 +497,7 @@ System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(for
         }
         
         
-                }
+                
 
              
 }// chiude la classe
