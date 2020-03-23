@@ -126,9 +126,7 @@ public class OrdiniAdminPanel extends JPanel {
                 } catch (SQLException ex) {
                     Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-                //ORA è IL MOMENTO DI AGGIUNGERE NEL MODEL DELLA LISTA IL RECORD NEL CARRELLO
-                //ANCHE SE PRIMA NE DEVO SPECIFICARE LA QTY E GIORNI ALL'ARRIVO
+
                 ProdottoDAO prodao = new ProdottoDAO();
                 try {
                     Prodotto p =  prodao.getBySku(text);

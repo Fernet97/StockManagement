@@ -5,10 +5,12 @@
  */
 package ui;
 
+import beans.Ordine;
 import others.JavaProcessId;
 import beans.Prodotto;
 import beans.Utente;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
+import dao.OrdineDAO;
 import dao.ProdottoDAO;
 import dao.UtenteDAO;
 import database.DriverManagerConnectionPool;
@@ -214,7 +216,7 @@ public class FramePrincipale extends JFrame {
         button4.setBackground(new Color(151, 109, 248));
         pannellodash.add(button4);
 
-        ButtonDash button5 = new ButtonDash("Nuovo ordine");
+        ButtonDash button5 = new ButtonDash("Ordini effettuati");
         button5.setBackground(new Color(236, 50, 213));
         pannellodash.add(button5);
 
@@ -684,6 +686,44 @@ public class FramePrincipale extends JFrame {
             JLabel scrittaVai =  new JLabel(ImpostaImg("/res/img/prodotti.png"));     
             vai.add(scrittaVai);
         } */
+            
+              if (type.equals("Ordini effettuati")) {
+
+                  Ordine o = new Ordine();
+                  number = o.leggiUltimoID();
+                  
+                                  vai.addMouseListener(new MouseListener() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        VaiAOrdini("Seleziona un fornitore");
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                    }
+                });
+
+                JLabel scrittaVai = new JLabel(ImpostaImg("/res/img/ordini.png"));
+                vai.add(scrittaVai);
+               
+            }
+            
+            
+            
+            
+            
             JLabel num = new JLabel(String.valueOf(number)); //Per dare ampiezza al jpanel
             num.setFont(new Font("Arial Black", Font.BOLD, 30));
             num.setForeground(Color.red);
