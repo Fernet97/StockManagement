@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import static java.util.Collections.list;
 import java.util.logging.Level;
@@ -251,9 +252,7 @@ public class OrdiniAdminPanel extends JPanel {
         model.addColumn("Fornitore");
         table.setModel(model);
         JScrollPane sp = new JScrollPane(table);
-        /*for (int i = 0; i < 40; i++) {
-            model.addRow(new Object[]{"XXXXX", "8", "12 euro", "Arrivo tra 7 giorni", "Amazon"});
-        }*/
+
 
         info.add(sp);
         JButton rimuoviprod = new JButton("Svuota carrello");
@@ -304,6 +303,22 @@ public class OrdiniAdminPanel extends JPanel {
         sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "Riepilogo ordini effettuati", TitledBorder.CENTER, TitledBorder.TOP));
         SXdown.add(sp2);
         SXdown.add(new JButton("Cancella ordine selezionato"));
+        
+        OrdineDAO ordaoo = new OrdineDAO();
+        
+        try {
+            // String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale ordine", "In spedizione", "Controlla ordine", "Ricarica ordine"};
+            for(ArrayList<String> ordine: ordaoo.groupByOrdini()){
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(1), ordine.get(2), ordine.get(3), ordaoo.isArrivato(ordine.get(0)), "", ""});
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
         princ.add(SXdown);
 
         JPanel DXdown = new JPanel();
@@ -415,6 +430,10 @@ public class OrdiniAdminPanel extends JPanel {
         jComboBox.setSelectedIndex(0);
         listModel.clear();
         // model.setRowCount(0); magari il carrello non lo svuoto ogni volta al cambio scheda
+        
+        // REFRESHA TABELLA RIEPILOGO ORDINI
+        
+        
     }
 
     class TableButtonRenderer extends JButton implements TableCellRenderer {
@@ -510,11 +529,14 @@ public class OrdiniAdminPanel extends JPanel {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
-            if (Boolean.parseBoolean(table2.getValueAt(row, 4).toString())) {
+            if (Integer.parseInt(table2.getValueAt(row, 4).toString()) == 3) {
                 setBackground(new Color(126, 169, 93));  // VERDE          
 
-            } else {
+            } else if(Integer.parseInt(table2.getValueAt(row, 4).toString()) == 0) {
                 setBackground(new Color(244, 80, 37));    // ROSSO 
+            }
+            else if(Integer.parseInt(table2.getValueAt(row, 4).toString()) == 2){
+                setBackground(Color.yellow); // GIALLO
             }
 
             setText("");
