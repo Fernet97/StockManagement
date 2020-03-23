@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import static java.util.Collections.list;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -399,24 +400,23 @@ public class OrdiniAdminPanel extends JPanel {
     public void refreshTab() {
         // refresh lista fornitori
         // BISOGNA SVUOTARE E RICARICARE LISTA FORN
-        
-        jComboBox.addItem("Seleziona un fornitore");
+        jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
         FornitoreDAO daof = new FornitoreDAO();
-        try {
-            for(Fornitore f : daof.getAll())  {    
-              jComboBox.addItem(f.getIdfornitore() +"|"+f.getFullname());
-            }
+        try {     
+            for(Fornitore f : daof.getAll())
+                jComboBox.addItem(f.getIdfornitore() +"|"+f.getFullname());
         } catch (SQLException ex) {
             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+
         casella.setBackground(Color.gray);
+        casella.setText("");
         costot.setText("Costo totale: 0 euro");
         numordine.setText("#Ordine:");
         jComboBox.setSelectedIndex(0);
         listModel.clear();
-        model.setRowCount(0);
-        
-
+       // model.setRowCount(0); magari il carrello non lo svuoto ogni volta al cambio scheda
     }
 
     class TableButtonRenderer extends JButton implements TableCellRenderer {
