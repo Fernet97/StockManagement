@@ -314,7 +314,7 @@ public class AnagrafichePanel extends JPanel {
                             try {
                                 dao.remove(table.getValueAt(row, 1).toString());
                             } catch (Exception e) {
-                                JOptionPane.showMessageDialog(getComponent(), "Se vuoi cancellare un fornitore, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");
+                                //JOptionPane.showMessageDialog(getComponent(), "Se vuoi cancellare un fornitore, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");
                                 e.printStackTrace();
 
                             }

@@ -132,19 +132,19 @@ public class OrdiniAdminPanel extends JPanel {
 
                         forny = ordinedao.getFPr(text);
                         System.out.println("Fornitore corrispondente al prodotto scritto:" + forny);
-                        
+
                         FornitoreDAO forndao = new FornitoreDAO();
-                        String fornyname ="";
+                        String fornyname = "";
                         for (Fornitore f : forndao.getAll()) {
-                            if(f.getIdfornitore().equals(forny)) {
+                            if (f.getIdfornitore().equals(forny)) {
                                 fornyname = f.getFullname();
                                 break;
                             }
                         }
-                        
-                       jComboBox.getModel().setSelectedItem(forny+ "|" +fornyname); 
-                       
-                }
+
+                        jComboBox.getModel().setSelectedItem(forny + "|" + fornyname);
+
+                    }
 
                 } catch (SQLException ex) {
                     Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -253,7 +253,6 @@ public class OrdiniAdminPanel extends JPanel {
         table.setModel(model);
         JScrollPane sp = new JScrollPane(table);
 
-
         info.add(sp);
         JButton rimuoviprod = new JButton("Svuota carrello");
         rimuoviprod.addActionListener(new ActionListener() {
@@ -302,23 +301,44 @@ public class OrdiniAdminPanel extends JPanel {
         JScrollPane sp2 = new JScrollPane(table2);
         sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "Riepilogo ordini effettuati", TitledBorder.CENTER, TitledBorder.TOP));
         SXdown.add(sp2);
-        SXdown.add(new JButton("Cancella ordine selezionato"));
-        
+        JButton ordinerimuovi = new JButton("Cancella ordine selezionato");
+        ordinerimuovi.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                OrdineDAO daor = new OrdineDAO();
+                try {
+                    for (int i = 0; i < table2.getSelectedRows().length; i++) {
+
+                        System.out.println("ordine selezionato:" + table2.getValueAt(table2.getSelectedRow(), 0));
+                          int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(),"Sicuro di voler cancellare l'ordine: "
+                            + table2.getValueAt(table2.getSelectedRow(), 0));
+
+                    if (OpzioneScelta == JOptionPane.OK_OPTION) { 
+                        daor.removeOrd(table2.getValueAt(table2.getSelectedRow(), 0).toString());
+                        model2.removeRow(table2.getSelectedRow());
+                    }
+                }
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        });
+        SXdown.add(ordinerimuovi);
+
         OrdineDAO ordaoo = new OrdineDAO();
-        
+
         try {
             // String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale ordine", "In spedizione", "Controlla ordine", "Ricarica ordine"};
-            for(ArrayList<String> ordine: ordaoo.groupByOrdini()){
-                model2.addRow(new Object[]{ordine.get(0), ordine.get(1), ordine.get(2), ordine.get(3), ordaoo.isArrivato(ordine.get(0)), "", ""});
+            for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), ordine.get(2), ordaoo.isArrivato(ordine.get(0)), "", ""});
             }
         } catch (SQLException ex) {
             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
+
         princ.add(SXdown);
 
         JPanel DXdown = new JPanel();
@@ -430,10 +450,8 @@ public class OrdiniAdminPanel extends JPanel {
         jComboBox.setSelectedIndex(0);
         listModel.clear();
         // model.setRowCount(0); magari il carrello non lo svuoto ogni volta al cambio scheda
-        
+
         // REFRESHA TABELLA RIEPILOGO ORDINI
-        
-        
     }
 
     class TableButtonRenderer extends JButton implements TableCellRenderer {
@@ -532,10 +550,9 @@ public class OrdiniAdminPanel extends JPanel {
             if (Integer.parseInt(table2.getValueAt(row, 4).toString()) == 3) {
                 setBackground(new Color(126, 169, 93));  // VERDE          
 
-            } else if(Integer.parseInt(table2.getValueAt(row, 4).toString()) == 0) {
+            } else if (Integer.parseInt(table2.getValueAt(row, 4).toString()) == 0) {
                 setBackground(new Color(244, 80, 37));    // ROSSO 
-            }
-            else if(Integer.parseInt(table2.getValueAt(row, 4).toString()) == 2){
+            } else if (Integer.parseInt(table2.getValueAt(row, 4).toString()) == 2) {
                 setBackground(Color.yellow); // GIALLO
             }
 
@@ -581,17 +598,19 @@ public class OrdiniAdminPanel extends JPanel {
 
                 try {
                     Prodotto p = pdao.getBySku(skusel);
-                    
-                    if(casellaqty.getText().matches("-?\\d+(\\.\\d+)?") && ggallacons.getText().matches("-?\\d+(\\.\\d+)?")){
+
+                    if (casellaqty.getText().matches("-?\\d+(\\.\\d+)?") && ggallacons.getText().matches("-?\\d+(\\.\\d+)?")) {
                         model.addRow(new Object[]{skusel, casellaqty.getText(), p.getCosto(), ggallacons.getText(), jComboBox.getSelectedItem().toString()});
-                    
-                    costocarrell += p.getCosto() * Integer.parseInt(casellaqty.getText());
-                    costot.setText("Costo totale: " + costocarrell + " euro");
-                    Ordine o = new Ordine();
-                    int prossimoord = o.leggiUltimoID() + 1;
-                    numordine.setText("#Ordine: ORD-" + prossimoord);
-                    popup.setVisible(false);}
-                    else JOptionPane.showMessageDialog(getParent(), "Scegliere un formato numerico per la quantità ed i giorni all consegna");
+
+                        costocarrell += p.getCosto() * Integer.parseInt(casellaqty.getText());
+                        costot.setText("Costo totale: " + costocarrell + " euro");
+                        Ordine o = new Ordine();
+                        int prossimoord = o.leggiUltimoID() + 1;
+                        numordine.setText("#Ordine: ORD-" + prossimoord);
+                        popup.setVisible(false);
+                    } else {
+                        JOptionPane.showMessageDialog(getParent(), "Scegliere un formato numerico per la quantità ed i giorni all consegna");
+                    }
                 } catch (SQLException ex) {
                     Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
                 }
