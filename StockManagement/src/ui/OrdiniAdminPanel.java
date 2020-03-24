@@ -243,7 +243,7 @@ public class OrdiniAdminPanel extends JPanel {
 
         table = new JTable();
         table.getTableHeader().setReorderingAllowed(false);
-        table.setEnabled(false);
+        
         model = new DefaultTableModel();
         model.addColumn("SKU");
         model.addColumn("quantità da ordinare");
@@ -251,14 +251,19 @@ public class OrdiniAdminPanel extends JPanel {
         model.addColumn("Giorni all'arrivo");
         model.addColumn("Fornitore");
         table.setModel(model);
+        
+        
         JScrollPane sp = new JScrollPane(table);
 
         info.add(sp);
-        JButton rimuoviprod = new JButton("Svuota carrello");
+        JButton rimuoviprod = new JButton("Elimina prodotto selezionato");
         rimuoviprod.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                costot.setText("Costo totale: 0 euro");
-                model.setRowCount(0);
+                    for (int i = 0; i < table.getSelectedRows().length; i++) {
+
+                       model.removeRow(table.getSelectedRow());
+                }
+                
             }
         });
         info.add(rimuoviprod);
@@ -331,7 +336,7 @@ public class OrdiniAdminPanel extends JPanel {
         try {
             // String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale ordine", "In spedizione", "Controlla ordine", "Ricarica ordine"};
             for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
-                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), ordine.get(2), ordaoo.isArrivato(ordine.get(0)), "", ""});
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), ordine.get(2), ordaoo.isArrivato(ordine.get(0)), "Controlla ordine", "Ricarica ordine"});
             }
         } catch (SQLException ex) {
             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -516,12 +521,15 @@ public class OrdiniAdminPanel extends JPanel {
         public Object getCellEditorValue() {
             if (clicked) // SE CLICCATO QUEL BOTTONE:::::::::::::
             {
-                if (button.getText().equals("Riepilogo ordine")) {
+                if (button.getText().equals("Controlla ordine")) {
 
-                    JOptionPane.showMessageDialog(getComponent(), "Vai Riepilogo ordini");
+                    JOptionPane.showMessageDialog(getComponent(), "Controlla Ordine");
 
-                } else if (button.getText().equals("Lista prodotti")) {
-                    JOptionPane.showMessageDialog(getComponent(), "Vai Lista prodotti");
+                } else if (button.getText().equals("Ricarica ordine")) {
+                    model.setRowCount(0);
+                    refreshTab();
+                    caricaOrdine(table.getValueAt(row, 0).toString());
+                    
                 }
 
             }
@@ -562,6 +570,35 @@ public class OrdiniAdminPanel extends JPanel {
         }
     }
 
+    
+    
+    public void  caricaOrdine(String numerordine){
+        JOptionPane.showMessageDialog(this, "Sto caricando l'ordine "+numerordine+ " nel carrello ...");
+        OrdineDAO ordao = new OrdineDAO();
+
+        
+        try {
+            FornitoreDAO forndao = new FornitoreDAO();
+            ProdottoDAO prodao = new ProdottoDAO();
+            
+            for (Ordine o : ordao.getByNum(numerordine)){
+                Fornitore f = forndao.getByID(o.getFk_fornitore());
+                Prodotto p = prodao.getBySku(o.getProdotto_sku());
+               model.addRow(new Object[]{p.getSku(), o.getQty_in_arrivo(),  p.getCosto(),  o.getGiorni_alla_consegna(), f.getIdfornitore()+"|"+f.getFullname()}); 
+                
+                        costocarrell += p.getCosto() * o.getQty_in_arrivo();
+                        costot.setText("Costo totale: " + costocarrell + " euro");
+                        int prossimoord = o.leggiUltimoID() + 1;
+                        numordine.setText("#Ordine: ORD-" + prossimoord);
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    
     public void aggiungiTOcarrello(String skuselezionato) {
 
         skusel = skuselezionato.substring(0, skuselezionato.indexOf("|"));
