@@ -299,7 +299,7 @@ public class OrdineDAO {
         Collection<String> ordini = new LinkedList<String>();
         //SELECT * FROM prodotti WHERE sku = '1';
         
-        String selectSQL = "SELECT prodotto_sku FROM " + this.TABLE_NAME + " WHERE fk_fornitore = '"+fr+"'";
+        String selectSQL = "SELECT distinct prodotto_sku FROM " + this.TABLE_NAME + " WHERE fk_fornitore = '"+fr+"'";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
