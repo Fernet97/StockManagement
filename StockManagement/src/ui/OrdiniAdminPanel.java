@@ -450,6 +450,20 @@ public class OrdiniAdminPanel extends JPanel {
         // model.setRowCount(0); magari il carrello non lo svuoto ogni volta al cambio scheda
 
         // REFRESHA TABELLA RIEPILOGO ORDINI
+        OrdineDAO ordaoo = new OrdineDAO();
+        model2.setRowCount(0);
+        try {
+            for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), ordine.get(2), ordaoo.isArrivato(ordine.get(0)), "Controlla ordine", "Ricarica ordine"});
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
     }
 
     class TableButtonRenderer extends JButton implements TableCellRenderer {

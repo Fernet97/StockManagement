@@ -906,11 +906,12 @@ public class AnagrafichePanel extends JPanel {
 
                 // Cliente
                 if (tipologia == 0) {
-                    ClienteDAO dao = new ClienteDAO();
-                    client = new Cliente(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
 
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                     if (a == JOptionPane.YES_OPTION) {
+                    ClienteDAO dao = new ClienteDAO();
+                    client = new Cliente(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
+
                         //dao.add(client);
                         form.setVisible(false);
                     }
@@ -919,10 +920,10 @@ public class AnagrafichePanel extends JPanel {
                 // Fornitore
                 if (tipologia == 1) {
                     FornitoreDAO dao = new FornitoreDAO();
-                    forn = new Fornitore(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
 
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                     if (a == JOptionPane.YES_OPTION) {
+                                            forn = new Fornitore(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
                         dao.add(forn);
                         form.setVisible(false);
                     }
@@ -932,10 +933,11 @@ public class AnagrafichePanel extends JPanel {
                 if (tipologia == 2) {
                     UtenteDAO dao = new UtenteDAO();
                     System.out.println("Utente che sto per scrivere:" + casfullname.getText() + "" + cascfiva.getText() + "" + casindirizzo.getText() + "" + castel.getText() + "" + casemail.getText() + "" + caspwd.getText() + "" + permess.getSelectedIndex() + "" + note.getText());
-                    uten = new Utente(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), caspwd.getText(), permess.getSelectedIndex(), note.getText());
 
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                     if (a == JOptionPane.YES_OPTION) {
+                                            uten = new Utente(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), caspwd.getText(), permess.getSelectedIndex(), note.getText());
+
                         dao.add(uten);
                         form.setVisible(false);
                     }
@@ -976,10 +978,11 @@ public class AnagrafichePanel extends JPanel {
 
                 // Fornitore
                 if (tipologia == 1) {
-                    forn = new Fornitore(casid.getText(), casdatareg.getText(), casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
                     FornitoreDAO dao = new FornitoreDAO();
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                     if (a == JOptionPane.YES_OPTION) {
+                                            forn = new Fornitore(casid.getText(), casdatareg.getText(), casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
+
                         dao.update(forn);
                         form.setVisible(false);
                     }
@@ -988,10 +991,11 @@ public class AnagrafichePanel extends JPanel {
                 // Utente
                 if (tipologia == 2) {
                     UtenteDAO dao = new UtenteDAO();
-                    uten = new Utente(casid.getText(), casdatareg.getText(), casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), caspwd.getText(), permess.getSelectedIndex(), note.getText());
 
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                     if (a == JOptionPane.YES_OPTION) {
+                                            uten = new Utente(casid.getText(), casdatareg.getText(), casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), caspwd.getText(), permess.getSelectedIndex(), note.getText());
+
                         dao.update(uten);
                         form.setVisible(false);
                     }

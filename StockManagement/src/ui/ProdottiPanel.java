@@ -765,17 +765,16 @@ public class ProdottiPanel extends JPanel {
             Prodotto prod;
             try {
                 System.out.println("Percorso foto prima di salvarlo: "+percorsofoto );
-                prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
-
-                ProdottoDAO dao = new ProdottoDAO();
-
                 int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                 if (a == JOptionPane.YES_OPTION) {
+                    prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
+                     ProdottoDAO dao = new ProdottoDAO();
                     dao.add(prod);
                     form.setVisible(false);
 
                 }
-                                refreshTab();
+                               
+                refreshTab();
   
             } catch (SQLException ex) {
                 Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -839,11 +838,10 @@ public class ProdottiPanel extends JPanel {
         public void getOggettoforFormUpdate() throws InterruptedException {
 
             ProdottoDAO dao = new ProdottoDAO();
-            Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected() , Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
         try {            
            int a= JOptionPane.showConfirmDialog(this,"Dario, sei proprio sicuro?");
            if(a==JOptionPane.YES_OPTION){
-               
+             Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected() , Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());              
                System.out.println("Prodotto modificato: "+casname.getText()+" "+ Integer.parseInt(casqty.getText())+" "+ cat.getSelectedItem().toString()+" "+inStock.isSelected()+" "+Float.valueOf(ccosto.getText())+" "+Integer.parseInt(cmin.getText())+" "+note.getText() +" "+ percorsofoto+" "+ negozio.isSelected());
             dao.update(prod);               
              form.setVisible(false);
