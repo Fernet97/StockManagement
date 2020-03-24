@@ -244,7 +244,15 @@ public class OrdiniAdminPanel extends JPanel {
         table = new JTable();
         table.getTableHeader().setReorderingAllowed(false);
         
-        model = new DefaultTableModel();
+        model = new DefaultTableModel() {
+            private static final long serialVersionUID = 1L;
+
+            public boolean isCellEditable(int row, int column) {
+                if(column == 0 || column == 2 || column == 4 )
+                    return false; //il numero di celle NON editabili...
+                else return true;
+            }
+        };
         model.addColumn("SKU");
         model.addColumn("quantità da ordinare");
         model.addColumn("Costo unitario");
@@ -256,17 +264,29 @@ public class OrdiniAdminPanel extends JPanel {
         JScrollPane sp = new JScrollPane(table);
 
         info.add(sp);
+        
+        JPanel manageprod = new JPanel();
+        manageprod.setLayout(new GridBagLayout());
         JButton rimuoviprod = new JButton("Elimina prodotto selezionato");
         rimuoviprod.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                     for (int i = 0; i < table.getSelectedRows().length; i++) {
-
                        model.removeRow(table.getSelectedRow());
                 }
-                
             }
-        });
-        info.add(rimuoviprod);
+        });      
+        manageprod.add(rimuoviprod);
+        
+        JButton svuotaprod = new JButton("Svuota carrello"); 
+        svuotaprod.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.setRowCount(0);
+            }
+        });    
+        manageprod.add(svuotaprod);
+        
+        info.add(manageprod);
+     
 
         infolabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         dxpan.add(infolabel);
@@ -529,8 +549,13 @@ public class OrdiniAdminPanel extends JPanel {
             if (clicked) // SE CLICCATO QUEL BOTTONE:::::::::::::
             {
                 if (button.getText().equals("Controlla ordine")) {
-
-                    JOptionPane.showMessageDialog(getComponent(), "Controlla Ordine");
+                    FrameRiepilogo f = new FrameRiepilogo(table.getValueAt(row, 0).toString());
+                    f.setResizable(false);
+                    f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    f.setSize(1300,400);
+                    f.setVisible(true);
+                    f.setTitle("Riepilogo ordine: "+ table.getValueAt(row, 0));
+                    
 
                 } else if (button.getText().equals("Ricarica ordine")) {
                     model.setRowCount(0);
