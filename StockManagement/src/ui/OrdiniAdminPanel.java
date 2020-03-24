@@ -389,14 +389,7 @@ public class OrdiniAdminPanel extends JPanel {
 
                     for (int i = 0; i < model.getRowCount(); i++) {
                         try {
-                            /*
-                            model.addColumn("SKU");
-                            model.addColumn("quantità da ordinare");
-                            model.addColumn("Costo unitario");
-                            model.addColumn("Giorni all'arrivo");
-                            model.addColumn("Fornitore");   
-                             */
-                            //Ordine o = new Ordine(qty in arrivo, gg alla cons, fk_utente, prodotto_sku, cliente, fk_fornitore)
+
                             String selezionato = "";
                             String subselezionato = "";
                             selezionato = model.getValueAt(i, 4).toString();
