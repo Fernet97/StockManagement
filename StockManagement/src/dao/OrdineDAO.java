@@ -418,7 +418,8 @@ public class OrdineDAO {
             
              System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(formatter)+ " consegna "+ consegna.format(formatter));
              
-             if (bean.getGiorni_alla_consegna() == -1 ){
+             // Se è -1 allora è arrivato, se è -2 è messo anche in stock
+             if (bean.getGiorni_alla_consegna() < 0 ){
                 return  3;//verde
             }else if (now.format(formatter).equals(consegna.format(formatter))){
                 return 2; //giallo

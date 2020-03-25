@@ -356,7 +356,7 @@ public class OrdiniAdminPanel extends JPanel {
         try {
             // String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale ordine", "In spedizione", "Controlla ordine", "Ricarica ordine"};
             for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
-                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), ordine.get(2), ordaoo.isArrivato(ordine.get(0)), "Controlla ordine", "Ricarica ordine"});
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), ordine.get(2), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica ordine"});
             }
         } catch (SQLException ex) {
             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -474,7 +474,7 @@ public class OrdiniAdminPanel extends JPanel {
         model2.setRowCount(0);
         try {
             for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
-                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), ordine.get(2), ordaoo.isArrivato(ordine.get(0)), "Controlla ordine", "Ricarica ordine"});
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), ordine.get(2), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica ordine"});
             }
         } catch (SQLException ex) {
             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -548,7 +548,7 @@ public class OrdiniAdminPanel extends JPanel {
         public Object getCellEditorValue() {
             if (clicked) // SE CLICCATO QUEL BOTTONE:::::::::::::
             {
-                if (button.getText().equals("Controlla ordine")) {
+                if (button.getText().equals("Apri")) {
                     FrameRiepilogo f = new FrameRiepilogo(table.getValueAt(row, 0).toString());
                     f.setResizable(false);
                     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

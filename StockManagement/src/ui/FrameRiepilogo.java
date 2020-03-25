@@ -12,7 +12,9 @@ import dao.ProdottoDAO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,16 +23,21 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -40,25 +47,29 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 /**
  *
  * @author Fernet
  */
-class FrameRiepilogo extends JFrame{
+class FrameRiepilogo extends JFrame {
 
-    private  DefaultTableModel model2;
+    private DefaultTableModel model2;
     private final JTable table2;
     private final String numordine;
-    
-    public FrameRiepilogo(String numordine){
-        
+
+    public FrameRiepilogo(String numordine) {
+
         this.numordine = numordine;
-    
+
         ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
         this.setIconImage(img.getImage());
-        
-             String[] columnNames = {"#Ordine","Fornitore" ,"SKU prodotto", "Costo", "Quantita' arrivata", "Data prevista di arrivo", " E' Arrivato?", "Messo in Stock?", "Gestisci"};
+
+        String[] columnNames = {"#Ordine", "Fornitore", "SKU prodotto", "Costo", "Quantita' arrivata", "Data prevista di arrivo", " E' Arrivato?", "Messo in Stock?", "Gestisci"};
 
         Object[][] data = {};
 
@@ -71,17 +82,15 @@ class FrameRiepilogo extends JFrame{
         };
         table2 = new JTable(model2);
         table2.getTableHeader().setReorderingAllowed(false);
-        
+
         table2.getColumnModel().getColumn(8).setCellRenderer(new TableButtonRenderer());
         table2.getColumnModel().getColumn(8).setCellEditor(new TableRenderer(new JCheckBox()));
-  
-       
-        
+
         JScrollPane sp2 = new JScrollPane(table2);
-        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red),"  #ORDINE: "+ numordine+"  ", TitledBorder.CENTER, TitledBorder.TOP));
-        add(sp2, BorderLayout.CENTER);  
-        
-        JButton  bannulla= new JButton("Annulla");
+        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "  #ORDINE: " + numordine + "  ", TitledBorder.CENTER, TitledBorder.TOP));
+        add(sp2, BorderLayout.CENTER);
+
+        JButton bannulla = new JButton("Annulla");
         bannulla.addActionListener(new ActionListener() {
 
             @Override
@@ -90,31 +99,24 @@ class FrameRiepilogo extends JFrame{
             }
 
         });
-        
-        
-        
-        
-        JButton bconferma= new JButton("Conferma");
-       
+
+        JButton bconferma = new JButton("Conferma");
+
         JPanel pdown = new JPanel();
         pdown.setLayout(new GridBagLayout());
         pdown.add(bconferma);
         pdown.add(bannulla);
         add(pdown, BorderLayout.SOUTH);
-        
+
         refreshOrdini();
-        
-    
-    
-    
-    
+
     }
 
     public void refreshOrdini() {
-        
+
         model2.setRowCount(0);
-        
-              OrdineDAO ordaoo = new OrdineDAO();
+
+        OrdineDAO ordaoo = new OrdineDAO();
 
         try {
             /*
@@ -129,24 +131,31 @@ class FrameRiepilogo extends JFrame{
 
             
             
-            */         
+             */
             //  String[] columnNames = {"#Ordine","Fornitore" ,"SKU prodotto", "Costo", "Quantita' arrivata", "Data prevista di arrivo", " E' Arrivato?", "Messo in Stock?"};
-            
+
             ProdottoDAO prodao = new ProdottoDAO();
+            String arrivato = "";
+            String messoInStock = "";
             for (Ordine ordine : ordaoo.getByNum(numordine)) {
                 
-                model2.addRow(new Object[]{ordine.getN_ordine(), ordine.getFk_fornitore(), ordine.getProdotto_sku(), prodao.getBySku(ordine.getProdotto_sku()).getCosto(), "0/"+ordine.getQty_in_arrivo(), "22/12/2020", "Sì", "No"});
+                if(ordine.getGiorni_alla_consegna() < 0) {
+                    arrivato ="Sì";
+                    if(ordine.getGiorni_alla_consegna() <= -2) messoInStock = "Sì";
+                    else messoInStock = "No";
+                }else {
+                    arrivato = "No";
+                    messoInStock = "No";
+                }
+                
+                model2.addRow(new Object[]{ordine.getN_ordine(), ordine.getFk_fornitore(), ordine.getProdotto_sku(), prodao.getBySku(ordine.getProdotto_sku()).getCosto(), "0/" + ordine.getQty_in_arrivo(), "22/12/2020", arrivato, messoInStock});
             }
         } catch (SQLException ex) {
             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-    
-    
-    
-    
-    
+
     class TableButtonRenderer extends JButton implements TableCellRenderer {
 
         public TableButtonRenderer() {
@@ -170,6 +179,7 @@ class FrameRiepilogo extends JFrame{
         private boolean clicked;
         private int row, col;
         private JTable table;
+        public String skusel;
 
         public TableRenderer(JCheckBox checkBox) {
             super(checkBox);
@@ -189,13 +199,14 @@ class FrameRiepilogo extends JFrame{
             this.row = row;
             this.col = column;
 
+            skusel = table.getValueAt(row, 2).toString();
             button.setForeground(Color.black);
             button.setBackground(UIManager.getColor("Button.background"));
 
             label = (value == null) ? "" : value.toString();
             button.setText(label);
             button.setIcon(ImpostaImg("/res/img/pencil.png"));
-      
+
             clicked = true;
             return button;
         }
@@ -203,18 +214,90 @@ class FrameRiepilogo extends JFrame{
         public Object getCellEditorValue() {
             if (clicked) // SE CLICCATO QUEL BOTTONE:::::::::::::
             {
-                if (button.getText().equals("Controlla ordine")) {
-                    FrameRiepilogo f = new FrameRiepilogo(table.getValueAt(row, 0).toString());
-                    f.setResizable(false);
-                    f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    f.setSize(1300,400);
-                    f.setVisible(true);
-                    f.setTitle("Riepilogo ordine: "+ table.getValueAt(row, 0));
+                JFrame f = new JFrame();
+                f.setResizable(false);
+                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                f.setSize(500, 150);
+                f.setVisible(true);
+                f.setTitle(numordine + "| " + skusel);
+
+                    ProdottoDAO prodao = new ProdottoDAO();
+                    
+                    JPanel main = new JPanel();
+                    main.setLayout(new GridLayout(2, 3));
+     
+                    JLabel co = new JLabel(" # prodotti arrivati");                    
+                    JLabel c1 = new JLabel("E' arrivato");
+                    JLabel c2 = new JLabel("l'ho messo in Stock");
+                    
+                    main.add(co);
+                    main.add(c1);
+                    main.add(c2);
+                    
+                    JPanel p_arrivati = new JPanel();
+                    p_arrivati.setLayout( new GridLayout(1,2));
+                    JTextField qtyarr = new JTextField(10);
+                    qtyarr.setText("0");
+                    ((AbstractDocument)qtyarr.getDocument()).setDocumentFilter(new DocumentFilter(){
+                    Pattern regEx = Pattern.compile("\\d*");
+                    @Override
+                    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {          
+                        Matcher matcher = regEx.matcher(text);
+                        if(!matcher.matches()){
+                            return;
+                        }
+                        super.replace(fb, offset, length, text, attrs);
+                    }
+                });
+
+                    
+                    p_arrivati.add(qtyarr);
+                    String qtyChedovevaArrivare =  model2.getValueAt(row, 4).toString();
+                    qtyChedovevaArrivare = qtyChedovevaArrivare.substring(qtyChedovevaArrivare.indexOf('/'));
+                    JLabel txt = new JLabel(qtyChedovevaArrivare);
+                    p_arrivati.add(txt);
+                    main.add(p_arrivati);
+                    
+                    
+                    JCheckBox r1 = new JCheckBox();
+                    r1.setAlignmentX(CENTER_ALIGNMENT);
+                    JCheckBox r2 = new JCheckBox();
+                    r2.setAlignmentX(CENTER_ALIGNMENT);
+  
+                    main.add(r1);
+                    main.add(r2);
+                    
+                    
+                    f.add(main);
+                    
+                    
+                    JButton ok = new JButton("O K   K   E   Y");
+                    ok.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            
+                            String qtyChedovevaArrivare =  model2.getValueAt(row, 4).toString();
+                            qtyChedovevaArrivare = qtyChedovevaArrivare.substring(qtyChedovevaArrivare.indexOf('/'));
+                            // Setta la qty arrivata davvero
+                            model2.setValueAt(qtyarr.getText()+ qtyChedovevaArrivare , row, 4);
+                            
+                            // è arrivato
+                            if(r1.isSelected())model2.setValueAt( "Sì", row, 6);
+                            else model2.setValueAt( "No", row, 6);
+ 
+                            if(r2.isSelected())model2.setValueAt( "Sì", row, 7);
+                            else model2.setValueAt( "No", row, 7);
+                            
+                            f.setVisible(false);
+                            
+                        }
+
+                    });
+                    f.add(ok, BorderLayout.SOUTH);
+                    
                     
 
-                } else if (button.getText().equals("Ricarica ordine")) {
-                    
-                }
+                
 
             }
             clicked = false;
@@ -230,15 +313,13 @@ class FrameRiepilogo extends JFrame{
             super.fireEditingStopped();
         }
     }
- 
- 
-        public ImageIcon ImpostaImg(String nomeImmag) {
+
+    public ImageIcon ImpostaImg(String nomeImmag) {
 
         ImageIcon icon = new ImageIcon((getClass().getResource(nomeImmag)));
         Image ImmagineScalata = icon.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT);
         icon.setImage(ImmagineScalata);
         return icon;
     }
-    
-    
+
 }
