@@ -121,11 +121,11 @@ public class Poopulator {
                 bean.startOrdine();
 
 //            Ordine o = new Ordine(qty in arrivo, gg alla cons, fk_utente, prodotto_sku, cliente, fk_fornitore)
-                Ordine o = new Ordine(5, 5, "admin", sku, 0, "FR-10");
-                Ordine o2 = new Ordine(5, 6, "admin", sku, 0, "FR-2");
-                Ordine o3 = new Ordine(5, 7, "admin", sku, 0, "FR-1");
-                Ordine o4 = new Ordine(5, 8, "admin", sku, 0, "FR-14");
-                Ordine o5 = new Ordine(5, 10, "admin", sku, 0, "FR-19");
+                Ordine o = new Ordine(5, 5, "admin", sku, 0, "FR-10",0);
+                Ordine o2 = new Ordine(5, 6, "admin", sku, 0, "FR-2",0);
+                Ordine o3 = new Ordine(5, 7, "admin", sku, 0, "FR-1",0);
+                Ordine o4 = new Ordine(5, 8, "admin", sku, 0, "FR-14",0);
+                Ordine o5 = new Ordine(5, 10, "admin", sku, 0, "FR-19",0);
 
                 daoo.add(o);
                 daoo.add(o2);
