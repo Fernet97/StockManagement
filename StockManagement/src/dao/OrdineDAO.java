@@ -150,14 +150,18 @@ public class OrdineDAO {
 
     }
 
-    // NB: ma se vuoi cambiare la categoria .. ma poi dovrei cambiare anche lo sku? DA RISCRIVERE
-    public synchronized void updateGG(Ordine o) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
+    /*
+    Modifica i giorni alla consegna:
+    -1 : indico che l'ordine è arrivato
+    -2: indica che è arrivato e conteggiato
+  */
+    
+    public synchronized void updateGG(String nordine, String sku, int gg) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
         Connection connection = null;
         Statement statement = null;
 
-        System.out.println("sku del ordine da modificare: " + o.getN_ordine());
 //UPDATE `db_stock`.`ordine` SET `n_ordine` = '2', `data` = '2', `qty_in_arrivo` = '2', `giorni_alla_consegna` = '2', `fk_utente` = '2', `prodotto_sku` = '2', `fk_cliente` = '2', `fk_fornitore` = '2', `id` = '2' WHERE (`idordine` = '10')
-        String query = "UPDATE " + this.TABLE_NAME + " SET  `giorni_alla_consegna` = '-1',  WHERE (`n_ordine` = '"+o.getN_ordine()+"' AND `prodotto_sku` = '"+o.getProdotto_sku()+"' )";
+        String query = "UPDATE " + this.TABLE_NAME + " SET  giorni_alla_consegna = '"+gg+"'  WHERE n_ordine = '"+nordine+"' AND prodotto_sku = '"+sku+"'";
         System.out.println("ordine update " + query);
 
         try {
@@ -177,6 +181,46 @@ public class OrdineDAO {
 
     }
 
+    
+    // setta la qty arrivata (sovrascrivendola nella qty in arrivo dell'ordine)
+        public synchronized void setQtyArrivata(String nordine, String sku, int qty) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
+        Connection connection = null;
+        Statement statement = null;
+
+        String query = "UPDATE " + this.TABLE_NAME + " SET  qty_in_arrivo = '"+qty+"'  WHERE n_ordine = '"+nordine+"' AND prodotto_sku = '"+sku+"'";
+        System.out.println("ordine update " + query);
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+            connection.commit();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+        }
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public synchronized void removeOrd(String n_ordine) throws SQLException {
         Connection connection = null;
         Statement statement = null;

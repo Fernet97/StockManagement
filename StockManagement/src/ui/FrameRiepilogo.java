@@ -60,16 +60,19 @@ class FrameRiepilogo extends JFrame {
 
     private DefaultTableModel model2;
     private final JTable table2;
-    private final String numordine;
+    private final String Numordine;
+    public OrdiniAdminPanel panadmin;
+    private String arrivato;
+    private String messoInStock;
 
-    public FrameRiepilogo(String numordine) {
-
-        this.numordine = numordine;
+    public FrameRiepilogo(OrdiniAdminPanel panAdmin, String numordine) {
+        panadmin = panAdmin;
+        Numordine = numordine;
 
         ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
         this.setIconImage(img.getImage());
 
-        String[] columnNames = {"#Ordine", "Fornitore", "SKU prodotto", "Costo", "Quantita' arrivata", "Data prevista di arrivo", " E' Arrivato?", "Messo in Stock?", "Gestisci"};
+        String[] columnNames = {"#Ordine", "Fornitore", "SKU prodotto", "Costo", "Quantita' arrivata/ Quantità prevista", "Data prevista di arrivo", " E' Arrivato?", "Messo in Stock?", "Gestisci"};
 
         Object[][] data = {};
 
@@ -101,6 +104,54 @@ class FrameRiepilogo extends JFrame {
         });
 
         JButton bconferma = new JButton("Conferma");
+        bconferma.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di voler apportare le seguenti modifiche?????");
+
+                if (OpzioneScelta == JOptionPane.OK_OPTION) {
+
+                    try {
+                        OrdineDAO ordinedao = new OrdineDAO();
+
+                        // SALVA I DATI MODIFICATI
+                        for (int i = 0; i < model2.getRowCount(); i++) {
+
+                            String qtyArrivata = model2.getValueAt(i, 4).toString();
+                            qtyArrivata = qtyArrivata.substring(0, qtyArrivata.indexOf("/"));
+                            int qtyarriv = Integer.parseInt(qtyArrivata);
+
+                            // Se è arrivato
+                            if (model2.getValueAt(i, 6).toString().equals("Sì")) {
+                                ordinedao.updateGG(Numordine, model2.getValueAt(i, 2).toString(), -1);
+                                System.out.println("qty che è effettivamente arrivata..: " + qtyarriv);
+                                ordinedao.setQtyArrivata(Numordine, model2.getValueAt(i, 2).toString(), qtyarriv);
+                            }
+
+                            // Se è arrivato
+                            if (model2.getValueAt(i, 7).toString().equals("Sì")) {
+                                ordinedao.updateGG(Numordine, model2.getValueAt(i, 2).toString(), -2);
+                                System.out.println("tal qty arrivata  la aggiungerò in stock: " + qtyarriv);
+                                ProdottoDAO daop = new ProdottoDAO();
+                                Prodotto p = daop.getBySku(model2.getValueAt(i, 2).toString());
+                                p.setQty(p.getQty() + qtyarriv); // SOMMO LA NUOVA QTY ARRIVATA
+                                daop.update(p);
+
+                            }
+
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(FrameRiepilogo.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    setVisible(false);
+                    panadmin.refreshTab();
+                }
+            }
+
+        });
 
         JPanel pdown = new JPanel();
         pdown.setLayout(new GridBagLayout());
@@ -122,20 +173,27 @@ class FrameRiepilogo extends JFrame {
             //  String[] columnNames = {"#Ordine","Fornitore" ,"SKU prodotto", "Costo", "Quantita' arrivata", "Data prevista di arrivo", " E' Arrivato?", "Messo in Stock?"};
 
             ProdottoDAO prodao = new ProdottoDAO();
-            String arrivato = "";
-            String messoInStock = "";
-            for (Ordine ordine : ordaoo.getByNum(numordine)) {
-                
-                if(ordine.getGiorni_alla_consegna() < 0) {
-                    arrivato ="Sì";
-                    if(ordine.getGiorni_alla_consegna() <= -2) messoInStock = "Sì";
-                    else messoInStock = "No";
-                }else {
+            arrivato = "";
+             messoInStock = "";
+            boolean giaArrivatoInPassato = false;
+            for (Ordine ordine : ordaoo.getByNum(Numordine)) {
+
+                if (ordine.getGiorni_alla_consegna() < 0) {
+                    arrivato = "Sì";
+                    giaArrivatoInPassato = true;
+                    
+                    if (ordine.getGiorni_alla_consegna() <= -2) {
+                        messoInStock = "Sì";
+                    } else {
+                        messoInStock = "No";
+                    }
+                } else {
                     arrivato = "No";
                     messoInStock = "No";
                 }
-                
-                model2.addRow(new Object[]{ordine.getN_ordine(), ordine.getFk_fornitore(), ordine.getProdotto_sku(), prodao.getBySku(ordine.getProdotto_sku()).getCosto(), "0/" + ordine.getQty_in_arrivo(), ordaoo.dataArrivo(ordine.getN_ordine(), ordine.getProdotto_sku()), arrivato, messoInStock});
+
+     
+                model2.addRow(new Object[]{ordine.getN_ordine(), ordine.getFk_fornitore(), ordine.getProdotto_sku(), prodao.getBySku(ordine.getProdotto_sku()).getCosto(), giaArrivatoInPassato ? (ordine.getQty_in_arrivo() + "/" + ordine.getQty_in_arrivo()) : ("0/" + ordine.getQty_in_arrivo()), ordaoo.dataArrivo(ordine.getN_ordine(), ordine.getProdotto_sku()), arrivato, messoInStock});
             }
         } catch (SQLException ex) {
             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -208,85 +266,89 @@ class FrameRiepilogo extends JFrame {
                 f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 f.setSize(500, 150);
                 f.setVisible(true);
-                f.setTitle(numordine + "| " + skusel);
+                f.setTitle(Numordine + "| " + skusel);
 
-                    ProdottoDAO prodao = new ProdottoDAO();
-                    
-                    JPanel main = new JPanel();
-                    main.setLayout(new GridLayout(2, 3));
-     
-                    JLabel co = new JLabel(" # prodotti arrivati");                    
-                    JLabel c1 = new JLabel("E' arrivato");
-                    JLabel c2 = new JLabel("l'ho messo in Stock");
-                    
-                    main.add(co);
-                    main.add(c1);
-                    main.add(c2);
-                    
-                    JPanel p_arrivati = new JPanel();
-                    p_arrivati.setLayout( new GridLayout(1,2));
-                    JTextField qtyarr = new JTextField(10);
-                    qtyarr.setText("0");
-                    ((AbstractDocument)qtyarr.getDocument()).setDocumentFilter(new DocumentFilter(){
+                ProdottoDAO prodao = new ProdottoDAO();
+
+                JPanel main = new JPanel();
+                main.setLayout(new GridLayout(2, 3));
+
+                JLabel co = new JLabel(" # prodotti arrivati");
+                JLabel c1 = new JLabel("E' arrivato");
+                JLabel c2 = new JLabel("l'ho messo in Stock");
+
+                main.add(co);
+                main.add(c1);
+                main.add(c2);
+
+                JPanel p_arrivati = new JPanel();
+                p_arrivati.setLayout(new GridLayout(1, 2));
+                JTextField qtyarr = new JTextField(10);
+                qtyarr.setText("0");
+                ((AbstractDocument) qtyarr.getDocument()).setDocumentFilter(new DocumentFilter() {
                     Pattern regEx = Pattern.compile("\\d*");
+
                     @Override
-                    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {          
+                    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
                         Matcher matcher = regEx.matcher(text);
-                        if(!matcher.matches()){
+                        if (!matcher.matches()) {
                             return;
                         }
                         super.replace(fb, offset, length, text, attrs);
                     }
                 });
 
-                    
-                    p_arrivati.add(qtyarr);
-                    String qtyChedovevaArrivare =  model2.getValueAt(row, 4).toString();
-                    qtyChedovevaArrivare = qtyChedovevaArrivare.substring(qtyChedovevaArrivare.indexOf('/'));
-                    JLabel txt = new JLabel(qtyChedovevaArrivare);
-                    p_arrivati.add(txt);
-                    main.add(p_arrivati);
-                    
-                    
-                    JCheckBox r1 = new JCheckBox();
-                    r1.setAlignmentX(CENTER_ALIGNMENT);
-                    JCheckBox r2 = new JCheckBox();
-                    r2.setAlignmentX(CENTER_ALIGNMENT);
-  
-                    main.add(r1);
-                    main.add(r2);
-                    
-                    
-                    f.add(main);
-                    
-                    
-                    JButton ok = new JButton("O K   K   E   Y");
-                    ok.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            
-                            String qtyChedovevaArrivare =  model2.getValueAt(row, 4).toString();
-                            qtyChedovevaArrivare = qtyChedovevaArrivare.substring(qtyChedovevaArrivare.indexOf('/'));
-                            // Setta la qty arrivata davvero
-                            model2.setValueAt(qtyarr.getText()+ qtyChedovevaArrivare , row, 4);
-                            
-                            // è arrivato
-                            if(r1.isSelected())model2.setValueAt( "Sì", row, 6);
-                            else model2.setValueAt( "No", row, 6);
- 
-                            if(r2.isSelected())model2.setValueAt( "Sì", row, 7);
-                            else model2.setValueAt( "No", row, 7);
-                            
-                            f.setVisible(false);
-                            
+                p_arrivati.add(qtyarr);
+                String qtyChedovevaArrivare = model2.getValueAt(row, 4).toString();
+                qtyChedovevaArrivare = qtyChedovevaArrivare.substring(qtyChedovevaArrivare.indexOf('/'));
+                JLabel txt = new JLabel(qtyChedovevaArrivare);
+                p_arrivati.add(txt);
+                main.add(p_arrivati);
+
+                JCheckBox r1 = new JCheckBox();
+                if(arrivato.equals("Sì")) r1.setSelected(true);
+                else r1.setSelected(false);
+                r1.setAlignmentX(CENTER_ALIGNMENT);
+              
+                JCheckBox r2 = new JCheckBox();
+                if(messoInStock.equals("Sì")) r2.setSelected(true);
+                else r2.setSelected(false);                 
+                r2.setAlignmentX(CENTER_ALIGNMENT);
+
+                main.add(r1);
+                main.add(r2);
+
+                f.add(main);
+
+                JButton ok = new JButton("O K   K   E   Y");
+                ok.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                        String qtyChedovevaArrivare = model2.getValueAt(row, 4).toString();
+                        qtyChedovevaArrivare = qtyChedovevaArrivare.substring(qtyChedovevaArrivare.indexOf('/'));
+                        // Setta la qty arrivata davvero
+                        model2.setValueAt(qtyarr.getText() + qtyChedovevaArrivare, row, 4);
+
+                        // è arrivato
+                        if (r1.isSelected()) {
+                            model2.setValueAt("Sì", row, 6);
+                        } else {
+                            model2.setValueAt("No", row, 6);
                         }
 
-                    });
-                    f.add(ok, BorderLayout.SOUTH);
-                    
-                    
+                        if (r2.isSelected()) {
+                            model2.setValueAt("Sì", row, 7);
+                        } else {
+                            model2.setValueAt("No", row, 7);
+                        }
 
-                
+                        f.setVisible(false);
+
+                    }
+
+                });
+                f.add(ok, BorderLayout.SOUTH);
 
             }
             clicked = false;

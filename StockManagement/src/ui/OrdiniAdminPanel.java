@@ -451,6 +451,7 @@ public class OrdiniAdminPanel extends JPanel {
     public void refreshTab() {
         // refresh lista fornitori
         // BISOGNA SVUOTARE E RICARICARE LISTA FORN
+        System.out.println("R   E   F   R   E   S   H   !   !   !");
         jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
         FornitoreDAO daof = new FornitoreDAO();
         try {
@@ -549,10 +550,10 @@ public class OrdiniAdminPanel extends JPanel {
             if (clicked) // SE CLICCATO QUEL BOTTONE:::::::::::::
             {
                 if (button.getText().equals("Apri")) {
-                    FrameRiepilogo f = new FrameRiepilogo(table.getValueAt(row, 0).toString());
+                    FrameRiepilogo f = new FrameRiepilogo(getInstance(), table.getValueAt(row, 0).toString());
                     f.setResizable(false);
                     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    f.setSize(1300,400);
+                    f.setSize(1400,400);
                     f.setVisible(true);
                     f.setTitle("Riepilogo ordine: "+ table.getValueAt(row, 0));
                     
@@ -689,6 +690,12 @@ public class OrdiniAdminPanel extends JPanel {
 
         popup.add(ButtonConferma);
         popup.setVisible(true);
+
+    }
+    
+    
+    public OrdiniAdminPanel getInstance(){
+        return this;
 
     }
 
