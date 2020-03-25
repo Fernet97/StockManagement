@@ -55,7 +55,9 @@ public class OrdineDAO {
                 bean.setN_ordine(rs.getString("n_ordine"));
                 bean.setData(rs.getString("data"));
                 bean.setQty_in_arrivo(rs.getInt("qty_in_arrivo"));
+                bean.setQty_arrivata(rs.getInt("qty_arrivata"));
                 bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
+                bean.setData_arrivo(rs.getString("data_arrivo"));
                 bean.setFk_utente(rs.getString("fk_utente"));
                 bean.setProdotto_sku(rs.getString("prodotto_sku"));
                 bean.setFk_cliente(rs.getInt("fk_cliente"));
@@ -101,7 +103,9 @@ public class OrdineDAO {
                 bean.setN_ordine(rs.getString("n_ordine"));
                 bean.setData(rs.getString("data"));
                 bean.setQty_in_arrivo(rs.getInt("qty_in_arrivo"));
+                bean.setQty_arrivata(rs.getInt("qty_arrivata"));
                 bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
+                bean.setData_arrivo(rs.getString("data_arrivo"));
                 bean.setFk_utente(rs.getString("fk_utente"));
                 bean.setProdotto_sku(rs.getString("prodotto_sku"));
                 bean.setFk_cliente(rs.getInt("fk_cliente"));
@@ -183,11 +187,11 @@ public class OrdineDAO {
 
     
     // setta la qty arrivata (sovrascrivendola nella qty in arrivo dell'ordine)
-        public synchronized void setQtyArrivata(String nordine, String sku, int qty) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
+        public synchronized void setQtyArrivata(String nordine, String sku, int qty ) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
         Connection connection = null;
         Statement statement = null;
-
-        String query = "UPDATE " + this.TABLE_NAME + " SET  qty_in_arrivo = '"+qty+"'  WHERE n_ordine = '"+nordine+"' AND prodotto_sku = '"+sku+"'";
+        Ordine bean =new Ordine();
+        String query = "UPDATE " + this.TABLE_NAME + " SET  qty_arrivata = '"+qty+"' , data_arrivo = '"+bean.generateData()+"'  WHERE n_ordine = '"+nordine+"' AND prodotto_sku = '"+sku+"'";
         System.out.println("ordine update " + query);
 
         try {
@@ -463,8 +467,10 @@ public class OrdineDAO {
              System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(formatter)+ " consegna "+ consegna.format(formatter));
              
              // Se è -1 allora è arrivato, se è -2 è messo anche in stock
-             if (bean.getGiorni_alla_consegna() < 0 ){
+             if (bean.getGiorni_alla_consegna() == -2  ){
                 return  3;//verde
+            }else if(bean.getGiorni_alla_consegna() == -1  ){
+                return 2;//giallo
             }else if (now.format(formatter).equals(consegna.format(formatter))){
                 return 2; //giallo
             }else if (now.isAfter(consegna)){

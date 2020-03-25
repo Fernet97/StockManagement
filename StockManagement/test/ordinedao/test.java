@@ -28,9 +28,9 @@ public class test {
             
         bean.startOrdine();
 //            Ordine o = new Ordine(qty in arrivo, gg alla cons, fk_utente, prodotto_sku, cliente, fk_fornitore)
-        Ordine o = new Ordine(0, 0, "admin", "di18-16/03/2020 16:07:16", 0, "FR-1");
-        Ordine o2 = new Ordine(0, 0, "admin", "op15-16/03/2020 16:07:16", 0, "FR-1");
-        Ordine o3 = new Ordine(0, 0, "admin", "re4-16/03/2020 16:07:16", 0, "FR-1");
+        Ordine o = new Ordine(0, 0, "admin", "di18-16/03/2020 16:07:16", 0, "FR-1",0);
+        Ordine o2 = new Ordine(0, 0, "admin", "op15-16/03/2020 16:07:16", 0, "FR-1",0);
+        Ordine o3 = new Ordine(0, 0, "admin", "re4-16/03/2020 16:07:16", 0, "FR-1",0);
 
         dao.add(o);
         dao.add(o2);

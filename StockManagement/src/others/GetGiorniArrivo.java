@@ -32,8 +32,10 @@ public class GetGiorniArrivo {
             
              System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(formatter)+ " consegna "+ consegna.format(formatter));
              
-             if (bean.getGiorni_alla_consegna() == -1 ){
+             if (bean.getGiorni_alla_consegna() == -2  ){
                 return  3;//verde
+            }else if(bean.getGiorni_alla_consegna() == -1  ){
+                return 2;//giallo
             }else if (now.format(formatter).equals(consegna.format(formatter))){
                 return 2; //giallo
             }else if (now.isAfter(consegna)){

@@ -26,10 +26,10 @@ public class test3 {
             OrdineDAO dao =new OrdineDAO();
 
             
-            System.out.println(dao.isArrivato("ord-1"));
+            System.out.println(dao.isArrivato("ord-2"));
 
 //        System.out.println(dao.ggConsegna());
-System.out.println(dao.ggConsegnaPR("ord-1", "di10-22/03/2020 21:26:50"));
+//System.out.println(dao.ggConsegnaPR("ord-1", "di10-22/03/2020 21:26:50"));
             
             
     }
