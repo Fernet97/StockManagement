@@ -185,9 +185,8 @@ public class OrdineDAO {
 
     }
 
-    
-    // setta la qty arrivata (sovrascrivendola nella qty in arrivo dell'ordine)
-        public synchronized void setQtyArrivata(String nordine, String sku, int qty ) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
+// setta la qty arrivata  per quel preciso prodotto di quell'ordine
+        public synchronized void setQtyArrivata(String nordine, String sku, int qty ) throws SQLException { 
         Connection connection = null;
         Statement statement = null;
         Ordine bean =new Ordine();

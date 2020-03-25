@@ -64,7 +64,7 @@ class FrameRiepilogo extends JFrame {
     public OrdiniAdminPanel panadmin;
     private String arrivato;
     private String messoInStock;
-
+    
     public FrameRiepilogo(OrdiniAdminPanel panAdmin, String numordine) {
         panadmin = panAdmin;
         Numordine = numordine;
@@ -72,7 +72,7 @@ class FrameRiepilogo extends JFrame {
         ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
         this.setIconImage(img.getImage());
 
-        String[] columnNames = {"#Ordine", "Fornitore", "SKU prodotto", "Costo", "Quantita' arrivata/ Quantità prevista", "Data prevista di arrivo", " E' Arrivato?", "Messo in Stock?", "Gestisci"};
+        String[] columnNames = {"#Ordine", "Fornitore", "SKU prodotto", "Costo", "Quantita' arrivata/ Quantità prevista", "Data di arrivo", " E' Arrivato?", "Messo in Stock?", "Gestisci"};
 
         Object[][] data = {};
 
@@ -125,15 +125,23 @@ class FrameRiepilogo extends JFrame {
 
                             // Se è arrivato
                             if (model2.getValueAt(i, 6).toString().equals("Sì")) {
+                                // setto a -1 gg
                                 ordinedao.updateGG(Numordine, model2.getValueAt(i, 2).toString(), -1);
-                                System.out.println("qty che è effettivamente arrivata..: " + qtyarriv);
+                                
+                                // setto la qty arrivata nwll'ordine
                                 ordinedao.setQtyArrivata(Numordine, model2.getValueAt(i, 2).toString(), qtyarriv);
                             }
 
-                            // Se è arrivato
+                            // Se è l'ho messo a posto
                             if (model2.getValueAt(i, 7).toString().equals("Sì")) {
+                                
+                                // setto a -2 gg
                                 ordinedao.updateGG(Numordine, model2.getValueAt(i, 2).toString(), -2);
-                                System.out.println("tal qty arrivata  la aggiungerò in stock: " + qtyarriv);
+                                
+                                //Setto la qty arrivata nell'ordine 
+                                ordinedao.setQtyArrivata(Numordine, model2.getValueAt(i, 2).toString(), qtyarriv);
+                                
+                                //Sommo questa qty arrivata alla qty del prodotto corrispondente
                                 ProdottoDAO daop = new ProdottoDAO();
                                 Prodotto p = daop.getBySku(model2.getValueAt(i, 2).toString());
                                 p.setQty(p.getQty() + qtyarriv); // SOMMO LA NUOVA QTY ARRIVATA
@@ -175,12 +183,12 @@ class FrameRiepilogo extends JFrame {
             ProdottoDAO prodao = new ProdottoDAO();
             arrivato = "";
              messoInStock = "";
-            boolean giaArrivatoInPassato = false;
+             String datao = "";
             for (Ordine ordine : ordaoo.getByNum(Numordine)) {
 
                 if (ordine.getGiorni_alla_consegna() < 0) {
                     arrivato = "Sì";
-                    giaArrivatoInPassato = true;
+                    datao = ordine.getData_arrivo()+ " (arrivato)"; // data quando è arrivata 
                     
                     if (ordine.getGiorni_alla_consegna() <= -2) {
                         messoInStock = "Sì";
@@ -190,10 +198,12 @@ class FrameRiepilogo extends JFrame {
                 } else {
                     arrivato = "No";
                     messoInStock = "No";
+                    datao = ordaoo.dataArrivo(ordine.getN_ordine(), ordine.getProdotto_sku())+ " (previsto)"; // data prevista
                 }
 
      
-                model2.addRow(new Object[]{ordine.getN_ordine(), ordine.getFk_fornitore(), ordine.getProdotto_sku(), prodao.getBySku(ordine.getProdotto_sku()).getCosto(), giaArrivatoInPassato ? (ordine.getQty_in_arrivo() + "/" + ordine.getQty_in_arrivo()) : ("0/" + ordine.getQty_in_arrivo()), ordaoo.dataArrivo(ordine.getN_ordine(), ordine.getProdotto_sku()), arrivato, messoInStock});
+                model2.addRow(new Object[]{ordine.getN_ordine(), ordine.getFk_fornitore(), ordine.getProdotto_sku(), prodao.getBySku(ordine.getProdotto_sku()).getCosto(),
+                    ordine.getQty_arrivata() +"/"+ordine.getQty_in_arrivo(), datao, arrivato, messoInStock});
             }
         } catch (SQLException ex) {
             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -284,7 +294,6 @@ class FrameRiepilogo extends JFrame {
                 JPanel p_arrivati = new JPanel();
                 p_arrivati.setLayout(new GridLayout(1, 2));
                 JTextField qtyarr = new JTextField(10);
-                qtyarr.setText("0");
                 ((AbstractDocument) qtyarr.getDocument()).setDocumentFilter(new DocumentFilter() {
                     Pattern regEx = Pattern.compile("\\d*");
 

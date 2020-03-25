@@ -414,7 +414,7 @@ public class OrdiniAdminPanel extends JPanel {
                             String subselezionato = "";
                             selezionato = model.getValueAt(i, 4).toString();
                             subselezionato = selezionato.substring(0, selezionato.lastIndexOf("|"));
-                            Ordine o = new Ordine(Integer.parseInt(model.getValueAt(i, 1).toString()), Integer.parseInt(model.getValueAt(i, 3).toString()), user, model.getValueAt(i, 0).toString(), 0, subselezionato);
+                            Ordine o = new Ordine(Integer.parseInt(model.getValueAt(i, 1).toString()), Integer.parseInt(model.getValueAt(i, 3).toString()), user, model.getValueAt(i, 0).toString(), 0, subselezionato, 0);
                             ordao.add(o);
                         } catch (SQLException ex) {
                             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
