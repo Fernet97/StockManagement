@@ -499,7 +499,55 @@ System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(for
         
         }
         
+         public synchronized String dataArrivo(String o, String sku) throws SQLException, ParseException  {
         
+            Connection connection = null;
+            PreparedStatement ps = null;
+
+            Ordine bean =new Ordine();
+
+            String sql = "select n_ordine ,data , giorni_alla_consegna from ordine where n_ordine = '"+o+"' and prodotto_sku = '"+sku+"'  order by giorni_alla_consegna desc limit 1";
+            
+             try {
+            connection = DriverManagerConnectionPool.getConnection();
+            ps = connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+           while (rs.next()) {
+                bean.setN_ordine(rs.getString("n_ordine"));
+                bean.setData(rs.getString("data"));
+                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
+                
+             }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            //get data attuale
+            String [] nows= bean.generateData().split(" ");
+            LocalDate now = LocalDate.parse(nows[0], formatter);
+            
+            //get data ordine
+            String [] dbs= bean.getData().split(" ");
+            LocalDate db = LocalDate.parse(dbs[0], formatter);
+            
+            // get data della consegna
+            LocalDate consegna = db.plusDays(bean.getGiorni_alla_consegna());
+            
+             System.out.println("data prevista di arrivo "+consegna.format(formatter));
+             
+
+            return consegna.format(formatter);
+            
+            }
+        }
+               
                 
 
              

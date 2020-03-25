@@ -119,19 +119,6 @@ class FrameRiepilogo extends JFrame {
         OrdineDAO ordaoo = new OrdineDAO();
 
         try {
-            /*
-                            bean.setN_ordine(rs.getString("n_ordine"));
-                bean.setData(rs.getString("data"));
-                bean.setQty_in_arrivo(rs.getInt("qty_in_arrivo"));
-                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
-                bean.setFk_utente(rs.getString("fk_utente"));
-                bean.setProdotto_sku(rs.getString("prodotto_sku"));
-                bean.setFk_cliente(rs.getInt("fk_cliente"));
-                bean.setFk_fornitore(rs.getString("fk_fornitore"));
-
-            
-            
-             */
             //  String[] columnNames = {"#Ordine","Fornitore" ,"SKU prodotto", "Costo", "Quantita' arrivata", "Data prevista di arrivo", " E' Arrivato?", "Messo in Stock?"};
 
             ProdottoDAO prodao = new ProdottoDAO();
@@ -148,10 +135,12 @@ class FrameRiepilogo extends JFrame {
                     messoInStock = "No";
                 }
                 
-                model2.addRow(new Object[]{ordine.getN_ordine(), ordine.getFk_fornitore(), ordine.getProdotto_sku(), prodao.getBySku(ordine.getProdotto_sku()).getCosto(), "0/" + ordine.getQty_in_arrivo(), "22/12/2020", arrivato, messoInStock});
+                model2.addRow(new Object[]{ordine.getN_ordine(), ordine.getFk_fornitore(), ordine.getProdotto_sku(), prodao.getBySku(ordine.getProdotto_sku()).getCosto(), "0/" + ordine.getQty_in_arrivo(), ordaoo.dataArrivo(ordine.getN_ordine(), ordine.getProdotto_sku()), arrivato, messoInStock});
             }
         } catch (SQLException ex) {
             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(FrameRiepilogo.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
