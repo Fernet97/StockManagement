@@ -589,7 +589,7 @@ System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(for
             // get data della consegna
             LocalDate consegna = db.plusDays(bean.getGiorni_alla_consegna());
             
-             System.out.println("data prevista di arrivo "+consegna.format(formatter));
+             System.err.println("data prevista di arrivo "+consegna.format(formatter));
              
 
             return consegna.format(formatter);
@@ -598,6 +598,70 @@ System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(for
         }
                
                 
+         
+         
+         
+         
+         
+         
+         public synchronized int ggConsegnaPR2(String o, String p) throws SQLException, ParseException  { // da definire (query OK)
+            
+            Connection connection = null;
+            PreparedStatement ps = null;
+            int gg= -9999;
+            
+            Ordine bean =new Ordine();
+
+            String sql = "select distinct n_ordine ,data , giorni_alla_consegna, prodotto_sku from "+this.TABLE_NAME+" "
+                    + "where n_ordine = '"+o+"'  and prodotto_sku = '"+p+"'";
+            
+             try {
+            connection = DriverManagerConnectionPool.getConnection();
+            ps = connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+            int i =0;
+           while (rs.next()) {
+               
+                bean.setN_ordine(rs.getString("n_ordine"));
+                bean.setData(rs.getString("data"));
+                bean.setGiorni_alla_consegna(rs.getInt("giorni_alla_consegna"));
+                bean.setProdotto_sku(rs.getString("prodotto_sku"));
+                
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            
+            //get data ordine
+            String [] dbs= bean.getData().split(" ");
+            LocalDate db = LocalDate.parse(dbs[0], formatter);
+            
+            //get data attuale
+            String [] nows= bean.generateData().split(" ");
+            LocalDate now = LocalDate.parse(nows[0], formatter);
+            
+            // get giorni mancanti consegna
+            LocalDate consegna = db.plusDays(bean.getGiorni_alla_consegna());
+            
+                gg = (int) DAYS.between(consegna,  now);
+System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(formatter)+ " consegna "+ consegna.format(formatter) + " giorni mancanti  " + gg);
+                    i++;
+           }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+                 return gg;
+
+            }
+        
+                         
+
+             }
+         }
+         
+         
 
              
 }// chiude la classe

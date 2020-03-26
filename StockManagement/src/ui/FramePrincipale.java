@@ -43,6 +43,12 @@ import java.io.IOException;
 import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,14 +100,21 @@ public class FramePrincipale extends JFrame {
     private JTable table2;
     public String nomeuser;
     public Utente user;
+    public ButtonDash button;
+    public ButtonDash button1;
+    public ButtonDash button2;
+    public ButtonDash button3;
+    public ButtonDash button4;
+    public ButtonDash button5;
 
     public FramePrincipale(String nomeutente) {
         nomeuser = nomeutente;
         CreaGUI();
+        refresh();
     }
 
     public void CreaGUI() {
-
+        
         UtenteDAO daouten = new UtenteDAO();
         try {
             user = daouten.getByID(nomeuser);
@@ -197,27 +210,27 @@ public class FramePrincipale extends JFrame {
         pannellodash.setLayout(new GridLayout(3, 2, 50, 70));
 
         //Bottoni Dash
-        ButtonDash button = new ButtonDash("Totale prodotti in magazzino");
+        button = new ButtonDash("Totale prodotti in magazzino");
         button.setBackground(new Color(250, 190, 80));
         pannellodash.add(button);
 
-        ButtonDash button1 = new ButtonDash("Totale prodotti in arrivo");
+        button1 = new ButtonDash("Totale prodotti in arrivo");
         button1.setBackground(new Color(250, 190, 80));
         pannellodash.add(button1);
 
-        ButtonDash button2 = new ButtonDash("Spese totali");
+        button2 = new ButtonDash("Spese totali");
         button2.setBackground(new Color(92, 91, 47));
         pannellodash.add(button2);
 
-        ButtonDash button3 = new ButtonDash("Vendite totali");
+        button3 = new ButtonDash("Vendite totali");
         button3.setBackground(new Color(92, 91, 47));
         pannellodash.add(button3);
 
-        ButtonDash button4 = new ButtonDash("Totale utenti registrati");
+        button4 = new ButtonDash("Totale utenti registrati");
         button4.setBackground(new Color(151, 109, 248));
         pannellodash.add(button4);
 
-        ButtonDash button5 = new ButtonDash("Ordini effettuati");
+        button5 = new ButtonDash("Ordini effettuati");
         button5.setBackground(new Color(236, 50, 213));
         pannellodash.add(button5);
 
@@ -241,23 +254,38 @@ public class FramePrincipale extends JFrame {
         model2 = new DefaultTableModel();
         model2.addColumn("Nome");
         model2.addColumn("Quantità");
+        model2.addColumn("#Ordine");
+        model2.addColumn("Data arrivo");
+       
         table2.setEnabled(false);
         table2.setModel(model2);
         JScrollPane sp2 = new JScrollPane(table2);
         TitoloTab2.add(sp2);
+        
+        OrdineDAO ordao = new OrdineDAO();
 
         try {
             for (Prodotto prod : daop.getAll()) {
                 if (prod.getQty() <= prod.getQty_min()) {
-                    model.addRow(new Object[]{prod.getNome(), prod.getQty()});
+                    model.addRow(new Object[]{prod.getSku() +"  !"+ prod.getNome(), prod.getQty()});
 
                 }
-                /*  if(prod.getGiorni_alla_consegna() <=7){
-                     model2.addRow(new Object[]{prod.getNome(), prod.getQty()});          
                
-                }*/
+                
             }
+            
+            for(Ordine o : ordao.getAll()){
+            
+                if(ordao.ggConsegnaPR2(o.getN_ordine(), o.getProdotto_sku()) <=5 && o.getGiorni_alla_consegna()>=0)
+                    model2.addRow(new Object[]{o.getProdotto_sku(), o.getQty_in_arrivo(), o.getN_ordine(), ordao.dataArrivo(o.getN_ordine(), o.getProdotto_sku())});          
+
+                
+            }
+            
+            
         } catch (SQLException ex) {
+            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
             Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -506,7 +534,7 @@ public class FramePrincipale extends JFrame {
                         prodotti.refreshTab();
                         categorie.refreshTab();
                         ordiniadmin.refreshTab();
-                        refreshTab();
+                        refresh();
 
                     } catch (SQLException ex) {
                         Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
@@ -564,51 +592,92 @@ public class FramePrincipale extends JFrame {
 
     }
 
-    public void refreshTab() {
+    public void refresh() {
         ProdottoDAO daop = new ProdottoDAO();
 
         model.setRowCount(0);
         model2.setRowCount(0);
 
+        OrdineDAO ordao = new OrdineDAO();
+
         try {
             for (Prodotto prod : daop.getAll()) {
                 if (prod.getQty() <= prod.getQty_min()) {
-                    model.addRow(new Object[]{prod.getNome(), prod.getQty()});
-
-                }
-                /*                if(prod.getGiorni_alla_consegna() <=7){
-                     model2.addRow(new Object[]{prod.getNome(), prod.getQty()});          
-               
-                }*/
+                    model.addRow(new Object[]{prod.getSku() +"  !"+ prod.getNome(), prod.getQty()});
+                }  
             }
-        } catch (SQLException ex) {
+            
+            for(Ordine o : ordao.getAll()){
+                if(ordao.ggConsegnaPR2(o.getN_ordine(), o.getProdotto_sku()) <=5 && o.getGiorni_alla_consegna()>=0)
+                    model2.addRow(new Object[]{o.getProdotto_sku(), o.getQty_in_arrivo(), o.getN_ordine(), ordao.dataArrivo(o.getN_ordine(), o.getProdotto_sku())});          
+
+                
+            }
+        //Aggiornare numeri sui pannelli della dash ...
+        button.refreshButtonDash();
+        button1.refreshButtonDash();
+        button2.refreshButtonDash();
+        button3.refreshButtonDash();
+        button4.refreshButtonDash();
+        button5.refreshButtonDash();
+        
+        
+    }   catch (SQLException ex) {
+            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
             Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        //Aggiornare numeri sui pannelli della dash ...
     }
-
+    
+    
+    
     class ButtonDash extends RoundedPanel { //PANNELLO TOTALE PRODOTTI
 
         private int number;
+        public  RoundedPanel vai;
+        private String type;
+        public JLabel title;
+        private JLabel num;
+        private JLabel scrittaVai;
 
         public ButtonDash(String type) {
+            this.type = type;
             setForeground(new Color(27, 32, 36));
             number = 0;
             super.setLayout(new GridLayout(3, 1));
             super.setBackground(new Color(66, 139, 221));
-            JLabel title = new JLabel(type); //Per dare ampiezza al jpanel
+            title = new JLabel(type); //Per dare ampiezza al jpanel
             title.setFont(new Font("Arial Black", Font.BOLD, 20));
             title.setHorizontalAlignment(JLabel.CENTER);
 
-            RoundedPanel vai = new RoundedPanel();
+            vai = new RoundedPanel();
             vai.setFont(new Font("Arial Black", Font.BOLD, 15));
             vai.setBackground(new Color(128, 128, 128));
             vai.setForeground(Color.black);
             vai.setLayout(new GridLayout(1, 1));
+            num = new JLabel(); //Per dare ampiezza al jpanel
+
+            refreshButtonDash();
+
+            super.add(title);
+            super.add(num);
+            super.add(vai);
+
+        }
+
+        public ImageIcon ImpostaImg(String nomeImmag) {
+
+            ImageIcon icon = new ImageIcon(getClass().getResource(nomeImmag));
+            Image ImmagineScalata = icon.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
+            icon.setImage(ImmagineScalata);
+            return icon;
+        }
+        
+        public void refreshButtonDash(){
+                        number = 0;
 
             if (type.equals("Totale utenti registrati")) {
-
+             
                 UtenteDAO dao = new UtenteDAO();
                 try {
                     number = dao.getAll().size();
@@ -618,7 +687,6 @@ public class FramePrincipale extends JFrame {
             }
 
             if (type.equals("Totale prodotti in magazzino")) {
-
                 ProdottoDAO dao = new ProdottoDAO();
                 Enumeration names;
                 String key;
@@ -655,22 +723,29 @@ public class FramePrincipale extends JFrame {
                     }
                 });
 
-                JLabel scrittaVai = new JLabel(ImpostaImg("/res/img/prodotti.png"));
+                scrittaVai = new JLabel(ImpostaImg("/res/img/prodotti.png"));
+                   vai.removeAll();
                 vai.add(scrittaVai);
 
+
             }
 
-            /* 
-        if(type.equals("Totale prodotti in arrivo")){
             
-            ProdottoDAO dao = new ProdottoDAO();
+        if(type.equals("Totale prodotti in arrivo")){
+            number = 0;
+            OrdineDAO ordao = new OrdineDAO();
             try {
-                for(Prodotto p : dao.getAll() ){
-                    if(p.getGiorni_alla_consegna() <=7)number = number + p.getQty();
-                }
+            for(Ordine o : ordao.getAll()){
+            
+            if(ordao.ggConsegnaPR2(o.getN_ordine(), o.getProdotto_sku()) <=5 && o.getGiorni_alla_consegna()>=0){
+                number++;}
+               
+            }
             } catch (SQLException ex) {
                 Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }   catch (ParseException ex) {
+                    Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                }
            
             vai.addMouseListener(new MouseListener() {
                 @Override
@@ -690,9 +765,11 @@ public class FramePrincipale extends JFrame {
                 public void mouseExited(MouseEvent e) {}
             });
             
-            JLabel scrittaVai =  new JLabel(ImpostaImg("/res/img/prodotti.png"));     
+            scrittaVai =  new JLabel(ImpostaImg("/res/img/prodotti.png"));   
+                               vai.removeAll();
             vai.add(scrittaVai);
-        } */
+ 
+        } 
             
               if (type.equals("Ordini effettuati")) {
 
@@ -722,33 +799,29 @@ public class FramePrincipale extends JFrame {
                     }
                 });
 
-                JLabel scrittaVai = new JLabel(ImpostaImg("/res/img/ordini.png"));
+                scrittaVai = new JLabel(ImpostaImg("/res/img/ordini.png"));
+                                   vai.removeAll();
+
                 vai.add(scrittaVai);
                
             }
-            
-            
-            
-            
-            
-            JLabel num = new JLabel(String.valueOf(number)); //Per dare ampiezza al jpanel
+                  
+     
+            num.setText(String.valueOf(number));
             num.setFont(new Font("Arial Black", Font.BOLD, 30));
-            num.setForeground(Color.red);
+            num.setForeground(Color.white);
             num.setHorizontalAlignment(JLabel.CENTER);
 
-            super.add(title);
-            super.add(num);
-            super.add(vai);
-
+        
+        
         }
-
-        public ImageIcon ImpostaImg(String nomeImmag) {
-
-            ImageIcon icon = new ImageIcon(getClass().getResource(nomeImmag));
-            Image ImmagineScalata = icon.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
-            icon.setImage(ImmagineScalata);
-            return icon;
-        }
+        
+        
 
     }
+    
+    
+    
+    
+
 }
