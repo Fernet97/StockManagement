@@ -294,6 +294,12 @@ class FrameRiepilogo extends JFrame {
                 JPanel p_arrivati = new JPanel();
                 p_arrivati.setLayout(new GridLayout(1, 2));
                 JTextField qtyarr = new JTextField(10);
+                
+            
+                String arrivat = model2.getValueAt(row, 4).toString();
+                arrivat = arrivat.substring(0, arrivat.indexOf("/"));
+                qtyarr.setText(arrivat);
+                
                 ((AbstractDocument) qtyarr.getDocument()).setDocumentFilter(new DocumentFilter() {
                     Pattern regEx = Pattern.compile("\\d*");
 
