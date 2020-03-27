@@ -6,6 +6,7 @@
 package ui;
 
 import beans.Prodotto;
+import dao.OrdineDAO;
 import dao.ProdottoDAO;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -44,7 +45,7 @@ import others.RoundedPanel;
  */
 public class OrdiniPanel extends JPanel {
 
-    /*
+    
     public Prodotto prodottoCorrente;
     private final ProdottoDAO dao;
     private final JLabel infosku;
@@ -172,7 +173,7 @@ public class OrdiniPanel extends JPanel {
 
         /*** PRENDI E CONFERMA **********/
     
-    /*
+    
         JPanel SXdown = new RoundedPanel();
         SXdown.setLayout(new GridLayout(6, 1));
         SXdown.add(new JLabel(""));        
@@ -214,9 +215,10 @@ public class OrdiniPanel extends JPanel {
                 if (OpzioneScelta == JOptionPane.OK_OPTION) {System.out.println("OOOOOOOOKKKKKK EFFETTUO PRELIEVO UNITA'"); 
                 
                     prodottoCorrente.setQty(qtyAttuale - Integer.parseInt(quantdaprend.getText()));
+                    OrdineDAO ordao = new OrdineDAO();
                     try {
-                        System.out.println("aggiorno "+prodottoCorrente.getSku() + "  "+ prodottoCorrente.getId_fornitore() );
-                        dao.update(prodottoCorrente, prodottoCorrente.getId_fornitore());
+                        System.out.println("aggiorno "+prodottoCorrente.getSku() + "  "+  ordao.getFPr(prodottoCorrente.getSku()) );
+                        dao.update(prodottoCorrente);
                         casella.setText(prodottoCorrente.getSku());
                     } catch (SQLException ex) {
                         Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -284,7 +286,7 @@ public class OrdiniPanel extends JPanel {
                 infosku.setText(prodottoCorrente.getSku());
                 infonome.setText(prodottoCorrente.getNome());
                 infocat.setText(prodottoCorrente.getCategoria());
-                infonote.setText(prodottoCorrente.getDescrizione());
+                infonote.setText(prodottoCorrente.getNote());
                 qtyAttuale = prodottoCorrente.getQty();
                 
                 qtyMin = prodottoCorrente.getQty_min();
@@ -311,7 +313,7 @@ public class OrdiniPanel extends JPanel {
     
     
     
-    }*/
+    }    
 }
 
 

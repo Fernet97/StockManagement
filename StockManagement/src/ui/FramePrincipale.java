@@ -237,7 +237,7 @@ public class FramePrincipale extends JFrame {
         //Le tabelle ...
         ProdottoDAO daop = new ProdottoDAO();
 
-        JPanel TitoloTab1 = new JPanel();
+        JPanel TitoloTab1 = new JPanel(new GridLayout(1, 1));
         TitoloTab1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "prodotti in esaurimento", TitledBorder.RIGHT, TitledBorder.TOP));
         table = new JTable();
         table.setEnabled(false);
@@ -248,7 +248,7 @@ public class FramePrincipale extends JFrame {
         JScrollPane sp = new JScrollPane(table);
         TitoloTab1.add(sp);
 
-        JPanel TitoloTab2 = new JPanel();
+        JPanel TitoloTab2 = new JPanel(new GridLayout(1, 1));
         TitoloTab2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "Prodotti in arrivo", TitledBorder.RIGHT, TitledBorder.TOP));
         table2 = new JTable();
         model2 = new DefaultTableModel();
@@ -292,7 +292,7 @@ public class FramePrincipale extends JFrame {
         pannelloTab.setLayout(new GridLayout(2, 1));
         pannelloTab.add(TitoloTab1);
         pannelloTab.add(TitoloTab2);
-        pannelloTab.setBorder(new EmptyBorder(20, 200, 20, 50));
+       pannelloTab.setBorder(new EmptyBorder(0, 100, 0, 20));
 
         dashboard.setLayout(new GridLayout(1, 2));
         dashboard.add(pannellodash);
@@ -529,11 +529,13 @@ public class FramePrincipale extends JFrame {
                     System.out.println("Codice tasto premuto:" + code);
 
                     try {
-
+                        
+                        if(user.getPermessi() == 0){
                         codici.refreshTab();
                         prodotti.refreshTab();
                         categorie.refreshTab();
                         ordiniadmin.refreshTab();
+                        }
                         refresh();
 
                     } catch (SQLException ex) {
@@ -665,13 +667,6 @@ public class FramePrincipale extends JFrame {
 
         }
 
-        public ImageIcon ImpostaImg(String nomeImmag) {
-
-            ImageIcon icon = new ImageIcon(getClass().getResource(nomeImmag));
-            Image ImmagineScalata = icon.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
-            icon.setImage(ImmagineScalata);
-            return icon;
-        }
         
         public void refreshButtonDash(){
                         number = 0;
@@ -684,6 +679,9 @@ public class FramePrincipale extends JFrame {
                 } catch (SQLException ex) {
                     Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                 scrittaVai = new JLabel(ImpostaImg("/res/img/users.png"));
+                   vai.removeAll();
+                vai.add(scrittaVai);
             }
 
             if (type.equals("Totale prodotti in magazzino")) {
@@ -824,4 +822,11 @@ public class FramePrincipale extends JFrame {
     
     
 
+        public ImageIcon ImpostaImg(String nomeImmag) {
+
+            ImageIcon icon = new ImageIcon(getClass().getResource(nomeImmag));
+            Image ImmagineScalata = icon.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
+            icon.setImage(ImmagineScalata);
+            return icon;
+        }
 }
