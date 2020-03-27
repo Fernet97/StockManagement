@@ -145,6 +145,7 @@ class FrameRiepilogo extends JFrame {
                                 ProdottoDAO daop = new ProdottoDAO();
                                 Prodotto p = daop.getBySku(model2.getValueAt(i, 2).toString());
                                 p.setQty(p.getQty() + qtyarriv); // SOMMO LA NUOVA QTY ARRIVATA
+                                p.setInstock(true);
                                 daop.update(p);
 
                             }
