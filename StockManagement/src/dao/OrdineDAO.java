@@ -297,7 +297,7 @@ public class OrdineDAO {
 
         ArrayList<ArrayList<String>> ordini = new ArrayList<>(4);
         
-        String selectSQL = "select n_ordine ,data , sum(qty_in_arrivo), sum(costo) from db_stock.ordine,  db_stock.prodotto where prodotto_sku = sku group by n_ordine";
+        String selectSQL = "select n_ordine ,data , sum(qty_in_arrivo) , sum(qty_in_arrivo * costo) from db_stock.ordine,  db_stock.prodotto where prodotto_sku = sku group by n_ordine";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -309,7 +309,7 @@ public class OrdineDAO {
                 ArrayList<String> record = new ArrayList<String>();
                 record.add(rs.getString("n_ordine"));
                 record.add(rs.getString("sum(qty_in_arrivo)"));
-                record.add(rs.getString("sum(costo)"));
+                record.add(rs.getString("sum(qty_in_arrivo * costo)"));
                 record.add(rs.getString("data"));
                 
                 ordini.add(record);
@@ -660,8 +660,44 @@ System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(for
 
              }
          }
-         
-         
+         /**
+          * ritorna il numero di ordini effettuati
+          * @return
+          * @throws SQLException 
+          */
+         public synchronized int qtyOrdini() throws SQLException{ // da definire (query OK)
+            
+            Connection connection = null;
+            PreparedStatement ps = null;
+            
+          int  n =0;
+
+            String sql = "select count(distinct n_ordine) from "+this.TABLE_NAME;
+            
+             try {
+            connection = DriverManagerConnectionPool.getConnection();
+            ps = connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+        
+               
+             n = rs.getInt("count(distinct n_ordine)");
+           
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+                 return n;
+
+            }
+        
+                         
+
+             }
+         }
 
              
 }// chiude la classe
