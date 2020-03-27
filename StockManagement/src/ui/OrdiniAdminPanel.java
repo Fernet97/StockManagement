@@ -272,6 +272,8 @@ public class OrdiniAdminPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                     for (int i = 0; i < table.getSelectedRows().length; i++) {
                        model.removeRow(table.getSelectedRow());
+                       costocarrell += Float.parseFloat(table.getValueAt(i, 2).toString()) * Integer.parseInt(table.getValueAt(i, 1).toString());
+                       costot.setText("Costo totale: " + costocarrell + " euro");
                 }
             }
         });      
@@ -281,6 +283,8 @@ public class OrdiniAdminPanel extends JPanel {
         svuotaprod.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 model.setRowCount(0);
+                costocarrell= 0;
+                costot.setText("Costo totale: 0 euro");
             }
         });    
         manageprod.add(svuotaprod);
@@ -425,6 +429,8 @@ public class OrdiniAdminPanel extends JPanel {
                     }
                     refreshTab();
                     model.setRowCount(0);
+                    costocarrell = 0;
+                    costot.setText("Costo totale: 0 euro");
 
                 }
 
@@ -617,8 +623,8 @@ public class OrdiniAdminPanel extends JPanel {
             for (Ordine o : ordao.getByNum(numerordine)){
                 Fornitore f = forndao.getByID(o.getFk_fornitore());
                 Prodotto p = prodao.getBySku(o.getProdotto_sku());
+                costocarrell = 0;
                model.addRow(new Object[]{p.getSku(), o.getQty_in_arrivo(),  p.getCosto(),  o.getGiorni_alla_consegna(), f.getIdfornitore()+"|"+f.getFullname()}); 
-                
                         costocarrell += p.getCosto() * o.getQty_in_arrivo();
                         costot.setText("Costo totale: " + costocarrell + " euro");
                         int prossimoord = o.leggiUltimoID() + 1;
