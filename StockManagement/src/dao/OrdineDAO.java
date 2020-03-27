@@ -660,11 +660,13 @@ System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(for
 
              }
          }
-         /**
-          * ritorna il numero di ordini effettuati
-          * @return
-          * @throws SQLException 
-          */
+         
+         
+/**
+ * ritorna il numero di ordini effettuati
+ * @return
+ * @throws SQLException 
+ */
          public synchronized int qtyOrdini() throws SQLException{ // da definire (query OK)
             
             Connection connection = null;
