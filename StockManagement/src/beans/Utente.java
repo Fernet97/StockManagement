@@ -64,7 +64,7 @@ public class Utente {
 
 //        this.datareg = datareg;;
         this.fullname = fullname;
-        System.out.println("fullname" + getFullname());
+//        System.out.println("fullname" + getFullname());
         this.CF = CF;
         this.indirizzo = indirizzo;
         this.telefono = telefono;
@@ -107,7 +107,7 @@ public class Utente {
     }
 
     public String getFullname() {
-        System.out.println("diocane" + fullname);
+//        System.out.println("diocane" + fullname);
         return fullname;
     }
 
@@ -211,14 +211,14 @@ public class Utente {
     }
 
     private String generateID() {
-        String idgenerato = UtenteDAO.usergen + getCode();
+        String idgenerato = UtenteDAO.usergen.toLowerCase() + getCode();
         return idgenerato;
     }
 
     public synchronized String generateData() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        System.out.println(dtf.format(now)); //11/11/2019 11:11
+        System.out.println(dtf.format(now)); //11/11/2019 11:11 +  01/00/0000 00:00 = 12/11/eccc
         return dtf.format(now);
     }
 
