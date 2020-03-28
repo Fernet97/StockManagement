@@ -5,12 +5,19 @@
  */
 package ui;
 
+import beans.Utente;
 import others.JavaProcessId;
 import database.DriverManagerConnectionPool;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
@@ -23,6 +30,11 @@ public class StockManagement {
     	
   public static void main(String[] args) throws InterruptedException {
       
+      Logger logger = Logger.getLogger("genlog");  
+    FileHandler fh;
+    
+    
+      
       JavaProcessId.jPID();
       
        // CREA CARTELLA DI ROOT DEI DATI
@@ -34,15 +46,41 @@ public class StockManagement {
        // CREA CARTELLA QRCODE
        File directory1 = new File("./DATA/QRCODE/");
        if (!directory1.mkdir()) {
-       System.out.println("Impossibile creare la directory!");
        }
        
        // CREA CARTELLA IMG
        File directory2 = new File("./DATA/IMG/");
        if (!directory2.mkdir()) {
-       System.out.println("Impossibile creare la directory!");
        }      
       
+       // CREA CARTELLA LOG
+       File directory3 = new File("./DATA/LOG/");
+       if (!directory3.mkdir()) {
+       }  
+       
+       // CREA CARTELLA USERLOG
+       File directory4 = new File("./DATA/LOG/USERLOG/");
+       if (!directory4.mkdir()) {
+       } 
+       
+       
+          try {  
+               DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy_HH_mm_ss");
+        LocalDateTime now = LocalDateTime.now();
+              
+             String datanow = dtf.format(now);
+
+        // This block configure the logger with handler and formatter  
+        fh = new FileHandler("./DATA/LOG/LOG_"+datanow+".log");  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);   
+          
+    } catch (SecurityException e) {  
+        e.printStackTrace();  
+    } catch (IOException e) {  
+        e.printStackTrace();  
+    }
 
         UIManager.put( "control", new Color( 27, 32, 36) );
         UIManager.put( "info", new Color( 40, 45, 51) );
@@ -92,4 +130,5 @@ public class StockManagement {
     
 
   }
+  
 }

@@ -1,6 +1,7 @@
 package ui;
 
 import beans.Utente;
+import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 import dao.UtenteDAO;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -118,7 +119,7 @@ public class LoginDialog extends javax.swing.JDialog {
     }
 
     // verifica Login
-    public boolean checkLogin(String user, String password) {
+    public boolean checkLogin(String user, String password) { 
 
         nomeutente = user;
 
@@ -137,8 +138,8 @@ public class LoginDialog extends javax.swing.JDialog {
         try {
             utente = udao.getByID(user);
         } catch (SQLException ex) {
-            Logger.getLogger(LoginDialog.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            Logger.getLogger(LoginDialog.class.getName()).log(Level.SEVERE, null, ex);}
+
 
         try {
             System.out.println("nome utente nel db:" + utente.getIdutente() + " nome utente inserita adesso:" + user);
@@ -160,6 +161,8 @@ public class LoginDialog extends javax.swing.JDialog {
     }
 
     public void avviaPrincFrame() {
+        
+    
         if (checkLogin(casella_nome.getText(), casella_pwd.getText())) {
             FramePrincipale mainFrame = new FramePrincipale(nomeutente);
             mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -172,9 +175,9 @@ public class LoginDialog extends javax.swing.JDialog {
             mainFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
             dispose();
         } else {
-            System.err.println("ERRORE ACCESSO ");
+//          JOptionPane.showMessageDialog(this, "errore accesso");
         }
-
+    
     }
 
 }
