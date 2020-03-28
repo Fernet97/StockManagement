@@ -556,7 +556,7 @@ public class OrdiniAdminPanel extends JPanel {
             if (clicked) // SE CLICCATO QUEL BOTTONE:::::::::::::
             {
                 if (button.getText().equals("Apri")) {
-                    FrameRiepilogo f = new FrameRiepilogo(getInstance(), table.getValueAt(row, 0).toString());
+                    FrameRiepilogo f = new FrameRiepilogo(getInstance(), table.getValueAt(row, 0).toString(),  table.getValueAt(row, 1).toString());
                     f.setResizable(false);
                     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     f.setSize(1400,400);

@@ -265,7 +265,11 @@ public class AnagrafichePanel extends JPanel {
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("APRI FORMMMMm");
-                    fireEditingStopped();
+                    try{
+                        fireEditingStopped();}
+                    catch(Exception ex){
+                        System.err.println("-------- BUG SUPREMO -------");
+                    };
                 }
             });
         }
@@ -380,7 +384,10 @@ public class AnagrafichePanel extends JPanel {
         }
 
         protected void fireEditingStopped() {
-            super.fireEditingStopped();
+            try{super.fireEditingStopped();}
+            catch(Exception ex){
+                System.err.println("........ BUG SUPREMOOOO ---------");
+            };
         }
     }
 
@@ -874,11 +881,21 @@ public class AnagrafichePanel extends JPanel {
 
         public boolean check() {
 
-            if (casfullname.getText().isEmpty() || cascfiva.getText().isEmpty() || casindirizzo.getText().isEmpty()
-                    || castel.getText().isEmpty() || casemail.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Riempi tutti i campi! ['Note' è opzionale]");
+     
+            if(tipologia != 1){
+                if (casfullname.getText().isEmpty() || cascfiva.getText().isEmpty() || casindirizzo.getText().isEmpty()
+                        || castel.getText().isEmpty() || casemail.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Riempi tutti i campi! ['Note' è opzionale]");
 
-                return false;
+                    return false;
+                }
+            }
+            else if(tipologia == 1){
+                   if (casfullname.getText().isEmpty() || cascfiva.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Riempi tutti i campi! ['Note', 'Telefono', 'email', 'indirizzo' sono opzionali]");
+
+                    return false;
+                }         
             }
             
                 if (castel.getText().length() >= 15) {

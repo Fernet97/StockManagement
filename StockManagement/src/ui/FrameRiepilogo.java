@@ -65,7 +65,7 @@ class FrameRiepilogo extends JFrame {
     private String arrivato;
     private String messoInStock;
     
-    public FrameRiepilogo(OrdiniAdminPanel panAdmin, String numordine) {
+    public FrameRiepilogo(OrdiniAdminPanel panAdmin, String numordine, String dataordine) {
         panadmin = panAdmin;
         Numordine = numordine;
 
@@ -90,7 +90,7 @@ class FrameRiepilogo extends JFrame {
         table2.getColumnModel().getColumn(8).setCellEditor(new TableRenderer(new JCheckBox()));
 
         JScrollPane sp2 = new JScrollPane(table2);
-        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "  #ORDINE: " + numordine + "  ", TitledBorder.CENTER, TitledBorder.TOP));
+        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "  #ORDINE: " + numordine + "  del "+dataordine+ "   ", TitledBorder.CENTER, TitledBorder.TOP));
         add(sp2, BorderLayout.CENTER);
 
         JButton bannulla = new JButton("Annulla");

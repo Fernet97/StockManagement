@@ -27,6 +27,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -237,7 +238,10 @@ public class ProdottiPanel extends JPanel {
         for (Prodotto pro : dao.getAll()) {
             Fornitore forni = forndao.getByID( daoo.getFPr(pro.getSku()));
             String forny = forni.getIdfornitore()+"|  "+ forni.getFullname();
-            model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), pro.getCosto(), pro.getNote(), pro.getQty_min(), "Modifica", "Cancella", "Ordina"});
+            
+            // CONDENSA 0s
+            BigDecimal bd = new BigDecimal(String.valueOf(pro.getCosto()));
+            model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(),  bd.toPlainString() , pro.getNote(), pro.getQty_min(), "Modifica", "Cancella", "Ordina"});
 
         }
         System.out.println("Numero di  record prima dell'aggiornamento  " + model.getRowCount());
@@ -797,7 +801,12 @@ public class ProdottiPanel extends JPanel {
             casdatareg.setText(prodotto.getDatareg());
             cmin.setText(Integer.toString(prodotto.getQty_min()));
             casqty.setText(Integer.toString(prodotto.getQty()));
-            ccosto.setText(String.valueOf(prodotto.getCosto()));
+            
+                        // CONDENSA 0s
+            BigDecimal bd = new BigDecimal(String.valueOf(prodotto.getCosto()));
+
+            
+            ccosto.setText(bd.toPlainString() );
             note.setText(prodotto.getNote());
             inStock.setSelected(prodotto.isInstock());
             
