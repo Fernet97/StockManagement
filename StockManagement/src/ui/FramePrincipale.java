@@ -375,7 +375,6 @@ public class FramePrincipale extends JFrame {
         
         public void VaiAOrdiniconProdFORNULL(String forn, String prod) {
            cardlayout.show(HomePanel, "Ordini");
-            System.out.println("aaaaaaaaaaaaaaah "+forn);
             ordiniadmin.jComboBox.getModel().setSelectedItem(forn); 
             ((DefaultListModel) ordiniadmin.list.getModel()).addElement(prod);
             ordiniadmin.aggiungiTOcarrello(prod);
@@ -526,7 +525,6 @@ public class FramePrincipale extends JFrame {
                     ButtonLaterale bottonepremuto = (ButtonLaterale) e.getSource();
                     bottonepremuto.premuto = true;
                     pan.setBackground(color_etichetta);
-                    System.out.println("Codice tasto premuto:" + code);
 
                     try {
                         
@@ -574,7 +572,6 @@ public class FramePrincipale extends JFrame {
             for (int i = 0; i < pannelloOpzioni.getComponentCount(); i++) {
 
                 if (i != cod) {
-                    System.out.println(i);
                     ButtonLaterale b = (ButtonLaterale) pannelloOpzioni.getComponent(i);
                     b.pan.setBackground(new Color(128, 128, 128));
                     b.premuto = false;

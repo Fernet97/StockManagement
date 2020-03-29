@@ -264,11 +264,9 @@ public class AnagrafichePanel extends JPanel {
             button.setOpaque(true);
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("APRI FORMMMMm");
                     try{
                         fireEditingStopped();}
                     catch(Exception ex){
-                        System.err.println("-------- BUG SUPREMO -------");
                     };
                 }
             });
@@ -310,10 +308,9 @@ public class AnagrafichePanel extends JPanel {
                             + table.getValueAt(row, 7) + "  ]");
 
                     if (OpzioneScelta == JOptionPane.OK_OPTION) {  // DIFFERENZIARLO X CLIENTE, FORNITORE, UTENTE
-                        System.out.println("OOOOOOOOKKKKKK CANCELLO");
+             
 
                         if (table.getValueAt(row, 0).toString().equals("Fornitore")) {
-                            System.out.println("Sto cancellando un fornitore...");
                             FornitoreDAO dao = new FornitoreDAO();
                             try {
                                 dao.remove(table.getValueAt(row, 1).toString());
@@ -325,7 +322,6 @@ public class AnagrafichePanel extends JPanel {
                         }
 
                         if (table.getValueAt(row, 0).toString().equals("Utente")) {
-                            System.out.println("Sto cancellando un Utente...");
                             UtenteDAO dao = new UtenteDAO();
                             try {
                                 dao.remove(table.getValueAt(row, 1).toString());
@@ -420,7 +416,6 @@ public class AnagrafichePanel extends JPanel {
 
         public Formanagrafiche(int OpzioneScelta, String mod, String idSelected) {
 
-            System.out.println("Scelta:" + OpzioneScelta);
             tipologia = OpzioneScelta;
             modalita = mod;
             IdSelezionato = idSelected;
@@ -432,8 +427,7 @@ public class AnagrafichePanel extends JPanel {
             casdatareg.setBackground(Color.DARK_GRAY);
 
             if (modalita.equals("UPDATE")) {
-                System.out.println("Sono in modalità update ...");
-                System.out.println(" Id selezionato: " + idSelected);
+
                 setFormAsID(idSelected);
 
             }
@@ -949,7 +943,6 @@ public class AnagrafichePanel extends JPanel {
                 // Utente
                 if (tipologia == 2) {
                     UtenteDAO dao = new UtenteDAO();
-                    System.out.println("Utente che sto per scrivere:" + casfullname.getText() + "" + cascfiva.getText() + "" + casindirizzo.getText() + "" + castel.getText() + "" + casemail.getText() + "" + caspwd.getText() + "" + permess.getSelectedIndex() + "" + note.getText());
 
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                     if (a == JOptionPane.YES_OPTION) {
@@ -1037,7 +1030,6 @@ public class AnagrafichePanel extends JPanel {
     public static void refreshTab() throws SQLException {
 
         //Cancello vecchie righe...
-        System.out.println("Numero di  record prima dell'aggiornamento  " + model.getRowCount());
         model.setRowCount(0);
 
         FornitoreDAO daof = new FornitoreDAO();
@@ -1057,7 +1049,6 @@ public class AnagrafichePanel extends JPanel {
             }
         }
 
-        System.out.println("Numero di  record prima dell'aggiornamento  " + model.getRowCount());
 
     }
     

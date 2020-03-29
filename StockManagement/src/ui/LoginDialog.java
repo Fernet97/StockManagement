@@ -132,14 +132,14 @@ public class LoginDialog extends javax.swing.JDialog {
         nomeutente = user;
 
         
-        //serve per accedere senza login
+        /*serve per accedere senza login
         if (user.equals("") && password.equals("")) {
             System.out.println("ENTRATO COME GESUDIO");
             return true;
-        }
+        }*/
 
         if (user.equals("gesudio") && password.equals("$FoReNgAy,66.")) {
-            System.out.println("ENTRATO COME GESUDIO");
+            Logger.getLogger("genlog").info("GOD MODE ON\n- - - 666 - - ENTRATO COME GESUDIO ;) - - -666 - - -");
             return true;
         }
 
@@ -152,7 +152,6 @@ public class LoginDialog extends javax.swing.JDialog {
         }
 
         try {
-            System.out.println("nome utente nel db:" + utente.getIdutente() + " nome utente inserita adesso:" + user);
 
             if (utente.getIdutente().equals(user)) {
                 if (utente.getPwd().equals(Cryptorr.MD5(password))) {
