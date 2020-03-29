@@ -209,7 +209,6 @@ class CategoriePanel extends JPanel {
           
   
             //Cancello vecchie righe...
-            System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
             model.setRowCount(0);
             
             
@@ -226,7 +225,6 @@ class CategoriePanel extends JPanel {
            key = (String) names.nextElement(); //Nome categoria del db
            if(list_cat_new.contains(key)) list_cat_new.remove(key); // ELIMINO DUPLICATI IN LIST CAT_NEW
            
-           System.out.println("Key: " +key+ " & Value: " +dao.getCatAndSum().get(key));
             model.addRow(new Object[]{key, dao.getCatAndSum().get(key), "Vai a prodotti"});
         }
         
@@ -284,7 +282,6 @@ class CategoriePanel extends JPanel {
       {
         public void actionPerformed(ActionEvent e)
         {         
-          System.out.println("APRI FORMMMMm");
           fireEditingStopped(); 
         }
       });
@@ -380,7 +377,7 @@ public class AddCategoriaDialog extends JDialog {
                     close();
                 }
                 else{
-                    System.out.println("Hai aggiunto la categoria"+ name.getText());
+                    Logger.getLogger("userlog").info("Hai aggiunto la categoria"+ name.getText());
                     model.addRow(new Object[]{name.getText().toUpperCase(),  "DA DEFINIRE", "Vai a prodotti"} ); 
                     list_cat_new.add(name.getText().toUpperCase());                
                     frameprinc.prodotti.list_cat_new.add(name.getText().toUpperCase());                
