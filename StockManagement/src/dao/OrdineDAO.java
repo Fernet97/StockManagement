@@ -6,25 +6,19 @@
 package dao;
 
 import beans.Ordine;
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.dateTime;
 import database.DriverManagerConnectionPool;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Hashtable;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import static java.time.temporal.ChronoUnit.DAYS;
-import java.time.temporal.TemporalAccessor;
 import java.util.logging.Logger;
 
 
