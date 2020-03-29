@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -360,7 +361,10 @@ public class OrdiniAdminPanel extends JPanel {
         try {
             // String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale ordine", "In spedizione", "Controlla ordine", "Ricarica ordine"};
             for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
-                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), ordine.get(2), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica ordine"});
+                                                    BigDecimal costoo = new BigDecimal(String.valueOf(ordine.get(2)));
+
+             
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica ordine"});
             }
         } catch (SQLException ex) {
             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -481,7 +485,8 @@ public class OrdiniAdminPanel extends JPanel {
         model2.setRowCount(0);
         try {
             for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
-                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), ordine.get(2), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica ordine"});
+                  BigDecimal costoo = new BigDecimal(String.valueOf(ordine.get(2)));
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica ordine"});
             }
         } catch (SQLException ex) {
             Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -556,7 +561,7 @@ public class OrdiniAdminPanel extends JPanel {
             if (clicked) // SE CLICCATO QUEL BOTTONE:::::::::::::
             {
                 if (button.getText().equals("Apri")) {
-                    FrameRiepilogo f = new FrameRiepilogo(getInstance(), table.getValueAt(row, 0).toString(),  table.getValueAt(row, 1).toString());
+                    FrameRiepilogo f = new FrameRiepilogo(getInstance(), table.getValueAt(row, 0).toString(),  table.getValueAt(row, 1).toString(), table.getValueAt(row, 3).toString());
                     f.setResizable(false);
                     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     f.setSize(1400,400);
@@ -624,7 +629,10 @@ public class OrdiniAdminPanel extends JPanel {
                 Fornitore f = forndao.getByID(o.getFk_fornitore());
                 Prodotto p = prodao.getBySku(o.getProdotto_sku());
                 costocarrell = 0;
-               model.addRow(new Object[]{p.getSku(), o.getQty_in_arrivo(),  p.getCosto(),  o.getGiorni_alla_consegna(), f.getIdfornitore()+"|"+f.getFullname()}); 
+            
+            BigDecimal costoo = new BigDecimal(String.valueOf(p.getCosto()));
+
+               model.addRow(new Object[]{p.getSku(), o.getQty_in_arrivo(), costoo.toPlainString(),  o.getGiorni_alla_consegna(), f.getIdfornitore()+"|"+f.getFullname()}); 
                         costocarrell += p.getCosto() * o.getQty_in_arrivo();
                         costot.setText("Costo totale: " + costocarrell + " euro");
                         int prossimoord = o.leggiUltimoID() + 1;
@@ -676,7 +684,9 @@ public class OrdiniAdminPanel extends JPanel {
                     Prodotto p = pdao.getBySku(skusel);
 
                     if (casellaqty.getText().matches("-?\\d+(\\.\\d+)?") && ggallacons.getText().matches("-?\\d+(\\.\\d+)?")) {
-                        model.addRow(new Object[]{skusel, casellaqty.getText(), p.getCosto(), ggallacons.getText(), jComboBox.getSelectedItem().toString()});
+                                    BigDecimal costoo = new BigDecimal(String.valueOf(p.getCosto()));
+
+                        model.addRow(new Object[]{skusel, casellaqty.getText(), costoo.toPlainString(), ggallacons.getText(), jComboBox.getSelectedItem().toString()});
 
                         costocarrell += p.getCosto() * Integer.parseInt(casellaqty.getText());
                         costot.setText("Costo totale: " + costocarrell + " euro");
