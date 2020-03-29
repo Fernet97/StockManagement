@@ -377,7 +377,7 @@ public class AddCategoriaDialog extends JDialog {
                     close();
                 }
                 else{
-                    Logger.getLogger("userlog").info("Hai aggiunto la categoria"+ name.getText());
+                    Logger.getLogger("userlog").info("Hai aggiunto la categoria: "+ name.getText());
                     model.addRow(new Object[]{name.getText().toUpperCase(),  "DA DEFINIRE", "Vai a prodotti"} ); 
                     list_cat_new.add(name.getText().toUpperCase());                
                     frameprinc.prodotti.list_cat_new.add(name.getText().toUpperCase());                

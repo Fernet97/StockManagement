@@ -145,7 +145,6 @@ public class Cliente {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        System.out.println(dtf.format(now)); //11/11/2019 11:11
         return dtf.format(now);
     }
 

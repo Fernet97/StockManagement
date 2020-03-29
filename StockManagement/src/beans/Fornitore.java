@@ -51,7 +51,6 @@ public class Fornitore {
         this.note = note;
         this.idfornitore = idfornitore;
         setDatareg(generateData());
-        System.out.println("ID del nuovo fornitore:" + getIdfornitore());
         
        
 
@@ -78,7 +77,6 @@ public class Fornitore {
         setCode(leggiUltimoID() + 1);
         setIdfornitore(generateID());
         setDatareg(generateData());
-        System.out.println("ID del nuovo fornitore:" + getIdfornitore());
 
         
     }
@@ -179,7 +177,6 @@ public class Fornitore {
 
             tmp = lastid.substring(3);
             idlast = Integer.parseInt(tmp);
-            System.out.println("ID dell'ultimo fornitore:" + idlast);
 
         } catch (SQLException ex) {
             Logger.getLogger(Fornitore.class.getName()).log(Level.SEVERE, null, ex);
@@ -194,7 +191,6 @@ public class Fornitore {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        System.out.println(dtf.format(now)); //11/11/2019 11:11
         return dtf.format(now);
     }
 

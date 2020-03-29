@@ -191,13 +191,11 @@ public class Prodotto {
     }
 
     public int getCode() {
-        System.out.println("getcode " + code);
         return code;
     }
 
     public void setCode(int c) {
         code = c;
-        System.out.println("setcode " + c);
     }
 
 
@@ -211,18 +209,7 @@ int ultimosku;
             ProdottoDAO dao = new ProdottoDAO();
 
              ultimosku = dao.getLastProdotto().getCode();
-             System.out.println("last sku "+ultimosku);
-            //String ultimosku = "DI2467-2019/11/29 17:34:21";
-//            if (ultimosku == 0) {
-//                ultimosku += 1;
-//            } 
 
-//            int index;
-//            index = ultimosku.indexOf('-');
-//            System.out.println("index" + index);
-//            tmp = ultimosku.substring(2, index);
-//            System.out.println("tmp " + tmp);
-//            idlast = Integer.parseInt(tmp);
 
         } catch (SQLException ex) {
             Logger.getLogger(Prodotto.class.getName()).log(Level.SEVERE, null, ex);
@@ -234,11 +221,9 @@ int ultimosku;
     }
     
         public String generateSKU()  {
-        System.out.println("Categoria del nuovo prodotto: " + getCategoria());
         String skuGenerato = getCategoria().substring(0, 2);
         skuGenerato += getCode() + "-";
         skuGenerato += getDatareg();
-        System.out.println("skugenerato " + skuGenerato);
         return skuGenerato;
 
     }
@@ -246,7 +231,6 @@ int ultimosku;
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        System.out.println(dtf.format(now)); //11/11/2019 11:11
         return dtf.format(now);
 
     }

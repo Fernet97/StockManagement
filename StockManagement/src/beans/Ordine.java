@@ -190,7 +190,6 @@ public class Ordine {
 //
 //            tmp = lastid.substring(4);
 //            idlast = Integer.parseInt(tmp);
-            System.out.println("ID dell'ultimo ordine:" + lastid);
 
         } catch (SQLException ex) {
             Logger.getLogger(Ordine.class.getName()).log(Level.SEVERE, null, ex);
@@ -205,7 +204,6 @@ public class Ordine {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        System.out.println(dtf.format(now)); //11/11/2019 11:11
         return dtf.format(now);
     }
 
@@ -218,7 +216,6 @@ public class Ordine {
 
     public void startOrdine() throws InterruptedException {
 
-//        System.out.println("data start "+getData());
         setCode(leggiUltimoID() + 1);
         setN_ordine(generateID());
         setData(generateData());
