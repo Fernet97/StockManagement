@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 /**
  *
@@ -131,9 +132,9 @@ public class FornitoreDAO {
             preparedStatement.setInt(9, b.getCode());
 
             preparedStatement.executeUpdate();
-        System.out.println("fornitore add " + preparedStatement.toString());
-
             connection.commit();
+            
+            Logger.getLogger("userlog").info(preparedStatement.toString());
         } finally {
             try {
                 if (preparedStatement != null) {
@@ -151,18 +152,19 @@ public class FornitoreDAO {
         Connection connection = null;
         Statement statement = null;
 
-        Fornitore f = b;
+        Fornitore f = b;//sono un cretino @littlejoke
 
-        System.out.println("Id del fornitore da modificare: " + f.getIdfornitore());
+        Logger.getLogger("userlog").info("Id del fornitore da modificare: \n" + f.getIdfornitore());
         String query = "UPDATE "+this.TABLE_NAME+" SET   `fullname` = '" + f.getFullname() + "', `p_iva` = '" + f.getP_iva() + "',"
                 + " `indirizzo` = '" + f.getIndirizzo() + "', `tel` = '" + f.getTel() + "', `email` = '" + f.getEmail() + "', "
                 + "`note` = '" + f.getNote() + "' WHERE (`idfornitore` = '" + f.getIdfornitore() + "');";
-        System.out.println("fornitore update " + query);
+
         try {
             connection = DriverManagerConnectionPool.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate(query);
             connection.commit();
+             Logger.getLogger("userlog").info(b.toString());
         } finally {
             try {
                 if (statement != null) {
@@ -181,12 +183,13 @@ public class FornitoreDAO {
         Statement statement = null;
 //DELETE FROM `db_stock`.`prodotti` WHERE (`sku` = 'mi1-13/12/2019 11:21:41');
         String query = "DELETE FROM " + this.TABLE_NAME + " WHERE (`idfornitore` = '" + idFornitore + "')";
-        System.out.println("fornitori remove " + query);
+
         try {
             connection = DriverManagerConnectionPool.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate(query);
             connection.commit();
+            Logger.getLogger("userlog").info(query);
 
         } finally {
             try {

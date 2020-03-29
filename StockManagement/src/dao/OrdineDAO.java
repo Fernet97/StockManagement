@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import static java.time.temporal.ChronoUnit.DAYS;
 import java.time.temporal.TemporalAccessor;
+import java.util.logging.Logger;
 
 
 /**
@@ -142,6 +143,7 @@ public class OrdineDAO {
             statement = connection.createStatement();
             statement.executeUpdate(query);
             connection.commit();
+            Logger.getLogger("userlog").info(query);
         } finally {
             try {
                 if (statement != null) {
@@ -163,16 +165,19 @@ public class OrdineDAO {
     public synchronized void updateGG(String nordine, String sku, int gg) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
         Connection connection = null;
         Statement statement = null;
-
+        
+       
 //UPDATE `db_stock`.`ordine` SET `n_ordine` = '2', `data` = '2', `qty_in_arrivo` = '2', `giorni_alla_consegna` = '2', `fk_utente` = '2', `prodotto_sku` = '2', `fk_cliente` = '2', `fk_fornitore` = '2', `id` = '2' WHERE (`idordine` = '10')
         String query = "UPDATE " + this.TABLE_NAME + " SET  giorni_alla_consegna = '"+gg+"'  WHERE n_ordine = '"+nordine+"' AND prodotto_sku = '"+sku+"'";
-        System.out.println("ordine update " + query);
+         Logger.getLogger("userlog").info("ordine che si sta per modificare \nn_ordine= " + nordine +" sku= "+ sku );
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate(query);
             connection.commit();
+            
+            Logger.getLogger("userlog").info(query);
         } finally {
             try {
                 if (statement != null) {
@@ -191,13 +196,15 @@ public class OrdineDAO {
         Statement statement = null;
         Ordine bean =new Ordine();
         String query = "UPDATE " + this.TABLE_NAME + " SET  qty_arrivata = '"+qty+"' , data_arrivo = '"+bean.generateData()+"'  WHERE n_ordine = '"+nordine+"' AND prodotto_sku = '"+sku+"'";
-        System.out.println("ordine update " + query);
+        Logger.getLogger("userlog").info("ordine che si sta per modificare \nn_ordine= " + nordine +" sku= "+ sku );
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate(query);
             connection.commit();
+            
+            Logger.getLogger("userlog").info(query);
         } finally {
             try {
                 if (statement != null) {
@@ -228,14 +235,15 @@ public class OrdineDAO {
         Connection connection = null;
         Statement statement = null;
         String query = "DELETE FROM " + this.TABLE_NAME + " WHERE  (`n_ordine` = '" + n_ordine + "');";
-        System.out.println("ordine remove " + query);
+
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate(query);
             connection.commit();
-
+            
+            Logger.getLogger("userlog").info(query);
         } finally {
             try {
                 if (statement != null) {
@@ -463,7 +471,7 @@ public class OrdineDAO {
             // get data della consegna
             LocalDate consegna = db.plusDays(bean.getGiorni_alla_consegna());
             
-             System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(formatter)+ " consegna "+ consegna.format(formatter));
+           Logger.getLogger("userlog").info("now data "+ now.format(formatter)+ " db data "+db.format(formatter)+ " consegna "+ consegna.format(formatter));
              
              // Se è -1 allora è arrivato, se è -2 è messo anche in stock
              if (bean.getGiorni_alla_consegna() == -2  ){
@@ -529,7 +537,7 @@ public class OrdineDAO {
             
             int gg = (int) DAYS.between(consegna,  now);
             array [i] = gg;
-System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(formatter)+ " consegna "+ consegna.format(formatter) + " giorni mancanti  " + gg);
+Logger.getLogger("userlog").info("now data "+ now.format(formatter)+ " db data "+db.format(formatter)+ " consegna "+ consegna.format(formatter) + " giorni mancanti  " + gg);
                     i++;
            }
         } finally {
@@ -589,7 +597,7 @@ System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(for
             // get data della consegna
             LocalDate consegna = db.plusDays(bean.getGiorni_alla_consegna());
             
-             System.err.println("data prevista di arrivo "+consegna.format(formatter));
+             Logger.getLogger("userlog").info("data prevista di arrivo "+consegna.format(formatter));
              
 
             return consegna.format(formatter);
@@ -642,7 +650,7 @@ System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(for
             LocalDate consegna = db.plusDays(bean.getGiorni_alla_consegna());
             
                 gg = (int) DAYS.between(consegna,  now);
-System.out.println("now data "+ now.format(formatter)+ " db data "+db.format(formatter)+ " consegna "+ consegna.format(formatter) + " giorni mancanti  " + gg);
+Logger.getLogger("userlog").info("now data "+ now.format(formatter)+ " db data "+db.format(formatter)+ " consegna "+ consegna.format(formatter) + " giorni mancanti  " + gg);
                     i++;
            }
         } finally {

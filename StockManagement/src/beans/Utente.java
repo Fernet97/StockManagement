@@ -222,9 +222,19 @@ public class Utente {
         return dtf.format(now);
     }
 
+//    @Override
+//    public String toString() {
+//        return "Utente{" + "idutente=" + idutente + ", datareg=" + datareg + ", fullname=" + fullname + ", CF=" + CF + ", indirizzo=" + indirizzo + ", telefono=" + telefono + ", email=" + email + ", pwd=" + pwd + ", permessi=" + permessi + ", note=" + note + '}';
+//    }
+    
+    
+    /**
+     * questo non ritorna la password
+     * @return 
+     */
     @Override
     public String toString() {
-        return "Utente{" + "idutente=" + idutente + ", datareg=" + datareg + ", fullname=" + fullname + ", CF=" + CF + ", indirizzo=" + indirizzo + ", telefono=" + telefono + ", email=" + email + ", pwd=" + pwd + ", permessi=" + permessi + ", note=" + note + '}';
+        return "Utente{" + "idutente=" + idutente + ", datareg=" + datareg + ", fullname=" + fullname + ", CF=" + CF + ", indirizzo=" + indirizzo + ", telefono=" + telefono + ", email=" + email + ", permessi=" + permessi + ", note=" + note + '}';
     }
 
     

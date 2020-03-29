@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 /**
  *
@@ -114,12 +115,14 @@ public class ClienteDAO {
         String insertSQL = "INSERT INTO "+this.TABLE_NAME+" (`datareg`, `fullname`, `cf`, `indirizzo`, `tel`, `email`, `note`) "
                 + "VALUES ( '"+c.getDatareg()+"', '"+c.getFullname()+"', '"+c.getCf()+"', '"+c.getIndirizzo()+"', '"+c.getTel()+"', "
                 + "'"+c.getEmail()+"', '"+c.getNote()+"')";
-        System.out.println("add cliente "+ insertSQL);
+        
+       
         try {
             connection = DriverManagerConnectionPool.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate(insertSQL);
             connection.commit();
+            Logger.getLogger("userlog").info(insertSQL);
         } finally {
             try {
                 if (statement != null) {
@@ -139,17 +142,17 @@ public class ClienteDAO {
 
 
 
-        System.out.println("sku del prodoto da modificare: " + c.getIdcliente());
+        Logger.getLogger("userlog").info("id del cliente da modificare: \n" + c.getIdcliente());
 //UPDATE `db_stock`.`cliente` SET `idcliente` = '2', `datareg` = '?', `fullname` = '?', `cf` = '?', `indirizzo` = '?', `tel` = '?', `email` = '?', `note` = '?' WHERE (`idcliente` = '1');
 
         String query = "UPDATE "+this.TABLE_NAME+" SET  `datareg` = '"+c.getDatareg()+"', `fullname` = '"+c.getFullname()+"', `cf` = '"+c.getCf()+"', `indirizzo` = '"+c.getIndirizzo()+"', `tel` = '"+c.getTel()+"', `email` = '"+c.getEmail()+"', `note` = '"+c.getNote()+"' WHERE (`idcliente` = '"+c.getIdcliente()+"')";
-        System.out.println("cliente update " + query);
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate(query);
             connection.commit();
+            Logger.getLogger("userlog").info(query);
         } finally {
             try {
                 if (statement != null) {
@@ -166,14 +169,15 @@ public class ClienteDAO {
         Connection connection = null;
         Statement statement = null;
         String query = "DELETE FROM " + this.TABLE_NAME + " WHERE  (`idcliente` = '" + id + "');";
-        System.out.println("prodotto remove " + query);
+
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate(query);
             connection.commit();
-
+            
+            Logger.getLogger("userlog").info(query);
         } finally {
             try {
                 if (statement != null) {

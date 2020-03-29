@@ -141,15 +141,14 @@ public class UtenteDAO {
                                 preparedStatement.setInt(9, u.getPermessi());
                                 preparedStatement.setString(10, u.getNote());
                                 preparedStatement.setInt(11, u.getCode());
-                            
-                        
-		
-                        System.out.println("utente add "+preparedStatement);
+                                
+                                
                         
 
 			preparedStatement.executeUpdate();
 
 			connection.commit();
+                                Logger.getLogger("userlog").info(u.toString());// non ritorna la password @ovveride cambiato nel bean
 
 		} finally {
 			try {
@@ -167,19 +166,20 @@ public class UtenteDAO {
                         Connection connection = null;
                         Statement st = null;  
                         
-                         System.out.println("id dell'utente da modificare"+u.getIdutente());	                                                   
+                         Logger.getLogger("userlog").info("id dell'utente da modificare"+u.getIdutente());	                                                   
 
                                                           
                         String insertSQL = "UPDATE " +TABLE_NAME+ " SET `fullname` = '"+u.getFullname()+"', `CF` = '"+u.getCF()+"', "
                                 + "`indirizzo` = '"+u.getIndirizzo()+"', `tel` = '"+u.getTelefono()+"', `email` = '"+u.getEmail()+"',"
                                 + " `pwd` = md5('"+u.getPwd()+"'), `permessi` = '"+u.getPermessi()+"', `note` = '"+u.getNote()+""
                                 + "' WHERE (`idutente` = '"+u.getIdutente()+"')";
-            System.out.println("utente update "+ insertSQL);
+
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
 			st = connection.createStatement();
 			st.executeUpdate(insertSQL);
 			connection.commit();
+                         Logger.getLogger("userlog").info(u.toString());// non ritorna la password @ovveride cambiato nel bean
 		} finally {
 			try {
 				if (st != null)
@@ -196,13 +196,14 @@ public synchronized void remove (String id) throws SQLException{
                         Statement  statement = null;
 
 		String query = "DELETE FROM " + this.TABLE_NAME + " WHERE idutente='"+id+"'";
-                System.out.println("utenti remove "+query);
+               Logger.getLogger("userlog").info("utenti remove \n"+query);
 
                         try {
                                 connection = DriverManagerConnectionPool.getConnection();
                                 statement = connection.createStatement();
                                 statement.executeUpdate(query);
                                 connection.commit();
+                                 Logger.getLogger("userlog").info(query);
 
                                     }
                                         finally {
@@ -231,7 +232,7 @@ public synchronized void remove (String id) throws SQLException{
                                     usergen = name[0]+name[1];
 
                         String selectSQL = "select * from "+this.TABLE_NAME+" where idutente like '%"+usergen+"%' order by id desc limit 1";
-                        System.out.println("sql "+selectSQL);
+
                           try {
                         connection = DriverManagerConnectionPool.getConnection();
                         preparedStatement = connection.prepareStatement(selectSQL);
@@ -254,7 +255,7 @@ public synchronized void remove (String id) throws SQLException{
 
 
                         }
-                              System.out.println("bean to string"+bean.toString());
+                            
                 } finally {
                         try {
                                 if (preparedStatement != null)

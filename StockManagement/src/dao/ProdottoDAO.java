@@ -15,6 +15,7 @@ import java.sql.Statement;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 /**
  *
@@ -111,7 +112,6 @@ public class ProdottoDAO {
             }
 
         }
-        System.out.println("foto getby "+bean.getFoto());
         return bean;
     }
 
@@ -138,12 +138,13 @@ public class ProdottoDAO {
             ps.setBoolean(11, b.isNegozio());
             ps.setInt(12, b.getCode());
 
-            System.out.println("prodotto add " + b.toString());
+
 
             ps.executeUpdate();
 
             connection.commit();
 
+            Logger.getLogger("userlog").info(b.toString());
         } finally {
             try {
                 if (ps != null) {
@@ -161,7 +162,6 @@ public class ProdottoDAO {
         Connection connection = null;
         Statement statement = null;
         String foto = null;
-        System.out.println("foto "+p.getFoto());
         /*
  * inStock & isNegozio sono variabili in che servono per il db fanno il
  * cast del valore "true","false" (booleano) ad int "1","0"
@@ -172,19 +172,21 @@ public class ProdottoDAO {
         }else{
             foto = p.getFoto().replace("\\", "\\\\");
         }
-        System.out.println("sku del prodoto da modificare: " + p.getSku());
+        Logger.getLogger("userlog").info("sku del prodotto da modificare: " + p.getSku());
         // UPDATE `db_stock`.`prodotto` SET `sku` = '1', `datareg` = '2', `nome` = '2', `qty` = '2', `categoria` = '2', `instock` = '2', `costo` = '2', `qty_min` = '2', `note` = '2', `foto` = '2', `negozio` = '2' WHERE (`sku` = '1');
 
         String query = "UPDATE " + this.TABLE_NAME + " SET `nome` = '" + p.getNome() + "', `qty` = '" + p.getQty() + "', `categoria` = '" + p.getCategoria() + "', "
                 + "`instock` = '" + inStock + "', `costo` = '" + p.getCosto() + "', `qty_min` = '" + p.getQty_min() + "', `note` = '" + p.getNote() + "', "
                 + "`foto` = '" + foto + "', `negozio` = '" + isNegozio + "' WHERE (`sku` = '" + p.getSku() + "')";
-        System.out.println("prodotto update " + query);
+        Logger.getLogger("userlog").info("prodotto update \n" + query);
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate(query);
             connection.commit();
+            
+            Logger.getLogger("userlog").info(query);
         } finally {
             try {
                 if (statement != null) {
@@ -201,14 +203,15 @@ public class ProdottoDAO {
         Connection connection = null;
         Statement statement = null;
         String query = "DELETE FROM " + this.TABLE_NAME + " WHERE  (`sku` = '" + sku + "');";
-        System.out.println("prodotto remove " + query);
+
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate(query);
             connection.commit();
-
+            
+            Logger.getLogger("userlog").info(query);
         } finally {
             try {
                 if (statement != null) {
