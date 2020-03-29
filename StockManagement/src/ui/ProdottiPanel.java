@@ -27,8 +27,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -226,7 +231,6 @@ public class ProdottiPanel extends JPanel {
     public void refreshTab() throws SQLException {
 
         //Cancello vecchie righe...
-        System.out.println("Numero di  record prima dell'aggiornamento  " + model.getRowCount());
         model.setRowCount(0);
 
         ProdottoDAO dao = new ProdottoDAO();
@@ -244,7 +248,6 @@ public class ProdottiPanel extends JPanel {
             model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(),  bd.toPlainString() , pro.getNote(), pro.getQty_min(), "Modifica", "Cancella", "Ordina"});
 
         }
-        System.out.println("Numero di  record prima dell'aggiornamento  " + model.getRowCount());
 
     }
 
@@ -332,11 +335,10 @@ public class ProdottiPanel extends JPanel {
             button.setOpaque(true);
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("APRI FORMMMMm");
                     try{
                     fireEditingStopped();
                     }catch(IndexOutOfBoundsException es) {
-                        System.out.println("- - - - - Bug supremo della rimozione - - - - ");}
+                      }
                     
                 }
             });
@@ -383,7 +385,6 @@ public class ProdottiPanel extends JPanel {
                             + table.getValueAt(row, 11) + "  ]");
 
                     if (OpzioneScelta == JOptionPane.OK_OPTION) {
-                        System.out.println("OOOOOOOOKKKKKK CANCELLO");
                         ProdottoDAO daor = new ProdottoDAO();
                         try {
                             daor.remove(table.getValueAt(row, 0).toString());
@@ -425,7 +426,6 @@ public class ProdottiPanel extends JPanel {
                     
                     jComboBox.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        System.out.println("FOrnitore scelto da un prodotto che non nessun forny associato:"+jComboBox.getSelectedItem());
                         frameprinc.VaiAOrdiniconProdFORNULL( jComboBox.getSelectedItem().toString(), prodSceltoxOrdine);
                         vaiarod.setVisible(false);
                         
@@ -502,8 +502,6 @@ public class ProdottiPanel extends JPanel {
                 casdatareg.setBackground(Color.DARK_GRAY);
                 
             if (modalita.equals("UPDATE")) {
-                System.out.println("Sono in modalità update ...");
-                System.out.println(" Id selezionato: " + idSelected);
                 setFormAsID(idSelected);
                 cat.setEnabled(false);
                 cat.setBackground(Color.darkGray);
@@ -603,7 +601,6 @@ public class ProdottiPanel extends JPanel {
         String[] list_prod = new String[dao.getAll().size()+ list_cat_new.size()+1];
         for(int y =0; y<list_cat_new.size(); y++){ //Aggiungo le categorie aggiunte prima dinamicamente..
             list_prod[y] = list_cat_new.get(y);
-            System.out.println("size:" + list_cat_new.get(y));        
         }        
              
         Iterator<Prodotto> iter = dao.getAll().iterator();
@@ -651,16 +648,28 @@ public class ProdottiPanel extends JPanel {
             bfoto = new JButton();
             bfoto.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("Upload foto....");
 
                     JFileChooser jFileChooser = new JFileChooser();
                     jFileChooser.setCurrentDirectory(new File("./"));
                     int result = jFileChooser.showOpenDialog(new JFrame());
                     if (result == JFileChooser.APPROVE_OPTION) {
+                        // File selezionato
                         File selectedFile = jFileChooser.getSelectedFile();
-                        System.out.println("Selected file: " + selectedFile.getAbsolutePath());
                         percorsofoto = selectedFile.getAbsolutePath();
-                        System.err.println("Percorso foto appena caricata:"+percorsofoto);
+                        
+                        Path sourcepath = Paths.get(percorsofoto);
+                        // POSSO AGGIUNGERE SOLO FILE PNG
+                        Path destinationepath = Paths.get( "./DATA/IMG/"+casku.getText().substring(0, casku.getText().indexOf('-'))+ ".png");
+                
+                        try {
+                            //copia del file
+                            Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
+                            percorsofoto = destinationepath.toString();
+                        } catch (IOException ex) {
+                            Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                        
                         ImageIcon icon = new ImageIcon(percorsofoto);
                         Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
                         icon.setImage(ImmagineScalata);
@@ -768,7 +777,6 @@ public class ProdottiPanel extends JPanel {
 
             Prodotto prod;
             try {
-                System.out.println("Percorso foto prima di salvarlo: "+percorsofoto );
                 int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                 if (a == JOptionPane.YES_OPTION) {
                     prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
@@ -820,20 +828,16 @@ public class ProdottiPanel extends JPanel {
             negozio.setSelected(prodotto.isNegozio());
             
             cat.setSelectedItem(prodotto.getCategoria());            
-            System.err.println("percorso foto prima di prenderla daldb:"+percorsofoto);
             percorsofoto = prodotto.getFoto();
-            System.err.println("percorso foto DOPO di prenderla daldb:"+percorsofoto);
             ImageIcon icon;
             if(percorsofoto == null){
                 icon = new ImageIcon(getClass().getResource("/res/img/upload.png"));
-                System.err.println("Non ho trovato una foto per questo prodotto");
             }
             else icon = new ImageIcon(percorsofoto);
             Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
             icon.setImage(ImmagineScalata);
             bfoto.setIcon(icon);
             
-            System.out.println("Prodotto:"+prodotto.getSku() +" "+prodotto.getDatareg()+" "+prodotto.getQty()+ " "+prodotto.getFoto()+ "  inStock:"+prodotto.isInstock());
             
             
                        
@@ -851,10 +855,8 @@ public class ProdottiPanel extends JPanel {
            int a= JOptionPane.showConfirmDialog(this,"Dario, sei proprio sicuro?");
            if(a==JOptionPane.YES_OPTION){
              Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected() , Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());              
-               System.out.println("Prodotto modificato: "+casname.getText()+" "+ Integer.parseInt(casqty.getText())+" "+ cat.getSelectedItem().toString()+" "+inStock.isSelected()+" "+Float.valueOf(ccosto.getText())+" "+Integer.parseInt(cmin.getText())+" "+note.getText() +" "+ percorsofoto+" "+ negozio.isSelected());
             dao.update(prod);               
              form.setVisible(false);
-             System.out.println("La form:"+ form);
 
            }            
             

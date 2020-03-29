@@ -260,7 +260,6 @@ class FrameRiepilogo extends JFrame {
             button.setOpaque(true);
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("APRI FORMMMMm");
                     fireEditingStopped();
                 }
             });

@@ -226,7 +226,6 @@ public class CodiciPanel extends JPanel{
 
             
             }
-            System.out.println("Numero di  record prima dell'aggiornamento  "+model.getRowCount());
 
         
         }
@@ -253,10 +252,8 @@ public class CodiciPanel extends JPanel{
       setText((value == null) ? "" : value.toString());
       if(getText().equals("Stampa"))setIcon(ImpostaImg("/res/img/printer.png"));
       else {//Altrimenti imposta il suo qr CODE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! settare come icona il qrCode relativo allo sku di questa riga
-          System.out.println("Sku di questa riga:"+table.getValueAt(row, 0));       
           try {
               String percorsoQRgenerato = generaQRdaSKU(table.getValueAt(row, 0).toString());
-              System.out.println(percorsoQRgenerato);
               setIcon(new ImageIcon(percorsoQRgenerato));
               setText(percorsoQRgenerato.substring(9));
           } catch (IOException ex) {
@@ -317,7 +314,6 @@ public class CodiciPanel extends JPanel{
                         table.getValueAt(row, 0)+"  |   "+
                         table.getValueAt(row, 1)+"  ]");    
                     if (OpzioneScelta == JOptionPane.OK_OPTION) {
-                            System.out.println("OOOOOOOOKKKKKK CANCELLO");  
                             // QUI METTERE IL DAO CON FUNZIONE REMOVE
                      }
   

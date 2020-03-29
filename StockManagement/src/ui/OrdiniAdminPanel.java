@@ -132,7 +132,6 @@ public class OrdiniAdminPanel extends JPanel {
                         aggiungiTOcarrello(p.getSku() + "|  " + p.getNome());
 
                         forny = ordinedao.getFPr(text);
-                        System.out.println("Fornitore corrispondente al prodotto scritto:" + forny);
 
                         FornitoreDAO forndao = new FornitoreDAO();
                         String fornyname = "";
@@ -188,13 +187,9 @@ public class OrdiniAdminPanel extends JPanel {
                 String selezionato = "";
                 String subselezionato = "";
                 selezionato = jComboBox.getSelectedItem().toString();
-                System.out.println("Totale selezionato:" + selezionato);
                 subselezionato = selezionato.substring(0, selezionato.lastIndexOf("|"));
-                System.out.println("Sub selezionato:" + subselezionato);
 
                 idfornitore = subselezionato;
-                //TORNA I PRODOTTI DI QUEL FORNITORE
-                System.err.println("Fornitore selezionato:" + idfornitore);
                 OrdineDAO daoo = new OrdineDAO();
                 ProdottoDAO prodao = new ProdottoDAO();
 
@@ -222,9 +217,7 @@ public class OrdiniAdminPanel extends JPanel {
                     return;
                 }
                 int index = list.getSelectedIndex(); // Prodotto selezionato dalla jlist
-                System.out.println("Indice del prodotto selezionato: " + index);
                 String s = (String) list.getSelectedValue();
-                System.out.println("sku del prodotto selezionato: " + s.toString());
 
                 aggiungiTOcarrello(list.getSelectedValue().toString());
             }
@@ -339,7 +332,6 @@ public class OrdiniAdminPanel extends JPanel {
                 try {
                     for (int i = 0; i < table2.getSelectedRows().length; i++) {
 
-                        System.out.println("ordine selezionato:" + table2.getValueAt(table2.getSelectedRow(), 0));
                           int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(),"Sicuro di voler cancellare l'ordine: "
                             + table2.getValueAt(table2.getSelectedRow(), 0));
 
@@ -405,7 +397,6 @@ public class OrdiniAdminPanel extends JPanel {
 
                 int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di voler effettuare questo ordine?");
                 if (OpzioneScelta == JOptionPane.OK_OPTION) {
-                    System.out.println("OOOOOOOOKKKKKK SALVO L'ORDINE");
 
                     OrdineDAO ordao = new OrdineDAO();
                     Ordine bean = new Ordine();
@@ -461,7 +452,7 @@ public class OrdiniAdminPanel extends JPanel {
     public void refreshTab() {
         // refresh lista fornitori
         // BISOGNA SVUOTARE E RICARICARE LISTA FORN
-        System.out.println("R   E   F   R   E   S   H   !   !   !");
+        //System.out.println("R   E   F   R   E   S   H   !   !   !");
         jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
         FornitoreDAO daof = new FornitoreDAO();
         try {
@@ -531,7 +522,6 @@ public class OrdiniAdminPanel extends JPanel {
             button.setOpaque(true);
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("APRI FORMMMMm");
                     fireEditingStopped();
                 }
             });

@@ -78,7 +78,6 @@ public class OrdiniPanel extends JPanel {
         casella.addCaretListener(new CaretListener() {
         @Override
         public void caretUpdate(CaretEvent e) {
-            System.out.println("Il testo è stato campiato: "+casella.getText());
             try {
 
                 aggiornaScheda(casella.getText());
