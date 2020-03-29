@@ -18,6 +18,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -64,10 +65,12 @@ class FrameRiepilogo extends JFrame {
     public OrdiniAdminPanel panadmin;
     private String arrivato;
     private String messoInStock;
+    private String costoTot;
     
-    public FrameRiepilogo(OrdiniAdminPanel panAdmin, String numordine, String dataordine) {
-        panadmin = panAdmin;
-        Numordine = numordine;
+    public FrameRiepilogo(OrdiniAdminPanel panAdmin, String numordine, String dataordine, String costoTot) {
+        this.panadmin = panAdmin;
+        this.Numordine = numordine;
+        this.costoTot = costoTot;
 
         ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
         this.setIconImage(img.getImage());
@@ -91,6 +94,8 @@ class FrameRiepilogo extends JFrame {
 
         JScrollPane sp2 = new JScrollPane(table2);
         sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "  #ORDINE: " + numordine + "  del "+dataordine+ "   ", TitledBorder.CENTER, TitledBorder.TOP));
+  
+        
         add(sp2, BorderLayout.CENTER);
 
         JButton bannulla = new JButton("Annulla");
@@ -162,10 +167,18 @@ class FrameRiepilogo extends JFrame {
 
         });
 
-        JPanel pdown = new JPanel();
+        JPanel pdown = new JPanel(new GridLayout(1, 3));
+       // pdown.setBackground(Color.red); // FACCIAMO CON IL COLORE DEL SEMAFORO?
         pdown.setLayout(new GridBagLayout());
         pdown.add(bconferma);
         pdown.add(bannulla);
+                
+                
+        JLabel costoTotale = new JLabel("   Costo totale ordine:  "+ costoTot);
+        costoTotale.setFont(new Font("Arial Black", Font.BOLD, 12));
+        pdown.add(costoTotale);        
+      
+
         add(pdown, BorderLayout.SOUTH);
 
         refreshOrdini();
@@ -202,8 +215,9 @@ class FrameRiepilogo extends JFrame {
                     datao = ordaoo.dataArrivo(ordine.getN_ordine(), ordine.getProdotto_sku())+ " (previsto)"; // data prevista
                 }
 
+                BigDecimal costoo = new BigDecimal(String.valueOf(prodao.getBySku(ordine.getProdotto_sku()).getCosto()));
      
-                model2.addRow(new Object[]{ordine.getN_ordine(), ordine.getFk_fornitore(), ordine.getProdotto_sku(), prodao.getBySku(ordine.getProdotto_sku()).getCosto(),
+                model2.addRow(new Object[]{ordine.getN_ordine(), ordine.getFk_fornitore(), ordine.getProdotto_sku(),costoo.toPlainString() ,
                     ordine.getQty_arrivata() +"/"+ordine.getQty_in_arrivo(), datao, arrivato, messoInStock});
             }
         } catch (SQLException ex) {

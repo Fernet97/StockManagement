@@ -78,7 +78,7 @@ public class LoginDialog extends javax.swing.JDialog {
         label_nome = new JLabel("Nome utente :");
         label_nome.setFont(new Font("Arial Black", Font.PLAIN, 15));
         casella_nome = new JTextField("", 20);
-        casella_nome.setFont(new Font("Arial Black", Font.ITALIC, 10));
+        casella_nome.setFont(new Font("Arial Black", Font.BOLD, 10));
         casella_nome.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -94,7 +94,7 @@ public class LoginDialog extends javax.swing.JDialog {
         label_pwd = new JLabel("       Password :");
         label_pwd.setFont(new Font("Arial Black", Font.PLAIN, 15));
         casella_pwd = new JPasswordField("", 20);
-        casella_pwd.setFont(new Font("Arial Black", Font.ITALIC, 10));
+        casella_pwd.setFont(new Font("Arial Black", Font.BOLD, 10));
         casella_pwd.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
