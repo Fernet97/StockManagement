@@ -30,6 +30,8 @@ public class StockManagement {
 
         private static Logger logger = Logger.getLogger("genlog");
         private static FileHandler fh;
+     
+
     
     public static void main(String[] args) throws InterruptedException {
 
@@ -72,8 +74,8 @@ public class StockManagement {
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
-            logger.info("START: " + datanow);
-            fh.close();
+
+
 
         } catch (SecurityException e) {
             e.printStackTrace();
@@ -82,6 +84,9 @@ public class StockManagement {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        
+
 
         UIManager.put("control", new Color(27, 32, 36));
         UIManager.put("info", new Color(40, 45, 51));
@@ -132,7 +137,9 @@ public class StockManagement {
     }
     
     public static void closeFH() throws FileNotFoundException {
-        fh.close();        
+        fh.close();  
+        LoginDialog.fhu.close();
     }
+
 
 }

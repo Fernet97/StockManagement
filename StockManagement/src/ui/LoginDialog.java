@@ -15,9 +15,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -37,12 +42,15 @@ public class LoginDialog extends javax.swing.JDialog {
     private JPasswordField casella_pwd;
     private JButton ButtonAccedi;
     private JLabel logo;
-    public String nomeutente;
+    public static String nomeutente;
 
     //Costruttore
     public LoginDialog() {
         CreaGUI();
     }
+
+    private static Logger userlogger = Logger.getLogger("userlog");
+    public static FileHandler fhu;
 
     private void CreaGUI() {
 
@@ -119,10 +127,12 @@ public class LoginDialog extends javax.swing.JDialog {
     }
 
     // verifica Login
-    public boolean checkLogin(String user, String password) { 
+    public boolean checkLogin(String user, String password) {
 
         nomeutente = user;
 
+        
+        //serve per accedere senza login
         if (user.equals("") && password.equals("")) {
             System.out.println("ENTRATO COME GESUDIO");
             return true;
@@ -138,33 +148,35 @@ public class LoginDialog extends javax.swing.JDialog {
         try {
             utente = udao.getByID(user);
         } catch (SQLException ex) {
-            Logger.getLogger(LoginDialog.class.getName()).log(Level.SEVERE, null, ex);}
-
+            Logger.getLogger(LoginDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         try {
             System.out.println("nome utente nel db:" + utente.getIdutente() + " nome utente inserita adesso:" + user);
 
             if (utente.getIdutente().equals(user)) {
                 if (utente.getPwd().equals(Cryptorr.MD5(password))) {
-                    System.out.println("PASSWORD CORRETTA");
-                    System.out.println("pwd nel db:" + utente.getPwd() + " pwd inserita adesso:" + password);
+                  //  System.out.println("PASSWORD CORRETTA");
+                    //System.out.println("pwd nel db:" + utente.getPwd() + " pwd inserita adesso:" + password);
                     return true;
                 }
             }
 
             JOptionPane.showMessageDialog(this, "Password sbagliata!");
+            Logger.getLogger("genlog").info("Password sbagliata!\n");
             return false;
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(this, "nome utente non valido!");
+             Logger.getLogger("genlog").info("Nome utente non valido!\n");
             return false;
         }
     }
 
     public void avviaPrincFrame() {
-        
-    
+
         if (checkLogin(casella_nome.getText(), casella_pwd.getText())) {
             FramePrincipale mainFrame = new FramePrincipale(nomeutente);
+            logUserStart();
             mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             mainFrame.setVisible(true);
             //mainFrame.setResizable(false);
@@ -173,11 +185,33 @@ public class LoginDialog extends javax.swing.JDialog {
 
             mainFrame.setMinimumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
             mainFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+             Logger.getLogger("userlog").info("ACCESSO COME: " + nomeutente + "\n");
             dispose();
         } else {
 //          JOptionPane.showMessageDialog(this, "errore accesso");
         }
-    
+
     }
 
+    public void logUserStart() {
+        try {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy_HH_mm_ss");
+            LocalDateTime now = LocalDateTime.now();
+
+            String datanow = dtf.format(now);
+
+            // This block configure the logger with handler and formatter  
+            fhu = new FileHandler("./DATA/LOG/USERLOG/LOG_" + nomeutente + "_" + datanow + ".log");
+            userlogger.addHandler(fhu);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fhu.setFormatter(formatter);
+
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
