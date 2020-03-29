@@ -2,10 +2,13 @@ package others;
 
 import ui.StockManagement;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.URL;
 import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import static java.util.logging.Logger.getLogger;
 
@@ -19,7 +22,19 @@ public class JavaProcessId {
         os = System.getProperty("os.name");
         System.out.println("os " + os);
         if (os.startsWith("Windows")) {
-            closeLogger("genlog");
+        
+            // --
+            try {
+//                StockManagement.fh.close();  //non se fa
+                StockManagement.closeFH();
+            } catch(FileNotFoundException sEx) {
+                sEx.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            
+            Thread.sleep(1000);
+            System.err.println("chiudo");     
             Process pr = Runtime.getRuntime().exec("taskkill /pid " + jPID() + " /t /f");
         } else {
             System.out.println("sto chiudendo " + os);
@@ -29,16 +44,7 @@ public class JavaProcessId {
 
     }
     
-        public static void closeLogger(String name) {
-        Logger logger = getLogger(name);
-            System.out.println("nomelog"+name);
-        java.util.logging.Handler[] handlers = logger.getHandlers();
-        for (java.util.logging.Handler h : handlers) {
-            try {
-                h.close();
-            } catch (SecurityException e) {}
-        }
-    }
+
 
     public static String jPID() throws InterruptedException {
         String vmName = ManagementFactory.getRuntimeMXBean().getName();
