@@ -5,6 +5,7 @@
  */
 package ui;
 
+import org.apache.commons.io.FilenameUtils;
 import beans.Fornitore;
 import beans.Prodotto;
 import dao.FornitoreDAO;
@@ -648,7 +649,7 @@ public class ProdottiPanel extends JPanel {
             bfoto = new JButton();
             bfoto.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-
+                    try{
                     JFileChooser jFileChooser = new JFileChooser();
                     jFileChooser.setCurrentDirectory(new File("./"));
                     int result = jFileChooser.showOpenDialog(new JFrame());
@@ -658,16 +659,16 @@ public class ProdottiPanel extends JPanel {
                         percorsofoto = selectedFile.getAbsolutePath();
                         
                         Path sourcepath = Paths.get(percorsofoto);
+                        String estensione = FilenameUtils.getExtension(percorsofoto).toString();
                         // POSSO AGGIUNGERE SOLO FILE PNG
-                        Path destinationepath = Paths.get( "./DATA/IMG/"+casku.getText().substring(0, casku.getText().indexOf('-'))+ ".png");
-                
-                        try {
+                        Path destinationepath = Paths.get( "./DATA/IMG/"+casku.getText().substring(0, casku.getText().indexOf('-'))+ "."+estensione);
+                        System.out.println("dd "+destinationepath.toString());
+                        
+                        
                             //copia del file
                             Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
                             percorsofoto = destinationepath.toString();
-                        } catch (IOException ex) {
-                            Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+
                         
                         
                         ImageIcon icon = new ImageIcon(percorsofoto);
@@ -675,7 +676,12 @@ public class ProdottiPanel extends JPanel {
                         icon.setImage(ImmagineScalata);
                         bfoto.setIcon(icon);
 
-                    }
+                    }              
+                        } catch (IOException ex) {
+                            Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }catch(StringIndexOutOfBoundsException ex){// mi dava -1 alla riga 664
+                        Logger.getLogger("userlog").warning("percorso foto \n"+ex);
+                        }
 
                 }
             });
