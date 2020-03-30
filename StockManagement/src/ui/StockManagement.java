@@ -5,9 +5,7 @@
  */
 package ui;
 
-import beans.Utente;
 import others.JavaProcessId;
-import database.DriverManagerConnectionPool;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -28,11 +26,9 @@ import javax.swing.UIManager;
  */
 public class StockManagement {
 
-        private static Logger logger = Logger.getLogger("genlog");
-        private static FileHandler fh;
-     
+    private static Logger logger = Logger.getLogger("genlog");
+    private static FileHandler fh;
 
-    
     public static void main(String[] args) throws InterruptedException {
 
         JavaProcessId.jPID();
@@ -60,7 +56,7 @@ public class StockManagement {
         // CREA CARTELLA USERLOG
         File directory4 = new File("./DATA/LOG/USERLOG/");
         if (!directory4.mkdir()) {
-            
+
         }
 
         try {
@@ -75,17 +71,15 @@ public class StockManagement {
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
 
-
-
         } catch (SecurityException e) {
- Logger.getLogger("genlog").warning(" "+e);        } catch (IOException e) {
+            Logger.getLogger("genlog").warning("SecurityException\n" + e);
+        } catch (IOException e) {
+            Logger.getLogger("genlog").warning("IOException\n" + e);
             e.printStackTrace();
         } catch (Exception e) {
+            Logger.getLogger("genlog").warning("Exception\n" + e);
             e.printStackTrace();
         }
-        
-        
-
 
         UIManager.put("control", new Color(27, 32, 36));
         UIManager.put("info", new Color(40, 45, 51));
@@ -113,10 +107,12 @@ public class StockManagement {
                 }
             }
         } catch (Exception e) {
- Logger.getLogger("genlog").warning(" "+e);            try {
+            Logger.getLogger("genlog").warning("Exception\n" + e);
+            try {
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             } catch (Exception ex) {
- Logger.getLogger("genlog").warning(" "+e);            }
+                Logger.getLogger("genlog").warning("Exception\n" + e);
+            }
         }
 
         int s_witdh = Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -132,11 +128,10 @@ public class StockManagement {
         ld.setTitle("Login");
 
     }
-    
+
     public static void closeFH() throws FileNotFoundException {
-        fh.close();  
+        fh.close();
         LoginDialog.fhu.close();
     }
-
 
 }

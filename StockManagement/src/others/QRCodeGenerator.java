@@ -20,34 +20,29 @@ import java.util.logging.Logger;
  * @author Fernet
  */
 public class QRCodeGenerator {
-  
-     private static final String QR_CODE_IMAGE_PATH = "./MyQRCode.png";
+
+    private static final String QR_CODE_IMAGE_PATH = "./MyQRCode.png";
 
     private static void generateQRCodeImage(String text, int width, int height, String filePath) throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
 
         Path path = FileSystems.getDefault().getPath(filePath);
-        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);   
-    
+        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
+
     }
- 
-        
+
     public static void main(String[] args) {
         try {
             generateQRCodeImage("Miaoooooooo!!!", 350, 350, QR_CODE_IMAGE_PATH);
-            
-            
+
         } catch (WriterException e) {
-                                            Logger.getLogger("genlog").warning("Could not generate QR Code, WriterException :: " + e.getMessage()+"\n"+e);
+            Logger.getLogger("genlog").warning("WriterException:Could not generate QR Code, WriterException:\n" + e.getMessage() + "\n" + e);
 
         } catch (IOException e) {
-                                                        Logger.getLogger("genlog").warning("Could not generate QR Code, IOException :: " + e.getMessage()+"\n"+e);
+            Logger.getLogger("genlog").warning("IOException:Could not generate QR Code, IOException:\n" + e.getMessage() + "\n" + e);
 
-            
         }
     }
-    
-   
-    
+
 }

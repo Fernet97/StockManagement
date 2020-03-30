@@ -21,24 +21,18 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -46,7 +40,6 @@ import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
@@ -157,7 +150,8 @@ class FrameRiepilogo extends JFrame {
 
                         }
                     } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                    }
+ Logger.getLogger("genlog").warning("SQLException\n"+ex); 
+                    }
 
                     setVisible(false);
                     panadmin.refreshTab();
@@ -220,8 +214,9 @@ class FrameRiepilogo extends JFrame {
                     ordine.getQty_arrivata() +"/"+ordine.getQty_in_arrivo(), datao, arrivato, messoInStock});
             }
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        } catch (ParseException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);     
+        } catch (ParseException ex) {
+ Logger.getLogger("genlog").warning("ParseException\n"+ex);        }
 
     }
 

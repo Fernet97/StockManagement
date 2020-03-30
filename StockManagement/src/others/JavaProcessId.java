@@ -1,16 +1,11 @@
 package others;
 
 import ui.StockManagement;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.URL;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
-import static java.util.logging.Logger.getLogger;
 
 public class JavaProcessId {
 
@@ -22,22 +17,22 @@ public class JavaProcessId {
         os = System.getProperty("os.name");
         System.out.println("os " + os);
         if (os.startsWith("Windows")) {
-        
+
             // --
             try {
 //                StockManagement.fh.close();  //non se fa
                 StockManagement.closeFH();
-            } catch(FileNotFoundException sEx) {
-                                Logger.getLogger("genlog").warning(""+sEx);
+            } catch (FileNotFoundException sEx) {
+                Logger.getLogger("genlog").warning("FileNotFoundException\n" + sEx);
                 sEx.printStackTrace();
             } catch (Exception ex) {
-                                                Logger.getLogger("genlog").warning(""+ex);
+                Logger.getLogger("genlog").warning("Exception\n" + ex);
 
                 ex.printStackTrace();
             }
-            
+
             Thread.sleep(1000);
-            System.err.println("chiudo");     
+            System.err.println("chiudo");
             Process pr = Runtime.getRuntime().exec("taskkill /pid " + jPID() + " /t /f");
         } else {
             System.out.println("sto chiudendo " + os);
@@ -46,8 +41,6 @@ public class JavaProcessId {
         }
 
     }
-    
-
 
     public static String jPID() throws InterruptedException {
         String vmName = ManagementFactory.getRuntimeMXBean().getName();
@@ -58,36 +51,36 @@ public class JavaProcessId {
 
     public static String path() {
         URL jarLocationUrl = JavaProcessId.class.getProtectionDomain().getCodeSource().getLocation();
-       String patht = jarLocationUrl.toString();
+        String patht = jarLocationUrl.toString();
 //        System.out.println("jarloc "+jarLocationUrl);
 //        String path = new File(jarLocationUrl).getParent();
         System.out.println("patht " + patht);
         String replace = patht.replaceAll("StockManagement.jar", "java -jar StockManagement.jar");
-         String os = "";
+        String os = "";
         os = System.getProperty("os.name");
         System.out.println("os " + os);
         if (os.startsWith("Windows")) {
-           String pathw= replace.substring(0).replaceFirst("/", "");
-            System.out.println("winzoz "+pathw);
-           return pathw;
+            String pathw = replace.substring(0).replaceFirst("/", "");
+            System.out.println("winzoz " + pathw);
+            return pathw;
         } else {
             System.out.println("sto chiudendo " + os);
-           String pathlx = replace.substring(0).replaceAll("/", "");
-            System.out.println("linux "+pathlx );
+            String pathlx = replace.substring(0).replaceAll("/", "");
+            System.out.println("linux " + pathlx);
             return pathlx;
         }
 //                System.out.println("path "+path);
 //        return jarLocationUrl;
 //        return path;
     }
-    
-    public static void runn(){
+
+    public static void runn() {
         ProcessBuilder builder = new ProcessBuilder(path());
-    
+
         try {
             builder.start();
         } catch (IOException e) {
-                                            Logger.getLogger("genlog").warning(""+e);
+            Logger.getLogger("genlog").warning("IOException\n" + e);
 
             e.printStackTrace();
         }

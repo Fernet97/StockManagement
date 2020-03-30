@@ -11,7 +11,6 @@ import beans.Prodotto;
 import dao.FornitoreDAO;
 import dao.OrdineDAO;
 import dao.ProdottoDAO;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import static java.awt.Component.CENTER_ALIGNMENT;
@@ -24,13 +23,9 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,14 +33,10 @@ import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.stage.FileChooser;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -53,11 +44,8 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -67,14 +55,10 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import static ui.AnagrafichePanel.form;
 
 /**
  *
@@ -163,7 +147,7 @@ public class ProdottiPanel extends JPanel {
         try {
             refreshTab(); // Aggiorna tavola con  i fornitori del db;
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);        }
 
         table.setRowHeight(40); //altezza celle
 
@@ -338,7 +322,7 @@ public class ProdottiPanel extends JPanel {
                     try{
                     fireEditingStopped();
                     }catch(IndexOutOfBoundsException es) {
-                         Logger.getLogger("genlog").warning(" "+es);
+                         Logger.getLogger("genlog").warning("IndexOutOfBoundsException\n"+es);
                       }
                     
                 }
@@ -392,7 +376,7 @@ public class ProdottiPanel extends JPanel {
 
                             refreshTab();
                         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                        }
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);                        }
                     }
                 } else if (button.getText().equals("Modifica")) { // APRI FORM PER MODIFICARE RECORD
 
@@ -421,7 +405,7 @@ public class ProdottiPanel extends JPanel {
                             jComboBox.addItem(f.getIdfornitore() +"|"+f.getFullname());
                         }
                     } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                    }
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);                    }
                     
                     jComboBox.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -482,7 +466,7 @@ public class ProdottiPanel extends JPanel {
             try {
                 initComponents();
             } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);            }
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);            }
 
         }
 
@@ -506,7 +490,7 @@ public class ProdottiPanel extends JPanel {
             }
                 
             } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);            }
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);            }
 
             ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
             setSize(600, (650));
@@ -662,7 +646,7 @@ public class ProdottiPanel extends JPanel {
 
                     }              
                         } catch(StringIndexOutOfBoundsException ex){// mi dava -1 alla riga 664
-                        Logger.getLogger("userlog").warning("percorso foto \n"+ex);
+                        Logger.getLogger("userlog").warning("StringIndexOutOfBoundsException: percorso foto \n"+ex);
                         ex.printStackTrace();
                         }
 
@@ -694,7 +678,7 @@ public class ProdottiPanel extends JPanel {
                             try {
                                 getOggettoforFormUpdate();
                             } catch (InterruptedException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                            }
+ Logger.getLogger("genlog").warning("InterruptedException\n"+ex);                            }
                         } else {
                             getOggettoforFormSave();
                         }
@@ -744,14 +728,14 @@ public class ProdottiPanel extends JPanel {
 
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Controlla che \"Quantità\",  \"qty minima\",  siano numeri validi. [ Per il costo usare \".\" per indicare la parte decimale ]");
-                 Logger.getLogger("genlog").warning(" "+e);
+                 Logger.getLogger("genlog").warning("NumberFormatException\n"+e);
                 return false;
             }
 
             //controlla se sono float ...
             try {
                 Float.parseFloat(ccosto.getText());
-            } catch (NumberFormatException e) { Logger.getLogger("genlog").warning(" "+e);
+            } catch (NumberFormatException e) { Logger.getLogger("genlog").warning("NumberFormatException\n"+e);
                 JOptionPane.showMessageDialog(this, "Controlla che le quantità ed il costo siano numeri validi! [Per il costo usare '.' per indicare la parte decimale]");
                 return false;
             }
@@ -790,9 +774,11 @@ public class ProdottiPanel extends JPanel {
                 refreshTab();
   
             } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);            } catch (InterruptedException ex) {
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);          
+            } catch (InterruptedException ex) {
+                 Logger.getLogger("genlog").warning("InterruptedException\n"+ex);
             } catch (IOException ex) {
- Logger.getLogger("genlog").warning(" "+ex);            }
+ Logger.getLogger("genlog").warning("IOException\n"+ex);            }
 
         }
 
@@ -842,7 +828,7 @@ public class ProdottiPanel extends JPanel {
             
                        
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }   
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);        }   
 
 
         }
@@ -874,13 +860,15 @@ public class ProdottiPanel extends JPanel {
             
                        
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }   catch (IOException ex) {
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);       
+        }   catch (IOException ex) { 
+            Logger.getLogger("genlog").warning("IOException\n"+ex);
             }
 
         try {
             refreshTab();
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }
+ Logger.getLogger("genlog").warning("SQLException"+ex);        }
              
         }
 

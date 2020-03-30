@@ -11,7 +11,6 @@ import beans.Prodotto;
 import dao.FornitoreDAO;
 import dao.OrdineDAO;
 import dao.ProdottoDAO;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -27,10 +26,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import static java.util.Collections.list;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -47,15 +43,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.RowFilter;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
@@ -147,7 +138,8 @@ public class OrdiniAdminPanel extends JPanel {
                     }
 
                 } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                }
+                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                }
 
             }
 
@@ -170,7 +162,8 @@ public class OrdiniAdminPanel extends JPanel {
                 jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
             }
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }
+            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+        }
         jComboBox.setForeground(Color.black);
         jComboBox.setBackground(Color.DARK_GRAY);
         jComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -197,7 +190,8 @@ public class OrdiniAdminPanel extends JPanel {
                         ((DefaultListModel) list.getModel()).addElement(pp.getSku() + "|  " + pp.getNome());
                     }
                 } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                }
+                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                }
             }
         });
         sxpan.add(jComboBox);
@@ -234,14 +228,16 @@ public class OrdiniAdminPanel extends JPanel {
 
         table = new JTable();
         table.getTableHeader().setReorderingAllowed(false);
-        
+
         model = new DefaultTableModel() {
             private static final long serialVersionUID = 1L;
 
             public boolean isCellEditable(int row, int column) {
-                if(column == 0 || column == 2 || column == 4 )
+                if (column == 0 || column == 2 || column == 4) {
                     return false; //il numero di celle NON editabili...
-                else return true;
+                } else {
+                    return true;
+                }
             }
         };
         model.addColumn("SKU");
@@ -250,38 +246,36 @@ public class OrdiniAdminPanel extends JPanel {
         model.addColumn("Giorni all'arrivo");
         model.addColumn("Fornitore");
         table.setModel(model);
-        
-        
+
         JScrollPane sp = new JScrollPane(table);
 
         info.add(sp);
-        
+
         JPanel manageprod = new JPanel();
         manageprod.setLayout(new GridBagLayout());
         JButton rimuoviprod = new JButton("Elimina prodotto selezionato");
         rimuoviprod.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                    for (int i = 0; i < table.getSelectedRows().length; i++) {
-                       model.removeRow(table.getSelectedRow());
-                       costocarrell += Float.parseFloat(table.getValueAt(i, 2).toString()) * Integer.parseInt(table.getValueAt(i, 1).toString());
-                       costot.setText("Costo totale: " + costocarrell + " euro");
+                for (int i = 0; i < table.getSelectedRows().length; i++) {
+                    model.removeRow(table.getSelectedRow());
+                    costocarrell += Float.parseFloat(table.getValueAt(i, 2).toString()) * Integer.parseInt(table.getValueAt(i, 1).toString());
+                    costot.setText("Costo totale: " + costocarrell + " euro");
                 }
             }
-        });      
+        });
         manageprod.add(rimuoviprod);
-        
-        JButton svuotaprod = new JButton("Svuota carrello"); 
+
+        JButton svuotaprod = new JButton("Svuota carrello");
         svuotaprod.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 model.setRowCount(0);
-                costocarrell= 0;
+                costocarrell = 0;
                 costot.setText("Costo totale: 0 euro");
             }
-        });    
+        });
         manageprod.add(svuotaprod);
-        
+
         info.add(manageprod);
-     
 
         infolabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         dxpan.add(infolabel);
@@ -329,16 +323,17 @@ public class OrdiniAdminPanel extends JPanel {
                 try {
                     for (int i = 0; i < table2.getSelectedRows().length; i++) {
 
-                          int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(),"Sicuro di voler cancellare l'ordine: "
-                            + table2.getValueAt(table2.getSelectedRow(), 0));
+                        int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sicuro di voler cancellare l'ordine: "
+                                + table2.getValueAt(table2.getSelectedRow(), 0));
 
-                    if (OpzioneScelta == JOptionPane.OK_OPTION) { 
-                        daor.removeOrd(table2.getValueAt(table2.getSelectedRow(), 0).toString());
-                        model2.removeRow(table2.getSelectedRow());
+                        if (OpzioneScelta == JOptionPane.OK_OPTION) {
+                            daor.removeOrd(table2.getValueAt(table2.getSelectedRow(), 0).toString());
+                            model2.removeRow(table2.getSelectedRow());
+                        }
                     }
-                }
                 } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                }
+                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                }
 
             }
         });
@@ -349,14 +344,15 @@ public class OrdiniAdminPanel extends JPanel {
         try {
             // String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale ordine", "In spedizione", "Controlla ordine", "Ricarica ordine"};
             for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
-                                                    BigDecimal costoo = new BigDecimal(String.valueOf(ordine.get(2)));
+                BigDecimal costoo = new BigDecimal(String.valueOf(ordine.get(2)));
 
-             
                 model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica ordine"});
             }
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        } catch (ParseException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }
+            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+        } catch (ParseException ex) {
+            Logger.getLogger("genlog").warning("ParseException\n" + ex);
+        }
 
         princ.add(SXdown);
 
@@ -397,7 +393,8 @@ public class OrdiniAdminPanel extends JPanel {
                     try {
                         bean.startOrdine();
                     } catch (InterruptedException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                    }
+                        Logger.getLogger("genlog").warning("InterruptedException\n" + ex);
+                    }
 
                     for (int i = 0; i < model.getRowCount(); i++) {
                         try {
@@ -409,8 +406,10 @@ public class OrdiniAdminPanel extends JPanel {
                             Ordine o = new Ordine(Integer.parseInt(model.getValueAt(i, 1).toString()), Integer.parseInt(model.getValueAt(i, 3).toString()), user, model.getValueAt(i, 0).toString(), 0, subselezionato, 0);
                             ordao.add(o);
                         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                        } catch (InterruptedException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                        }
+                            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger("genlog").warning("InterruptedException\n" + ex);
+                        }
 
                     }
                     refreshTab();
@@ -451,7 +450,8 @@ public class OrdiniAdminPanel extends JPanel {
                 jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
             }
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }
+            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+        }
 
         casella.setBackground(Color.gray);
         casella.setText("");
@@ -466,15 +466,15 @@ public class OrdiniAdminPanel extends JPanel {
         model2.setRowCount(0);
         try {
             for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
-                  BigDecimal costoo = new BigDecimal(String.valueOf(ordine.get(2)));
+                BigDecimal costoo = new BigDecimal(String.valueOf(ordine.get(2)));
                 model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica ordine"});
             }
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        } catch (ParseException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }
-        
-        
-        
+            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+        } catch (ParseException ex) {
+            Logger.getLogger("genlog").warning("ParseException\n" + ex);
+        }
+
     }
 
     class TableButtonRenderer extends JButton implements TableCellRenderer {
@@ -539,19 +539,18 @@ public class OrdiniAdminPanel extends JPanel {
             if (clicked) // SE CLICCATO QUEL BOTTONE:::::::::::::
             {
                 if (button.getText().equals("Apri")) {
-                    FrameRiepilogo f = new FrameRiepilogo(getInstance(), table.getValueAt(row, 0).toString(),  table.getValueAt(row, 1).toString(), table.getValueAt(row, 3).toString());
+                    FrameRiepilogo f = new FrameRiepilogo(getInstance(), table.getValueAt(row, 0).toString(), table.getValueAt(row, 1).toString(), table.getValueAt(row, 3).toString());
                     f.setResizable(false);
                     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    f.setSize(1400,400);
+                    f.setSize(1400, 400);
                     f.setVisible(true);
-                    f.setTitle("Riepilogo ordine: "+ table.getValueAt(row, 0));
-                    
+                    f.setTitle("Riepilogo ordine: " + table.getValueAt(row, 0));
 
                 } else if (button.getText().equals("Ricarica ordine")) {
                     model.setRowCount(0);
                     refreshTab();
                     caricaOrdine(table.getValueAt(row, 0).toString());
-                    
+
                 }
 
             }
@@ -592,37 +591,34 @@ public class OrdiniAdminPanel extends JPanel {
         }
     }
 
-    
-    
-    public void  caricaOrdine(String numerordine){
-        JOptionPane.showMessageDialog(this, "Sto caricando l'ordine "+numerordine+ " nel carrello ...");
+    public void caricaOrdine(String numerordine) {
+        JOptionPane.showMessageDialog(this, "Sto caricando l'ordine " + numerordine + " nel carrello ...");
         OrdineDAO ordao = new OrdineDAO();
 
-        
         try {
             FornitoreDAO forndao = new FornitoreDAO();
             ProdottoDAO prodao = new ProdottoDAO();
-            
-            for (Ordine o : ordao.getByNum(numerordine)){
+
+            for (Ordine o : ordao.getByNum(numerordine)) {
                 Fornitore f = forndao.getByID(o.getFk_fornitore());
                 Prodotto p = prodao.getBySku(o.getProdotto_sku());
                 costocarrell = 0;
-            
-            BigDecimal costoo = new BigDecimal(String.valueOf(p.getCosto()));
 
-               model.addRow(new Object[]{p.getSku(), o.getQty_in_arrivo(), costoo.toPlainString(),  o.getGiorni_alla_consegna(), f.getIdfornitore()+"|"+f.getFullname()}); 
-                        costocarrell += p.getCosto() * o.getQty_in_arrivo();
-                        costot.setText("Costo totale: " + costocarrell + " euro");
-                        int prossimoord = o.leggiUltimoID() + 1;
-                        numordine.setText("#Ordine: ORD-" + prossimoord);
-                
+                BigDecimal costoo = new BigDecimal(String.valueOf(p.getCosto()));
+
+                model.addRow(new Object[]{p.getSku(), o.getQty_in_arrivo(), costoo.toPlainString(), o.getGiorni_alla_consegna(), f.getIdfornitore() + "|" + f.getFullname()});
+                costocarrell += p.getCosto() * o.getQty_in_arrivo();
+                costot.setText("Costo totale: " + costocarrell + " euro");
+                int prossimoord = o.leggiUltimoID() + 1;
+                numordine.setText("#Ordine: ORD-" + prossimoord);
+
             }
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }
+            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+        }
 
     }
-    
-    
+
     public void aggiungiTOcarrello(String skuselezionato) {
 
         skusel = skuselezionato.substring(0, skuselezionato.indexOf("|"));
@@ -661,7 +657,7 @@ public class OrdiniAdminPanel extends JPanel {
                     Prodotto p = pdao.getBySku(skusel);
 
                     if (casellaqty.getText().matches("-?\\d+(\\.\\d+)?") && ggallacons.getText().matches("-?\\d+(\\.\\d+)?")) {
-                                    BigDecimal costoo = new BigDecimal(String.valueOf(p.getCosto()));
+                        BigDecimal costoo = new BigDecimal(String.valueOf(p.getCosto()));
 
                         model.addRow(new Object[]{skusel, casellaqty.getText(), costoo.toPlainString(), ggallacons.getText(), jComboBox.getSelectedItem().toString()});
 
@@ -675,7 +671,8 @@ public class OrdiniAdminPanel extends JPanel {
                         JOptionPane.showMessageDialog(getParent(), "Scegliere un formato numerico per la quantità ed i giorni all consegna");
                     }
                 } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                }
+                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                }
 
             }
         });
@@ -684,9 +681,8 @@ public class OrdiniAdminPanel extends JPanel {
         popup.setVisible(true);
 
     }
-    
-    
-    public OrdiniAdminPanel getInstance(){
+
+    public OrdiniAdminPanel getInstance() {
         return this;
 
     }

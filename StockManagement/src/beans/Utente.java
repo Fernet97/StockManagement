@@ -52,8 +52,6 @@ public class Utente {
 
         setDatareg(generateData());
 
-
-
     }
 
     /**
@@ -75,8 +73,6 @@ public class Utente {
         setDatareg(generateData());
         setCode(leggiUltimoID() + 1);
         setIdutente(generateID());
-
-
 
     }
 
@@ -187,16 +183,14 @@ public class Utente {
 
             lastid = dao.getLastID(this.fullname).getIdutente().toString();
 
-
-           
             tmp = lastid.replaceAll("[^0-9]", "");
             idlast = Integer.parseInt(tmp);
         } catch (SQLException ex) {
-                Logger.getLogger("genlog").warning(""+ex);
-                ex.printStackTrace(); 
+            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            ex.printStackTrace();
         } catch (NullPointerException en) {
-                Logger.getLogger("genlog").warning(""+en);
-                en.printStackTrace(); 
+            Logger.getLogger("genlog").warning("NullPointerException\n" + en);
+            en.printStackTrace();
             return idlast = 0;
         }
 
@@ -218,16 +212,14 @@ public class Utente {
 //    public String toString() {
 //        return "Utente{" + "idutente=" + idutente + ", datareg=" + datareg + ", fullname=" + fullname + ", CF=" + CF + ", indirizzo=" + indirizzo + ", telefono=" + telefono + ", email=" + email + ", pwd=" + pwd + ", permessi=" + permessi + ", note=" + note + '}';
 //    }
-    
-    
     /**
      * questo non ritorna la password
-     * @return 
+     *
+     * @return
      */
     @Override
     public String toString() {
         return "Utente{" + "idutente=" + idutente + ", datareg=" + datareg + ", fullname=" + fullname + ", CF=" + CF + ", indirizzo=" + indirizzo + ", telefono=" + telefono + ", email=" + email + ", permessi=" + permessi + ", note=" + note + '}';
     }
 
-    
 }

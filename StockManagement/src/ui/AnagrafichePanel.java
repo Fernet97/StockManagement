@@ -11,26 +11,18 @@ import beans.Utente;
 import dao.ClienteDAO;
 import dao.FornitoreDAO;
 import dao.UtenteDAO;
-import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.AbstractButton;
 
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -42,27 +34,17 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -99,15 +81,15 @@ public class AnagrafichePanel extends JPanel {
         panSopra.add(cerca);
 
         JPanel panelcheck = new JPanel();
-        
+
         ActionListener actionListener = new ActionListener() {
-        public void actionPerformed(ActionEvent actionEvent) {
-            try {
-                refreshTab();
-            } catch (SQLException ex) {
-                                            Logger.getLogger("genlog").warning(" "+ex);
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    refreshTab();
+                } catch (SQLException ex) {
+                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                }
             }
-          }
         };
         checkforn = new JCheckBox("Fornitori");
         checkforn.setSelected(true);
@@ -168,7 +150,8 @@ public class AnagrafichePanel extends JPanel {
         try {
             refreshTab(); // Aggiorna tavola con  i fornitori del db;
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }
+            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+        }
 
         table.setRowHeight(40); //altezza celle
 
@@ -263,10 +246,10 @@ public class AnagrafichePanel extends JPanel {
             button.setOpaque(true);
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    try{
-                        fireEditingStopped();}
-                    catch(Exception ex){
-                         Logger.getLogger("genlog").warning(" "+ex);
+                    try {
+                        fireEditingStopped();
+                    } catch (Exception ex) {
+                        Logger.getLogger("genlog").warning("Exception\n" + ex);
                     };
                 }
             });
@@ -308,14 +291,13 @@ public class AnagrafichePanel extends JPanel {
                             + table.getValueAt(row, 7) + "  ]");
 
                     if (OpzioneScelta == JOptionPane.OK_OPTION) {  // DIFFERENZIARLO X CLIENTE, FORNITORE, UTENTE
-             
 
                         if (table.getValueAt(row, 0).toString().equals("Fornitore")) {
                             FornitoreDAO dao = new FornitoreDAO();
                             try {
                                 dao.remove(table.getValueAt(row, 1).toString());
                             } catch (Exception e) {
-                                 Logger.getLogger("genlog").warning(" "+e);
+                                Logger.getLogger("genlog").warning("Exception\n" + e);
                                 e.printStackTrace();
 
                             }
@@ -326,7 +308,8 @@ public class AnagrafichePanel extends JPanel {
                             try {
                                 dao.remove(table.getValueAt(row, 1).toString());
                             } catch (Exception e) {
- Logger.getLogger("genlog").warning(" "+e);                                e.printStackTrace();
+                                Logger.getLogger("genlog").warning("Exception\n" + e);
+                                e.printStackTrace();
 
                             }
                         }
@@ -336,7 +319,8 @@ public class AnagrafichePanel extends JPanel {
                             try {
                                 //dao.remove(table.getValueAt(row, 1).toString());
                             } catch (Exception e) {
- Logger.getLogger("genlog").warning(" "+e);                                e.printStackTrace();
+                                Logger.getLogger("genlog").warning("Exception\n" + e);
+                                e.printStackTrace();
 
                             }
                         }
@@ -358,15 +342,16 @@ public class AnagrafichePanel extends JPanel {
                     form.setVisible(true);
 
                 } else if (button.getText().equals("Ordina")) { // VAI A ORDINI
-                     frameprinc.VaiAOrdini(table.getValueAt(row, 1).toString()+"|"+table.getValueAt(row, 3).toString());
-                    
+                    frameprinc.VaiAOrdini(table.getValueAt(row, 1).toString() + "|" + table.getValueAt(row, 3).toString());
+
                 }
 
             }
             try {
                 refreshTab();
             } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);            }
+                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            }
             clicked = false;
             return new String(label);
         }
@@ -377,9 +362,10 @@ public class AnagrafichePanel extends JPanel {
         }
 
         protected void fireEditingStopped() {
-            try{super.fireEditingStopped();}
-            catch(Exception ex){
-                 Logger.getLogger("genlog").warning(" "+ex);
+            try {
+                super.fireEditingStopped();
+            } catch (Exception ex) {
+                Logger.getLogger("genlog").warning("Exception\n" + ex);
             };
         }
     }
@@ -838,8 +824,7 @@ public class AnagrafichePanel extends JPanel {
                     note.setText(fornitore.getNote());
 
                 } catch (SQLException ex) {
-                    Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-                     Logger.getLogger("genlog").warning(" "+ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
                 }
 
             }
@@ -864,7 +849,7 @@ public class AnagrafichePanel extends JPanel {
                     permess.setSelectedIndex(u.getPermessi());
 
                 } catch (SQLException ex) {
-                    Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
                 }
 
             }
@@ -873,31 +858,28 @@ public class AnagrafichePanel extends JPanel {
 
         public boolean check() {
 
-     
-            if(tipologia != 1){
+            if (tipologia != 1) {
                 if (casfullname.getText().isEmpty() || cascfiva.getText().isEmpty() || casindirizzo.getText().isEmpty()
                         || castel.getText().isEmpty() || casemail.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Riempi tutti i campi! ['Note' è opzionale]");
 
                     return false;
                 }
-            }
-            else if(tipologia == 1){
-                   if (casfullname.getText().isEmpty() || cascfiva.getText().isEmpty()) {
+            } else if (tipologia == 1) {
+                if (casfullname.getText().isEmpty() || cascfiva.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Riempi tutti i campi! ['Note', 'Telefono', 'email', 'indirizzo' sono opzionali]");
 
                     return false;
-                }         
-            }
-            
-                if (castel.getText().length() >= 15) {
-                    JOptionPane.showMessageDialog(this, "Numero di telefono troppo lungo");
-                    return false;
                 }
-                            
+            }
+
+            if (castel.getText().length() >= 15) {
+                JOptionPane.showMessageDialog(this, "Numero di telefono troppo lungo");
+                return false;
+            }
 
             // SE NON C'E' UN NOME E UN COGNOME X UTENTE (CI DEVE ESSERE UNO SPAZIO)
-            if (casfullname.getText().matches("\\S+") && tipologia == 2 ) {
+            if (casfullname.getText().matches("\\S+") && tipologia == 2) {
                 JOptionPane.showMessageDialog(this, "Bisogna specificare un nome e un cognome!");
                 return false;
             }
@@ -918,8 +900,8 @@ public class AnagrafichePanel extends JPanel {
 
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                     if (a == JOptionPane.YES_OPTION) {
-                    ClienteDAO dao = new ClienteDAO();
-                    client = new Cliente(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
+                        ClienteDAO dao = new ClienteDAO();
+                        client = new Cliente(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
 
                         //dao.add(client);
                         form.setVisible(false);
@@ -932,7 +914,7 @@ public class AnagrafichePanel extends JPanel {
 
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                     if (a == JOptionPane.YES_OPTION) {
-                                            forn = new Fornitore(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
+                        forn = new Fornitore(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
                         dao.add(forn);
                         form.setVisible(false);
                     }
@@ -944,7 +926,7 @@ public class AnagrafichePanel extends JPanel {
 
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                     if (a == JOptionPane.YES_OPTION) {
-                                            uten = new Utente(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), caspwd.getText(), permess.getSelectedIndex(), note.getText());
+                        uten = new Utente(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), caspwd.getText(), permess.getSelectedIndex(), note.getText());
 
                         dao.add(uten);
                         form.setVisible(false);
@@ -952,13 +934,17 @@ public class AnagrafichePanel extends JPanel {
                 }
 
             } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);            } catch (InterruptedException ex) {
+                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger("genlog").warning("InterruptedException\n" + ex);
+
             }
 
             try {
                 refreshTab();
             } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);            }
+                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            }
 
         }
 
@@ -986,7 +972,7 @@ public class AnagrafichePanel extends JPanel {
                     FornitoreDAO dao = new FornitoreDAO();
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                     if (a == JOptionPane.YES_OPTION) {
-                                            forn = new Fornitore(casid.getText(), casdatareg.getText(), casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
+                        forn = new Fornitore(casid.getText(), casdatareg.getText(), casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
 
                         dao.update(forn);
                         form.setVisible(false);
@@ -999,7 +985,7 @@ public class AnagrafichePanel extends JPanel {
 
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                     if (a == JOptionPane.YES_OPTION) {
-                                            uten = new Utente(casid.getText(), casdatareg.getText(), casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), caspwd.getText(), permess.getSelectedIndex(), note.getText());
+                        uten = new Utente(casid.getText(), casdatareg.getText(), casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), caspwd.getText(), permess.getSelectedIndex(), note.getText());
 
                         dao.update(uten);
                         form.setVisible(false);
@@ -1007,13 +993,17 @@ public class AnagrafichePanel extends JPanel {
                 }
 
             } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);            } catch (InterruptedException ex) {
+                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger("genlog").warning("InterruptedException\n" + ex);
+
             }
 
             try {
                 refreshTab();
             } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);            }
+                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            }
         }
 
     }
@@ -1041,14 +1031,11 @@ public class AnagrafichePanel extends JPanel {
             }
         }
 
+    }
+
+    public void setComunicator(FramePrincipale princ) {
+        frameprinc = princ;
 
     }
-    
-    
-        public void  setComunicator(FramePrincipale princ){
-        frameprinc  = princ;
-        
-    }
-    
 
 }

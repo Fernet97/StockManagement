@@ -9,7 +9,6 @@ import dao.OrdineDAO;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -53,7 +52,6 @@ public class Ordine {
         this.fk_cliente = fk_cliente;
         this.fk_fornitore = fk_fornitore;
         this.qty_arrivata = qty_arrivata;
-        
 
     }
 
@@ -171,9 +169,6 @@ public class Ordine {
     public void setData_arrivo(String data_arrivo) {
         this.data_arrivo = data_arrivo;
     }
-    
-    
-    
 
     public synchronized int leggiUltimoID() {
 //        String tmp;
@@ -193,8 +188,8 @@ public class Ordine {
 
         } catch (SQLException ex) {
             lastid = -99999;
-                            Logger.getLogger("genlog").warning(""+ex);
-                ex.printStackTrace(); 
+            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            ex.printStackTrace();
         }
 
         return lastid;
@@ -224,7 +219,7 @@ public class Ordine {
 
     @Override
     public String toString() {
-        return "Ordine{" + "n_ordine=" + n_ordine + ", data=" + data + ", qty_in_arrivo=" + qty_in_arrivo + ", giorni_alla_consegna=" + giorni_alla_consegna + ", fk_utente=" + fk_utente + ", prodotto_sku=" + prodotto_sku + ", fk_cliente=" + fk_cliente + ", fk_fornitore=" + fk_fornitore + ", qty_arrivata=" + qty_arrivata + ", data_arrivo=" +data_arrivo+ '}';
+        return "Ordine{" + "n_ordine=" + n_ordine + ", data=" + data + ", qty_in_arrivo=" + qty_in_arrivo + ", giorni_alla_consegna=" + giorni_alla_consegna + ", fk_utente=" + fk_utente + ", prodotto_sku=" + prodotto_sku + ", fk_cliente=" + fk_cliente + ", fk_fornitore=" + fk_fornitore + ", qty_arrivata=" + qty_arrivata + ", data_arrivo=" + data_arrivo + '}';
     }
 
 }

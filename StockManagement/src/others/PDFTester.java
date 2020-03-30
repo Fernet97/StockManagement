@@ -18,7 +18,6 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -81,15 +80,15 @@ public class PDFTester {
             document.close();
             writer.close();
         } catch (DocumentException e) {
-                                            Logger.getLogger("genlog").warning(""+e);
+            Logger.getLogger("genlog").warning("DocumentException\n" + e);
 
             e.printStackTrace();
         } catch (FileNotFoundException e) {
-                                            Logger.getLogger("genlog").warning(""+e);
+            Logger.getLogger("genlog").warning("FileNotFoundException\n" + e);
 
             e.printStackTrace();
         } catch (IOException ex) {
-                                            Logger.getLogger("genlog").warning(""+ex);
+            Logger.getLogger("genlog").warning("IOException\n" + ex);
 
         }
 

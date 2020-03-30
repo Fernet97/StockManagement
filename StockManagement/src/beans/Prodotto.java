@@ -5,12 +5,10 @@
  */
 package beans;
 
-
 import dao.ProdottoDAO;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -34,6 +32,7 @@ public class Prodotto {
 
     /**
      * costruttore completo
+     *
      * @param sku
      * @param datareg
      * @param nome
@@ -44,7 +43,7 @@ public class Prodotto {
      * @param qty_min
      * @param note
      * @param foto
-     * @param negozio 
+     * @param negozio
      */
     public Prodotto(String sku, String datareg, String nome, int qty, String Categoria, boolean instock, float costo, int qty_min, String note, String foto, boolean negozio) {
         this.sku = sku;
@@ -63,6 +62,7 @@ public class Prodotto {
 
     /**
      * per add
+     *
      * @param nome
      * @param qty
      * @param Categoria
@@ -71,7 +71,7 @@ public class Prodotto {
      * @param qty_min
      * @param note
      * @param foto
-     * @param negozio 
+     * @param negozio
      */
     public Prodotto(String nome, int qty, String Categoria, boolean instock, float costo, int qty_min, String note, String foto, boolean negozio) throws InterruptedException {
 
@@ -89,10 +89,6 @@ public class Prodotto {
         setSku(generateSKU());
 
     }
-
-    
-    
-    
 
     public Prodotto() {
 
@@ -195,37 +191,35 @@ public class Prodotto {
         code = c;
     }
 
-
-
     public synchronized int leggiUltimoSku() {
 
 //        String tmp;
 //        int idlast = 0;
-int ultimosku;
+        int ultimosku;
         try {
             ProdottoDAO dao = new ProdottoDAO();
 
-             ultimosku = dao.getLastProdotto().getCode();
-
+            ultimosku = dao.getLastProdotto().getCode();
 
         } catch (SQLException ex) {
             ultimosku = -99999;
-                            Logger.getLogger("genlog").warning(""+ex);
-                ex.printStackTrace(); 
+            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            ex.printStackTrace();
         }
 
         return ultimosku;
 
     }
-    
-        public String generateSKU()  {
+
+    public String generateSKU() {
         String skuGenerato = getCategoria().substring(0, 2);
         skuGenerato += getCode() + "-";
         skuGenerato += getDatareg();
         return skuGenerato;
 
     }
-            public synchronized String generateData() {
+
+    public synchronized String generateData() {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
@@ -237,7 +231,5 @@ int ultimosku;
     public String toString() {
         return "Prodotto{" + "sku=" + sku + ", datareg=" + datareg + ", nome=" + nome + ", qty=" + qty + ", Categoria=" + Categoria + ", instock=" + instock + ", costo=" + costo + ", qty_min=" + qty_min + ", note=" + note + ", foto=" + foto + ", negozio=" + negozio + ", id=" + code + '}';
     }
-
-   
 
 }

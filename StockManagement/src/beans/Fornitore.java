@@ -9,8 +9,6 @@ import dao.FornitoreDAO;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.function.Supplier;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -52,8 +50,6 @@ public class Fornitore {
         this.note = note;
         this.idfornitore = idfornitore;
         setDatareg(generateData());
-        
-       
 
     }
 
@@ -79,7 +75,6 @@ public class Fornitore {
         setIdfornitore(generateID());
         setDatareg(generateData());
 
-        
     }
 
     public Fornitore() {
@@ -181,9 +176,9 @@ public class Fornitore {
 
         } catch (SQLException ex) {
             idlast = -99999;
-                Logger.getLogger("genlog").warning(""+ex);
-                ex.printStackTrace(); 
-            
+            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            ex.printStackTrace();
+
         }
 
         return idlast;
@@ -208,7 +203,5 @@ public class Fornitore {
     public String toString() {
         return "Fornitore{" + "idfornitore=" + idfornitore + ", datareg=" + datareg + ", fullname=" + fullname + ", p_iva=" + p_iva + ", indirizzo=" + indirizzo + ", tel=" + tel + ", email=" + email + ", note=" + note + '}';
     }
-    
-    
 
 }

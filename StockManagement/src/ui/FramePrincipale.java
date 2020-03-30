@@ -9,7 +9,6 @@ import beans.Ordine;
 import others.JavaProcessId;
 import beans.Prodotto;
 import beans.Utente;
-import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
 import dao.OrdineDAO;
 import dao.ProdottoDAO;
 import dao.UtenteDAO;
@@ -17,49 +16,24 @@ import database.DriverManagerConnectionPool;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Insets;
-import java.awt.Label;
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.RoundRectangle2D;
-import java.io.File;
 import java.io.IOException;
-import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.Action;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -69,14 +43,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import others.RoundedPanel;
 
 /**
@@ -119,7 +89,7 @@ public class FramePrincipale extends JFrame {
         try {
             user = daouten.getByID(nomeuser);
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);        }
 
         //set icona finestra
         ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
@@ -283,9 +253,10 @@ public class FramePrincipale extends JFrame {
             
             
         } catch (SQLException ex) {
-            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+             Logger.getLogger("genlog").warning("SQLException\n"+ex);        
+
         } catch (ParseException ex) {
-            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+             Logger.getLogger("genlog").warning("ParseException\n"+ex);        
         }
 
         pannelloTab.setLayout(new GridLayout(2, 1));
@@ -329,8 +300,9 @@ public class FramePrincipale extends JFrame {
                 try {
                     riavviaStockManagement();
                 } catch (IOException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                } catch (InterruptedException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                }
+ Logger.getLogger("genlog").warning("IOException\n"+ex);                
+                } catch (InterruptedException ex) {
+ Logger.getLogger("genlog").warning("InterruptedException\n"+ex);                }
 
             }
         });
@@ -341,8 +313,9 @@ public class FramePrincipale extends JFrame {
                 try {
                     chiudiStockManagement();
                 } catch (IOException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                } catch (InterruptedException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                }
+ Logger.getLogger("genlog").warning("IOException\n"+ex);               
+                } catch (InterruptedException ex) {
+ Logger.getLogger("genlog").warning("InterruptedException\n"+ex);                }
 
             }
         });
@@ -416,15 +389,15 @@ public class FramePrincipale extends JFrame {
             System.out.println("La connessione: " + con);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(getParent(), "Non trovo nessuna connesione :(");
- Logger.getLogger("genlog").warning(" "+ex);        }
+ Logger.getLogger("genlog").warning("SQLException:Non trovo nessuna connesione\n"+ex);        }
 
         try {
             DriverManagerConnectionPool.releaseConnection(con);
 
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }
+ Logger.getLogger("genlog").warning("SQLException"+ex);        }
 
-        System.out.println("La connessione dopo averla chiusa: " + con);
+      //  System.out.println("La connessione dopo averla chiusa: " + con);
         dispose();
         JavaProcessId.kILL();
 
@@ -529,7 +502,7 @@ public class FramePrincipale extends JFrame {
                         refresh();
 
                     } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                    }
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);                    }
                     disattivaTuttiIBottoniTranne(bottonepremuto.code);
 
                     cardlayout.show(HomePanel, tipo);
@@ -613,8 +586,9 @@ public class FramePrincipale extends JFrame {
         
         
     }   catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        } catch (ParseException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);        
+    } catch (ParseException ex) {
+ Logger.getLogger("genlog").warning("ParseException\n"+ex);        }
     }
     
     
@@ -663,7 +637,7 @@ public class FramePrincipale extends JFrame {
                 try {
                     number = dao.getAll().size();
                 } catch (SQLException ex) {
-                    Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);        
                 }
                  scrittaVai = new JLabel(ImpostaImg("/res/img/users.png"));
                    vai.removeAll();
@@ -681,7 +655,8 @@ public class FramePrincipale extends JFrame {
                         number += Integer.parseInt(dao.getCatAndSum().get(key));
                     }
                 } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                }
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);        
+              }
 
                 vai.addMouseListener(new MouseListener() {
                     @Override
@@ -725,8 +700,9 @@ public class FramePrincipale extends JFrame {
                
             }
             } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);            }   catch (ParseException ex) {
- Logger.getLogger("genlog").warning(" "+ex);                }
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);   
+            }   catch (ParseException ex) {
+ Logger.getLogger("genlog").warning("ParseException\n"+ex);                }
            
             vai.addMouseListener(new MouseListener() {
                 @Override

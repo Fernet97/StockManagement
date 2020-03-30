@@ -1,14 +1,11 @@
 package ui;
 
 import beans.Utente;
-import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 import dao.UtenteDAO;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -20,10 +17,8 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -148,7 +143,7 @@ public class LoginDialog extends javax.swing.JDialog {
         try {
             utente = udao.getByID(user);
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }
+ Logger.getLogger("genlog").warning("SQLException\n"+ex);        }
 
         try {
 
@@ -165,7 +160,8 @@ public class LoginDialog extends javax.swing.JDialog {
             return false;
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(this, "nome utente non valido!");
- Logger.getLogger("genlog").warning(" "+e);            return false;
+ Logger.getLogger("genlog").info("nome utente non valido!\n"+e);          
+ return false;
         }
     }
 
@@ -204,13 +200,13 @@ public class LoginDialog extends javax.swing.JDialog {
             fhu.setFormatter(formatter);
 
         } catch (SecurityException e) {
-             Logger.getLogger("genlog").warning(" "+e);
+             Logger.getLogger("genlog").warning("SecurityException\n"+e);
             e.printStackTrace();
         } catch (IOException e) {
-                         Logger.getLogger("genlog").warning(" "+e);
+                         Logger.getLogger("genlog").warning("IOException\n"+e);
 
             e.printStackTrace();
-        } catch (Exception e) {             Logger.getLogger("genlog").warning(" "+e);
+        } catch (Exception e) {             Logger.getLogger("genlog").warning("Exception\n"+e);
 
             e.printStackTrace();
         }
