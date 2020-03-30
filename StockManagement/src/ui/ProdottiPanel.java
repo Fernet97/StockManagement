@@ -658,18 +658,6 @@ public class ProdottiPanel extends JPanel {
                         File selectedFile = jFileChooser.getSelectedFile();
                         percorsofoto = selectedFile.getAbsolutePath();
                         
-                        Path sourcepath = Paths.get(percorsofoto);
-                        String estensione = FilenameUtils.getExtension(percorsofoto).toString();
-                        // POSSO AGGIUNGERE SOLO FILE PNG
-                        Path destinationepath = Paths.get( "./DATA/IMG/"+casku.getText().substring(0, casku.getText().indexOf('-'))+ "."+estensione);
-                        System.out.println("dd "+destinationepath.toString());
-                        
-                        
-                            //copia del file
-                            Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
-                            percorsofoto = destinationepath.toString();
-
-                        
                         
                         ImageIcon icon = new ImageIcon(percorsofoto);
                         Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
@@ -677,10 +665,9 @@ public class ProdottiPanel extends JPanel {
                         bfoto.setIcon(icon);
 
                     }              
-                        } catch (IOException ex) {
-                            Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
-                        }catch(StringIndexOutOfBoundsException ex){// mi dava -1 alla riga 664
+                        } catch(StringIndexOutOfBoundsException ex){// mi dava -1 alla riga 664
                         Logger.getLogger("userlog").warning("percorso foto \n"+ex);
+                        ex.printStackTrace();
                         }
 
                 }
@@ -787,6 +774,17 @@ public class ProdottiPanel extends JPanel {
                 if (a == JOptionPane.YES_OPTION) {
                     prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
                      ProdottoDAO dao = new ProdottoDAO();
+      
+                    Path sourcepath = Paths.get(percorsofoto);
+                   String estensione = FilenameUtils.getExtension(percorsofoto).toString();
+                   // POSSO AGGIUNGERE SOLO FILE PNG
+                   Path destinationepath = Paths.get( "./DATA/IMG/"+prod.getSku().substring(0, prod.getSku().indexOf("-"))+"."+estensione);
+
+                   //copia del file
+                   Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
+                   percorsofoto = destinationepath.toString();
+
+                    prod.setFoto(percorsofoto);
                     dao.add(prod);
                     form.setVisible(false);
 
@@ -797,6 +795,8 @@ public class ProdottiPanel extends JPanel {
             } catch (SQLException ex) {
                 Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
+                Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
                 Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -861,7 +861,19 @@ public class ProdottiPanel extends JPanel {
            int a= JOptionPane.showConfirmDialog(this,"Dario, sei proprio sicuro?");
            if(a==JOptionPane.YES_OPTION){
              Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected() , Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());              
-            dao.update(prod);               
+            
+                       Path sourcepath = Paths.get(percorsofoto);
+                   String estensione = FilenameUtils.getExtension(percorsofoto).toString();
+                   // POSSO AGGIUNGERE SOLO FILE PNG
+                   Path destinationepath = Paths.get( "./DATA/IMG/"+prod.getSku().substring(0, prod.getSku().indexOf("-"))+"."+estensione);
+
+                   //copia del file
+                   Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
+                   percorsofoto = destinationepath.toString();
+
+                    prod.setFoto(percorsofoto);          
+             
+             dao.update(prod);               
              form.setVisible(false);
 
            }            
@@ -869,7 +881,9 @@ public class ProdottiPanel extends JPanel {
                        
         } catch (SQLException ex) {
             Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }   catch (IOException ex) {
+                Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         try {
             refreshTab();

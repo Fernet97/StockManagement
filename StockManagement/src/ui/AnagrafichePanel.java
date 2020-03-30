@@ -382,7 +382,6 @@ public class AnagrafichePanel extends JPanel {
         protected void fireEditingStopped() {
             try{super.fireEditingStopped();}
             catch(Exception ex){
-                System.err.println("........ BUG SUPREMOOOO ---------");
             };
         }
     }
