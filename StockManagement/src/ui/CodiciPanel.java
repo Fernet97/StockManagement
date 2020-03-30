@@ -99,14 +99,12 @@ public class CodiciPanel extends JPanel{
                 try {
                     refreshTab();
                 } catch (SQLException ex) {
-                    Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
-                }
+ Logger.getLogger("genlog").warning(" "+ex);                }
                 
             try {
                           Desktop.getDesktop().open(new File("./DATA/QRCODE/"));
                       } catch (IOException ex) {
-                          Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
-                      }
+ Logger.getLogger("genlog").warning(" "+ex);                      }
                           
             }
         });
@@ -144,8 +142,7 @@ public class CodiciPanel extends JPanel{
         try {
             refreshTab(); // Aggiorna tavola con  i fornitori del db;
         } catch (SQLException ex) {
-            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        }
                         
              
              
@@ -257,10 +254,8 @@ public class CodiciPanel extends JPanel{
               setIcon(new ImageIcon(percorsoQRgenerato));
               setText(percorsoQRgenerato.substring(9));
           } catch (IOException ex) {
-              Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
-          } catch (WriterException ex) {
-              Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
-          }        
+ Logger.getLogger("genlog").warning(" "+ex);          } catch (WriterException ex) {
+ Logger.getLogger("genlog").warning(" "+ex);          }        
   
       } 
       return this;
@@ -323,8 +318,7 @@ public class CodiciPanel extends JPanel{
                   try {
                       Desktop.getDesktop().open(new File("./DATA/QRCODE/"+path.substring(0, path.indexOf("-"))+".png"));
                   } catch (IOException ex) {
-                      Logger.getLogger(CodiciPanel.class.getName()).log(Level.SEVERE, null, ex);
-                  }
+ Logger.getLogger("genlog").warning(" "+ex);                  }
 
 
               }

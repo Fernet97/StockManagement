@@ -78,8 +78,7 @@ public class StockManagement {
 
 
         } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+ Logger.getLogger("genlog").warning(" "+e);        } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,12 +113,10 @@ public class StockManagement {
                 }
             }
         } catch (Exception e) {
-            // If Nimbus is not available, fall back to cross-platform
-            try {
+ Logger.getLogger("genlog").warning(" "+e);            try {
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             } catch (Exception ex) {
-                // not worth my time
-            }
+ Logger.getLogger("genlog").warning(" "+e);            }
         }
 
         int s_witdh = Toolkit.getDefaultToolkit().getScreenSize().width;

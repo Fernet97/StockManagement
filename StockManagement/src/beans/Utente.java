@@ -192,10 +192,11 @@ public class Utente {
             tmp = lastid.replaceAll("[^0-9]", "");
             idlast = Integer.parseInt(tmp);
         } catch (SQLException ex) {
-            Logger.getLogger(Utente.class.getName()).log(Level.SEVERE, null, ex);
-
+                Logger.getLogger("genlog").warning(""+ex);
+                ex.printStackTrace(); 
         } catch (NullPointerException en) {
-
+                Logger.getLogger("genlog").warning(""+en);
+                en.printStackTrace(); 
             return idlast = 0;
         }
 

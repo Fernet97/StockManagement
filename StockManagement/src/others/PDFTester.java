@@ -81,11 +81,16 @@ public class PDFTester {
             document.close();
             writer.close();
         } catch (DocumentException e) {
+                                            Logger.getLogger("genlog").warning(""+e);
+
             e.printStackTrace();
         } catch (FileNotFoundException e) {
+                                            Logger.getLogger("genlog").warning(""+e);
+
             e.printStackTrace();
         } catch (IOException ex) {
-            Logger.getLogger(PDFTester.class.getName()).log(Level.SEVERE, null, ex);
+                                            Logger.getLogger("genlog").warning(""+ex);
+
         }
 
     }

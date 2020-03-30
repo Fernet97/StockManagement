@@ -105,7 +105,7 @@ public class AnagrafichePanel extends JPanel {
             try {
                 refreshTab();
             } catch (SQLException ex) {
-                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+                                            Logger.getLogger("genlog").warning(" "+ex);
             }
           }
         };
@@ -168,8 +168,7 @@ public class AnagrafichePanel extends JPanel {
         try {
             refreshTab(); // Aggiorna tavola con  i fornitori del db;
         } catch (SQLException ex) {
-            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        }
 
         table.setRowHeight(40); //altezza celle
 
@@ -267,6 +266,7 @@ public class AnagrafichePanel extends JPanel {
                     try{
                         fireEditingStopped();}
                     catch(Exception ex){
+                         Logger.getLogger("genlog").warning(" "+ex);
                     };
                 }
             });
@@ -315,7 +315,7 @@ public class AnagrafichePanel extends JPanel {
                             try {
                                 dao.remove(table.getValueAt(row, 1).toString());
                             } catch (Exception e) {
-                                //JOptionPane.showMessageDialog(getComponent(), "Se vuoi cancellare un fornitore, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");
+                                 Logger.getLogger("genlog").warning(" "+e);
                                 e.printStackTrace();
 
                             }
@@ -326,8 +326,7 @@ public class AnagrafichePanel extends JPanel {
                             try {
                                 dao.remove(table.getValueAt(row, 1).toString());
                             } catch (Exception e) {
-                                JOptionPane.showMessageDialog(getComponent(), "Se vuoi cancellare un Utente, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");
-                                e.printStackTrace();
+ Logger.getLogger("genlog").warning(" "+e);                                e.printStackTrace();
 
                             }
                         }
@@ -337,8 +336,7 @@ public class AnagrafichePanel extends JPanel {
                             try {
                                 //dao.remove(table.getValueAt(row, 1).toString());
                             } catch (Exception e) {
-                                JOptionPane.showMessageDialog(getComponent(), "Se vuoi cancellare un cliente, devi prima cancellare o modificare le dipendenze con i prodotti relativi a quest'ultimo!");
-                                e.printStackTrace();
+ Logger.getLogger("genlog").warning(" "+e);                                e.printStackTrace();
 
                             }
                         }
@@ -368,8 +366,7 @@ public class AnagrafichePanel extends JPanel {
             try {
                 refreshTab();
             } catch (SQLException ex) {
-                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+ Logger.getLogger("genlog").warning(" "+ex);            }
             clicked = false;
             return new String(label);
         }
@@ -382,6 +379,7 @@ public class AnagrafichePanel extends JPanel {
         protected void fireEditingStopped() {
             try{super.fireEditingStopped();}
             catch(Exception ex){
+                 Logger.getLogger("genlog").warning(" "+ex);
             };
         }
     }
@@ -841,6 +839,7 @@ public class AnagrafichePanel extends JPanel {
 
                 } catch (SQLException ex) {
                     Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+                     Logger.getLogger("genlog").warning(" "+ex);
                 }
 
             }
@@ -953,16 +952,13 @@ public class AnagrafichePanel extends JPanel {
                 }
 
             } catch (SQLException ex) {
-                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+ Logger.getLogger("genlog").warning(" "+ex);            } catch (InterruptedException ex) {
             }
 
             try {
                 refreshTab();
             } catch (SQLException ex) {
-                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+ Logger.getLogger("genlog").warning(" "+ex);            }
 
         }
 
@@ -1011,16 +1007,13 @@ public class AnagrafichePanel extends JPanel {
                 }
 
             } catch (SQLException ex) {
-                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+ Logger.getLogger("genlog").warning(" "+ex);            } catch (InterruptedException ex) {
             }
 
             try {
                 refreshTab();
             } catch (SQLException ex) {
-                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+ Logger.getLogger("genlog").warning(" "+ex);            }
         }
 
     }

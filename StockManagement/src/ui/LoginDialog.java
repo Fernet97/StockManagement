@@ -148,8 +148,7 @@ public class LoginDialog extends javax.swing.JDialog {
         try {
             utente = udao.getByID(user);
         } catch (SQLException ex) {
-            Logger.getLogger(LoginDialog.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        }
 
         try {
 
@@ -166,8 +165,7 @@ public class LoginDialog extends javax.swing.JDialog {
             return false;
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(this, "nome utente non valido!");
-             Logger.getLogger("genlog").info("Nome utente non valido!\n");
-            return false;
+ Logger.getLogger("genlog").warning(" "+e);            return false;
         }
     }
 
@@ -206,10 +204,14 @@ public class LoginDialog extends javax.swing.JDialog {
             fhu.setFormatter(formatter);
 
         } catch (SecurityException e) {
+             Logger.getLogger("genlog").warning(" "+e);
             e.printStackTrace();
         } catch (IOException e) {
+                         Logger.getLogger("genlog").warning(" "+e);
+
             e.printStackTrace();
-        } catch (Exception e) {
+        } catch (Exception e) {             Logger.getLogger("genlog").warning(" "+e);
+
             e.printStackTrace();
         }
     }

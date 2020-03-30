@@ -192,8 +192,9 @@ public class Ordine {
 //            idlast = Integer.parseInt(tmp);
 
         } catch (SQLException ex) {
-            Logger.getLogger(Ordine.class.getName()).log(Level.SEVERE, null, ex);
             lastid = -99999;
+                            Logger.getLogger("genlog").warning(""+ex);
+                ex.printStackTrace(); 
         }
 
         return lastid;

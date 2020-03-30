@@ -163,8 +163,7 @@ public class ProdottiPanel extends JPanel {
         try {
             refreshTab(); // Aggiorna tavola con  i fornitori del db;
         } catch (SQLException ex) {
-            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        }
 
         table.setRowHeight(40); //altezza celle
 
@@ -339,6 +338,7 @@ public class ProdottiPanel extends JPanel {
                     try{
                     fireEditingStopped();
                     }catch(IndexOutOfBoundsException es) {
+                         Logger.getLogger("genlog").warning(" "+es);
                       }
                     
                 }
@@ -392,8 +392,7 @@ public class ProdottiPanel extends JPanel {
 
                             refreshTab();
                         } catch (SQLException ex) {
-                            Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+ Logger.getLogger("genlog").warning(" "+ex);                        }
                     }
                 } else if (button.getText().equals("Modifica")) { // APRI FORM PER MODIFICARE RECORD
 
@@ -422,8 +421,7 @@ public class ProdottiPanel extends JPanel {
                             jComboBox.addItem(f.getIdfornitore() +"|"+f.getFullname());
                         }
                     } catch (SQLException ex) {
-                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+ Logger.getLogger("genlog").warning(" "+ex);                    }
                     
                     jComboBox.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -484,8 +482,7 @@ public class ProdottiPanel extends JPanel {
             try {
                 initComponents();
             } catch (SQLException ex) {
-                Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+ Logger.getLogger("genlog").warning(" "+ex);            }
 
         }
 
@@ -509,8 +506,7 @@ public class ProdottiPanel extends JPanel {
             }
                 
             } catch (SQLException ex) {
-                Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+ Logger.getLogger("genlog").warning(" "+ex);            }
 
             ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
             setSize(600, (650));
@@ -698,8 +694,7 @@ public class ProdottiPanel extends JPanel {
                             try {
                                 getOggettoforFormUpdate();
                             } catch (InterruptedException ex) {
-                                Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+ Logger.getLogger("genlog").warning(" "+ex);                            }
                         } else {
                             getOggettoforFormSave();
                         }
@@ -749,13 +744,14 @@ public class ProdottiPanel extends JPanel {
 
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Controlla che \"Quantità\",  \"qty minima\",  siano numeri validi. [ Per il costo usare \".\" per indicare la parte decimale ]");
+                 Logger.getLogger("genlog").warning(" "+e);
                 return false;
             }
 
             //controlla se sono float ...
             try {
                 Float.parseFloat(ccosto.getText());
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException e) { Logger.getLogger("genlog").warning(" "+e);
                 JOptionPane.showMessageDialog(this, "Controlla che le quantità ed il costo siano numeri validi! [Per il costo usare '.' per indicare la parte decimale]");
                 return false;
             }
@@ -775,6 +771,7 @@ public class ProdottiPanel extends JPanel {
                     prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
                      ProdottoDAO dao = new ProdottoDAO();
       
+                     if(percorsofoto != null){
                     Path sourcepath = Paths.get(percorsofoto);
                    String estensione = FilenameUtils.getExtension(percorsofoto).toString();
                    // POSSO AGGIUNGERE SOLO FILE PNG
@@ -784,7 +781,7 @@ public class ProdottiPanel extends JPanel {
                    Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
                    percorsofoto = destinationepath.toString();
 
-                    prod.setFoto(percorsofoto);
+                    prod.setFoto(percorsofoto);}
                     dao.add(prod);
                     form.setVisible(false);
 
@@ -793,12 +790,9 @@ public class ProdottiPanel extends JPanel {
                 refreshTab();
   
             } catch (SQLException ex) {
-                Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+ Logger.getLogger("genlog").warning(" "+ex);            } catch (InterruptedException ex) {
             } catch (IOException ex) {
-                Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+ Logger.getLogger("genlog").warning(" "+ex);            }
 
         }
 
@@ -848,8 +842,7 @@ public class ProdottiPanel extends JPanel {
             
                        
         } catch (SQLException ex) {
-            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-        }   
+ Logger.getLogger("genlog").warning(" "+ex);        }   
 
 
         }
@@ -862,6 +855,7 @@ public class ProdottiPanel extends JPanel {
            if(a==JOptionPane.YES_OPTION){
              Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected() , Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());              
             
+             if(percorsofoto != null){
                        Path sourcepath = Paths.get(percorsofoto);
                    String estensione = FilenameUtils.getExtension(percorsofoto).toString();
                    // POSSO AGGIUNGERE SOLO FILE PNG
@@ -871,7 +865,7 @@ public class ProdottiPanel extends JPanel {
                    Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
                    percorsofoto = destinationepath.toString();
 
-                    prod.setFoto(percorsofoto);          
+                    prod.setFoto(percorsofoto);     }     
              
              dao.update(prod);               
              form.setVisible(false);
@@ -880,16 +874,13 @@ public class ProdottiPanel extends JPanel {
             
                        
         } catch (SQLException ex) {
-            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-        }   catch (IOException ex) {
-                Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+ Logger.getLogger("genlog").warning(" "+ex);        }   catch (IOException ex) {
             }
 
         try {
             refreshTab();
         } catch (SQLException ex) {
-            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        }
              
         }
 

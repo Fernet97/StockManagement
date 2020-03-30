@@ -9,6 +9,7 @@ import dao.FornitoreDAO;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -179,8 +180,10 @@ public class Fornitore {
             idlast = Integer.parseInt(tmp);
 
         } catch (SQLException ex) {
-            Logger.getLogger(Fornitore.class.getName()).log(Level.SEVERE, null, ex);
             idlast = -99999;
+                Logger.getLogger("genlog").warning(""+ex);
+                ex.printStackTrace(); 
+            
         }
 
         return idlast;

@@ -95,8 +95,7 @@ class CategoriePanel extends JPanel {
                 try {
                     refreshTab();
                 } catch (SQLException ex) {
-                    Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-                }
+ Logger.getLogger("genlog").warning(" "+ex);                }
 
 
 
@@ -134,8 +133,7 @@ class CategoriePanel extends JPanel {
              try {
               refreshTab();
           } catch (SQLException ex) {
-              Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-          }
+ Logger.getLogger("genlog").warning(" "+ex);          }
              
              
                 

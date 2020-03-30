@@ -5,6 +5,8 @@
  */
 package others;
 
+import java.util.logging.Logger;
+
 /**
  *
  * @author Fernet
@@ -22,6 +24,8 @@ public abstract class Cryptorr {
             }
              return sb.toString();
          } catch (java.security.NoSuchAlgorithmException e) {
+                             Logger.getLogger("genlog").warning(""+e);
+                e.printStackTrace();
          }
          return null;
 }

@@ -28,8 +28,11 @@ public class JavaProcessId {
 //                StockManagement.fh.close();  //non se fa
                 StockManagement.closeFH();
             } catch(FileNotFoundException sEx) {
+                                Logger.getLogger("genlog").warning(""+sEx);
                 sEx.printStackTrace();
             } catch (Exception ex) {
+                                                Logger.getLogger("genlog").warning(""+ex);
+
                 ex.printStackTrace();
             }
             
@@ -84,6 +87,8 @@ public class JavaProcessId {
         try {
             builder.start();
         } catch (IOException e) {
+                                            Logger.getLogger("genlog").warning(""+e);
+
             e.printStackTrace();
         }
     }

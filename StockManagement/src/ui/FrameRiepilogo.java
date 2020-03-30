@@ -157,8 +157,7 @@ class FrameRiepilogo extends JFrame {
 
                         }
                     } catch (SQLException ex) {
-                        Logger.getLogger(FrameRiepilogo.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+ Logger.getLogger("genlog").warning(" "+ex);                    }
 
                     setVisible(false);
                     panadmin.refreshTab();
@@ -221,10 +220,8 @@ class FrameRiepilogo extends JFrame {
                     ordine.getQty_arrivata() +"/"+ordine.getQty_in_arrivo(), datao, arrivato, messoInStock});
             }
         } catch (SQLException ex) {
-            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(FrameRiepilogo.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        } catch (ParseException ex) {
+ Logger.getLogger("genlog").warning(" "+ex);        }
 
     }
 

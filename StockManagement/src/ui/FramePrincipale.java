@@ -119,8 +119,7 @@ public class FramePrincipale extends JFrame {
         try {
             user = daouten.getByID(nomeuser);
         } catch (SQLException ex) {
-            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        }
 
         //set icona finestra
         ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
@@ -330,10 +329,8 @@ public class FramePrincipale extends JFrame {
                 try {
                     riavviaStockManagement();
                 } catch (IOException ex) {
-                    Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-                }
+ Logger.getLogger("genlog").warning(" "+ex);                } catch (InterruptedException ex) {
+ Logger.getLogger("genlog").warning(" "+ex);                }
 
             }
         });
@@ -344,10 +341,8 @@ public class FramePrincipale extends JFrame {
                 try {
                     chiudiStockManagement();
                 } catch (IOException ex) {
-                    Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-                }
+ Logger.getLogger("genlog").warning(" "+ex);                } catch (InterruptedException ex) {
+ Logger.getLogger("genlog").warning(" "+ex);                }
 
             }
         });
@@ -404,8 +399,7 @@ public class FramePrincipale extends JFrame {
             DriverManagerConnectionPool.releaseConnection(con);
 
         } catch (SQLException ex) {
-            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        }
 
         System.out.println("La connessione dopo averla chiusa: " + con);
         dispose();
@@ -422,15 +416,13 @@ public class FramePrincipale extends JFrame {
             System.out.println("La connessione: " + con);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(getParent(), "Non trovo nessuna connesione :(");
-            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        }
 
         try {
             DriverManagerConnectionPool.releaseConnection(con);
 
         } catch (SQLException ex) {
-            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        }
 
         System.out.println("La connessione dopo averla chiusa: " + con);
         dispose();
@@ -537,8 +529,7 @@ public class FramePrincipale extends JFrame {
                         refresh();
 
                     } catch (SQLException ex) {
-                        Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+ Logger.getLogger("genlog").warning(" "+ex);                    }
                     disattivaTuttiIBottoniTranne(bottonepremuto.code);
 
                     cardlayout.show(HomePanel, tipo);
@@ -622,10 +613,8 @@ public class FramePrincipale extends JFrame {
         
         
     }   catch (SQLException ex) {
-            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        } catch (ParseException ex) {
+ Logger.getLogger("genlog").warning(" "+ex);        }
     }
     
     
@@ -692,8 +681,7 @@ public class FramePrincipale extends JFrame {
                         number += Integer.parseInt(dao.getCatAndSum().get(key));
                     }
                 } catch (SQLException ex) {
-                    Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-                }
+ Logger.getLogger("genlog").warning(" "+ex);                }
 
                 vai.addMouseListener(new MouseListener() {
                     @Override
@@ -737,10 +725,8 @@ public class FramePrincipale extends JFrame {
                
             }
             } catch (SQLException ex) {
-                Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-            }   catch (ParseException ex) {
-                    Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
-                }
+ Logger.getLogger("genlog").warning(" "+ex);            }   catch (ParseException ex) {
+ Logger.getLogger("genlog").warning(" "+ex);                }
            
             vai.addMouseListener(new MouseListener() {
                 @Override

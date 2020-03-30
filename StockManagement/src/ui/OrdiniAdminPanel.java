@@ -147,8 +147,7 @@ public class OrdiniAdminPanel extends JPanel {
                     }
 
                 } catch (SQLException ex) {
-                    Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-                }
+ Logger.getLogger("genlog").warning(" "+ex);                }
 
             }
 
@@ -171,8 +170,7 @@ public class OrdiniAdminPanel extends JPanel {
                 jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
             }
         } catch (SQLException ex) {
-            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        }
         jComboBox.setForeground(Color.black);
         jComboBox.setBackground(Color.DARK_GRAY);
         jComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -199,8 +197,7 @@ public class OrdiniAdminPanel extends JPanel {
                         ((DefaultListModel) list.getModel()).addElement(pp.getSku() + "|  " + pp.getNome());
                     }
                 } catch (SQLException ex) {
-                    Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-                }
+ Logger.getLogger("genlog").warning(" "+ex);                }
             }
         });
         sxpan.add(jComboBox);
@@ -341,8 +338,7 @@ public class OrdiniAdminPanel extends JPanel {
                     }
                 }
                 } catch (SQLException ex) {
-                    Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-                }
+ Logger.getLogger("genlog").warning(" "+ex);                }
 
             }
         });
@@ -359,10 +355,8 @@ public class OrdiniAdminPanel extends JPanel {
                 model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica ordine"});
             }
         } catch (SQLException ex) {
-            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        } catch (ParseException ex) {
+ Logger.getLogger("genlog").warning(" "+ex);        }
 
         princ.add(SXdown);
 
@@ -403,8 +397,7 @@ public class OrdiniAdminPanel extends JPanel {
                     try {
                         bean.startOrdine();
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+ Logger.getLogger("genlog").warning(" "+ex);                    }
 
                     for (int i = 0; i < model.getRowCount(); i++) {
                         try {
@@ -416,10 +409,8 @@ public class OrdiniAdminPanel extends JPanel {
                             Ordine o = new Ordine(Integer.parseInt(model.getValueAt(i, 1).toString()), Integer.parseInt(model.getValueAt(i, 3).toString()), user, model.getValueAt(i, 0).toString(), 0, subselezionato, 0);
                             ordao.add(o);
                         } catch (SQLException ex) {
-                            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+ Logger.getLogger("genlog").warning(" "+ex);                        } catch (InterruptedException ex) {
+ Logger.getLogger("genlog").warning(" "+ex);                        }
 
                     }
                     refreshTab();
@@ -460,8 +451,7 @@ public class OrdiniAdminPanel extends JPanel {
                 jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
             }
         } catch (SQLException ex) {
-            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        }
 
         casella.setBackground(Color.gray);
         casella.setText("");
@@ -480,10 +470,8 @@ public class OrdiniAdminPanel extends JPanel {
                 model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica ordine"});
             }
         } catch (SQLException ex) {
-            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        } catch (ParseException ex) {
+ Logger.getLogger("genlog").warning(" "+ex);        }
         
         
         
@@ -630,8 +618,7 @@ public class OrdiniAdminPanel extends JPanel {
                 
             }
         } catch (SQLException ex) {
-            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ Logger.getLogger("genlog").warning(" "+ex);        }
 
     }
     
@@ -688,8 +675,7 @@ public class OrdiniAdminPanel extends JPanel {
                         JOptionPane.showMessageDialog(getParent(), "Scegliere un formato numerico per la quantità ed i giorni all consegna");
                     }
                 } catch (SQLException ex) {
-                    Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-                }
+ Logger.getLogger("genlog").warning(" "+ex);                }
 
             }
         });

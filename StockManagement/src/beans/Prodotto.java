@@ -209,8 +209,9 @@ int ultimosku;
 
 
         } catch (SQLException ex) {
-            Logger.getLogger(Prodotto.class.getName()).log(Level.SEVERE, null, ex);
             ultimosku = -99999;
+                            Logger.getLogger("genlog").warning(""+ex);
+                ex.printStackTrace(); 
         }
 
         return ultimosku;

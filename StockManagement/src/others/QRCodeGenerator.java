@@ -13,6 +13,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.logging.Logger;
 
 /**
  *
@@ -38,9 +39,12 @@ public class QRCodeGenerator {
             
             
         } catch (WriterException e) {
-            System.out.println("Could not generate QR Code, WriterException :: " + e.getMessage());
+                                            Logger.getLogger("genlog").warning("Could not generate QR Code, WriterException :: " + e.getMessage()+"\n"+e);
+
         } catch (IOException e) {
-            System.out.println("Could not generate QR Code, IOException :: " + e.getMessage());
+                                                        Logger.getLogger("genlog").warning("Could not generate QR Code, IOException :: " + e.getMessage()+"\n"+e);
+
+            
         }
     }
     
