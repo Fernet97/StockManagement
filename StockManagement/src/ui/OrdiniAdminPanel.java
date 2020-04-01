@@ -538,11 +538,18 @@ public class OrdiniAdminPanel extends JPanel {
         public Object getCellEditorValue() {
             if (clicked) // SE CLICCATO QUEL BOTTONE:::::::::::::
             {
+               boolean instockk = false;
                 if (button.getText().equals("Apri")) {
-                    FrameRiepilogo f = new FrameRiepilogo(getInstance(), table.getValueAt(row, 0).toString(), table.getValueAt(row, 1).toString(), table.getValueAt(row, 3).toString());
+                    if(table.getValueAt(row, 4).toString().equals("3")) {
+                        instockk = true;
+                        
+                    }
+                    FrameRiepilogo f = new FrameRiepilogo(getInstance(), table.getValueAt(row, 0).toString(), table.getValueAt(row, 1).toString(), table.getValueAt(row, 3).toString(), instockk);
                     f.setResizable(false);
                     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     f.setSize(1400, 400);
+                    f.setLocationRelativeTo(null);  // CENTRA 
+                    f.setAlwaysOnTop(true);  // Focus
                     f.setVisible(true);
                     f.setTitle("Riepilogo ordine: " + table.getValueAt(row, 0));
 
@@ -678,6 +685,8 @@ public class OrdiniAdminPanel extends JPanel {
         });
 
         popup.add(ButtonConferma);
+        popup.setLocationRelativeTo(null); 
+        popup.setAlwaysOnTop(true);
         popup.setVisible(true);
 
     }

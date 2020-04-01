@@ -59,11 +59,14 @@ class FrameRiepilogo extends JFrame {
     private String arrivato;
     private String messoInStock;
     private String costoTot;
+    private boolean giamessoaposto;
     
-    public FrameRiepilogo(OrdiniAdminPanel panAdmin, String numordine, String dataordine, String costoTot) {
+    
+    public FrameRiepilogo(OrdiniAdminPanel panAdmin, String numordine, String dataordine, String costoTot, boolean giamessoaposto ) {
         this.panadmin = panAdmin;
         this.Numordine = numordine;
         this.costoTot = costoTot;
+        this.giamessoaposto = giamessoaposto;
 
         ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
         this.setIconImage(img.getImage());
@@ -106,6 +109,7 @@ class FrameRiepilogo extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                setAlwaysOnTop(false);
 
                 int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di voler apportare le seguenti modifiche?????");
 
@@ -230,7 +234,11 @@ class FrameRiepilogo extends JFrame {
             setText((value == null) ? "" : value.toString());
 
             setIcon(ImpostaImg("/res/img/pencil.png"));
-
+            if(giamessoaposto){
+                setEnabled(false);
+                setIcon(null);
+            }
+            
             return this;
         }
 
@@ -261,6 +269,8 @@ class FrameRiepilogo extends JFrame {
             this.table = table;
             this.row = row;
             this.col = column;
+            
+
 
             skusel = table.getValueAt(row, 2).toString();
             button.setForeground(Color.black);
@@ -269,6 +279,11 @@ class FrameRiepilogo extends JFrame {
             label = (value == null) ? "" : value.toString();
             button.setText(label);
             button.setIcon(ImpostaImg("/res/img/pencil.png"));
+        
+            if(giamessoaposto){
+                button.setEnabled(false);
+                button.setIcon(null);
+            }
 
             clicked = true;
             return button;
@@ -281,7 +296,11 @@ class FrameRiepilogo extends JFrame {
                 f.setResizable(false);
                 f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 f.setSize(500, 150);
-                f.setVisible(true);
+                f.setLocationRelativeTo(null); 
+                f.setAlwaysOnTop(true);
+                
+                f.setVisible(!giamessoaposto);
+                
                 f.setTitle(Numordine + "| " + skusel);
 
                 ProdottoDAO prodao = new ProdottoDAO();

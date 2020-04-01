@@ -72,11 +72,8 @@ public class ProdottiPanel extends JPanel {
     public FormProdotti form;
     public ArrayList<String> list_cat_new;
     private final JTable table;
-    public  String percorsofoto;
+    public String percorsofoto;
     private FramePrincipale frameprinc;
-
-
-    
 
     public ProdottiPanel() {
         list_cat_new = new ArrayList<>();
@@ -112,6 +109,8 @@ public class ProdottiPanel extends JPanel {
                 }//debug
 
                 form = new FormProdotti("ADD", null);
+                form.setLocationRelativeTo(null);
+                form.setAlwaysOnTop(true);
                 form.setResizable(false);
                 form.setVisible(true);
                 form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -147,7 +146,8 @@ public class ProdottiPanel extends JPanel {
         try {
             refreshTab(); // Aggiorna tavola con  i fornitori del db;
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);        }
+            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+        }
 
         table.setRowHeight(40); //altezza celle
 
@@ -218,18 +218,17 @@ public class ProdottiPanel extends JPanel {
         model.setRowCount(0);
 
         ProdottoDAO dao = new ProdottoDAO();
-         FornitoreDAO forndao = new FornitoreDAO();
-         
+        FornitoreDAO forndao = new FornitoreDAO();
+
         OrdineDAO daoo = new OrdineDAO();
 
-
         for (Prodotto pro : dao.getAll()) {
-            Fornitore forni = forndao.getByID( daoo.getFPr(pro.getSku()));
-            String forny = forni.getIdfornitore()+"|  "+ forni.getFullname();
-            
+            Fornitore forni = forndao.getByID(daoo.getFPr(pro.getSku()));
+            String forny = forni.getIdfornitore() + "|  " + forni.getFullname();
+
             // CONDENSA 0s
             BigDecimal bd = new BigDecimal(String.valueOf(pro.getCosto()));
-            model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(),  bd.toPlainString() , pro.getNote(), pro.getQty_min(), "Modifica", "Cancella", "Ordina"});
+            model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), pro.getNote(), pro.getQty_min(), "Modifica", "Cancella", "Ordina"});
 
         }
 
@@ -244,7 +243,6 @@ public class ProdottiPanel extends JPanel {
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-
 
             if (Integer.parseInt(table.getValueAt(row, 4).toString()) <= Integer.parseInt(table.getValueAt(row, 9).toString())) {
 
@@ -319,12 +317,12 @@ public class ProdottiPanel extends JPanel {
             button.setOpaque(true);
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    try{
-                    fireEditingStopped();
-                    }catch(IndexOutOfBoundsException es) {
-                         Logger.getLogger("genlog").warning("IndexOutOfBoundsException\n"+es);
-                      }
-                    
+                    try {
+                        fireEditingStopped();
+                    } catch (IndexOutOfBoundsException es) {
+                        Logger.getLogger("genlog").warning("IndexOutOfBoundsException\n" + es);
+                    }
+
                 }
             });
         }
@@ -376,20 +374,25 @@ public class ProdottiPanel extends JPanel {
 
                             refreshTab();
                         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);                        }
+                            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                        }
                     }
                 } else if (button.getText().equals("Modifica")) { // APRI FORM PER MODIFICARE RECORD
 
                     form = new FormProdotti("UPDATE", table.getValueAt(row, 0).toString());
                     form.setResizable(false);
+                    form.setLocationRelativeTo(null);
+                    form.setAlwaysOnTop(true);
                     form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     form.setVisible(true);
 
                 } else if (button.getText().equals("Ordina")) { // APRI FORM PER MODIFICARE RECORD
-                        //Se un fornitore non è definito
-                        if(table.getValueAt(row, 5).toString().equals("null|  null")){
+                    //Se un fornitore non è definito
+                    if (table.getValueAt(row, 5).toString().equals("null|  null")) {
                         vaiarod = new JFrame();
+                        vaiarod.setLocationRelativeTo(null); 
                         vaiarod.setResizable(false);
+                        vaiarod.setAlwaysOnTop(true);
                         vaiarod.setSize(new Dimension(300, 300));
                         vaiarod.setVisible(true);
                         vaiarod.setLayout(new GridLayout(2, 1));
@@ -397,30 +400,31 @@ public class ProdottiPanel extends JPanel {
                         FornitoreDAO forndao = new FornitoreDAO();
                         jComboBox = new JComboBox<>();
                         vaiarod.add(jComboBox);
-                        
-                        prodSceltoxOrdine = table.getValueAt(row, 0).toString()+"|"+table.getValueAt(row, 2).toString();
-                        
-                    try {
-                        for(Fornitore f :forndao.getAll()){
-                            jComboBox.addItem(f.getIdfornitore() +"|"+f.getFullname());
+
+                        prodSceltoxOrdine = table.getValueAt(row, 0).toString() + "|" + table.getValueAt(row, 2).toString();
+
+                        try {
+                            for (Fornitore f : forndao.getAll()) {
+                                jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
+                            }
+
+                        } catch (SQLException ex) {
+                            Logger.getLogger("genlog").warning("SQLException\n" + ex);
                         }
-                    } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);                    }
-                    
-                    jComboBox.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        frameprinc.VaiAOrdiniconProdFORNULL( jComboBox.getSelectedItem().toString(), prodSceltoxOrdine);
-                        vaiarod.setVisible(false);
-                        
-                    }
-                    });
-                
-                   } 
-                   // SE IL FORNITORE ERA GIA' DEFINITO
-                   else  {       
+
+                        jComboBox.addActionListener(new java.awt.event.ActionListener() {
+                            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                frameprinc.VaiAOrdiniconProdFORNULL(jComboBox.getSelectedItem().toString(), prodSceltoxOrdine);
+                                vaiarod.setVisible(false);
+
+                            }
+                        });
+
+                    } // SE IL FORNITORE ERA GIA' DEFINITO
+                    else {
                         frameprinc.VaiAOrdiniconProdFornCEH(table.getValueAt(row, 0).toString());
-                        
-                   }   
+
+                    }
                 }
 
             }
@@ -461,20 +465,18 @@ public class ProdottiPanel extends JPanel {
          * Creates new form FormProdotti
          */
         public FormProdotti() {
-            
-            
+
             try {
                 initComponents();
             } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);            }
+                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            }
 
         }
 
         private FormProdotti(String mod, String idSelected) {
             modalita = mod;
             IdSelezionato = idSelected;
-            
-
 
             try {
                 initComponents();
@@ -482,20 +484,20 @@ public class ProdottiPanel extends JPanel {
                 casdatareg.setEditable(false);
                 casku.setBackground(Color.DARK_GRAY);
                 casdatareg.setBackground(Color.DARK_GRAY);
-                
-            if (modalita.equals("UPDATE")) {
-                setFormAsID(idSelected);
-                cat.setEnabled(false);
-                cat.setBackground(Color.darkGray);
-            }
-                
+
+                if (modalita.equals("UPDATE")) {
+                    setFormAsID(idSelected);
+                    cat.setEnabled(false);
+                    cat.setBackground(Color.darkGray);
+                }
+
             } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);            }
+                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            }
 
             ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
             setSize(600, (650));
             this.setIconImage(img.getImage());
-
 
         }
 
@@ -576,23 +578,23 @@ public class ProdottiPanel extends JPanel {
 
             cat = new JComboBox<>();
             cat.setFont(new Font("Arial Black", Font.BOLD, 15));
-            
+
             ProdottoDAO dao = new ProdottoDAO();
-        // Cat dal db + Cat dinamiche aggiunte prima in java
-        String[] list_prod = new String[dao.getAll().size()+ list_cat_new.size()+1];
-        for(int y =0; y<list_cat_new.size(); y++){ //Aggiungo le categorie aggiunte prima dinamicamente..
-            list_prod[y] = list_cat_new.get(y);
-        }        
-             
-        Iterator<Prodotto> iter = dao.getAll().iterator();
-        int i =0;
-        int sum = list_cat_new.size();
-        while(iter.hasNext()){ //Aggiungo prima le categorie estrapolate dal db..
-            list_prod[sum+i] = iter.next().getCategoria();
-            i++;
-        }
-        String[] stringsP = Arrays.stream(list_prod).distinct().toArray(String[]:: new);;
-         
+            // Cat dal db + Cat dinamiche aggiunte prima in java
+            String[] list_prod = new String[dao.getAll().size() + list_cat_new.size() + 1];
+            for (int y = 0; y < list_cat_new.size(); y++) { //Aggiungo le categorie aggiunte prima dinamicamente..
+                list_prod[y] = list_cat_new.get(y);
+            }
+
+            Iterator<Prodotto> iter = dao.getAll().iterator();
+            int i = 0;
+            int sum = list_cat_new.size();
+            while (iter.hasNext()) { //Aggiungo prima le categorie estrapolate dal db..
+                list_prod[sum + i] = iter.next().getCategoria();
+                i++;
+            }
+            String[] stringsP = Arrays.stream(list_prod).distinct().toArray(String[]::new);;
+
             cat.setModel(new javax.swing.DefaultComboBoxModel<>(stringsP));
             cat.setForeground(Color.black);
             cat.setBackground(Color.DARK_GRAY);
@@ -629,26 +631,25 @@ public class ProdottiPanel extends JPanel {
             bfoto = new JButton();
             bfoto.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    try{
-                    JFileChooser jFileChooser = new JFileChooser();
-                    jFileChooser.setCurrentDirectory(new File("./"));
-                    int result = jFileChooser.showOpenDialog(new JFrame());
-                    if (result == JFileChooser.APPROVE_OPTION) {
-                        // File selezionato
-                        File selectedFile = jFileChooser.getSelectedFile();
-                        percorsofoto = selectedFile.getAbsolutePath();
-                        
-                        
-                        ImageIcon icon = new ImageIcon(percorsofoto);
-                        Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
-                        icon.setImage(ImmagineScalata);
-                        bfoto.setIcon(icon);
+                    try {
+                        JFileChooser jFileChooser = new JFileChooser();
+                        jFileChooser.setCurrentDirectory(new File("./"));
+                        int result = jFileChooser.showOpenDialog(new JFrame());
+                        if (result == JFileChooser.APPROVE_OPTION) {
+                            // File selezionato
+                            File selectedFile = jFileChooser.getSelectedFile();
+                            percorsofoto = selectedFile.getAbsolutePath();
 
-                    }              
-                        } catch(StringIndexOutOfBoundsException ex){// mi dava -1 alla riga 664
-                        Logger.getLogger("userlog").warning("StringIndexOutOfBoundsException: percorso foto \n"+ex);
-                        ex.printStackTrace();
+                            ImageIcon icon = new ImageIcon(percorsofoto);
+                            Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
+                            icon.setImage(ImmagineScalata);
+                            bfoto.setIcon(icon);
+
                         }
+                    } catch (StringIndexOutOfBoundsException ex) {// mi dava -1 alla riga 664
+                        Logger.getLogger("userlog").warning("StringIndexOutOfBoundsException: percorso foto \n" + ex);
+                        ex.printStackTrace();
+                    }
 
                 }
             });
@@ -678,14 +679,14 @@ public class ProdottiPanel extends JPanel {
                             try {
                                 getOggettoforFormUpdate();
                             } catch (InterruptedException ex) {
- Logger.getLogger("genlog").warning("InterruptedException\n"+ex);                            }
+                                Logger.getLogger("genlog").warning("InterruptedException\n" + ex);
+                            }
                         } else {
                             getOggettoforFormSave();
                         }
                     }
                 }
             }
-                    
             );
 
             JButton annulla = new JButton("Annulla");
@@ -716,9 +717,9 @@ public class ProdottiPanel extends JPanel {
                 JOptionPane.showMessageDialog(this, "Compila tutti i campi! ['Note' è opzionale]");
                 return false;
             }
-            
-            if(cat.getSelectedItem() == null){
-                            JOptionPane.showMessageDialog(this, "Devi scegliere una categoria!!");
+
+            if (cat.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(this, "Devi scegliere una categoria!!");
 
             }
 
@@ -728,14 +729,15 @@ public class ProdottiPanel extends JPanel {
 
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Controlla che \"Quantità\",  \"qty minima\",  siano numeri validi. [ Per il costo usare \".\" per indicare la parte decimale ]");
-                 Logger.getLogger("genlog").warning("NumberFormatException\n"+e);
+                Logger.getLogger("genlog").warning("NumberFormatException\n" + e);
                 return false;
             }
 
             //controlla se sono float ...
             try {
                 Float.parseFloat(ccosto.getText());
-            } catch (NumberFormatException e) { Logger.getLogger("genlog").warning("NumberFormatException\n"+e);
+            } catch (NumberFormatException e) {
+                Logger.getLogger("genlog").warning("NumberFormatException\n" + e);
                 JOptionPane.showMessageDialog(this, "Controlla che le quantità ed il costo siano numeri validi! [Per il costo usare '.' per indicare la parte decimale]");
                 return false;
             }
@@ -745,139 +747,134 @@ public class ProdottiPanel extends JPanel {
 
         public void getOggettoforFormSave() {
 
-
             // public Prodotto(String nome, int qty, String Categoria, int instock, float costo, int qty_min, String note, String foto, int negozio)
-
             Prodotto prod;
             try {
                 int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                 if (a == JOptionPane.YES_OPTION) {
                     prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
-                     ProdottoDAO dao = new ProdottoDAO();
-      
-                     if(percorsofoto != null){
-                    Path sourcepath = Paths.get(percorsofoto);
-                   String estensione = FilenameUtils.getExtension(percorsofoto).toString();
-                   // POSSO AGGIUNGERE SOLO FILE PNG
-                   Path destinationepath = Paths.get( "./DATA/IMG/"+prod.getSku().substring(0, prod.getSku().indexOf("-"))+"."+estensione);
+                    ProdottoDAO dao = new ProdottoDAO();
 
-                   //copia del file
-                   Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
-                   percorsofoto = destinationepath.toString();
+                    if (percorsofoto != null) {
+                        Path sourcepath = Paths.get(percorsofoto);
+                        String estensione = FilenameUtils.getExtension(percorsofoto).toString();
+                        // POSSO AGGIUNGERE SOLO FILE PNG
+                        Path destinationepath = Paths.get("./DATA/IMG/" + prod.getSku().substring(0, prod.getSku().indexOf("-")) + "." + estensione);
 
-                    prod.setFoto(percorsofoto);}
+                        //copia del file
+                        Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
+                        percorsofoto = destinationepath.toString();
+
+                        prod.setFoto(percorsofoto);
+                    }
                     dao.add(prod);
                     form.setVisible(false);
 
                 }
-                               
+
                 refreshTab();
-  
+
             } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);          
+                Logger.getLogger("genlog").warning("SQLException\n" + ex);
             } catch (InterruptedException ex) {
-                 Logger.getLogger("genlog").warning("InterruptedException\n"+ex);
+                Logger.getLogger("genlog").warning("InterruptedException\n" + ex);
             } catch (IOException ex) {
- Logger.getLogger("genlog").warning("IOException\n"+ex);            }
+                Logger.getLogger("genlog").warning("IOException\n" + ex);
+            }
 
         }
 
-        
         private void setFormAsID(String idSelected) {
 
             ProdottoDAO dao = new ProdottoDAO();
-            
-        try {
-      
-            Prodotto prodotto = dao.getBySku(idSelected);
-            casku.setText(prodotto.getSku());
-            casname.setText(prodotto.getNome());
-            casdatareg.setText(prodotto.getDatareg());
-            cmin.setText(Integer.toString(prodotto.getQty_min()));
-            casqty.setText(Integer.toString(prodotto.getQty()));
-            
-                        // CONDENSA 0s
-            BigDecimal bd = new BigDecimal(String.valueOf(prodotto.getCosto()));
 
-            
-            ccosto.setText(bd.toPlainString() );
-            note.setText(prodotto.getNote());
-            inStock.setSelected(prodotto.isInstock());
-            
-            OrdineDAO daoo = new OrdineDAO();
-            FornitoreDAO forndao = new FornitoreDAO();
-            Fornitore forni = forndao.getByID( daoo.getFPr(prodotto.getSku()));
-            cforn.setText(forni.getIdfornitore()+"|   "+forni.getFullname());
-            
-            cat.setSelectedItem(prodotto.getCategoria());
+            try {
 
-            negozio.setSelected(prodotto.isNegozio());
-            
-            cat.setSelectedItem(prodotto.getCategoria());            
-            percorsofoto = prodotto.getFoto();
-            ImageIcon icon;
-            if(percorsofoto == null){
-                icon = new ImageIcon(getClass().getResource("/res/img/upload.png"));
+                Prodotto prodotto = dao.getBySku(idSelected);
+                casku.setText(prodotto.getSku());
+                casname.setText(prodotto.getNome());
+                casdatareg.setText(prodotto.getDatareg());
+                cmin.setText(Integer.toString(prodotto.getQty_min()));
+                casqty.setText(Integer.toString(prodotto.getQty()));
+
+                // CONDENSA 0s
+                BigDecimal bd = new BigDecimal(String.valueOf(prodotto.getCosto()));
+
+                ccosto.setText(bd.toPlainString());
+                note.setText(prodotto.getNote());
+                inStock.setSelected(prodotto.isInstock());
+
+                OrdineDAO daoo = new OrdineDAO();
+                FornitoreDAO forndao = new FornitoreDAO();
+                Fornitore forni = forndao.getByID(daoo.getFPr(prodotto.getSku()));
+                cforn.setText(forni.getIdfornitore() + "|   " + forni.getFullname());
+
+                cat.setSelectedItem(prodotto.getCategoria());
+
+                negozio.setSelected(prodotto.isNegozio());
+
+                cat.setSelectedItem(prodotto.getCategoria());
+                percorsofoto = prodotto.getFoto();
+                ImageIcon icon;
+                if (percorsofoto == null) {
+                    icon = new ImageIcon(getClass().getResource("/res/img/upload.png"));
+                } else {
+                    icon = new ImageIcon(percorsofoto);
+                }
+                Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
+                icon.setImage(ImmagineScalata);
+                bfoto.setIcon(icon);
+
+            } catch (SQLException ex) {
+                Logger.getLogger("genlog").warning("SQLException\n" + ex);
             }
-            else icon = new ImageIcon(percorsofoto);
-            Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
-            icon.setImage(ImmagineScalata);
-            bfoto.setIcon(icon);
-            
-            
-            
-                       
-        } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);        }   
-
 
         }
 
         public void getOggettoforFormUpdate() throws InterruptedException {
 
             ProdottoDAO dao = new ProdottoDAO();
-        try {            
-           int a= JOptionPane.showConfirmDialog(this,"Dario, sei proprio sicuro?");
-           if(a==JOptionPane.YES_OPTION){
-             Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected() , Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());              
-            
-             if(percorsofoto != null && !percorsofoto.equals("NULL") && !percorsofoto.equals("null")){
-                       Path sourcepath = Paths.get(percorsofoto);
-                   String estensione = FilenameUtils.getExtension(percorsofoto).toString();
-                   // POSSO AGGIUNGERE SOLO FILE PNG
-                   Path destinationepath = Paths.get( "./DATA/IMG/"+prod.getSku().substring(0, prod.getSku().indexOf("-"))+"."+estensione);
+            try {
+                int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
+                if (a == JOptionPane.YES_OPTION) {
+                    Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
 
-                   //copia del file
-                   Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
-                   percorsofoto = destinationepath.toString();
+                    if (percorsofoto != null && !percorsofoto.equals("NULL") && !percorsofoto.equals("null")) {
+                        Path sourcepath = Paths.get(percorsofoto);
+                        String estensione = FilenameUtils.getExtension(percorsofoto).toString();
+                        Path destinationepath = Paths.get("./DATA/IMG/" + prod.getSku().substring(0, prod.getSku().indexOf("-")) + "." + estensione);
 
-                    prod.setFoto(percorsofoto);     }     
-             
-             dao.update(prod);               
-             form.setVisible(false);
+                        //copia del file
+                        Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
+                        percorsofoto = destinationepath.toString();
 
-           }            
-            
-                       
-        } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);       
-        }   catch (IOException ex) { 
-            Logger.getLogger("genlog").warning("IOException\n"+ex);
+                        prod.setFoto(percorsofoto);
+                    }
+
+                    dao.update(prod);
+                    form.setVisible(false);
+
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            } catch (IOException ex) {
+                Logger.getLogger("genlog").warning("IOException\n" + ex);
             }
 
-        try {
-            refreshTab();
-        } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException"+ex);        }
-             
+            try {
+                refreshTab();
+            } catch (SQLException ex) {
+                Logger.getLogger("genlog").warning("SQLException" + ex);
+            }
+
         }
 
-               
     }
-    
-    public void  setComunicator(FramePrincipale princ){
-        frameprinc  = princ;
-        
+
+    public void setComunicator(FramePrincipale princ) {
+        frameprinc = princ;
+
     }
 
 }

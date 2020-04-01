@@ -82,8 +82,11 @@ class CategoriePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddCategoriaDialog input = new AddCategoriaDialog();
-                input.setVisible(true);
                 String txt = input.getName();
+                input.setLocationRelativeTo(null); 
+                input.setAlwaysOnTop(true);
+                input.setVisible(true);
+
                 try {
                     refreshTab();
                 } catch (SQLException ex) {

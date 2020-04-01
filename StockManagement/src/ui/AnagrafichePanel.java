@@ -118,6 +118,8 @@ public class AnagrafichePanel extends JPanel {
                 if (OpzioneScelta != JOptionPane.CLOSED_OPTION) {
                     form = new Formanagrafiche(OpzioneScelta, "ADD", null);
                     form.setResizable(false);
+                    form.setLocationRelativeTo(null);  // CENTRA 
+                    form.setAlwaysOnTop(true);  // Focus
                     form.setVisible(true);
                     form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 }
@@ -423,6 +425,7 @@ public class AnagrafichePanel extends JPanel {
         private void initComponents() {
 
             // Cliente
+            /* CF, INDIRIZZO, EMAIL, TELEFONO,NOTE SONO NULLABILI*/
             if (tipologia == 0) {
 
                 JPanel pancliente = new JPanel();
