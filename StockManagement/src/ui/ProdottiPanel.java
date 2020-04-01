@@ -631,6 +631,9 @@ public class ProdottiPanel extends JPanel {
             bfoto = new JButton();
             bfoto.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
+                    
+                    setAlwaysOnTop(false);
+                    
                     try {
                         JFileChooser jFileChooser = new JFileChooser();
                         jFileChooser.setCurrentDirectory(new File("./"));
@@ -644,6 +647,8 @@ public class ProdottiPanel extends JPanel {
                             Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
                             icon.setImage(ImmagineScalata);
                             bfoto.setIcon(icon);
+                           setAlwaysOnTop(true);
+
 
                         }
                     } catch (StringIndexOutOfBoundsException ex) {// mi dava -1 alla riga 664
