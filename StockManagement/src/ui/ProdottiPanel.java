@@ -841,7 +841,7 @@ public class ProdottiPanel extends JPanel {
            if(a==JOptionPane.YES_OPTION){
              Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected() , Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());              
             
-             if(percorsofoto != null){
+             if(percorsofoto != null && !percorsofoto.equals("NULL") && !percorsofoto.equals("null")){
                        Path sourcepath = Paths.get(percorsofoto);
                    String estensione = FilenameUtils.getExtension(percorsofoto).toString();
                    // POSSO AGGIUNGERE SOLO FILE PNG
