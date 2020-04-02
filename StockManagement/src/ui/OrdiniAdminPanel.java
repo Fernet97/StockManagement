@@ -20,6 +20,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
@@ -75,6 +76,8 @@ public class OrdiniAdminPanel extends JPanel {
     public JTextField casella;
     public JDialog popup;
     public String skusel;
+    private JTextField ggallacons;
+    private JTextField casellaqty;
 
     public OrdiniAdminPanel(String user) {
         nomeutente = user;
@@ -642,13 +645,20 @@ public class OrdiniAdminPanel extends JPanel {
 
         JPanel panelUP1 = new JPanel();
         panelUP1.add(new JLabel("Quantità da ordinare; "));
-        JTextField casellaqty = new JTextField(20);
+        casellaqty = new JTextField(20);
         panelUP1.add(casellaqty);
         popup.add(panelUP1);
 
         JPanel panelUP2 = new JPanel();
         panelUP2.add(new JLabel("Giorni alla consegna: "));
-        JTextField ggallacons = new JTextField(20);
+        ggallacons = new JTextField(20);
+        ggallacons.addKeyListener(new KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent e) {
+                    if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                        confermaProdotto();
+                    }
+                }
+            });
         panelUP2.add(ggallacons);
         popup.add(panelUP2);
 
@@ -659,13 +669,33 @@ public class OrdiniAdminPanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProdottoDAO pdao = new ProdottoDAO();
+                  confermaProdotto();
+            }
+        });
+
+        popup.add(ButtonConferma);
+        popup.setLocationRelativeTo(null); 
+        popup.setVisible(true);
+
+    }
+    
+    
+    public void confermaProdotto(){
+    
+
+                   ProdottoDAO pdao = new ProdottoDAO();
 
                 try {
                     Prodotto p = pdao.getBySku(skusel);
 
                     if (casellaqty.getText().matches("-?\\d+(\\.\\d+)?") && ggallacons.getText().matches("-?\\d+(\\.\\d+)?")) {
                         BigDecimal costoo = new BigDecimal(String.valueOf(p.getCosto()));
+                        
+                        if(controlloProdottoUguale(skusel)){
+                            popup.setVisible(false);
+                            JOptionPane.showMessageDialog(getParent(), "Attenzione! Ricorda che:\n1) non puoi associare più fornitori ad un solo prodotto mentre lo stai aggiungendo al carrello.\n2)Non puoi mettere più volte lo stesso prodotto nel carrello durante lo stesso ordine.\n Se vuoi incrementarne la quantità, perchè non modificare tal valore nella tabella del carrello? Easy ;)");
+                            return;
+                        }
 
                         model.addRow(new Object[]{skusel, casellaqty.getText(), costoo.toPlainString(), ggallacons.getText(), jComboBox.getSelectedItem().toString()});
 
@@ -680,16 +710,21 @@ public class OrdiniAdminPanel extends JPanel {
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger("genlog").warning("SQLException\n" + ex);
-                }
-
-            }
-        });
-
-        popup.add(ButtonConferma);
-        popup.setLocationRelativeTo(null); 
-        popup.setVisible(true);
-
+                } 
     }
+    
+    
+    
+    public boolean controlloProdottoUguale(String skuscelto){
+    
+       for (int i = 0; i < table.getRowCount(); i++) {
+            if(model.getValueAt(i, 0).toString().equals(skuscelto) ) return true;
+        }
+    
+        return false;
+    }
+    
+    
 
     public OrdiniAdminPanel getInstance() {
         return this;
