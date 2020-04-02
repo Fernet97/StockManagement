@@ -28,6 +28,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import javax.swing.JLabel;
@@ -119,7 +120,6 @@ public class AnagrafichePanel extends JPanel {
                     form = new Formanagrafiche(OpzioneScelta, "ADD", null);
                     form.setResizable(false);
                     form.setLocationRelativeTo(null);  // CENTRA 
-                    form.setAlwaysOnTop(true);  // Focus
                     form.setVisible(true);
                     form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 }
@@ -382,7 +382,7 @@ public class AnagrafichePanel extends JPanel {
      *
      * @author Fernet
      */
-    public static class Formanagrafiche extends JFrame {
+    public static class Formanagrafiche extends JDialog {
 
         public int tipologia;
         public String modalita;
@@ -401,6 +401,8 @@ public class AnagrafichePanel extends JPanel {
 
         public Formanagrafiche(int OpzioneScelta, String mod, String idSelected) {
 
+            super.setModal(true);
+            
             tipologia = OpzioneScelta;
             modalita = mod;
             IdSelezionato = idSelected;

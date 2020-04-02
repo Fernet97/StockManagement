@@ -84,7 +84,6 @@ class CategoriePanel extends JPanel {
                 AddCategoriaDialog input = new AddCategoriaDialog();
                 String txt = input.getName();
                 input.setLocationRelativeTo(null); 
-                input.setAlwaysOnTop(true);
                 input.setVisible(true);
 
                 try {
@@ -292,6 +291,7 @@ class CategoriePanel extends JPanel {
 
         public AddCategoriaDialog() {
             super(new JFrame("Aggiungi Categoria"), "Aggiungi Categoria");
+            setAlwaysOnTop(true);
             this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
             this.setMinimumSize(new Dimension(500, 100));
             this.name = new JTextField();
@@ -329,7 +329,7 @@ class CategoriePanel extends JPanel {
         }
 
         public void confermaCategoria() {
-
+            setAlwaysOnTop(false);
             if (name.getText().length() < 2) {
                 JOptionPane.showMessageDialog(getParent(), "La categoria deve avere almeno 2 lettere!");
                 close();

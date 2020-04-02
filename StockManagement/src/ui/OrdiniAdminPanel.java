@@ -36,6 +36,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -72,7 +73,7 @@ public class OrdiniAdminPanel extends JPanel {
     private float costocarrell = 0;
     private final JLabel numordine;
     public JTextField casella;
-    public JFrame popup;
+    public JDialog popup;
     public String skusel;
 
     public OrdiniAdminPanel(String user) {
@@ -549,7 +550,6 @@ public class OrdiniAdminPanel extends JPanel {
                     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     f.setSize(1400, 400);
                     f.setLocationRelativeTo(null);  // CENTRA 
-                    f.setAlwaysOnTop(true);  // Focus
                     f.setVisible(true);
                     f.setTitle("Riepilogo ordine: " + table.getValueAt(row, 0));
 
@@ -630,7 +630,8 @@ public class OrdiniAdminPanel extends JPanel {
 
         skusel = skuselezionato.substring(0, skuselezionato.indexOf("|"));
         //Quando clicco un prodotto dalla jList mi si apre la finestra Pop-UP
-        popup = new JFrame();
+        popup = new JDialog();
+        popup.setModal(true);
         popup.setResizable(false);
         popup.setSize(new Dimension(300, 300));
         popup.setLayout(new GridLayout(4, 1));
@@ -686,7 +687,6 @@ public class OrdiniAdminPanel extends JPanel {
 
         popup.add(ButtonConferma);
         popup.setLocationRelativeTo(null); 
-        popup.setAlwaysOnTop(true);
         popup.setVisible(true);
 
     }

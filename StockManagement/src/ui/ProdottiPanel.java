@@ -41,6 +41,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -55,6 +56,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
@@ -308,7 +310,7 @@ public class ProdottiPanel extends JPanel {
         private int row, col;
         private JTable table;
         private String prodSceltoxOrdine;
-        private JFrame vaiarod;
+        private JDialog vaiarod;
         private JComboBox<String> jComboBox;
 
         public ClientsTableRenderer(JCheckBox checkBox) {
@@ -389,14 +391,14 @@ public class ProdottiPanel extends JPanel {
                 } else if (button.getText().equals("Ordina")) { // APRI FORM PER MODIFICARE RECORD
                     //Se un fornitore non è definito
                     if (table.getValueAt(row, 5).toString().equals("null|  null")) {
-                        vaiarod = new JFrame();
+                        vaiarod = new JDialog();
                         vaiarod.setLocationRelativeTo(null); 
                         vaiarod.setResizable(false);
-                        vaiarod.setAlwaysOnTop(true);
-                        vaiarod.setSize(new Dimension(300, 300));
-                        vaiarod.setVisible(true);
+                        vaiarod.setModal(true);
+                        vaiarod.setTitle("Seleziona un fornitore a cui associare il prodotto");
+                        vaiarod.setSize(new Dimension(500, 200));
                         vaiarod.setLayout(new GridLayout(2, 1));
-                        vaiarod.add(new JLabel("Seleziona un fornitore a cui associare il prodotto"));
+                        vaiarod.add(new JLabel("Scegli un fornitore: "));
                         FornitoreDAO forndao = new FornitoreDAO();
                         jComboBox = new JComboBox<>();
                         vaiarod.add(jComboBox);
@@ -414,17 +416,19 @@ public class ProdottiPanel extends JPanel {
 
                         jComboBox.addActionListener(new java.awt.event.ActionListener() {
                             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                frameprinc.VaiAOrdiniconProdFORNULL(jComboBox.getSelectedItem().toString(), prodSceltoxOrdine);
                                 vaiarod.setVisible(false);
+                                frameprinc.VaiAOrdiniconProdFORNULL(jComboBox.getSelectedItem().toString(), prodSceltoxOrdine);
 
                             }
                         });
+                        vaiarod.setVisible(true);
 
                     } // SE IL FORNITORE ERA GIA' DEFINITO
                     else {
                         frameprinc.VaiAOrdiniconProdFornCEH(table.getValueAt(row, 0).toString());
 
                     }
+
                 }
 
             }
@@ -443,7 +447,7 @@ public class ProdottiPanel extends JPanel {
     }
 
 // ****************** LA FORM ***********************
-    class FormProdotti extends javax.swing.JFrame {
+    class FormProdotti extends JDialog {
 
         public String modalita;
         public String IdSelezionato;
@@ -475,6 +479,8 @@ public class ProdottiPanel extends JPanel {
         }
 
         private FormProdotti(String mod, String idSelected) {
+            
+            setModal(true);
             modalita = mod;
             IdSelezionato = idSelected;
 
@@ -636,7 +642,9 @@ public class ProdottiPanel extends JPanel {
                     
                     try {
                         JFileChooser jFileChooser = new JFileChooser();
+                        jFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp", "tiff"));
                         jFileChooser.setCurrentDirectory(new File("./"));
+                        jFileChooser.setAcceptAllFileFilterUsed(false);
                         int result = jFileChooser.showOpenDialog(new JFrame());
                         if (result == JFileChooser.APPROVE_OPTION) {
                             // File selezionato

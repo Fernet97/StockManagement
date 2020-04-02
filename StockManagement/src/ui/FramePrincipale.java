@@ -501,8 +501,9 @@ public class FramePrincipale extends JFrame {
                         }
                         refresh();
 
-                    } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);                    }
+                    } 
+                    catch (SQLException ex) {
+                    Logger.getLogger("genlog").warning("SQLException\n"+ex);                    }
                     disattivaTuttiIBottoniTranne(bottonepremuto.code);
 
                     cardlayout.show(HomePanel, tipo);

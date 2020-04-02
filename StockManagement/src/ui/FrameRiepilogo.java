@@ -29,6 +29,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -50,7 +51,7 @@ import javax.swing.text.DocumentFilter;
  *
  * @author Fernet
  */
-class FrameRiepilogo extends JFrame {
+class FrameRiepilogo extends JDialog {
 
     private DefaultTableModel model2;
     private final JTable table2;
@@ -67,6 +68,8 @@ class FrameRiepilogo extends JFrame {
         this.Numordine = numordine;
         this.costoTot = costoTot;
         this.giamessoaposto = giamessoaposto;
+        
+        setModal(true);
 
         ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
         this.setIconImage(img.getImage());
@@ -109,7 +112,6 @@ class FrameRiepilogo extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                setAlwaysOnTop(false);
 
                 int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di voler apportare le seguenti modifiche?????");
 
@@ -292,14 +294,13 @@ class FrameRiepilogo extends JFrame {
         public Object getCellEditorValue() {
             if (clicked) // SE CLICCATO QUEL BOTTONE:::::::::::::
             {
-                JFrame f = new JFrame();
+                JDialog f = new JDialog();
                 f.setResizable(false);
                 f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 f.setSize(500, 150);
                 f.setLocationRelativeTo(null); 
-                f.setAlwaysOnTop(true);
+                f.setModal(true);
                 
-                f.setVisible(!giamessoaposto);
                 
                 f.setTitle(Numordine + "| " + skusel);
 
@@ -389,6 +390,8 @@ class FrameRiepilogo extends JFrame {
 
                 });
                 f.add(ok, BorderLayout.SOUTH);
+                f.setVisible(!giamessoaposto);
+
 
             }
             clicked = false;
