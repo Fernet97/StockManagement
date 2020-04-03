@@ -143,7 +143,7 @@ public class LoginDialog extends javax.swing.JDialog {
         try {
             utente = udao.getByID(user);
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);        }
+ Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));        }
 
         try {
 
@@ -160,7 +160,7 @@ public class LoginDialog extends javax.swing.JDialog {
             return false;
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(this, "nome utente non valido!");
- Logger.getLogger("genlog").info("nome utente non valido!\n"+e);          
+ Logger.getLogger("genlog").info("nome utente non valido!\n"+StockManagement.printStackTrace(e));          
  return false;
         }
     }
@@ -200,15 +200,15 @@ public class LoginDialog extends javax.swing.JDialog {
             fhu.setFormatter(formatter);
 
         } catch (SecurityException e) {
-             Logger.getLogger("genlog").warning("SecurityException\n"+e);
-            e.printStackTrace();
+             Logger.getLogger("genlog").warning("SecurityException\n"+StockManagement.printStackTrace(e));
+            
         } catch (IOException e) {
-                         Logger.getLogger("genlog").warning("IOException\n"+e);
+                         Logger.getLogger("genlog").warning("IOException\n"+StockManagement.printStackTrace(e));
 
-            e.printStackTrace();
-        } catch (Exception e) {             Logger.getLogger("genlog").warning("Exception\n"+e);
+            
+        } catch (Exception e) {             Logger.getLogger("genlog").warning("Exception\n"+StockManagement.printStackTrace(e));
 
-            e.printStackTrace();
+            
         }
     }
 }

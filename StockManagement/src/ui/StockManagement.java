@@ -12,6 +12,8 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.FileHandler;
@@ -72,13 +74,13 @@ public class StockManagement {
             fh.setFormatter(formatter);
 
         } catch (SecurityException e) {
-            Logger.getLogger("genlog").warning("SecurityException\n" + e);
+            Logger.getLogger("genlog").warning("SecurityException\n" + StockManagement.printStackTrace(e));
         } catch (IOException e) {
-            Logger.getLogger("genlog").warning("IOException\n" + e);
-            e.printStackTrace();
+            Logger.getLogger("genlog").warning("IOException\n" + StockManagement.printStackTrace(e));
+            
         } catch (Exception e) {
-            Logger.getLogger("genlog").warning("Exception\n" + e);
-            e.printStackTrace();
+            Logger.getLogger("genlog").warning("Exception\n" + StockManagement.printStackTrace(e));
+            
         }
 
         UIManager.put("control", new Color(27, 32, 36));
@@ -107,11 +109,11 @@ public class StockManagement {
                 }
             }
         } catch (Exception e) {
-            Logger.getLogger("genlog").warning("Exception\n" + e);
+            Logger.getLogger("genlog").warning("Exception\n" + StockManagement.printStackTrace(e));
             try {
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             } catch (Exception ex) {
-                Logger.getLogger("genlog").warning("Exception\n" + e);
+                Logger.getLogger("genlog").warning("Exception\n" + StockManagement.printStackTrace(e));
             }
         }
 
@@ -135,5 +137,14 @@ public class StockManagement {
         fh.close();
         LoginDialog.fhu.close();
     }
+    
+    public static String printStackTrace(Exception e) {
+        
+    
+     StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+           
+            return sw.toString();
+        }
 
 }

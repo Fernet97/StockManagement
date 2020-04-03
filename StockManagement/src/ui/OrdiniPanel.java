@@ -71,7 +71,7 @@ public class OrdiniPanel extends JPanel {
                     aggiornaScheda(casella.getText());
                 } catch (SQLException ex) {
                     casella.setBackground(Color.red);
-                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
 
             }
@@ -206,7 +206,7 @@ public class OrdiniPanel extends JPanel {
                             dao.update(prodottoCorrente);
                             casella.setText(prodottoCorrente.getSku());
                         } catch (SQLException ex) {
-                            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                         }
                     }
                 }
@@ -219,7 +219,7 @@ public class OrdiniPanel extends JPanel {
                     qtydaTogliere = Integer.parseInt(quantdaprend.getText());
 
                 } catch (NumberFormatException e) {
-                    Logger.getLogger("genlog").warning("NumberFormatException\n" + e);
+                    Logger.getLogger("genlog").warning("NumberFormatException\n" + StockManagement.printStackTrace(e));
                     return false;
                 }
 

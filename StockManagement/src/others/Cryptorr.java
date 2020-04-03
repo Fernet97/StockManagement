@@ -6,6 +6,7 @@
 package others;
 
 import java.util.logging.Logger;
+import ui.StockManagement;
 
 /**
  *
@@ -23,8 +24,8 @@ public abstract class Cryptorr {
             }
             return sb.toString();
         } catch (java.security.NoSuchAlgorithmException e) {
-            Logger.getLogger("genlog").warning("NoSuchAlgorithmException\n" + e);
-            e.printStackTrace();
+            Logger.getLogger("genlog").warning("NoSuchAlgorithmException\n" + StockManagement.printStackTrace(e));
+            
         }
         return null;
     }

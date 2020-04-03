@@ -95,13 +95,13 @@ public class CodiciPanel extends JPanel {
                 try {
                     refreshTab();
                 } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
 
                 try {
                     Desktop.getDesktop().open(new File("./DATA/QRCODE/"));
                 } catch (IOException ex) {
-                    Logger.getLogger("genlog").warning("IOException\n" + ex);
+                    Logger.getLogger("genlog").warning("IOException\n" + StockManagement.printStackTrace(ex));
                 }
 
             }
@@ -132,7 +132,7 @@ public class CodiciPanel extends JPanel {
         try {
             refreshTab(); // Aggiorna tavola con  i fornitori del db;
         } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
 
         table.setRowHeight(150); //altezza celle
@@ -224,9 +224,9 @@ public class CodiciPanel extends JPanel {
                     setIcon(new ImageIcon(percorsoQRgenerato));
                     setText(percorsoQRgenerato.substring(9));
                 } catch (IOException ex) {
-                    Logger.getLogger("genlog").warning("IOException\n" + ex);
+                    Logger.getLogger("genlog").warning("IOException\n" + StockManagement.printStackTrace(ex));
                 } catch (WriterException ex) {
-                    Logger.getLogger("genlog").warning("WriterException\n" + ex);
+                    Logger.getLogger("genlog").warning("WriterException\n" + StockManagement.printStackTrace(ex));
                 }
 
             }
@@ -288,7 +288,7 @@ public class CodiciPanel extends JPanel {
                     try {
                         Desktop.getDesktop().open(new File("./DATA/QRCODE/" + path.substring(0, path.indexOf("-")) + ".png"));
                     } catch (IOException ex) {
-                        Logger.getLogger("genlog").warning("IOException\n" + ex);
+                        Logger.getLogger("genlog").warning("IOException\n" + StockManagement.printStackTrace(ex));
                     }
 
                 }

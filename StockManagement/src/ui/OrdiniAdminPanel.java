@@ -142,7 +142,7 @@ public class OrdiniAdminPanel extends JPanel {
                     }
 
                 } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
 
             }
@@ -166,7 +166,7 @@ public class OrdiniAdminPanel extends JPanel {
                 jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
             }
         } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
         jComboBox.setForeground(Color.black);
         jComboBox.setBackground(Color.DARK_GRAY);
@@ -194,7 +194,7 @@ public class OrdiniAdminPanel extends JPanel {
                         ((DefaultListModel) list.getModel()).addElement(pp.getSku() + "|  " + pp.getNome());
                     }
                 } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
             }
         });
@@ -336,7 +336,7 @@ public class OrdiniAdminPanel extends JPanel {
                         }
                     }
                 } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
 
             }
@@ -353,9 +353,9 @@ public class OrdiniAdminPanel extends JPanel {
                 model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica ordine"});
             }
         } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         } catch (ParseException ex) {
-            Logger.getLogger("genlog").warning("ParseException\n" + ex);
+            Logger.getLogger("genlog").warning("ParseException\n" + StockManagement.printStackTrace(ex));
         }
 
         princ.add(SXdown);
@@ -397,7 +397,7 @@ public class OrdiniAdminPanel extends JPanel {
                     try {
                         bean.startOrdine();
                     } catch (InterruptedException ex) {
-                        Logger.getLogger("genlog").warning("InterruptedException\n" + ex);
+                        Logger.getLogger("genlog").warning("InterruptedException\n" + StockManagement.printStackTrace(ex));
                     }
 
                     for (int i = 0; i < model.getRowCount(); i++) {
@@ -410,9 +410,9 @@ public class OrdiniAdminPanel extends JPanel {
                             Ordine o = new Ordine(Integer.parseInt(model.getValueAt(i, 1).toString()), Integer.parseInt(model.getValueAt(i, 3).toString()), user, model.getValueAt(i, 0).toString(), 0, subselezionato, 0);
                             ordao.add(o);
                         } catch (SQLException ex) {
-                            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                         } catch (InterruptedException ex) {
-                            Logger.getLogger("genlog").warning("InterruptedException\n" + ex);
+                            Logger.getLogger("genlog").warning("InterruptedException\n" + StockManagement.printStackTrace(ex));
                         }
 
                     }
@@ -454,7 +454,7 @@ public class OrdiniAdminPanel extends JPanel {
                 jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
             }
         } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
 
         casella.setBackground(Color.gray);
@@ -474,9 +474,9 @@ public class OrdiniAdminPanel extends JPanel {
                 model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica ordine"});
             }
         } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         } catch (ParseException ex) {
-            Logger.getLogger("genlog").warning("ParseException\n" + ex);
+            Logger.getLogger("genlog").warning("ParseException\n" + StockManagement.printStackTrace(ex));
         }
 
     }
@@ -624,7 +624,7 @@ public class OrdiniAdminPanel extends JPanel {
 
             }
         } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
 
     }
@@ -709,7 +709,7 @@ public class OrdiniAdminPanel extends JPanel {
                         JOptionPane.showMessageDialog(getParent(), "Scegliere un formato numerico per la quantità ed i giorni all consegna");
                     }
                 } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 } 
     }
     

@@ -88,7 +88,7 @@ public class AnagrafichePanel extends JPanel {
                 try {
                     refreshTab();
                 } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
             }
         };
@@ -152,7 +152,7 @@ public class AnagrafichePanel extends JPanel {
         try {
             refreshTab(); // Aggiorna tavola con  i fornitori del db;
         } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
 
         table.setRowHeight(40); //altezza celle
@@ -251,7 +251,7 @@ public class AnagrafichePanel extends JPanel {
                     try {
                         fireEditingStopped();
                     } catch (Exception ex) {
-                        Logger.getLogger("genlog").warning("Exception\n" + ex);
+                        Logger.getLogger("genlog").warning("Exception\n" + StockManagement.printStackTrace(ex));
                     };
                 }
             });
@@ -299,8 +299,8 @@ public class AnagrafichePanel extends JPanel {
                             try {
                                 dao.remove(table.getValueAt(row, 1).toString());
                             } catch (Exception e) {
-                                Logger.getLogger("genlog").warning("Exception\n" + e);
-                                e.printStackTrace();
+                                Logger.getLogger("genlog").warning("Exception\n" + StockManagement.printStackTrace(e));
+                                
 
                             }
                         }
@@ -310,8 +310,8 @@ public class AnagrafichePanel extends JPanel {
                             try {
                                 dao.remove(table.getValueAt(row, 1).toString());
                             } catch (Exception e) {
-                                Logger.getLogger("genlog").warning("Exception\n" + e);
-                                e.printStackTrace();
+                                Logger.getLogger("genlog").warning("Exception\n" + StockManagement.printStackTrace(e));
+                                
 
                             }
                         }
@@ -321,8 +321,8 @@ public class AnagrafichePanel extends JPanel {
                             try {
                                 //dao.remove(table.getValueAt(row, 1).toString());
                             } catch (Exception e) {
-                                Logger.getLogger("genlog").warning("Exception\n" + e);
-                                e.printStackTrace();
+                                Logger.getLogger("genlog").warning("Exception\n" + StockManagement.printStackTrace(e));
+                                
 
                             }
                         }
@@ -352,7 +352,7 @@ public class AnagrafichePanel extends JPanel {
             try {
                 refreshTab();
             } catch (SQLException ex) {
-                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
             }
             clicked = false;
             return new String(label);
@@ -367,7 +367,7 @@ public class AnagrafichePanel extends JPanel {
             try {
                 super.fireEditingStopped();
             } catch (Exception ex) {
-                Logger.getLogger("genlog").warning("Exception\n" + ex);
+                Logger.getLogger("genlog").warning("Exception\n" + StockManagement.printStackTrace(ex));
             };
         }
     }
@@ -829,7 +829,7 @@ public class AnagrafichePanel extends JPanel {
                     note.setText(fornitore.getNote());
 
                 } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
 
             }
@@ -854,7 +854,7 @@ public class AnagrafichePanel extends JPanel {
                     permess.setSelectedIndex(u.getPermessi());
 
                 } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
 
             }
@@ -939,16 +939,16 @@ public class AnagrafichePanel extends JPanel {
                 }
 
             } catch (SQLException ex) {
-                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
             } catch (InterruptedException ex) {
-                Logger.getLogger("genlog").warning("InterruptedException\n" + ex);
+                Logger.getLogger("genlog").warning("InterruptedException\n" + StockManagement.printStackTrace(ex));
 
             }
 
             try {
                 refreshTab();
             } catch (SQLException ex) {
-                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
             }
 
         }
@@ -998,16 +998,16 @@ public class AnagrafichePanel extends JPanel {
                 }
 
             } catch (SQLException ex) {
-                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
             } catch (InterruptedException ex) {
-                Logger.getLogger("genlog").warning("InterruptedException\n" + ex);
+                Logger.getLogger("genlog").warning("InterruptedException\n" + StockManagement.printStackTrace(ex));
 
             }
 
             try {
                 refreshTab();
             } catch (SQLException ex) {
-                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
             }
         }
 

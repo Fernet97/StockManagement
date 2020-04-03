@@ -23,12 +23,11 @@ public class JavaProcessId {
 //                StockManagement.fh.close();  //non se fa
                 StockManagement.closeFH();
             } catch (FileNotFoundException sEx) {
-                Logger.getLogger("genlog").warning("FileNotFoundException\n" + sEx);
-                sEx.printStackTrace();
+                Logger.getLogger("genlog").warning("FileNotFoundException\n" + StockManagement.printStackTrace(sEx));
             } catch (Exception ex) {
-                Logger.getLogger("genlog").warning("Exception\n" + ex);
+                Logger.getLogger("genlog").warning("Exception\n" + StockManagement.printStackTrace(ex));
 
-                ex.printStackTrace();
+                
             }
 
             Thread.sleep(1000);
@@ -80,9 +79,9 @@ public class JavaProcessId {
         try {
             builder.start();
         } catch (IOException e) {
-            Logger.getLogger("genlog").warning("IOException\n" + e);
+            Logger.getLogger("genlog").warning("IOException\n" + StockManagement.printStackTrace(e));
 
-            e.printStackTrace();
+            
         }
     }
 }

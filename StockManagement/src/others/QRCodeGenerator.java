@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.logging.Logger;
+import ui.StockManagement;
 
 /**
  *
@@ -37,10 +38,10 @@ public class QRCodeGenerator {
             generateQRCodeImage("Miaoooooooo!!!", 350, 350, QR_CODE_IMAGE_PATH);
 
         } catch (WriterException e) {
-            Logger.getLogger("genlog").warning("WriterException:Could not generate QR Code, WriterException:\n" + e.getMessage() + "\n" + e);
+            Logger.getLogger("genlog").warning("WriterException:Could not generate QR Code, WriterException:\n" +StockManagement.printStackTrace(e));
 
         } catch (IOException e) {
-            Logger.getLogger("genlog").warning("IOException:Could not generate QR Code, IOException:\n" + e.getMessage() + "\n" + e);
+            Logger.getLogger("genlog").warning("IOException:Could not generate QR Code, IOException:\n" +StockManagement.printStackTrace(e));
 
         }
     }

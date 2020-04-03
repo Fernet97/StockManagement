@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import ui.StockManagement;
 
 /**
  *
@@ -186,11 +187,11 @@ public class Utente {
             tmp = lastid.replaceAll("[^0-9]", "");
             idlast = Integer.parseInt(tmp);
         } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + ex);
-            ex.printStackTrace();
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+            
         } catch (NullPointerException en) {
-            Logger.getLogger("genlog").warning("NullPointerException\n" + en);
-            en.printStackTrace();
+            Logger.getLogger("genlog").warning("NullPointerException\n" + StockManagement.printStackTrace(en));
+            
             return idlast = 0;
         }
 

@@ -148,7 +148,7 @@ public class ProdottiPanel extends JPanel {
         try {
             refreshTab(); // Aggiorna tavola con  i fornitori del db;
         } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
 
         table.setRowHeight(40); //altezza celle
@@ -322,7 +322,7 @@ public class ProdottiPanel extends JPanel {
                     try {
                         fireEditingStopped();
                     } catch (IndexOutOfBoundsException es) {
-                        Logger.getLogger("genlog").warning("IndexOutOfBoundsException\n" + es);
+                        Logger.getLogger("genlog").warning("IndexOutOfBoundsException\n" + StockManagement.printStackTrace(es));
                     }
 
                 }
@@ -376,7 +376,7 @@ public class ProdottiPanel extends JPanel {
 
                             refreshTab();
                         } catch (SQLException ex) {
-                            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                         }
                     }
                 } else if (button.getText().equals("Modifica")) { // APRI FORM PER MODIFICARE RECORD
@@ -411,7 +411,7 @@ public class ProdottiPanel extends JPanel {
                             }
 
                         } catch (SQLException ex) {
-                            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                         }
 
                         jComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -473,7 +473,7 @@ public class ProdottiPanel extends JPanel {
             try {
                 initComponents();
             } catch (SQLException ex) {
-                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
             }
 
         }
@@ -498,7 +498,7 @@ public class ProdottiPanel extends JPanel {
                 }
 
             } catch (SQLException ex) {
-                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
             }
 
             ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
@@ -660,8 +660,8 @@ public class ProdottiPanel extends JPanel {
 
                         }
                     } catch (StringIndexOutOfBoundsException ex) {// mi dava -1 alla riga 664
-                        Logger.getLogger("userlog").warning("StringIndexOutOfBoundsException: percorso foto \n" + ex);
-                        ex.printStackTrace();
+                        Logger.getLogger("userlog").warning("StringIndexOutOfBoundsException: percorso foto \n" + StockManagement.printStackTrace(ex));
+                        
                     }
 
                 }
@@ -692,7 +692,7 @@ public class ProdottiPanel extends JPanel {
                             try {
                                 getOggettoforFormUpdate();
                             } catch (InterruptedException ex) {
-                                Logger.getLogger("genlog").warning("InterruptedException\n" + ex);
+                                Logger.getLogger("genlog").warning("InterruptedException\n" + StockManagement.printStackTrace(ex));
                             }
                         } else {
                             getOggettoforFormSave();
@@ -742,7 +742,7 @@ public class ProdottiPanel extends JPanel {
 
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Controlla che \"Quantità\",  \"qty minima\",  siano numeri validi. [ Per il costo usare \".\" per indicare la parte decimale ]");
-                Logger.getLogger("genlog").warning("NumberFormatException\n" + e);
+                Logger.getLogger("genlog").warning("NumberFormatException\n" + StockManagement.printStackTrace(e));
                 return false;
             }
 
@@ -750,7 +750,7 @@ public class ProdottiPanel extends JPanel {
             try {
                 Float.parseFloat(ccosto.getText());
             } catch (NumberFormatException e) {
-                Logger.getLogger("genlog").warning("NumberFormatException\n" + e);
+                Logger.getLogger("genlog").warning("NumberFormatException\n" + StockManagement.printStackTrace(e));
                 JOptionPane.showMessageDialog(this, "Controlla che le quantità ed il costo siano numeri validi! [Per il costo usare '.' per indicare la parte decimale]");
                 return false;
             }
@@ -788,11 +788,11 @@ public class ProdottiPanel extends JPanel {
                 refreshTab();
 
             } catch (SQLException ex) {
-                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
             } catch (InterruptedException ex) {
-                Logger.getLogger("genlog").warning("InterruptedException\n" + ex);
+                Logger.getLogger("genlog").warning("InterruptedException\n" + StockManagement.printStackTrace(ex));
             } catch (IOException ex) {
-                Logger.getLogger("genlog").warning("IOException\n" + ex);
+                Logger.getLogger("genlog").warning("IOException\n" + StockManagement.printStackTrace(ex));
             }
 
         }
@@ -839,7 +839,7 @@ public class ProdottiPanel extends JPanel {
                 bfoto.setIcon(icon);
 
             } catch (SQLException ex) {
-                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
             }
 
         }
@@ -870,15 +870,15 @@ public class ProdottiPanel extends JPanel {
                 }
 
             } catch (SQLException ex) {
-                Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
             } catch (IOException ex) {
-                Logger.getLogger("genlog").warning("IOException\n" + ex);
+                Logger.getLogger("genlog").warning("IOException\n" + StockManagement.printStackTrace(ex));
             }
 
             try {
                 refreshTab();
             } catch (SQLException ex) {
-                Logger.getLogger("genlog").warning("SQLException" + ex);
+                Logger.getLogger("genlog").warning("SQLException" + StockManagement.printStackTrace(ex));
             }
 
         }

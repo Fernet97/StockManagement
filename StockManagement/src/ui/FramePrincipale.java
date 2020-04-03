@@ -89,7 +89,7 @@ public class FramePrincipale extends JFrame {
         try {
             user = daouten.getByID(nomeuser);
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);        }
+ Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));        }
 
         //set icona finestra
         ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
@@ -253,10 +253,10 @@ public class FramePrincipale extends JFrame {
             
             
         } catch (SQLException ex) {
-             Logger.getLogger("genlog").warning("SQLException\n"+ex);        
+             Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));        
 
         } catch (ParseException ex) {
-             Logger.getLogger("genlog").warning("ParseException\n"+ex);        
+             Logger.getLogger("genlog").warning("ParseException\n"+StockManagement.printStackTrace(ex));        
         }
 
         pannelloTab.setLayout(new GridLayout(2, 1));
@@ -300,9 +300,9 @@ public class FramePrincipale extends JFrame {
                 try {
                     riavviaStockManagement();
                 } catch (IOException ex) {
- Logger.getLogger("genlog").warning("IOException\n"+ex);                
+ Logger.getLogger("genlog").warning("IOException\n"+StockManagement.printStackTrace(ex));                
                 } catch (InterruptedException ex) {
- Logger.getLogger("genlog").warning("InterruptedException\n"+ex);                }
+ Logger.getLogger("genlog").warning("InterruptedException\n"+StockManagement.printStackTrace(ex));                }
 
             }
         });
@@ -313,9 +313,9 @@ public class FramePrincipale extends JFrame {
                 try {
                     chiudiStockManagement();
                 } catch (IOException ex) {
- Logger.getLogger("genlog").warning("IOException\n"+ex);               
+ Logger.getLogger("genlog").warning("IOException\n"+StockManagement.printStackTrace(ex));               
                 } catch (InterruptedException ex) {
- Logger.getLogger("genlog").warning("InterruptedException\n"+ex);                }
+ Logger.getLogger("genlog").warning("InterruptedException\n"+StockManagement.printStackTrace(ex));                }
 
             }
         });
@@ -389,13 +389,13 @@ public class FramePrincipale extends JFrame {
             System.out.println("La connessione: " + con);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(getParent(), "Non trovo nessuna connesione :(");
- Logger.getLogger("genlog").warning("SQLException:Non trovo nessuna connesione\n"+ex);        }
+ Logger.getLogger("genlog").warning("SQLException:Non trovo nessuna connesione\n"+StockManagement.printStackTrace(ex));        }
 
         try {
             DriverManagerConnectionPool.releaseConnection(con);
 
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException"+ex);        }
+ Logger.getLogger("genlog").warning("SQLException"+StockManagement.printStackTrace(ex));        }
 
       //  System.out.println("La connessione dopo averla chiusa: " + con);
         dispose();
@@ -503,7 +503,7 @@ public class FramePrincipale extends JFrame {
 
                     } 
                     catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n"+ex);                    }
+                    Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));                    }
                     disattivaTuttiIBottoniTranne(bottonepremuto.code);
 
                     cardlayout.show(HomePanel, tipo);
@@ -587,9 +587,9 @@ public class FramePrincipale extends JFrame {
         
         
     }   catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);        
+ Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));        
     } catch (ParseException ex) {
- Logger.getLogger("genlog").warning("ParseException\n"+ex);        }
+ Logger.getLogger("genlog").warning("ParseException\n"+StockManagement.printStackTrace(ex));        }
     }
     
     
@@ -638,7 +638,7 @@ public class FramePrincipale extends JFrame {
                 try {
                     number = dao.getAll().size();
                 } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);        
+ Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));        
                 }
                  scrittaVai = new JLabel(ImpostaImg("/res/img/users.png"));
                    vai.removeAll();
@@ -656,7 +656,7 @@ public class FramePrincipale extends JFrame {
                         number += Integer.parseInt(dao.getCatAndSum().get(key));
                     }
                 } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);        
+ Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));        
               }
 
                 vai.addMouseListener(new MouseListener() {
@@ -701,9 +701,9 @@ public class FramePrincipale extends JFrame {
                
             }
             } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);   
+ Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));   
             }   catch (ParseException ex) {
- Logger.getLogger("genlog").warning("ParseException\n"+ex);                }
+ Logger.getLogger("genlog").warning("ParseException\n"+StockManagement.printStackTrace(ex));                }
            
             vai.addMouseListener(new MouseListener() {
                 @Override

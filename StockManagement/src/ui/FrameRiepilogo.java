@@ -156,7 +156,7 @@ class FrameRiepilogo extends JDialog {
 
                         }
                     } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex); 
+ Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex)); 
                     }
 
                     setVisible(false);
@@ -220,9 +220,9 @@ class FrameRiepilogo extends JDialog {
                     ordine.getQty_arrivata() +"/"+ordine.getQty_in_arrivo(), datao, arrivato, messoInStock});
             }
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+ex);     
+ Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));     
         } catch (ParseException ex) {
- Logger.getLogger("genlog").warning("ParseException\n"+ex);        }
+ Logger.getLogger("genlog").warning("ParseException\n"+StockManagement.printStackTrace(ex));        }
 
     }
 

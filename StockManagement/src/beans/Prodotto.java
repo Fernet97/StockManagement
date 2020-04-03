@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Logger;
+import ui.StockManagement;
 
 /**
  *
@@ -203,8 +204,8 @@ public class Prodotto {
 
         } catch (SQLException ex) {
             ultimosku = -99999;
-            Logger.getLogger("genlog").warning("SQLException\n" + ex);
-            ex.printStackTrace();
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+            
         }
 
         return ultimosku;

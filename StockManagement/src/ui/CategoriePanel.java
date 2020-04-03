@@ -89,7 +89,7 @@ class CategoriePanel extends JPanel {
                 try {
                     refreshTab();
                 } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
 
             }
@@ -120,7 +120,7 @@ class CategoriePanel extends JPanel {
         try {
             refreshTab();
         } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
 
         table.setRowHeight(40); //altezza celle
