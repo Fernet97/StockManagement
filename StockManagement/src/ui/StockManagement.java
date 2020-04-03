@@ -72,7 +72,7 @@ public class StockManagement {
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
-            logger.info("Versione Software 0.9.1");
+            logger.info("Versione Software 0.9.2");
 
         } catch (SecurityException e) {
             Logger.getLogger("genlog").warning("SecurityException\n" + StockManagement.printStackTrace(e));

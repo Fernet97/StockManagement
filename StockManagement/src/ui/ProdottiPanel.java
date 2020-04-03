@@ -34,6 +34,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
@@ -111,12 +112,15 @@ public class ProdottiPanel extends JPanel {
                 }//debug
 
                 form = new FormProdotti("ADD", null);
-                form.setLocationRelativeTo(null);
-                form.setAlwaysOnTop(true);
-                form.setResizable(false);
-                form.setVisible(true);
-                form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    if(!form.nessunacat){
+                        form.setLocationRelativeTo(null);
+                        form.setAlwaysOnTop(true);
+                        form.setResizable(false);
+                        form.setVisible(true);
+                        form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+                    }
+                
             }
         });
         buttonNew.setFont(new Font("Arial Black", Font.BOLD, 15));
@@ -148,7 +152,7 @@ public class ProdottiPanel extends JPanel {
         try {
             refreshTab(); // Aggiorna tavola con  i fornitori del db;
         } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+            Logger.getLogger("genlog").warning("SQLExLogception\n" + StockManagement.printStackTrace(ex));
         }
 
         table.setRowHeight(40); //altezza celle
@@ -322,7 +326,7 @@ public class ProdottiPanel extends JPanel {
                     try {
                         fireEditingStopped();
                     } catch (IndexOutOfBoundsException es) {
-                        Logger.getLogger("genlog").warning("IndexOutOfBoundsException\n" + StockManagement.printStackTrace(es));
+                        Logger.getLogger("genlog").warning("IndexOutOfBoundsException\n- - - - - BUG SUPREMO - - - - -\n" + StockManagement.printStackTrace(es));
                     }
 
                 }
@@ -392,9 +396,10 @@ public class ProdottiPanel extends JPanel {
                     //Se un fornitore non è definito
                     if (table.getValueAt(row, 5).toString().equals("null|  null")) {
                         vaiarod = new JDialog();
-                        vaiarod.setLocationRelativeTo(null); 
                         vaiarod.setResizable(false);
                         vaiarod.setModal(true);
+                                                vaiarod.setLocationRelativeTo(null); 
+
                         vaiarod.setTitle("Seleziona un fornitore a cui associare il prodotto");
                         vaiarod.setSize(new Dimension(500, 200));
                         vaiarod.setLayout(new GridLayout(2, 1));
@@ -408,6 +413,10 @@ public class ProdottiPanel extends JPanel {
                         try {
                             for (Fornitore f : forndao.getAll()) {
                                 jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
+                            }
+                            if(jComboBox.getItemCount() == 0){
+                                JOptionPane.showMessageDialog(null, "Non hai creato ancora un fornitore!");
+                                return new String(label);
                             }
 
                         } catch (SQLException ex) {
@@ -464,6 +473,9 @@ public class ProdottiPanel extends JPanel {
         private JCheckBox inStock;
         private JCheckBox negozio;
         private JButton bfoto;
+        private String[] stringsP;
+        private String[] list_prod;
+        public  boolean nessunacat;
 
         /**
          * Creates new form FormProdotti
@@ -471,7 +483,9 @@ public class ProdottiPanel extends JPanel {
         public FormProdotti() {
 
             try {
+
                 initComponents();
+
             } catch (SQLException ex) {
                 Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
             }
@@ -480,11 +494,14 @@ public class ProdottiPanel extends JPanel {
 
         private FormProdotti(String mod, String idSelected) {
             
-            setModal(true);
             modalita = mod;
             IdSelezionato = idSelected;
 
-            try {
+            try {              
+
+               if(setCategoryList()){
+
+                 setModal(true);
                 initComponents();
                 casku.setEditable(false);
                 casdatareg.setEditable(false);
@@ -497,16 +514,50 @@ public class ProdottiPanel extends JPanel {
                     cat.setBackground(Color.darkGray);
                 }
 
-            } catch (SQLException ex) {
-                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
+                setSize(600, (650));
+                this.setIconImage(img.getImage());
+
+                } else {
+                    setVisible(false);
+                    dispose();
+               }
+            
+            }catch (SQLException ex) {
+                        Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                    }  
+     }
+        
+        private  boolean setCategoryList() throws SQLException{
+ 
+            ProdottoDAO dao = new ProdottoDAO();
+            // Cat dal db + Cat dinamiche aggiunte prima in java
+            list_prod = new String[dao.getAll().size() + list_cat_new.size() + 1];
+            for (int y = 0; y < list_cat_new.size(); y++) { //Aggiungo le categorie aggiunte prima dinamicamente..
+                list_prod[y] = list_cat_new.get(y);
             }
 
-            ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
-            setSize(600, (650));
-            this.setIconImage(img.getImage());
-
+            Iterator<Prodotto> iter = dao.getAll().iterator();
+            int i = 0;
+            int sum = list_cat_new.size();
+            while (iter.hasNext()) { //Aggiungo prima le categorie estrapolate dal db..
+                list_prod[sum + i] = iter.next().getCategoria();
+                i++;
+            }
+            stringsP = Arrays.stream(list_prod).distinct().toArray(String[]::new);;    
+            
+            // Se non ci sono categorie (c'è solo la stringa vuota)
+            if(stringsP.length == 1){
+                JOptionPane.showMessageDialog(null, "Devi aggiungere prima almeno una categoria!!");
+                nessunacat = true;
+                return false;
+            }
+            nessunacat = false;
+            return true;
+        
         }
-
+        
+        
         private void initComponents() throws SQLException {
             percorsofoto = null;
             JPanel panmain = new JPanel();
@@ -585,22 +636,6 @@ public class ProdottiPanel extends JPanel {
             cat = new JComboBox<>();
             cat.setFont(new Font("Arial Black", Font.BOLD, 15));
 
-            ProdottoDAO dao = new ProdottoDAO();
-            // Cat dal db + Cat dinamiche aggiunte prima in java
-            String[] list_prod = new String[dao.getAll().size() + list_cat_new.size() + 1];
-            for (int y = 0; y < list_cat_new.size(); y++) { //Aggiungo le categorie aggiunte prima dinamicamente..
-                list_prod[y] = list_cat_new.get(y);
-            }
-
-            Iterator<Prodotto> iter = dao.getAll().iterator();
-            int i = 0;
-            int sum = list_cat_new.size();
-            while (iter.hasNext()) { //Aggiungo prima le categorie estrapolate dal db..
-                list_prod[sum + i] = iter.next().getCategoria();
-                i++;
-            }
-            String[] stringsP = Arrays.stream(list_prod).distinct().toArray(String[]::new);;
-
             cat.setModel(new javax.swing.DefaultComboBoxModel<>(stringsP));
             cat.setForeground(Color.black);
             cat.setBackground(Color.DARK_GRAY);
@@ -608,6 +643,7 @@ public class ProdottiPanel extends JPanel {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                 }
             });
+            
             panelcat.add(cat);
             main.add(panelcat);
 
