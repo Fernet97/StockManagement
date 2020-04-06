@@ -15,9 +15,17 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
@@ -55,7 +63,24 @@ class CategoriePanel extends JPanel {
     public ArrayList<String> list_tot;
 
     public CategoriePanel() {
-        list_cat_new = new ArrayList<>();
+        
+      try {
+           File file = new File("./DATA/aikkop.aksn");
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            list_cat_new =(ArrayList<String>)ois.readObject();
+
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (FileNotFoundException ex) {
+                File file = new File("./DATA/aikkop.aksn");
+                Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                //Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+                list_cat_new = new ArrayList<>();
+            }
+            
+        
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JLabel title = new JLabel("CATEGORIE");
         title.setFont(new Font("Arial Black", Font.BOLD, 40));
@@ -86,11 +111,11 @@ class CategoriePanel extends JPanel {
                 input.setLocationRelativeTo(null); 
                 input.setVisible(true);
 
-                try {
+                try {   
                     refreshTab();
                 } catch (SQLException ex) {
                     Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                }
+                } 
 
             }
         });
@@ -126,7 +151,7 @@ class CategoriePanel extends JPanel {
         table.setRowHeight(40); //altezza celle
 
         //X colonne che hanno pulsanti
-        table.getColumnModel().getColumn(2).setCellRenderer(new ClientsTableButtonRenderer());
+            table.getColumnModel().getColumn(2).setCellRenderer(new ClientsTableButtonRenderer());
         table.getColumnModel().getColumn(2).setCellEditor(new ClientsTableRenderer(new JCheckBox()));
 
         JScrollPane sp = new JScrollPane(table);
@@ -206,7 +231,22 @@ class CategoriePanel extends JPanel {
             model.addRow(new Object[]{catDinamica, "DA DEFINIRE", "Vai a prodotti"});
 
         }
+        
+         
+        // Agiorno il file con le nuove cat_dinamiche
+        try {
+          File output=new File("./DATA/aikkop.aksn");
+          FileOutputStream fos;
+          fos = new FileOutputStream(output);
+          ObjectOutputStream oos = new ObjectOutputStream(fos);
+          oos.writeObject(list_cat_new); 
 
+          } catch (FileNotFoundException ex) {
+              Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (IOException ex) {
+              Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+          }         
+        
     }
 
     class ClientsTableButtonRenderer extends JButton implements TableCellRenderer {
@@ -308,7 +348,7 @@ class CategoriePanel extends JPanel {
             add.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent arg0) {
-                    confermaCategoria();
+                    confermaCategoria();    
                 }
             });
 
@@ -340,6 +380,19 @@ class CategoriePanel extends JPanel {
                 frameprinc.prodotti.list_cat_new.add(name.getText().toUpperCase());
                 close();
             }
+                            try {
+
+                    File output=new File("./DATA/aikkop.aksn");
+                    FileOutputStream fos;
+                    fos = new FileOutputStream(output);
+                    ObjectOutputStream oos = new ObjectOutputStream(fos);
+                    oos.writeObject(list_cat_new); 
+                    
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }   
         }
     }
 
