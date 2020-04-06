@@ -172,13 +172,13 @@ public class ProdottoDAO {
         }else{
             foto = p.getFoto().replace("\\", "\\\\");
         }
-        Logger.getLogger("userlog").info("sku del prodotto da modificare: " + p.getSku());
+        Logger.getLogger("userlog").info("sku del prodotto che si sta per modificare: " + p.getSku());
         // UPDATE `db_stock`.`prodotto` SET `sku` = '1', `datareg` = '2', `nome` = '2', `qty` = '2', `categoria` = '2', `instock` = '2', `costo` = '2', `qty_min` = '2', `note` = '2', `foto` = '2', `negozio` = '2' WHERE (`sku` = '1');
 
         String query = "UPDATE " + this.TABLE_NAME + " SET `nome` = '" + p.getNome() + "', `qty` = '" + p.getQty() + "', `categoria` = '" + p.getCategoria() + "', "
                 + "`instock` = '" + inStock + "', `costo` = '" + p.getCosto() + "', `qty_min` = '" + p.getQty_min() + "', `note` = '" + p.getNote() + "', "
                 + "`foto` = '" + foto + "', `negozio` = '" + isNegozio + "' WHERE (`sku` = '" + p.getSku() + "')";
-        Logger.getLogger("userlog").info("prodotto update \n" + query);
+        Logger.getLogger("userlog").info("prodotto update \n" + p.getSku());
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -298,5 +298,31 @@ public class ProdottoDAO {
         return hashtable;
 
     }
+    
+     public synchronized void updateCat(String cat, String cat_new) throws SQLException { 
+        Connection connection = null;
+        Statement statement = null;
+        
+             String query = "update "+this.TABLE_NAME+" set categoria ='"+cat_new+"' where categoria ='"+cat+"'";
+     
+              Logger.getLogger("userlog").info("Categoria update da "+cat+" a "+cat_new+"\n");
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+            connection.commit();
+            
+            Logger.getLogger("userlog").info(query);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+        }
+     }
 
 }
