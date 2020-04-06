@@ -31,9 +31,14 @@ public class StockManagement {
     private static Logger logger = Logger.getLogger("genlog");
     private static FileHandler fh;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
 
         JavaProcessId.jPID();
+
+        File file = new File("./DATA/aikkop.aksn");
+        if (!file.createNewFile()) {
+        }
+        
 
         // CREA CARTELLA DI ROOT DEI DATI
         File directory = new File("./DATA/");
@@ -72,7 +77,7 @@ public class StockManagement {
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
-            logger.info("Versione Software 0.9.2");
+            logger.info("Versione Software 0.9.3");
 
         } catch (SecurityException e) {
             Logger.getLogger("genlog").warning("SecurityException\n" + StockManagement.printStackTrace(e));

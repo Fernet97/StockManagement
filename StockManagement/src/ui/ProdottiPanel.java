@@ -24,7 +24,10 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -79,7 +82,22 @@ public class ProdottiPanel extends JPanel {
     private FramePrincipale frameprinc;
 
     public ProdottiPanel() {
-        list_cat_new = new ArrayList<>();
+        try{
+           File file = new File("./DATA/aikkop.aksn");
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            list_cat_new =(ArrayList<String>)ois.readObject();
+
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (FileNotFoundException ex) {
+                File file = new File("aikkop.aksn");
+                Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                //Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+                list_cat_new = new ArrayList<>();
+            }
+            
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JLabel title = new JLabel("PRODOTTI");
         title.setFont(new Font("Arial Black", Font.BOLD, 40));
