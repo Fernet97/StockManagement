@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -37,6 +38,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -61,6 +63,7 @@ class CategoriePanel extends JPanel {
     public ArrayList<String> list_cat_new;
     private FramePrincipale frameprinc;
     public ArrayList<String> list_tot;
+    private final JTable table;
 
     public CategoriePanel() {
         
@@ -88,17 +91,17 @@ class CategoriePanel extends JPanel {
         super.add(title);
 
         JPanel panSopra = new JPanel();
-        panSopra.setLayout(new GridLayout(1, 3));
+        panSopra.setLayout(new GridBagLayout());
         panSopra.setMaximumSize(new Dimension(1420, 300));
-        JPanel cerca = new JPanel();
+        JPanel cerca = new JPanel(new GridBagLayout());
         JLabel searchlabel = new JLabel("Cerca:");
         searchlabel.setFont(new Font("Arial Black", Font.BOLD, 20));
         JTextField casella = new JTextField(20);
         cerca.add(searchlabel);
         cerca.add(casella);
+        cerca.setBorder(new EmptyBorder(0, 0, 0, 800));
         panSopra.add(cerca);
 
-        panSopra.add(new JLabel(" "));
 
         JButton buttonNew = new JButton("ADD NEW");
         //*************+* BOTTONE AGGIUNGI NUOVA RIGA**************************
@@ -119,8 +122,91 @@ class CategoriePanel extends JPanel {
 
             }
         });
-        buttonNew.setFont(new Font("Arial Black", Font.BOLD, 15));
+        buttonNew.setFont(new Font("Arial Black", Font.BOLD, 13));
         panSopra.add(buttonNew);
+        JButton buttonModifica = new JButton("Modifica");
+        buttonModifica.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(table.getSelectedRow()<0) {
+                    JOptionPane.showMessageDialog(null, "Devi selezionare una riga da modificare!");
+                    return;
+                }
+                System.out.println("Categoria da modificare "+table.getValueAt(table.getSelectedRow(), 0));
+                JFrame modificaframe = new JFrame("Specifica il nuovo valore per la categoria");
+                modificaframe.setAlwaysOnTop(true);
+                modificaframe.setLocationRelativeTo(null); ;
+                modificaframe.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+                modificaframe.setMinimumSize(new Dimension(500, 100));
+                JTextField name = new JTextField(model.getValueAt(table.getSelectedRow(), 0).toString());
+                JButton add = new JButton("Modifica");
+                add.setForeground(Color.white);
+                add.addActionListener(new ActionListener() {
+
+                    public void actionPerformed(ActionEvent arg0) {        
+                          // Se è una categoria dinamica:
+                          if(model.getValueAt(table.getSelectedRow(), 1).toString().equals("DA DEFINIRE")){
+                            int index = list_cat_new.indexOf(model.getValueAt(table.getSelectedRow(), 0).toString());
+                             list_cat_new.set(index, name.getText().toUpperCase());
+                              model.setValueAt(name.getText().toUpperCase(), table.getSelectedRow(), 0);                              
+                              
+                          }
+                          //Se è una categoria del db
+                          else{
+                              ProdottoDAO prodao = new ProdottoDAO();
+                              try {
+                                  prodao.updateCat(model.getValueAt(table.getSelectedRow(), 0).toString(), name.getText());
+                                  model.setValueAt(name.getText().toUpperCase(), table.getSelectedRow(), 0);
+
+                                  
+                              } catch (SQLException ex) {
+                                  Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+                              }
+                          
+                          }
+                      
+                       modificaframe.dispose();
+
+                    }
+                });
+
+                modificaframe.setLayout(new GridLayout(2, 1, 5, 5));
+
+                modificaframe.add(name);
+                modificaframe.add(add);
+                modificaframe.pack();
+                modificaframe.setResizable(false);  
+                modificaframe.setVisible(true);
+              }
+            });
+        
+        
+        buttonModifica.setFont(new Font("Arial Black", Font.BOLD, 13));
+        panSopra.add(buttonModifica);
+        JButton buttonCancella = new JButton("Cancella");
+        buttonCancella.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // Se trattasi di categorie dinamiche
+                if(model.getValueAt(table.getSelectedRow(), 1).toString().equals("DA DEFINIRE")){
+                     int OpzioneScelta = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler cancellare la categoria "+ model.getValueAt(table.getSelectedRow(), 0).toString() +"?");
+                    if (OpzioneScelta == JOptionPane.OK_OPTION) { 
+                        int index = list_cat_new.indexOf(model.getValueAt(table.getSelectedRow(), 0).toString());
+                       list_cat_new.remove(index);
+                       model.removeRow(table.getSelectedRow());                              
+                    }
+              }              
+                try {   
+                    refreshTab();
+                } catch (SQLException ex) {
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                } 
+
+            }
+        });
+        buttonCancella.setFont(new Font("Arial Black", Font.BOLD, 13));
+        panSopra.add(buttonCancella);
 
         super.add(panSopra);
 
@@ -139,7 +225,7 @@ class CategoriePanel extends JPanel {
                 return column >= 2; //il numero di celle editabili...
             }
         };
-        JTable table = new JTable(model);
+        table = new JTable(model);
         table.getTableHeader().setReorderingAllowed(false);
 
         try {
@@ -245,7 +331,9 @@ class CategoriePanel extends JPanel {
               Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
           } catch (IOException ex) {
               Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-          }         
+          }    
+        
+
         
     }
 
