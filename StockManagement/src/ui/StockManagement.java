@@ -30,20 +30,24 @@ public class StockManagement {
 
     private static Logger logger = Logger.getLogger("genlog");
     private static FileHandler fh;
-    private static String version = "Versione Software 0.9.4";
+    private static String version = "Versione Software 0.9.4b";
 
     public static void main(String[] args) throws InterruptedException, IOException {
 
         JavaProcessId.jPID();
-
-        File file = new File("./DATA/aikkop.aksn");
-        if (!file.createNewFile()) {
-        }
         
-
         // CREA CARTELLA DI ROOT DEI DATI
         File directory = new File("./DATA/");
         if (!directory.mkdir()) {
+        }
+        
+        // CREA CARTELLA DI ROOT DEI DATI
+        File dir = new File("./DATA/CONFIG");
+        if (!dir.mkdir()) {
+        }
+        
+        File file = new File("./DATA/CONFIG/aikkop.aksn");
+        if (!file.createNewFile()) {
         }
 
         // CREA CARTELLA QRCODE

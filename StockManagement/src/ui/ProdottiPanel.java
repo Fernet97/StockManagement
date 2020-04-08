@@ -83,7 +83,7 @@ public class ProdottiPanel extends JPanel {
 
     public ProdottiPanel() {
         try{
-           File file = new File("./DATA/aikkop.aksn");
+           File file = new File("./DATA/CONFIG/aikkop.aksn");
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
             list_cat_new =(ArrayList<String>)ois.readObject();
@@ -255,6 +255,23 @@ public class ProdottiPanel extends JPanel {
             model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), pro.getNote(), pro.getQty_min(), "Modifica", "Cancella", "Ordina"});
 
         }
+        
+        
+        try{
+           File file = new File("./DATA/CONFIG/aikkop.aksn");
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            list_cat_new =(ArrayList<String>)ois.readObject();
+
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (FileNotFoundException ex) {
+                File file = new File("aikkop.aksn");
+                Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                //Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+                list_cat_new = new ArrayList<>();
+            }
 
     }
 

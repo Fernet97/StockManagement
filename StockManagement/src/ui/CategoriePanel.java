@@ -68,7 +68,7 @@ class CategoriePanel extends JPanel {
     public CategoriePanel() {
         
       try {
-           File file = new File("./DATA/aikkop.aksn");
+           File file = new File("./DATA/CONFIG/aikkop.aksn");
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
             list_cat_new =(ArrayList<String>)ois.readObject();
@@ -76,7 +76,7 @@ class CategoriePanel extends JPanel {
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (FileNotFoundException ex) {
-                File file = new File("./DATA/aikkop.aksn");
+                File file = new File("./DATA/CONFIG/aikkop.aksn");
                 Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 //Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -321,7 +321,7 @@ class CategoriePanel extends JPanel {
          
         // Agiorno il file con le nuove cat_dinamiche
         try {
-          File output=new File("./DATA/aikkop.aksn");
+          File output=new File("./DATA/CONFIG/aikkop.aksn");
           FileOutputStream fos;
           fos = new FileOutputStream(output);
           ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -470,7 +470,7 @@ class CategoriePanel extends JPanel {
             }
                             try {
 
-                    File output=new File("./DATA/aikkop.aksn");
+                    File output=new File("./DATA/CONFIG/aikkop.aksn");
                     FileOutputStream fos;
                     fos = new FileOutputStream(output);
                     ObjectOutputStream oos = new ObjectOutputStream(fos);
