@@ -324,5 +324,31 @@ public class ProdottoDAO {
             }
         }
      }
+     
+     public synchronized void removeCatp(String catp) throws SQLException {
+        Connection connection = null;
+        Statement statement = null;
+        String query = "DELETE FROM " + this.TABLE_NAME + " WHERE  (`categoria` = '" + catp + "');";
+              Logger.getLogger("userlog").info("Eliminazione dei prodotti collegati alla categoria "+catp+"\n");
+
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+            connection.commit();
+            
+            Logger.getLogger("userlog").info(query);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+        }
+
+    }
 
 }
