@@ -30,6 +30,7 @@ public class StockManagement {
 
     private static Logger logger = Logger.getLogger("genlog");
     private static FileHandler fh;
+    private static String version = "Versione Software 0.9.4";
 
     public static void main(String[] args) throws InterruptedException, IOException {
 
@@ -77,7 +78,7 @@ public class StockManagement {
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
-            logger.info("Versione Software 0.9.3");
+            logger.info(version);
 
         } catch (SecurityException e) {
             Logger.getLogger("genlog").warning("SecurityException\n" + StockManagement.printStackTrace(e));
