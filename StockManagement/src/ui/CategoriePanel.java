@@ -196,7 +196,38 @@ class CategoriePanel extends JPanel {
                        list_cat_new.remove(index);
                        model.removeRow(table.getSelectedRow());                              
                     }
-              }              
+              }             
+                // Trattasi di categoria del db
+              else{                    
+                     Object[] options = {"Cancella solo categoria", "Cancella TUTTI i prodotti correlati alla categoria"};
+                     int scelta =JOptionPane.showOptionDialog(null, "Seleziona la modalità di eliminazione", "Elimina categoria", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                     
+                     // Cancella solo categoria
+                     if(scelta == 0){
+                            ProdottoDAO prodao = new ProdottoDAO();
+                           try {
+                                if(model.getValueAt(table.getSelectedRow(), 0).toString().equals("NULL")){
+                                JOptionPane.showMessageDialog(null, "Ma che fai? Mica puoi cancellare il niente!");
+                                actionPerformed(e);
+                                return;}
+                               prodao.updateCat(model.getValueAt(table.getSelectedRow(), 0).toString(), "NULL");
+                               model.setValueAt("", table.getSelectedRow(), 0);
+                           } catch (SQLException ex) {
+                               Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+                           }
+                         
+                     }
+                     // Cancella prodotti correlati
+                     else{
+                         ProdottoDAO prodao = new ProdottoDAO();
+                         try {
+                             prodao.removeCatp(model.getValueAt(table.getSelectedRow(), 0).toString());
+                         } catch (SQLException ex) {
+                             Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+                         }
+                    
+                     }
+                }
                 try {   
                     refreshTab();
                 } catch (SQLException ex) {
