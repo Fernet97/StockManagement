@@ -166,6 +166,11 @@ class CategoriePanel extends JPanel {
                           }
                       
                        modificaframe.dispose();
+                        try {
+                            refreshTab();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
 
                     }
                 });
@@ -218,7 +223,7 @@ class CategoriePanel extends JPanel {
                          
                      }
                      // Cancella prodotti correlati
-                     else{
+                     else if(scelta == 1){
                          ProdottoDAO prodao = new ProdottoDAO();
                          try {
                              prodao.removeCatp(model.getValueAt(table.getSelectedRow(), 0).toString());
