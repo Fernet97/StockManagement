@@ -129,7 +129,7 @@ class CategoriePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(table.getSelectedRow()<0) {
-                    JOptionPane.showMessageDialog(null, "Devi selezionare una riga da modificare!");
+                    JOptionPane.showMessageDialog(getParent(), "Devi selezionare una riga da modificare!");
                     return;
                 }
                 System.out.println("Categoria da modificare "+table.getValueAt(table.getSelectedRow(), 0));
@@ -143,7 +143,13 @@ class CategoriePanel extends JPanel {
                 add.setForeground(Color.white);
                 add.addActionListener(new ActionListener() {
 
-                    public void actionPerformed(ActionEvent arg0) {        
+                    public void actionPerformed(ActionEvent arg0) {    
+                        if(name.getText().length() <2 || name.getText().length() >  45){
+                            modificaframe.setAlwaysOnTop(false);
+                            JOptionPane.showMessageDialog(getParent(), "La lunghezza della categoria deve essere compresa tra 2 e 45 caratteri|");
+                            modificaframe.setAlwaysOnTop(true);
+                            return;
+                        }
                           // Se è una categoria dinamica:
                           if(model.getValueAt(table.getSelectedRow(), 1).toString().equals("DA DEFINIRE")){
                             int index = list_cat_new.indexOf(model.getValueAt(table.getSelectedRow(), 0).toString());
@@ -494,9 +500,8 @@ class CategoriePanel extends JPanel {
 
         public void confermaCategoria() {
             setAlwaysOnTop(false);
-            if (name.getText().length() < 2) {
-                JOptionPane.showMessageDialog(getParent(), "La categoria deve avere almeno 2 lettere!");
-                close();
+            if (name.getText().length() < 2 || name.getText().length() > 45) {
+                JOptionPane.showMessageDialog(getParent(), "La categoria deve avere lunghezza compresa tra 2 e 45 caratteri!");
             } else {
                 Logger.getLogger("userlog").info("Hai aggiunto la categoria: " + name.getText());
                 model.addRow(new Object[]{name.getText().toUpperCase(), "DA DEFINIRE", "Vai a prodotti"});

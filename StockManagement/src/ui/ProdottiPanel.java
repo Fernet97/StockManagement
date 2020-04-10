@@ -284,8 +284,17 @@ public class ProdottiPanel extends JPanel {
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-
-            if (Integer.parseInt(table.getValueAt(row, 4).toString()) <= Integer.parseInt(table.getValueAt(row, 9).toString())) {
+             
+            ProdottoDAO prodao = new ProdottoDAO();
+            Prodotto p = null;
+            try {
+                p = prodao.getBySku(table.getValueAt(row, 0).toString());
+            } catch (SQLException ex) {
+                Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            if (Integer.parseInt(table.getValueAt(row, 4).toString()) <= p.getQty_min()) {
 
                 setBackground(new Color(244, 80, 37));    // ROSSO        
             } else {
@@ -500,7 +509,7 @@ public class ProdottiPanel extends JPanel {
         public JTextField casname;
         public JTextField casqty;
         public JTextField ccosto;
-        public JTextField cmin;
+        public JTextField cInArr;
         public JTextField cforn;
         public JComboBox cat;
 
@@ -647,10 +656,10 @@ public class ProdottiPanel extends JPanel {
 
             JPanel pmin = new JPanel();
             JLabel lmin = new JLabel("Qty. min");
-            cmin = new JTextField(15);
-            cmin.setAlignmentX(RIGHT_ALIGNMENT);
+            cInArr = new JTextField(15);
+            cInArr.setAlignmentX(RIGHT_ALIGNMENT);
             pmin.add(lmin);
-            pmin.add(cmin);
+            pmin.add(cInArr);
             main.add(pmin);
 
             JPanel pforn = new JPanel();
@@ -795,21 +804,50 @@ public class ProdottiPanel extends JPanel {
 
         }
 
-        // casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), Innegozio, Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, InStock);
+        // casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), Innegozio, Float.valueOf(ccosto.getText()), Integer.parseInt(cInArr.getText()), note.getText(), percorsofoto, InStock);
         private boolean check() {
-            if (casname.getText().isEmpty() || casqty.getText().isEmpty() || ccosto.getText().isEmpty() || cmin.getText().isEmpty()) {
+            if (casname.getText().isEmpty() || casqty.getText().isEmpty() || ccosto.getText().isEmpty() || cInArr.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Compila tutti i campi! ['Note' è opzionale]");
                 return false;
             }
 
             if (cat.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(this, "Devi scegliere una categoria!!");
-
+                return false;
             }
-
+            
+            
+            if(casname.getText().length() > 45){
+                JOptionPane.showMessageDialog(this, "Nome troppo lungo!");
+                return false;
+            }
+            
+            if(casqty.getText().length() > 10){
+                JOptionPane.showMessageDialog(this, "Quantità esagerata!");
+                return false;
+            }
+            
+            if(ccosto.getText().length() > 15){
+                JOptionPane.showMessageDialog(this, "Costo non valido!");
+                return false;
+            }
+            
+            
+            if(cInArr.getText().length() > 10){
+                JOptionPane.showMessageDialog(this, "Quantità minima non valida!");
+                return false;
+            }
+            
+            
+            if(note.getText().length() > 65535){
+                JOptionPane.showMessageDialog(this, "Note troppo lunghe!");
+                return false;
+            }
+            
+            
             try { //Controlla se sono interi...
                 Integer.parseInt(casqty.getText());
-                Integer.parseInt(cmin.getText());
+                Integer.parseInt(cInArr.getText());
 
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Controlla che \"Quantità\",  \"qty minima\",  siano numeri validi. [ Per il costo usare \".\" per indicare la parte decimale ]");
@@ -836,7 +874,7 @@ public class ProdottiPanel extends JPanel {
             try {
                 int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                 if (a == JOptionPane.YES_OPTION) {
-                    prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
+                    prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cInArr.getText()), note.getText(), percorsofoto, negozio.isSelected());
                     ProdottoDAO dao = new ProdottoDAO();
 
                     if (percorsofoto != null) {
@@ -878,7 +916,7 @@ public class ProdottiPanel extends JPanel {
                 casku.setText(prodotto.getSku());
                 casname.setText(prodotto.getNome());
                 casdatareg.setText(prodotto.getDatareg());
-                cmin.setText(Integer.toString(prodotto.getQty_min()));
+                cInArr.setText(Integer.toString(prodotto.getQty_min()));
                 casqty.setText(Integer.toString(prodotto.getQty()));
 
                 // CONDENSA 0s
@@ -921,7 +959,7 @@ public class ProdottiPanel extends JPanel {
             try {
                 int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                 if (a == JOptionPane.YES_OPTION) {
-                    Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
+                    Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cInArr.getText()), note.getText(), percorsofoto, negozio.isSelected());
 
                     if (percorsofoto != null && !percorsofoto.equals("NULL") && !percorsofoto.equals("null")) {
                         Path sourcepath = Paths.get(percorsofoto);
