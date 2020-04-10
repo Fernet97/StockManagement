@@ -124,7 +124,6 @@ public class OrdiniAdminPanel extends JPanel {
                     } else {
                         casella.setBackground(Color.green);
                         ((DefaultListModel) list.getModel()).addElement(p.getSku() + "|  " + p.getNome());
-                        aggiungiTOcarrello(p.getSku() + "|  " + p.getNome());
 
                         forny = ordinedao.getFPr(text);
 
@@ -136,8 +135,9 @@ public class OrdiniAdminPanel extends JPanel {
                                 break;
                             }
                         }
-
                         jComboBox.getModel().setSelectedItem(forny + "|" + fornyname);
+                        
+                        aggiungiTOcarrello(p.getSku() + "|  " + p.getNome());
 
                     }
 

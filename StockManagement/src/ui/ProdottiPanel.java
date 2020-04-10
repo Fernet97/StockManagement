@@ -151,7 +151,7 @@ public class ProdottiPanel extends JPanel {
         TitoloTab1.setLayout(new GridLayout(1, 1));
         TitoloTab1.setBorder(new EmptyBorder(0, 100, 20, 100));
 
-        String[] columnNames = {"sku", "Data reg.", "Nome", "Categoria", "Quantità", "Fornitore", "In Stock?", "Costo", "Note", "Quantità minima", "Modifica", "Cancella", "Ordina"};
+        String[] columnNames = {"sku", "Data reg.", "Nome", "Categoria", "Quantità", "Fornitore", "In Stock?", "Costo", "Note", "Quantità in arrivo", "Modifica", "Cancella", "Ordina"};
 
         Object[][] data = {};
 
@@ -246,13 +246,15 @@ public class ProdottiPanel extends JPanel {
 
         OrdineDAO daoo = new OrdineDAO();
 
+
         for (Prodotto pro : dao.getAll()) {
             Fornitore forni = forndao.getByID(daoo.getFPr(pro.getSku()));
             String forny = forni.getIdfornitore() + "|  " + forni.getFullname();
 
+            
             // CONDENSA 0s
             BigDecimal bd = new BigDecimal(String.valueOf(pro.getCosto()));
-            model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), pro.getNote(), pro.getQty_min(), "Modifica", "Cancella", "Ordina"});
+            model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), pro.getNote(), daoo.getQtyArrSku(pro.getSku()), "Modifica", "Cancella", "Ordina"});
 
         }
         
