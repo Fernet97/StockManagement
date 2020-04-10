@@ -509,7 +509,7 @@ public class ProdottiPanel extends JPanel {
         public JTextField casname;
         public JTextField casqty;
         public JTextField ccosto;
-        public JTextField cInArr;
+        public JTextField cmin;
         public JTextField cforn;
         public JComboBox cat;
 
@@ -656,10 +656,10 @@ public class ProdottiPanel extends JPanel {
 
             JPanel pmin = new JPanel();
             JLabel lmin = new JLabel("Qty. min");
-            cInArr = new JTextField(15);
-            cInArr.setAlignmentX(RIGHT_ALIGNMENT);
+            cmin = new JTextField(15);
+            cmin.setAlignmentX(RIGHT_ALIGNMENT);
             pmin.add(lmin);
-            pmin.add(cInArr);
+            pmin.add(cmin);
             main.add(pmin);
 
             JPanel pforn = new JPanel();
@@ -804,9 +804,9 @@ public class ProdottiPanel extends JPanel {
 
         }
 
-        // casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), Innegozio, Float.valueOf(ccosto.getText()), Integer.parseInt(cInArr.getText()), note.getText(), percorsofoto, InStock);
+        // casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), Innegozio, Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, InStock);
         private boolean check() {
-            if (casname.getText().isEmpty() || casqty.getText().isEmpty() || ccosto.getText().isEmpty() || cInArr.getText().isEmpty()) {
+            if (casname.getText().isEmpty() || casqty.getText().isEmpty() || ccosto.getText().isEmpty() || cmin.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Compila tutti i campi! ['Note' è opzionale]");
                 return false;
             }
@@ -833,7 +833,7 @@ public class ProdottiPanel extends JPanel {
             }
             
             
-            if(cInArr.getText().length() > 10){
+            if(cmin.getText().length() > 10){
                 JOptionPane.showMessageDialog(this, "Quantità minima non valida!");
                 return false;
             }
@@ -847,7 +847,7 @@ public class ProdottiPanel extends JPanel {
             
             try { //Controlla se sono interi...
                 Integer.parseInt(casqty.getText());
-                Integer.parseInt(cInArr.getText());
+                Integer.parseInt(cmin.getText());
 
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Controlla che \"Quantità\",  \"qty minima\",  siano numeri validi. [ Per il costo usare \".\" per indicare la parte decimale ]");
@@ -874,7 +874,7 @@ public class ProdottiPanel extends JPanel {
             try {
                 int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                 if (a == JOptionPane.YES_OPTION) {
-                    prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cInArr.getText()), note.getText(), percorsofoto, negozio.isSelected());
+                    prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
                     ProdottoDAO dao = new ProdottoDAO();
 
                     if (percorsofoto != null) {
@@ -916,7 +916,7 @@ public class ProdottiPanel extends JPanel {
                 casku.setText(prodotto.getSku());
                 casname.setText(prodotto.getNome());
                 casdatareg.setText(prodotto.getDatareg());
-                cInArr.setText(Integer.toString(prodotto.getQty_min()));
+                cmin.setText(Integer.toString(prodotto.getQty_min()));
                 casqty.setText(Integer.toString(prodotto.getQty()));
 
                 // CONDENSA 0s
@@ -959,7 +959,7 @@ public class ProdottiPanel extends JPanel {
             try {
                 int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                 if (a == JOptionPane.YES_OPTION) {
-                    Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cInArr.getText()), note.getText(), percorsofoto, negozio.isSelected());
+                    Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
 
                     if (percorsofoto != null && !percorsofoto.equals("NULL") && !percorsofoto.equals("null")) {
                         Path sourcepath = Paths.get(percorsofoto);
