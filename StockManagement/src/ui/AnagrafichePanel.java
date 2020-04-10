@@ -869,22 +869,59 @@ public class AnagrafichePanel extends JPanel {
                 if (casfullname.getText().isEmpty() || cascfiva.getText().isEmpty() || casindirizzo.getText().isEmpty()
                         || castel.getText().isEmpty() || casemail.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Riempi tutti i campi! ['Note' è opzionale]");
-
                     return false;
                 }
+                if (cascfiva.getText().length() > 45) {
+                    JOptionPane.showMessageDialog(this, "CF troppo lungo!");
+                    return false;
+                } 
+                
+                if(caspwd.getText().length() > 254 ){
+                    JOptionPane.showMessageDialog(this, "Password troppo lunga!");
+                    return false;
+                }
+                
+             // se è un fornitore   
             } else if (tipologia == 1) {
                 if (casfullname.getText().isEmpty() || cascfiva.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Riempi tutti i campi! ['Note', 'Telefono', 'email', 'indirizzo' sono opzionali]");
-
                     return false;
                 }
+                                
+                if (cascfiva.getText().length() > 30) {
+                    JOptionPane.showMessageDialog(this, "P.IVA troppo lunga!");
+                    return false;
+                } 
+                 
             }
 
-            if (castel.getText().length() >= 15) {
+            if (castel.getText().length() > 20) {
                 JOptionPane.showMessageDialog(this, "Numero di telefono troppo lungo");
                 return false;
             }
 
+            if (casfullname.getText().length() > 45) {
+                JOptionPane.showMessageDialog(this, "Nome troppo lungo!");
+                return false;
+            }           
+            
+            if (casindirizzo.getText().length() > 254) {
+                JOptionPane.showMessageDialog(this, "Indirizzo troppo lungo!");
+                return false;
+            }           
+
+            if (casemail.getText().length() > 254) {
+                JOptionPane.showMessageDialog(this, "email troppo lunga!");
+                return false;
+            }  
+
+            if (note.getText().length() > 65535) {
+                JOptionPane.showMessageDialog(this, "note troppo lunghe!");
+                return false;
+            }  
+
+            
+            
             // SE NON C'E' UN NOME E UN COGNOME X UTENTE (CI DEVE ESSERE UNO SPAZIO)
             if (casfullname.getText().matches("\\S+") && tipologia == 2) {
                 JOptionPane.showMessageDialog(this, "Bisogna specificare un nome e un cognome!");

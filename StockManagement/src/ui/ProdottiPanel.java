@@ -284,8 +284,17 @@ public class ProdottiPanel extends JPanel {
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-
-            if (Integer.parseInt(table.getValueAt(row, 4).toString()) <= Integer.parseInt(table.getValueAt(row, 9).toString())) {
+             
+            ProdottoDAO prodao = new ProdottoDAO();
+            Prodotto p = null;
+            try {
+                p = prodao.getBySku(table.getValueAt(row, 0).toString());
+            } catch (SQLException ex) {
+                Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            if (Integer.parseInt(table.getValueAt(row, 4).toString()) <= p.getQty_min()) {
 
                 setBackground(new Color(244, 80, 37));    // ROSSO        
             } else {
@@ -804,9 +813,38 @@ public class ProdottiPanel extends JPanel {
 
             if (cat.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(this, "Devi scegliere una categoria!!");
-
+                return false;
             }
-
+            
+            
+            if(casname.getText().length() > 45){
+                JOptionPane.showMessageDialog(this, "Nome troppo lungo!");
+                return false;
+            }
+            
+            if(casqty.getText().length() > 10){
+                JOptionPane.showMessageDialog(this, "Quantità esagerata!");
+                return false;
+            }
+            
+            if(ccosto.getText().length() > 15){
+                JOptionPane.showMessageDialog(this, "Costo non valido!");
+                return false;
+            }
+            
+            
+            if(cmin.getText().length() > 10){
+                JOptionPane.showMessageDialog(this, "Quantità minima non valida!");
+                return false;
+            }
+            
+            
+            if(note.getText().length() > 65535){
+                JOptionPane.showMessageDialog(this, "Note troppo lunghe!");
+                return false;
+            }
+            
+            
             try { //Controlla se sono interi...
                 Integer.parseInt(casqty.getText());
                 Integer.parseInt(cmin.getText());
