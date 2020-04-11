@@ -76,6 +76,7 @@ public class FramePrincipale extends JFrame {
     public ButtonDash button3;
     public ButtonDash button4;
     public ButtonDash button5;
+    private AnagrafichePanel anagrafiche;
 
     public FramePrincipale(String nomeutente) {
         nomeuser = nomeutente;
@@ -115,7 +116,7 @@ public class FramePrincipale extends JFrame {
 
         } else {
             //Aggiungi la carta "ANAGRAFICHE"
-            AnagrafichePanel anagrafiche = new AnagrafichePanel();
+            anagrafiche = new AnagrafichePanel();
             HomePanel.add(anagrafiche, "Anagrafiche");
             anagrafiche.setComunicator(this);
 
@@ -352,6 +353,11 @@ public class FramePrincipale extends JFrame {
          public void VaiAOrdiniconProdFornCEH(String prod){
            cardlayout.show(HomePanel, "Ordini");
            ordiniadmin.casella.setText(prod);
+         }
+         
+         public void VaiUtenti(){
+             cardlayout.show(HomePanel, "Anagrafiche");
+             anagrafiche.ViewOnlyUtenti();
          }
         
 
@@ -642,7 +648,33 @@ public class FramePrincipale extends JFrame {
                 }
                  scrittaVai = new JLabel(ImpostaImg("/res/img/users.png"));
                    vai.removeAll();
+                   
+                vai.addMouseListener(new MouseListener() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        VaiUtenti();
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                    }
+                });
+                   
+                        
                 vai.add(scrittaVai);
+                   
             }
 
             if (type.equals("Totale prodotti in magazzino")) {

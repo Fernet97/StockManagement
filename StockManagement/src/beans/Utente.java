@@ -190,7 +190,7 @@ public class Utente {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
             
         } catch (NullPointerException en) {
-            Logger.getLogger("genlog").warning("NullPointerException\n" + StockManagement.printStackTrace(en));
+           // Logger.getLogger("genlog").warning("NullPointerException\n" + StockManagement.printStackTrace(en));
             
             return idlast = 0;
         }

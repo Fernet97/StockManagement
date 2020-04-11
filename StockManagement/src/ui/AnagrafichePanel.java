@@ -20,6 +20,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
@@ -1075,6 +1076,20 @@ public class AnagrafichePanel extends JPanel {
             }
         }
 
+    }
+    
+    
+    public void ViewOnlyUtenti(){
+        checkclient.setSelected(false);
+        checkforn.setSelected(false);
+        checkuten.setSelected(true);
+        
+        try {
+            refreshTab();
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
     }
 
     public void setComunicator(FramePrincipale princ) {
