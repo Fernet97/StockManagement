@@ -51,6 +51,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -80,8 +81,11 @@ public class ProdottiPanel extends JPanel {
     private final JTable table;
     public String percorsofoto;
     private FramePrincipale frameprinc;
+    public JRadioButton checkOnlyArriv;
+    
 
-    public ProdottiPanel() {
+    public ProdottiPanel() {        
+        
         try{
            File file = new File("./DATA/CONFIG/aikkop.aksn");
             FileInputStream fis = new FileInputStream(file);
@@ -113,6 +117,19 @@ public class ProdottiPanel extends JPanel {
         casella = new JTextField(20);
         cerca.add(searchlabel);
         cerca.add(casella);
+       
+        ActionListener actionListener = new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    refreshTab();
+                } catch (SQLException ex) {
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                }
+            }
+        };
+        checkOnlyArriv = new JRadioButton("Solo prodotti in arrivo");
+        checkOnlyArriv.addActionListener(actionListener);
+        cerca.add(checkOnlyArriv);
         panSopra.add(cerca);
 
         panSopra.add(new JLabel(" "));
@@ -175,11 +192,16 @@ public class ProdottiPanel extends JPanel {
 
         table.setRowHeight(40); //altezza celle
 
-        //X colonne che hanno pulsanti
+        //X colonne che hanno semafori
         table.getColumnModel().getColumn(4).setCellRenderer(new CustomRender());
 
         table.getColumnModel().getColumn(6).setCellRenderer(new CustomStockRender());
 
+        table.getColumnModel().getColumn(9).setCellRenderer(new CustomInArrivoRender());
+        
+        
+         
+        //X colonne che hanno pulsanti
         table.getColumnModel().getColumn(10).setCellRenderer(new ClientsTableButtonRenderer());
         table.getColumnModel().getColumn(10).setCellEditor(new ClientsTableRenderer(new JCheckBox()));
 
@@ -246,17 +268,30 @@ public class ProdottiPanel extends JPanel {
 
         OrdineDAO daoo = new OrdineDAO();
 
+         if (checkOnlyArriv.isSelected()) {
+         
+         
+         }
 
         for (Prodotto pro : dao.getAll()) {
             Fornitore forni = forndao.getByID(daoo.getFPr(pro.getSku()));
             String forny = forni.getIdfornitore() + "|  " + forni.getFullname();
 
-            
-            // CONDENSA 0s
-            BigDecimal bd = new BigDecimal(String.valueOf(pro.getCosto()));
-            model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), pro.getNote(), daoo.getQtyArrSku(pro.getSku()), "Modifica", "Cancella", "Ordina"});
+            if (checkOnlyArriv.isSelected()) {
+                if(daoo.getQtyArrSku(pro.getSku())>0){ //Aggiungo solo righe che hanno prodotti in arrivo
+                        // CONDENSA 0s
+                     BigDecimal bd = new BigDecimal(String.valueOf(pro.getCosto()));
+                     model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), pro.getNote(), daoo.getQtyArrSku(pro.getSku()), "Modifica", "Cancella", "Ordina"});
 
-        }
+                }
+         
+            }else{
+               // CONDENSA 0s
+               BigDecimal bd = new BigDecimal(String.valueOf(pro.getCosto()));
+               model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), pro.getNote(), daoo.getQtyArrSku(pro.getSku()), "Modifica", "Cancella", "Ordina"});
+                
+            }
+           }
         
         
         try{
@@ -296,7 +331,7 @@ public class ProdottiPanel extends JPanel {
             }
             
             
-            if (Integer.parseInt(table.getValueAt(row, 4).toString()) <= p.getQty_min()) {
+            if (Integer.parseInt(table.getValueAt(row, 4).toString()) <= p.getQty_min()){
 
                 setBackground(new Color(244, 80, 37));    // ROSSO        
             } else {
@@ -330,6 +365,36 @@ public class ProdottiPanel extends JPanel {
             return this;
         }
     }
+    
+    
+    // RENDER DI QTY IN ARRIVO O NO     
+    class CustomInArrivoRender extends JButton implements TableCellRenderer {
+
+        public CustomInArrivoRender() {
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+            if (Integer.parseInt(table.getValueAt(row, 9).toString())>0) {
+                setBackground(new Color(126, 169, 93));  // VERDE         
+                setText(table.getValueAt(row, 9).toString());
+
+
+            } else {
+                setBackground(new Color(244, 80, 37));    // ROSSO 
+                setText("");
+
+            }
+
+
+            return this;
+        }
+    }
+    
+    
+    
+    
 
     class ClientsTableButtonRenderer extends JButton implements TableCellRenderer {
 
@@ -996,6 +1061,24 @@ public class ProdottiPanel extends JPanel {
 
     }
 
+    
+    public void ViewOnlyInArrivo(){
+    
+        checkOnlyArriv.setSelected(true);
+        
+        try {
+            refreshTab();
+        } catch (SQLException ex) {
+            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+   
+    
+    }
+    
+    
+    
+    
     public void setComunicator(FramePrincipale princ) {
         frameprinc = princ;
 

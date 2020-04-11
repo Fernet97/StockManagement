@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -335,6 +336,14 @@ public class FramePrincipale extends JFrame {
         prodotti.casella.setText(query);
 
     }
+    
+    
+    public void VaiAProdottiInArrivo(){
+        cardlayout.show(HomePanel, "Prodotti");
+        prodotti.ViewOnlyInArrivo();
+
+    }
+    
     
         public void VaiAOrdini(String forn) {
            cardlayout.show(HomePanel, "Ordini");
@@ -726,21 +735,18 @@ public class FramePrincipale extends JFrame {
             number = 0;
             OrdineDAO ordao = new OrdineDAO();
             try {
-            for(Ordine o : ordao.getAll()){
-            
-            if(ordao.ggConsegnaPR2(o.getN_ordine(), o.getProdotto_sku()) <=5 && o.getGiorni_alla_consegna()>=0){
-                number++;}
+            for(Ordine o: ordao.getAll()){
+              if(o.getGiorni_alla_consegna() >= 0)
+                  number+= o.getQty_in_arrivo();
                
             }
             } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));   
-            }   catch (ParseException ex) {
- Logger.getLogger("genlog").warning("ParseException\n"+StockManagement.printStackTrace(ex));                }
-           
+                Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));   
+            }  
             vai.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    VaiAProdotti("");
+                    VaiAProdottiInArrivo();
                 }
                 @Override
                 public void mousePressed(MouseEvent e) {}
