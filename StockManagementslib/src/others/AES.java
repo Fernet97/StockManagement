@@ -18,7 +18,6 @@ import java.util.logging.Logger;
  
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-import ui.StockManagement;
  
 public class AES {
  
@@ -36,10 +35,8 @@ public class AES {
             secretKey = new SecretKeySpec(key, "AES");
         } 
         catch (NoSuchAlgorithmException e) {
-            Logger.getLogger("genlog").info("NoSuchAlgorithmException: \n"+StockManagement.printStackTrace(e));
         } 
         catch (UnsupportedEncodingException e) {
-            Logger.getLogger("genlog").info("UnsupportedEncodingException: \n"+StockManagement.printStackTrace(e));
         }
     }
  
@@ -54,7 +51,6 @@ public class AES {
         } 
         catch (Exception e) 
         {
-            Logger.getLogger("genlog").info("Exception: \n"+StockManagement.printStackTrace(e));
         }
         return null;
     }
@@ -70,7 +66,6 @@ public class AES {
         } 
         catch (Exception e) 
         {
-           Logger.getLogger("genlog").info("Exception: \n"+StockManagement.printStackTrace(e));
         }
         return null;
     }

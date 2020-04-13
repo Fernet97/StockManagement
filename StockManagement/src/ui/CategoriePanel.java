@@ -66,24 +66,23 @@ class CategoriePanel extends JPanel {
     private final JTable table;
 
     public CategoriePanel() {
-        
-      try {
-           File file = new File("./DATA/CONFIG/aikkop.aksn");
+
+        try {
+            File file = new File("./DATA/CONFIG/aikkop.aksn");
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            list_cat_new =(ArrayList<String>)ois.readObject();
+            list_cat_new = (ArrayList<String>) ois.readObject();
 
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (FileNotFoundException ex) {
-                File file = new File("./DATA/CONFIG/aikkop.aksn");
-                Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                //Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-                list_cat_new = new ArrayList<>();
-            }
-            
-        
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger("genlog").info("ClassNotFoundException: \n" + StockManagement.printStackTrace(ex));
+        } catch (FileNotFoundException ex) {
+            File file = new File("./DATA/CONFIG/aikkop.aksn");
+            Logger.getLogger("genlog").info("FileNotFoundException:\n " + StockManagement.printStackTrace(ex));
+        } catch (IOException ex) {
+            Logger.getLogger("genlog").info("IOException: \n" + StockManagement.printStackTrace(ex));
+            list_cat_new = new ArrayList<>();
+        }
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JLabel title = new JLabel("CATEGORIE");
         title.setFont(new Font("Arial Black", Font.BOLD, 40));
@@ -102,7 +101,6 @@ class CategoriePanel extends JPanel {
         cerca.setBorder(new EmptyBorder(0, 0, 0, 800));
         panSopra.add(cerca);
 
-
         JButton buttonNew = new JButton("ADD NEW");
         //*************+* BOTTONE AGGIUNGI NUOVA RIGA**************************
         buttonNew.addActionListener(new ActionListener() {
@@ -111,14 +109,14 @@ class CategoriePanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 AddCategoriaDialog input = new AddCategoriaDialog();
                 String txt = input.getName();
-                input.setLocationRelativeTo(null); 
+                input.setLocationRelativeTo(null);
                 input.setVisible(true);
 
-                try {   
+                try {
                     refreshTab();
                 } catch (SQLException ex) {
                     Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                } 
+                }
 
             }
         });
@@ -128,14 +126,14 @@ class CategoriePanel extends JPanel {
         buttonModifica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(table.getSelectedRow()<0) {
+                if (table.getSelectedRow() < 0) {
                     JOptionPane.showMessageDialog(getParent(), "Devi selezionare una riga da modificare!");
                     return;
                 }
-                System.out.println("Categoria da modificare "+table.getValueAt(table.getSelectedRow(), 0));
+                System.out.println("Categoria da modificare " + table.getValueAt(table.getSelectedRow(), 0));
                 JFrame modificaframe = new JFrame("Specifica il nuovo valore per la categoria");
                 modificaframe.setAlwaysOnTop(true);
-                modificaframe.setLocationRelativeTo(null); ;
+                modificaframe.setLocationRelativeTo(null);;
                 modificaframe.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
                 modificaframe.setMinimumSize(new Dimension(500, 100));
                 JTextField name = new JTextField(model.getValueAt(table.getSelectedRow(), 0).toString());
@@ -143,39 +141,37 @@ class CategoriePanel extends JPanel {
                 add.setForeground(Color.white);
                 add.addActionListener(new ActionListener() {
 
-                    public void actionPerformed(ActionEvent arg0) {    
-                        if(name.getText().length() <2 || name.getText().length() >  45){
+                    public void actionPerformed(ActionEvent arg0) {
+                        if (name.getText().length() < 2 || name.getText().length() > 45) {
                             modificaframe.setAlwaysOnTop(false);
                             JOptionPane.showMessageDialog(getParent(), "La lunghezza della categoria deve essere compresa tra 2 e 45 caratteri|");
                             modificaframe.setAlwaysOnTop(true);
                             return;
                         }
-                          // Se è una categoria dinamica:
-                          if(model.getValueAt(table.getSelectedRow(), 1).toString().equals("DA DEFINIRE")){
+                        // Se è una categoria dinamica:
+                        if (model.getValueAt(table.getSelectedRow(), 1).toString().equals("DA DEFINIRE")) {
                             int index = list_cat_new.indexOf(model.getValueAt(table.getSelectedRow(), 0).toString());
-                             list_cat_new.set(index, name.getText().toUpperCase());
-                              model.setValueAt(name.getText().toUpperCase(), table.getSelectedRow(), 0);                              
-                              
-                          }
-                          //Se è una categoria del db
-                          else{
-                              ProdottoDAO prodao = new ProdottoDAO();
-                              try {
-                                  prodao.updateCat(model.getValueAt(table.getSelectedRow(), 0).toString(), name.getText());
-                                  model.setValueAt(name.getText().toUpperCase(), table.getSelectedRow(), 0);
+                            list_cat_new.set(index, name.getText().toUpperCase());
+                            model.setValueAt(name.getText().toUpperCase(), table.getSelectedRow(), 0);
 
-                                  
-                              } catch (SQLException ex) {
-                                  Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-                              }
-                          
-                          }
-                      
-                       modificaframe.dispose();
+                        } //Se è una categoria del db
+                        else {
+                            ProdottoDAO prodao = new ProdottoDAO();
+                            try {
+                                prodao.updateCat(model.getValueAt(table.getSelectedRow(), 0).toString(), name.getText());
+                                model.setValueAt(name.getText().toUpperCase(), table.getSelectedRow(), 0);
+
+                            } catch (SQLException ex) {
+                                Logger.getLogger("genlog").info("SQLException:\n " + StockManagement.printStackTrace(ex));
+                            }
+
+                        }
+
+                        modificaframe.dispose();
                         try {
                             refreshTab();
                         } catch (SQLException ex) {
-                            Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger("genlog").info("SQLException:\n " + StockManagement.printStackTrace(ex));
                         }
 
                     }
@@ -186,12 +182,11 @@ class CategoriePanel extends JPanel {
                 modificaframe.add(name);
                 modificaframe.add(add);
                 modificaframe.pack();
-                modificaframe.setResizable(false);  
+                modificaframe.setResizable(false);
                 modificaframe.setVisible(true);
-              }
-            });
-        
-        
+            }
+        });
+
         buttonModifica.setFont(new Font("Arial Black", Font.BOLD, 13));
         panSopra.add(buttonModifica);
         JButton buttonCancella = new JButton("Cancella");
@@ -200,50 +195,49 @@ class CategoriePanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
 
                 // Se trattasi di categorie dinamiche
-                if(model.getValueAt(table.getSelectedRow(), 1).toString().equals("DA DEFINIRE")){
-                     int OpzioneScelta = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler cancellare la categoria "+ model.getValueAt(table.getSelectedRow(), 0).toString() +"?");
-                    if (OpzioneScelta == JOptionPane.OK_OPTION) { 
+                if (model.getValueAt(table.getSelectedRow(), 1).toString().equals("DA DEFINIRE")) {
+                    int OpzioneScelta = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler cancellare la categoria " + model.getValueAt(table.getSelectedRow(), 0).toString() + "?");
+                    if (OpzioneScelta == JOptionPane.OK_OPTION) {
                         int index = list_cat_new.indexOf(model.getValueAt(table.getSelectedRow(), 0).toString());
-                       list_cat_new.remove(index);
-                       model.removeRow(table.getSelectedRow());                              
+                        list_cat_new.remove(index);
+                        model.removeRow(table.getSelectedRow());
                     }
-              }             
-                // Trattasi di categoria del db
-              else{                    
-                     Object[] options = {"Cancella solo categoria", "Cancella TUTTI i prodotti correlati alla categoria"};
-                     int scelta =JOptionPane.showOptionDialog(null, "Seleziona la modalità di eliminazione", "Elimina categoria", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-                     
-                     // Cancella solo categoria
-                     if(scelta == 0){
-                            ProdottoDAO prodao = new ProdottoDAO();
-                           try {
-                                if(model.getValueAt(table.getSelectedRow(), 0).toString().equals("NULL")){
+                } // Trattasi di categoria del db
+                else {
+                    Object[] options = {"Cancella solo categoria", "Cancella TUTTI i prodotti correlati alla categoria"};
+                    int scelta = JOptionPane.showOptionDialog(null, "Seleziona la modalità di eliminazione", "Elimina categoria", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+                    // Cancella solo categoria
+                    if (scelta == 0) {
+                        ProdottoDAO prodao = new ProdottoDAO();
+                        try {
+                            if (model.getValueAt(table.getSelectedRow(), 0).toString().equals("NULL")) {
                                 JOptionPane.showMessageDialog(null, "Ma che fai? Mica puoi cancellare il niente!");
                                 actionPerformed(e);
-                                return;}
-                               prodao.updateCat(model.getValueAt(table.getSelectedRow(), 0).toString(), "NULL");
-                               model.setValueAt("", table.getSelectedRow(), 0);
-                           } catch (SQLException ex) {
-                               Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-                           }
-                         
-                     }
-                     // Cancella prodotti correlati
-                     else if(scelta == 1){
-                         ProdottoDAO prodao = new ProdottoDAO();
-                         try {
-                             prodao.removeCatp(model.getValueAt(table.getSelectedRow(), 0).toString());
-                         } catch (SQLException ex) {
-                             Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-                         }
-                    
-                     }
+                                return;
+                            }
+                            prodao.updateCat(model.getValueAt(table.getSelectedRow(), 0).toString(), "NULL");
+                            model.setValueAt("", table.getSelectedRow(), 0);
+                        } catch (SQLException ex) {
+                            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                        }
+
+                    } // Cancella prodotti correlati
+                    else if (scelta == 1) {
+                        ProdottoDAO prodao = new ProdottoDAO();
+                        try {
+                            prodao.removeCatp(model.getValueAt(table.getSelectedRow(), 0).toString());
+                        } catch (SQLException ex) {
+                            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                        }
+
+                    }
                 }
-                try {   
+                try {
                     refreshTab();
                 } catch (SQLException ex) {
                     Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                } 
+                }
 
             }
         });
@@ -279,7 +273,7 @@ class CategoriePanel extends JPanel {
         table.setRowHeight(40); //altezza celle
 
         //X colonne che hanno pulsanti
-            table.getColumnModel().getColumn(2).setCellRenderer(new ClientsTableButtonRenderer());
+        table.getColumnModel().getColumn(2).setCellRenderer(new ClientsTableButtonRenderer());
         table.getColumnModel().getColumn(2).setCellEditor(new ClientsTableRenderer(new JCheckBox()));
 
         JScrollPane sp = new JScrollPane(table);
@@ -359,24 +353,21 @@ class CategoriePanel extends JPanel {
             model.addRow(new Object[]{catDinamica, "DA DEFINIRE", "Vai a prodotti"});
 
         }
-        
-         
+
         // Agiorno il file con le nuove cat_dinamiche
         try {
-          File output=new File("./DATA/CONFIG/aikkop.aksn");
-          FileOutputStream fos;
-          fos = new FileOutputStream(output);
-          ObjectOutputStream oos = new ObjectOutputStream(fos);
-          oos.writeObject(list_cat_new); 
+            File output = new File("./DATA/CONFIG/aikkop.aksn");
+            FileOutputStream fos;
+            fos = new FileOutputStream(output);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(list_cat_new);
 
-          } catch (FileNotFoundException ex) {
-              Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-          } catch (IOException ex) {
-              Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-          }    
-        
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger("genlog").warning("FileNotFoundException:\n" + StockManagement.printStackTrace(ex));
+        } catch (IOException ex) {
+            Logger.getLogger("genlog").warning("IOException:\n" + StockManagement.printStackTrace(ex));
+        }
 
-        
     }
 
     class ClientsTableButtonRenderer extends JButton implements TableCellRenderer {
@@ -478,7 +469,7 @@ class CategoriePanel extends JPanel {
             add.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent arg0) {
-                    confermaCategoria();    
+                    confermaCategoria();
                 }
             });
 
@@ -509,19 +500,19 @@ class CategoriePanel extends JPanel {
                 frameprinc.prodotti.list_cat_new.add(name.getText().toUpperCase());
                 close();
             }
-                            try {
+            try {
 
-                    File output=new File("./DATA/CONFIG/aikkop.aksn");
-                    FileOutputStream fos;
-                    fos = new FileOutputStream(output);
-                    ObjectOutputStream oos = new ObjectOutputStream(fos);
-                    oos.writeObject(list_cat_new); 
-                    
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-                    }   
+                File output = new File("./DATA/CONFIG/aikkop.aksn");
+                FileOutputStream fos;
+                fos = new FileOutputStream(output);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(list_cat_new);
+
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger("genlog").warning("FileNotFoundException:\n" + StockManagement.printStackTrace(ex));
+            } catch (IOException ex) {
+                Logger.getLogger("genlog").warning("IOException:\n" + StockManagement.printStackTrace(ex));
+            }
         }
     }
 

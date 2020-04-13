@@ -185,8 +185,8 @@ public class OrdineDAO {
         Connection connection = null;
         Statement statement = null;
         Ordine bean = new Ordine();
-        String query = "UPDATE " + this.TABLE_NAME + " SET  qty_arrivata = '" + qty + 
-                "' , data_arrivo = '" + bean.generateData() + "'  WHERE n_ordine = '" + nordine + "' AND prodotto_sku = '" + sku + "'";
+        String query = "UPDATE " + this.TABLE_NAME + " SET  qty_arrivata = '" + qty
+                + "' , data_arrivo = '" + bean.generateData() + "'  WHERE n_ordine = '" + nordine + "' AND prodotto_sku = '" + sku + "'";
         Logger.getLogger("userlog").info("ordine che si sta per modificare \nn_ordine= " + nordine + " sku= " + sku);
 
         try {
@@ -444,7 +444,7 @@ public class OrdineDAO {
             // get data della consegna
             LocalDate consegna = db.plusDays(bean.getGiorni_alla_consegna());
 
-            Logger.getLogger("userlog").info("now data " + now.format(formatter) + " db data " + db.format(formatter) 
+            Logger.getLogger("userlog").info("now data " + now.format(formatter) + " db data " + db.format(formatter)
                     + " consegna " + consegna.format(formatter));
 
             // Se è -1 allora è arrivato, se è -2 è messo anche in stock
@@ -512,7 +512,7 @@ public class OrdineDAO {
 
                 int gg = (int) DAYS.between(consegna, now);
                 array[i] = gg;
-                Logger.getLogger("userlog").info("now data " + now.format(formatter) + " db data " + db.format(formatter) 
+                Logger.getLogger("userlog").info("now data " + now.format(formatter) + " db data " + db.format(formatter)
                         + " consegna " + consegna.format(formatter) + " giorni mancanti  " + gg);
                 i++;
             }
@@ -618,7 +618,7 @@ public class OrdineDAO {
                 LocalDate consegna = db.plusDays(bean.getGiorni_alla_consegna());
 
                 gg = (int) DAYS.between(consegna, now);
-                Logger.getLogger("userlog").info("now data " + now.format(formatter) + " db data " + db.format(formatter) 
+                Logger.getLogger("userlog").info("now data " + now.format(formatter) + " db data " + db.format(formatter)
                         + " consegna " + consegna.format(formatter) + " giorni mancanti  " + gg);
                 i++;
             }

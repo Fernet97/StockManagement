@@ -82,26 +82,25 @@ public class ProdottiPanel extends JPanel {
     public String percorsofoto;
     private FramePrincipale frameprinc;
     public JRadioButton checkOnlyArriv;
-    
 
-    public ProdottiPanel() {        
-        
-        try{
-           File file = new File("./DATA/CONFIG/aikkop.aksn");
+    public ProdottiPanel() {
+
+        try {
+            File file = new File("./DATA/CONFIG/aikkop.aksn");
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            list_cat_new =(ArrayList<String>)ois.readObject();
+            list_cat_new = (ArrayList<String>) ois.readObject();
 
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (FileNotFoundException ex) {
-                File file = new File("aikkop.aksn");
-                Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                //Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-                list_cat_new = new ArrayList<>();
-            }
-            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger("genlog").warning("ClassNotFoundException\n" + StockManagement.printStackTrace(ex));
+        } catch (FileNotFoundException ex) {
+            File file = new File("aikkop.aksn");
+            Logger.getLogger("genlog").warning("FileNotFoundException\n" + StockManagement.printStackTrace(ex));
+        } catch (IOException ex) {
+            Logger.getLogger("genlog").warning("IOException\n" + StockManagement.printStackTrace(ex));
+            list_cat_new = new ArrayList<>();
+        }
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JLabel title = new JLabel("PRODOTTI");
         title.setFont(new Font("Arial Black", Font.BOLD, 40));
@@ -117,7 +116,7 @@ public class ProdottiPanel extends JPanel {
         casella = new JTextField(20);
         cerca.add(searchlabel);
         cerca.add(casella);
-       
+
         ActionListener actionListener = new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
@@ -147,15 +146,15 @@ public class ProdottiPanel extends JPanel {
                 }//debug
 
                 form = new FormProdotti("ADD", null);
-                    if(!form.nessunacat){
-                        form.setLocationRelativeTo(null);
-                        form.setAlwaysOnTop(true);
-                        form.setResizable(false);
-                        form.setVisible(true);
-                        form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                if (!form.nessunacat) {
+                    form.setLocationRelativeTo(null);
+                    form.setAlwaysOnTop(true);
+                    form.setResizable(false);
+                    form.setVisible(true);
+                    form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-                    }
-                
+                }
+
             }
         });
         buttonNew.setFont(new Font("Arial Black", Font.BOLD, 15));
@@ -198,9 +197,7 @@ public class ProdottiPanel extends JPanel {
         table.getColumnModel().getColumn(6).setCellRenderer(new CustomStockRender());
 
         table.getColumnModel().getColumn(9).setCellRenderer(new CustomInArrivoRender());
-        
-        
-         
+
         //X colonne che hanno pulsanti
         table.getColumnModel().getColumn(10).setCellRenderer(new ClientsTableButtonRenderer());
         table.getColumnModel().getColumn(10).setCellEditor(new ClientsTableRenderer(new JCheckBox()));
@@ -268,47 +265,45 @@ public class ProdottiPanel extends JPanel {
 
         OrdineDAO daoo = new OrdineDAO();
 
-         if (checkOnlyArriv.isSelected()) {
-         
-         
-         }
+        if (checkOnlyArriv.isSelected()) {
+
+        }
 
         for (Prodotto pro : dao.getAll()) {
             Fornitore forni = forndao.getByID(daoo.getFPr(pro.getSku()));
             String forny = forni.getIdfornitore() + "|  " + forni.getFullname();
 
             if (checkOnlyArriv.isSelected()) {
-                if(daoo.getQtyArrSku(pro.getSku())>0){ //Aggiungo solo righe che hanno prodotti in arrivo
-                        // CONDENSA 0s
-                     BigDecimal bd = new BigDecimal(String.valueOf(pro.getCosto()));
-                     model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), pro.getNote(), daoo.getQtyArrSku(pro.getSku()), "Modifica", "Cancella", "Ordina"});
+                if (daoo.getQtyArrSku(pro.getSku()) > 0) { //Aggiungo solo righe che hanno prodotti in arrivo
+                    // CONDENSA 0s
+                    BigDecimal bd = new BigDecimal(String.valueOf(pro.getCosto()));
+                    model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), pro.getNote(), daoo.getQtyArrSku(pro.getSku()), "Modifica", "Cancella", "Ordina"});
 
                 }
-         
-            }else{
-               // CONDENSA 0s
-               BigDecimal bd = new BigDecimal(String.valueOf(pro.getCosto()));
-               model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), pro.getNote(), daoo.getQtyArrSku(pro.getSku()), "Modifica", "Cancella", "Ordina"});
-                
+
+            } else {
+                // CONDENSA 0s
+                BigDecimal bd = new BigDecimal(String.valueOf(pro.getCosto()));
+                model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), pro.getNote(), daoo.getQtyArrSku(pro.getSku()), "Modifica", "Cancella", "Ordina"});
+
             }
-           }
-        
-        
-        try{
-           File file = new File("./DATA/CONFIG/aikkop.aksn");
+        }
+
+        try {
+            File file = new File("./DATA/CONFIG/aikkop.aksn");
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            list_cat_new =(ArrayList<String>)ois.readObject();
+            list_cat_new = (ArrayList<String>) ois.readObject();
 
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (FileNotFoundException ex) {
-                File file = new File("aikkop.aksn");
-                Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                //Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-                list_cat_new = new ArrayList<>();
-            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger("genlog").warning("ClassNotFoundException\n" + StockManagement.printStackTrace(ex));
+        } catch (FileNotFoundException ex) {
+            File file = new File("aikkop.aksn");
+            Logger.getLogger("genlog").warning("FileNotFoundException\n" + StockManagement.printStackTrace(ex));
+        } catch (IOException ex) {
+            Logger.getLogger("genlog").warning("IOException\n" + StockManagement.printStackTrace(ex));
+            list_cat_new = new ArrayList<>();
+        }
 
     }
 
@@ -321,17 +316,16 @@ public class ProdottiPanel extends JPanel {
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-             
+
             ProdottoDAO prodao = new ProdottoDAO();
             Prodotto p = null;
             try {
                 p = prodao.getBySku(table.getValueAt(row, 0).toString());
             } catch (SQLException ex) {
-                Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
             }
-            
-            
-            if (Integer.parseInt(table.getValueAt(row, 4).toString()) <= p.getQty_min()){
+
+            if (Integer.parseInt(table.getValueAt(row, 4).toString()) <= p.getQty_min()) {
 
                 setBackground(new Color(244, 80, 37));    // ROSSO        
             } else {
@@ -365,8 +359,7 @@ public class ProdottiPanel extends JPanel {
             return this;
         }
     }
-    
-    
+
     // RENDER DI QTY IN ARRIVO O NO     
     class CustomInArrivoRender extends JButton implements TableCellRenderer {
 
@@ -376,10 +369,9 @@ public class ProdottiPanel extends JPanel {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
-            if (Integer.parseInt(table.getValueAt(row, 9).toString())>0) {
+            if (Integer.parseInt(table.getValueAt(row, 9).toString()) > 0) {
                 setBackground(new Color(126, 169, 93));  // VERDE         
                 setText(table.getValueAt(row, 9).toString());
-
 
             } else {
                 setBackground(new Color(244, 80, 37));    // ROSSO 
@@ -387,14 +379,9 @@ public class ProdottiPanel extends JPanel {
 
             }
 
-
             return this;
         }
     }
-    
-    
-    
-    
 
     class ClientsTableButtonRenderer extends JButton implements TableCellRenderer {
 
@@ -509,7 +496,7 @@ public class ProdottiPanel extends JPanel {
                         vaiarod = new JDialog();
                         vaiarod.setResizable(false);
                         vaiarod.setModal(true);
-                                                vaiarod.setLocationRelativeTo(null); 
+                        vaiarod.setLocationRelativeTo(null);
 
                         vaiarod.setTitle("Seleziona un fornitore a cui associare il prodotto");
                         vaiarod.setSize(new Dimension(500, 200));
@@ -525,7 +512,7 @@ public class ProdottiPanel extends JPanel {
                             for (Fornitore f : forndao.getAll()) {
                                 jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
                             }
-                            if(jComboBox.getItemCount() == 0){
+                            if (jComboBox.getItemCount() == 0) {
                                 JOptionPane.showMessageDialog(null, "Non hai creato ancora un fornitore!");
                                 return new String(label);
                             }
@@ -586,7 +573,7 @@ public class ProdottiPanel extends JPanel {
         private JButton bfoto;
         private String[] stringsP;
         private String[] list_prod;
-        public  boolean nessunacat;
+        public boolean nessunacat;
 
         /**
          * Creates new form FormProdotti
@@ -604,43 +591,43 @@ public class ProdottiPanel extends JPanel {
         }
 
         private FormProdotti(String mod, String idSelected) {
-            
+
             modalita = mod;
             IdSelezionato = idSelected;
 
-            try {              
+            try {
 
-               if(setCategoryList()){
+                if (setCategoryList()) {
 
-                 setModal(true);
-                initComponents();
-                casku.setEditable(false);
-                casdatareg.setEditable(false);
-                casku.setBackground(Color.DARK_GRAY);
-                casdatareg.setBackground(Color.DARK_GRAY);
+                    setModal(true);
+                    initComponents();
+                    casku.setEditable(false);
+                    casdatareg.setEditable(false);
+                    casku.setBackground(Color.DARK_GRAY);
+                    casdatareg.setBackground(Color.DARK_GRAY);
 
-                if (modalita.equals("UPDATE")) {
-                    setFormAsID(idSelected);
-                    cat.setEnabled(false);
-                    cat.setBackground(Color.darkGray);
-                }
+                    if (modalita.equals("UPDATE")) {
+                        setFormAsID(idSelected);
+                        cat.setEnabled(false);
+                        cat.setBackground(Color.darkGray);
+                    }
 
-                ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
-                setSize(600, (650));
-                this.setIconImage(img.getImage());
+                    ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
+                    setSize(600, (650));
+                    this.setIconImage(img.getImage());
 
                 } else {
                     setVisible(false);
                     dispose();
-               }
-            
-            }catch (SQLException ex) {
-                        Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                    }  
-     }
-        
-        private  boolean setCategoryList() throws SQLException{
- 
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+            }
+        }
+
+        private boolean setCategoryList() throws SQLException {
+
             ProdottoDAO dao = new ProdottoDAO();
             // Cat dal db + Cat dinamiche aggiunte prima in java
             list_prod = new String[dao.getAll().size() + list_cat_new.size() + 1];
@@ -655,20 +642,19 @@ public class ProdottiPanel extends JPanel {
                 list_prod[sum + i] = iter.next().getCategoria();
                 i++;
             }
-            stringsP = Arrays.stream(list_prod).distinct().toArray(String[]::new);;    
-            
+            stringsP = Arrays.stream(list_prod).distinct().toArray(String[]::new);;
+
             // Se non ci sono categorie (c'è solo la stringa vuota)
-            if(stringsP.length == 1){
+            if (stringsP.length == 1) {
                 JOptionPane.showMessageDialog(null, "Devi aggiungere prima almeno una categoria!!");
                 nessunacat = true;
                 return false;
             }
             nessunacat = false;
             return true;
-        
+
         }
-        
-        
+
         private void initComponents() throws SQLException {
             percorsofoto = null;
             JPanel panmain = new JPanel();
@@ -754,7 +740,7 @@ public class ProdottiPanel extends JPanel {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                 }
             });
-            
+
             panelcat.add(cat);
             main.add(panelcat);
 
@@ -784,9 +770,9 @@ public class ProdottiPanel extends JPanel {
             bfoto = new JButton();
             bfoto.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    
+
                     setAlwaysOnTop(false);
-                    
+
                     try {
                         JFileChooser jFileChooser = new JFileChooser();
                         jFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp", "tiff"));
@@ -802,13 +788,12 @@ public class ProdottiPanel extends JPanel {
                             Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
                             icon.setImage(ImmagineScalata);
                             bfoto.setIcon(icon);
-                           setAlwaysOnTop(true);
-
+                            setAlwaysOnTop(true);
 
                         }
                     } catch (StringIndexOutOfBoundsException ex) {// mi dava -1 alla riga 664
                         Logger.getLogger("userlog").warning("StringIndexOutOfBoundsException: percorso foto \n" + StockManagement.printStackTrace(ex));
-                        
+
                     }
 
                 }
@@ -882,36 +867,32 @@ public class ProdottiPanel extends JPanel {
                 JOptionPane.showMessageDialog(this, "Devi scegliere una categoria!!");
                 return false;
             }
-            
-            
-            if(casname.getText().length() > 45){
+
+            if (casname.getText().length() > 45) {
                 JOptionPane.showMessageDialog(this, "Nome troppo lungo!");
                 return false;
             }
-            
-            if(casqty.getText().length() > 10){
+
+            if (casqty.getText().length() > 10) {
                 JOptionPane.showMessageDialog(this, "Quantità esagerata!");
                 return false;
             }
-            
-            if(ccosto.getText().length() > 15){
+
+            if (ccosto.getText().length() > 15) {
                 JOptionPane.showMessageDialog(this, "Costo non valido!");
                 return false;
             }
-            
-            
-            if(cmin.getText().length() > 10){
+
+            if (cmin.getText().length() > 10) {
                 JOptionPane.showMessageDialog(this, "Quantità minima non valida!");
                 return false;
             }
-            
-            
-            if(note.getText().length() > 65535){
+
+            if (note.getText().length() > 65535) {
                 JOptionPane.showMessageDialog(this, "Note troppo lunghe!");
                 return false;
             }
-            
-            
+
             try { //Controlla se sono interi...
                 Integer.parseInt(casqty.getText());
                 Integer.parseInt(cmin.getText());
@@ -1061,24 +1042,18 @@ public class ProdottiPanel extends JPanel {
 
     }
 
-    
-    public void ViewOnlyInArrivo(){
-    
+    public void ViewOnlyInArrivo() {
+
         checkOnlyArriv.setSelected(true);
-        
+
         try {
             refreshTab();
         } catch (SQLException ex) {
-            Logger.getLogger(AnagrafichePanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
-    
-   
-    
+
     }
-    
-    
-    
-    
+
     public void setComunicator(FramePrincipale princ) {
         frameprinc = princ;
 
