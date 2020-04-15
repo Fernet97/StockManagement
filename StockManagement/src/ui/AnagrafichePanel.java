@@ -1087,7 +1087,7 @@ public class AnagrafichePanel extends JPanel {
         try {
             refreshTab();
         } catch (SQLException ex) {
-            Logger.getLogger("genlog").info("Exception: \n"+StockManagement.printStackTrace(ex));
+            Logger.getLogger("genlog").warning("Exception: \n"+StockManagement.printStackTrace(ex));
         }
     
     }

@@ -74,12 +74,12 @@ class CategoriePanel extends JPanel {
             list_cat_new = (ArrayList<String>) ois.readObject();
 
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger("genlog").info("ClassNotFoundException: \n" + StockManagement.printStackTrace(ex));
+            Logger.getLogger("genlog").warning("ClassNotFoundException: \n" + StockManagement.printStackTrace(ex));
         } catch (FileNotFoundException ex) {
             File file = new File("./DATA/CONFIG/aikkop.aksn");
-            Logger.getLogger("genlog").info("FileNotFoundException:\n " + StockManagement.printStackTrace(ex));
+            Logger.getLogger("genlog").warning("FileNotFoundException:\n " + StockManagement.printStackTrace(ex));
         } catch (IOException ex) {
-            Logger.getLogger("genlog").info("IOException: \n" + StockManagement.printStackTrace(ex));
+            Logger.getLogger("genlog").warning("IOException: \n" + StockManagement.printStackTrace(ex));
             list_cat_new = new ArrayList<>();
         }
 
@@ -162,7 +162,7 @@ class CategoriePanel extends JPanel {
                                 model.setValueAt(name.getText().toUpperCase(), table.getSelectedRow(), 0);
 
                             } catch (SQLException ex) {
-                                Logger.getLogger("genlog").info("SQLException:\n " + StockManagement.printStackTrace(ex));
+                                Logger.getLogger("genlog").warning("SQLException:\n " + StockManagement.printStackTrace(ex));
                             }
 
                         }
@@ -171,7 +171,7 @@ class CategoriePanel extends JPanel {
                         try {
                             refreshTab();
                         } catch (SQLException ex) {
-                            Logger.getLogger("genlog").info("SQLException:\n " + StockManagement.printStackTrace(ex));
+                            Logger.getLogger("genlog").warning("SQLException:\n " + StockManagement.printStackTrace(ex));
                         }
 
                     }
