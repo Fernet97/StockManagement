@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import ui.StockManagement;
+
 import others.AES;
 /**
  * Classe che si occupa di fornire una connessione con il database
@@ -41,7 +41,7 @@ public class DriverManagerConnectionPool {
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"DB driver not found: \n" + e.getMessage());
-              Logger.getLogger("genlog").warning("Exception:DB driver not found:\n"+ StockManagement.printStackTrace(e));
+            
                 
         }
     }
@@ -54,16 +54,7 @@ public class DriverManagerConnectionPool {
     private static synchronized Connection createDBConnection() throws SQLException {
      ArrayList<String> arr =getConf();
         Connection newConnection = null;
-//        String ip = "localhost";
-//        String ip2 = "192.168.0.81";
-//        String port = "3306";
-//        String db = "db_stock";
-//        String username = "root";
-//        String username2 = "admin";
-//        String password = "admin";
-//        String password2 = "Password1.";
-//        String passwordd = "Dario1234";
-        
+    
         
          String ip = AES.decrypt(arr.get(0), "miao");
          String port = AES.decrypt(arr.get(1), "miao");
@@ -71,23 +62,8 @@ public class DriverManagerConnectionPool {
         String username = AES.decrypt(arr.get(3), "miao");
         String password = AES.decrypt(arr.get(4), "miao");
         pswd = password;
-/**
- * localhost
- */
-        newConnection = DriverManager.getConnection("jdbc:mysql://" + ip + ":" + port + "/" + db + "?allowMultiQueries=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", username, password);
 
-        
-/**
- * localhost dario
- */
-//        newConnection = DriverManager.getConnection("jdbc:mysql://" + ip + ":" + port + "/" + db + "?allowMultiQueries=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", username, passwordd);
-        
-        
-        
-/**
- * server su rete Manisera
- */
-//        newConnection = DriverManager.getConnection("jdbc:mysql://" + ip2 + ":" + port + "/" + db + "?allowMultiQueries=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", username2, password2);
+        newConnection = DriverManager.getConnection("jdbc:mysql://" + ip + ":" + port + "/" + db + "?allowMultiQueries=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", username, password);
 
         newConnection.setAutoCommit(false);
       
@@ -109,14 +85,14 @@ public class DriverManagerConnectionPool {
             } catch (SQLException e) {
                 connection.close();
                 connection = getConnection();
-                Logger.getLogger("genlog").warning("SQLException:\n" + StockManagement.printStackTrace(e));
+                 JOptionPane.showMessageDialog(null,"SQLException: \n" + e.getMessage());
             }
         } else { 
                 try{
                 connection = createDBConnection();
             }catch(CommunicationsException exx){
-                    JOptionPane.showMessageDialog(null, "Impossibile connettersi al DB: \n"+exx+"");
-                    Logger.getLogger("genlog").info("Impossibile connettersi al DB: \n"+StockManagement.printStackTrace(exx));
+                    JOptionPane.showMessageDialog(null, "Impossibile connettersi al DB: \n"+exx.getMessage()+"");
+                   
                     
                 }
         }
@@ -142,13 +118,13 @@ public class DriverManagerConnectionPool {
                 array = (ArrayList<String>) ois.readObject();
 
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger("genlog").info("Impossibile connettersi al DB: \n"+StockManagement.printStackTrace(ex));
+                 JOptionPane.showMessageDialog(null,"ClassNotFoundException: \n" + ex.getMessage());
             } catch (FileNotFoundException ex) {
 //                File file = new File("./ai.aksn");
                 File file = new File("./DATA/CONFIG/ai.aksn");
-               Logger.getLogger("genlog").info("file di configurazione non trovato \n"+StockManagement.printStackTrace(ex));
+                JOptionPane.showMessageDialog(null,"File di configurazione non trovato: \n" + ex.getMessage());
             } catch (IOException ex) {
-                Logger.getLogger("genlog").info("Impossibile connettersi al DB: \n"+StockManagement.printStackTrace(ex));
+                JOptionPane.showMessageDialog(null,"IOException: \n" + ex.getMessage());
                 array = new ArrayList<>();
             }return array;
 }
