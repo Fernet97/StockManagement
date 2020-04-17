@@ -36,7 +36,7 @@ public class OrdineDAO {
 
         Collection<Ordine> ordini = new LinkedList<Ordine>();
 
-        String selectSQL = "select* from " + this.TABLE_NAME + "";
+        String selectSQL = "select* from " + this.TABLE_NAME + " where prodotto_sku != 'VOID'";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -82,7 +82,7 @@ public class OrdineDAO {
         Collection<Ordine> ordini = new LinkedList<Ordine>();
         //SELECT * FROM prodotti WHERE sku = '1';
 
-        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE n_ordine = '" + o + "'";
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE n_ordine = '" + o + "' and prodotto_sku != 'VOID'";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -410,7 +410,7 @@ public class OrdineDAO {
 
         Ordine bean = new Ordine();
 
-        String sql = "select n_ordine ,data , giorni_alla_consegna from ordine where n_ordine = '" + o + "' order by giorni_alla_consegna desc limit 1";
+        String sql = "select n_ordine ,data , giorni_alla_consegna from ordine where n_ordine = '" + o + "' and prodotto_sku != 'VOID' order by giorni_alla_consegna desc limit 1";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -702,6 +702,122 @@ public class OrdineDAO {
         return n;
 
     }
+
+    public synchronized void addNote(Ordine o) throws SQLException {
+        Connection connection = null;
+        Statement statement = null;
+        Ordine bean = new Ordine();
+
+         String query = "INSERT INTO " + this.TABLE_NAME + " (`n_ordine`, `data`, `qty_in_arrivo`, `qty_arrivata`, "
+                + "`giorni_alla_consegna`, `data_arrivo`, `note`, `fk_utente`, `prodotto_sku`, `fk_cliente`, `id`)"
+                + " VALUES ('" + o.getN_ordine() + "', '" + bean.generateData() + "', '0', '0', '0', '0', '" + o.getNote() + "',"
+                + " '" + o.getFk_utente() + "', 'VOID', '0', '" +  getId(o.getN_ordine()) + "')";
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+            connection.commit();
+            Logger.getLogger("userlog").info(query);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+        }
+
+    }
+
+    public synchronized String getNote(String ord) throws SQLException { // da definire (query OK)
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+
+        String note = "";
+
+        String sql = "select note from ordine where n_ordine = '" + ord + "'and prodotto_sku = 'VOID'";
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            ps = connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                note = rs.getString("note");
+            }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+                return note;
+
+            }
+
+        }
+    }
+    
+    
+      public synchronized int getId(String ord) throws SQLException { // da definire (query OK)
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+
+        int id =0;
+
+        String sql = "select id from ordine where n_ordine = '" + ord + "' order by id desc limit 1";
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            ps = connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                id = rs.getInt("id");
+            }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+                return id;
+
+            }
+
+        }
+      }
+        
+       public synchronized void removeNote(String n_ordine) throws SQLException {
+        Connection connection = null;
+        Statement statement = null;
+        String query = "DELETE FROM " + this.TABLE_NAME + " WHERE  `n_ordine` = '" + n_ordine + "' and prodotto_sku = 'VOID'";
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+            connection.commit();
+
+            Logger.getLogger("userlog").info(query);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+        }
+
+    } 
+    
 
 }// chiude la classe
 

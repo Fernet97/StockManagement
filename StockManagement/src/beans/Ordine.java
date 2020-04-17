@@ -24,6 +24,7 @@ public class Ordine {
     private int qty_in_arrivo;
     private int qty_arrivata;
     private int giorni_alla_consegna;
+    private String note;
     private String data_arrivo;
     private String fk_utente;
     private String prodotto_sku;
@@ -79,6 +80,27 @@ public class Ordine {
         this.qty_arrivata = qty_arrivata;
 
     }
+
+/**
+ * serve per settare le note
+ * @param n_ordine
+ * @param data
+ * @param note
+ * @param fk_utente
+ * @throws InterruptedException 
+ */
+     public Ordine(String n_ordine, String note, String fk_utente) throws InterruptedException {
+        setCode(this.code);
+        setData(generateData());
+        this.n_ordine = n_ordine;
+        this.data = data;
+        this.note = note;
+        this.fk_utente = fk_utente;
+         
+        
+    }
+
+    
 
     public Ordine() {
     }
@@ -171,21 +193,25 @@ public class Ordine {
         this.data_arrivo = data_arrivo;
     }
 
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+    
+    
+
     public synchronized int leggiUltimoID() {
-//        String tmp;
+
         int lastid;
 
         try {
             OrdineDAO dao = new OrdineDAO();
 
             lastid = dao.getLastOrdine().getCode();
-            //ORD-000
-//            if (lastid == null) {
-//                return 0;
-//            }
-//
-//            tmp = lastid.substring(4);
-//            idlast = Integer.parseInt(tmp);
+        
 
         } catch (SQLException ex) {
             lastid = -99999;
@@ -196,6 +222,10 @@ public class Ordine {
         return lastid;
 
     }
+    
+
+    
+
 
     public synchronized String generateData() {
 
@@ -217,10 +247,13 @@ public class Ordine {
         setN_ordine(generateID());
         setData(generateData());
     }
+    
+    
+
 
     @Override
     public String toString() {
-        return "Ordine{" + "n_ordine=" + n_ordine + ", data=" + data + ", qty_in_arrivo=" + qty_in_arrivo + ", giorni_alla_consegna=" + giorni_alla_consegna + ", fk_utente=" + fk_utente + ", prodotto_sku=" + prodotto_sku + ", fk_cliente=" + fk_cliente + ", fk_fornitore=" + fk_fornitore + ", qty_arrivata=" + qty_arrivata + ", data_arrivo=" + data_arrivo + '}';
+        return "Ordine{" + "n_ordine=" + n_ordine + ", data=" + data + ", qty_in_arrivo=" + qty_in_arrivo + ", giorni_alla_consegna=" + giorni_alla_consegna + ", fk_utente=" + fk_utente + ", prodotto_sku=" + prodotto_sku + ", fk_cliente=" + fk_cliente + ", fk_fornitore=" + fk_fornitore + ", qty_arrivata=" + qty_arrivata + ", data_arrivo=" + data_arrivo +", note=" + note + '}';
     }
 
 }
