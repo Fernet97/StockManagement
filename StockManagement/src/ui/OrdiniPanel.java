@@ -202,8 +202,8 @@ public class OrdiniPanel extends JPanel {
                         prodottoCorrente.setQty(qtyAttuale - Integer.parseInt(quantdaprend.getText()));
                         OrdineDAO ordao = new OrdineDAO();
                         try {
-                            System.out.println("aggiorno " + prodottoCorrente.getSku() + "  " + ordao.getFPr(prodottoCorrente.getSku()));
                             dao.update(prodottoCorrente);
+                             Logger.getLogger("userlog").info("Ho prelevato:\n"+"Sku= " + prodottoCorrente.getSku() + " Qty prelevata= " +quantdaprend.getText());
                             casella.setText(prodottoCorrente.getSku());
                         } catch (SQLException ex) {
                             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
