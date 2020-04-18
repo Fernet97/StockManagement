@@ -19,7 +19,7 @@ import ui.StockManagement;
 public class Ordine {
 
     private static int code = 0;
-    private static String n_ordine;
+    private String n_ordine;
     private static String data = " ";
     private int qty_in_arrivo;
     private int qty_arrivata;
@@ -69,7 +69,7 @@ public class Ordine {
     public Ordine(int qty_in_arrivo, int giorni_alla_consegna, String fk_utente, String prodotto_sku, int fk_cliente, String fk_fornitore, int qty_arrivata) throws InterruptedException {
 
         setN_ordine(this.n_ordine);
-        setData(this.data);
+        setData(generateData());
         setCode(this.code);
         this.qty_in_arrivo = qty_in_arrivo;
         this.giorni_alla_consegna = giorni_alla_consegna;
