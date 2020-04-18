@@ -730,6 +730,39 @@ public class OrdineDAO {
         }
 
     }
+    
+    
+    //UPDATE `db_stock`.`ordine` SET `data` = '19/04/2020 17:41:00', `note` = 'miao', `fk_utente` = 'gatto silvestro' WHERE (`id` = 'x') and (`prodotto_sku` = 'VOID');
+
+      public synchronized void updateNote(Ordine o) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
+        Connection connection = null;
+        Statement statement = null;
+         Ordine bean = new Ordine();
+
+         String query = "UPDATE " + this.TABLE_NAME + " SET data` = '"+bean.generateData()+"', "
+                 + "`note` = '"+o.getNote()+"', `fk_utente` = '"+o.getFk_utente()+"' "
+                 + "WHERE (`id` = '"+getId(o.getN_ordine()) +"') and (`prodotto_sku` = 'VOID')";
+
+      
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+            connection.commit();
+
+            Logger.getLogger("userlog").info(query);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+        }
+
+    }
 
     public synchronized String getNote(String ord) throws SQLException { // da definire (query OK)
 
