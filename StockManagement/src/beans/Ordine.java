@@ -68,7 +68,7 @@ public class Ordine {
      */
     public Ordine(int qty_in_arrivo, int giorni_alla_consegna, String fk_utente, String prodotto_sku, int fk_cliente, String fk_fornitore, int qty_arrivata) throws InterruptedException {
 
-        setN_ordine(this.n_ordine);
+        setN_ordine(generateID());
         setData(generateData());
         setCode(this.code);
         this.qty_in_arrivo = qty_in_arrivo;
