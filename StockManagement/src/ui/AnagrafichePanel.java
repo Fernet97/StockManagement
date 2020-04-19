@@ -534,7 +534,7 @@ public class AnagrafichePanel extends JPanel {
                 JButton annulla = new JButton("Annulla");
                 annulla.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        form.setVisible(false);
+                        form.dispose();
                         form = null;
 
                     }
@@ -653,7 +653,7 @@ public class AnagrafichePanel extends JPanel {
                 JButton annulla = new JButton("Annulla");
                 annulla.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        form.setVisible(false);
+                        form.dispose();
                         form = null;
 
                     }
@@ -796,7 +796,7 @@ public class AnagrafichePanel extends JPanel {
                 JButton annulla = new JButton("Annulla");
                 annulla.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        form.setVisible(false);
+                        form.dispose();
                         form = null;
 
                     }
@@ -949,7 +949,7 @@ public class AnagrafichePanel extends JPanel {
                         client = new Cliente(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
 
                         //dao.add(client);
-                        form.setVisible(false);
+                        form.dispose();
                     }
                 }
 
@@ -961,7 +961,7 @@ public class AnagrafichePanel extends JPanel {
                     if (a == JOptionPane.YES_OPTION) {
                         forn = new Fornitore(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
                         dao.add(forn);
-                        form.setVisible(false);
+                        form.dispose();
                     }
                 }
 
@@ -974,7 +974,7 @@ public class AnagrafichePanel extends JPanel {
                         uten = new Utente(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), caspwd.getText(), permess.getSelectedIndex(), note.getText());
 
                         dao.add(uten);
-                        form.setVisible(false);
+                        form.dispose();
                     }
                 }
 
@@ -1020,7 +1020,7 @@ public class AnagrafichePanel extends JPanel {
                         forn = new Fornitore(casid.getText(), casdatareg.getText(), casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
 
                         dao.update(forn);
-                        form.setVisible(false);
+                        form.dispose();
                     }
                 }
 
@@ -1033,7 +1033,7 @@ public class AnagrafichePanel extends JPanel {
                         uten = new Utente(casid.getText(), casdatareg.getText(), casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), caspwd.getText(), permess.getSelectedIndex(), note.getText());
 
                         dao.update(uten);
-                        form.setVisible(false);
+                        form.dispose();
                     }
                 }
 

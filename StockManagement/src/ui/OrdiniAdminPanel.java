@@ -692,7 +692,7 @@ public class OrdiniAdminPanel extends JPanel {
                         BigDecimal costoo = new BigDecimal(String.valueOf(p.getCosto()));
                         
                         if(controlloProdottoUguale(skusel)){
-                            popup.setVisible(false);
+                            popup.dispose();
                             JOptionPane.showMessageDialog(getParent(), "Attenzione! Ricorda che:\n1) non puoi associare più fornitori ad un solo prodotto mentre lo stai aggiungendo al carrello.\n2)Non puoi mettere più volte lo stesso prodotto nel carrello durante lo stesso ordine.\n Se vuoi incrementarne la quantità, perchè non modificare tal valore nella tabella del carrello? Easy ;)");
                             return;
                         }
@@ -704,7 +704,7 @@ public class OrdiniAdminPanel extends JPanel {
                         Ordine o = new Ordine();
                         int prossimoord = o.leggiUltimoID() + 1;
                         numordine.setText("#Ordine: ORD-" + prossimoord);
-                        popup.setVisible(false);
+                        popup.dispose();
                     } else {
                         JOptionPane.showMessageDialog(getParent(), "Scegliere un formato numerico per la quantità ed i giorni all consegna");
                     }

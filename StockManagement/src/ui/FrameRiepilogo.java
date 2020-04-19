@@ -122,7 +122,7 @@ class FrameRiepilogo extends JDialog {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
+                dispose();
             }
 
         });
@@ -253,7 +253,7 @@ class FrameRiepilogo extends JDialog {
                         Logger.getLogger(FrameRiepilogo.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-                    setVisible(false);
+                    dispose();
                     panadmin.refreshTab();
                 }
             }
@@ -475,7 +475,7 @@ class FrameRiepilogo extends JDialog {
                             model2.setValueAt("No", row, 6);
                         }
 
-                        f.setVisible(false);
+                        f.dispose();
                        
                     }
                 }});
@@ -533,7 +533,7 @@ class FrameRiepilogo extends JDialog {
                             model2.setValueAt("No", row, 6);
                         }
 
-                        f.setVisible(false);
+                        f.dispose();
 
                     }
 

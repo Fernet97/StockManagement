@@ -511,7 +511,7 @@ public class ProdottiPanel extends JPanel {
                         JButton confermaforn = new JButton("Conferma");
                         confermaforn.addActionListener(new java.awt.event.ActionListener() {
                             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                vaiarod.setVisible(false);
+                                vaiarod.dispose();
                                 frameprinc.VaiAOrdiniconProdFORNULL(jComboBox.getSelectedItem().toString(), prodSceltoxOrdine);
 
                             }
@@ -624,7 +624,6 @@ public class ProdottiPanel extends JPanel {
                     this.setIconImage(img.getImage());
 
                 } else {
-                    setVisible(false);
                     dispose();
                 }
 
@@ -845,7 +844,7 @@ public class ProdottiPanel extends JPanel {
             annulla.setFont(new Font("Arial Black", Font.BOLD, 15));
             annulla.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    form.setVisible(false);
+                    form.dispose();
 
                 }
             });
@@ -945,7 +944,7 @@ public class ProdottiPanel extends JPanel {
                         prod.setFoto(percorsofoto);
                     }
                     dao.add(prod);
-                    form.setVisible(false);
+                    form.dispose();
 
                 }
 
@@ -1029,7 +1028,7 @@ public class ProdottiPanel extends JPanel {
                     }
 
                     dao.update(prod);
-                    form.setVisible(false);
+                    form.dispose();
 
                 }
 
