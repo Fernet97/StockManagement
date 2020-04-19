@@ -293,7 +293,7 @@ public class OrdiniAdminPanel extends JPanel {
         JPanel SXdown = new JPanel();
         SXdown.setLayout(new BoxLayout(SXdown, BoxLayout.PAGE_AXIS));
 
-        String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale ordine", "In spedizione", "Controlla ordine", "Ricarica ordine"};
+        String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale","Prodotti arrivati", "Stato ordine", "Controlla ordine", "Ricarica ordine"};
 
         Object[][] data = {};
 
@@ -301,20 +301,20 @@ public class OrdiniAdminPanel extends JPanel {
             private static final long serialVersionUID = 1L;
 
             public boolean isCellEditable(int row, int column) {
-                return column >= 5; //il numero di celle editabili...
+                return column >= 6; //il numero di celle editabili...
             }
         };
         table2 = new JTable(model2);
         table2.getTableHeader().setReorderingAllowed(false);
         // model2.addRow(data); // DA CANCELLARE
 
-        table2.getColumnModel().getColumn(4).setCellRenderer(new CustomStockRender());
-
-        table2.getColumnModel().getColumn(5).setCellRenderer(new TableButtonRenderer());
-        table2.getColumnModel().getColumn(5).setCellEditor(new TableRenderer(new JCheckBox()));
+        table2.getColumnModel().getColumn(5).setCellRenderer(new CustomStockRender());
 
         table2.getColumnModel().getColumn(6).setCellRenderer(new TableButtonRenderer());
         table2.getColumnModel().getColumn(6).setCellEditor(new TableRenderer(new JCheckBox()));
+
+        table2.getColumnModel().getColumn(7).setCellRenderer(new TableButtonRenderer());
+        table2.getColumnModel().getColumn(7).setCellEditor(new TableRenderer(new JCheckBox()));
 
         JScrollPane sp2 = new JScrollPane(table2);
         sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "Riepilogo ordini effettuati", TitledBorder.CENTER, TitledBorder.TOP));
@@ -350,7 +350,7 @@ public class OrdiniAdminPanel extends JPanel {
             for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
                 BigDecimal costoo = new BigDecimal(String.valueOf(ordine.get(2)));
 
-                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica ordine"});
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(),ordine.get(4),ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica"});
             }
         } catch (SQLException ex) {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
@@ -471,7 +471,7 @@ public class OrdiniAdminPanel extends JPanel {
         try {
             for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
                 BigDecimal costoo = new BigDecimal(String.valueOf(ordine.get(2)));
-                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica ordine"});
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(), ordine.get(4), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica"});
             }
         } catch (SQLException ex) {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
@@ -556,7 +556,7 @@ public class OrdiniAdminPanel extends JPanel {
                     f.setVisible(true);
                     f.setTitle("Riepilogo ordine: " + table.getValueAt(row, 0));
 
-                } else if (button.getText().equals("Ricarica ordine")) {
+                } else if (button.getText().equals("Ricarica")) {
                     model.setRowCount(0);
                     refreshTab();
                     caricaOrdine(table.getValueAt(row, 0).toString());
@@ -586,12 +586,12 @@ public class OrdiniAdminPanel extends JPanel {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
-            if (Integer.parseInt(table2.getValueAt(row, 4).toString()) == 3) {
+            if (Integer.parseInt(table2.getValueAt(row, 5).toString()) == 3) {
                 setBackground(new Color(126, 169, 93));  // VERDE          
 
-            } else if (Integer.parseInt(table2.getValueAt(row, 4).toString()) == 0) {
+            } else if (Integer.parseInt(table2.getValueAt(row, 5).toString()) == 0) {
                 setBackground(new Color(244, 80, 37));    // ROSSO 
-            } else if (Integer.parseInt(table2.getValueAt(row, 4).toString()) == 2) {
+            } else if (Integer.parseInt(table2.getValueAt(row, 5).toString()) == 2) {
                 setBackground(Color.yellow); // GIALLO
             }
 

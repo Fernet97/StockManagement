@@ -277,11 +277,12 @@ public class OrdineDAO {
         Connection connection = null;
         PreparedStatement ps = null;
 
-        ArrayList<ArrayList<String>> ordini = new ArrayList<>(4);
+        ArrayList<ArrayList<String>> ordini = new ArrayList<>(5);
 
-        String selectSQL = "select n_ordine ,data , sum(qty_in_arrivo) , sum(qty_in_arrivo * costo) from db_stock.ordine, "
+        String selectSQL = "select n_ordine ,data , sum(qty_in_arrivo) , sum(qty_in_arrivo * costo), sum(qty_arrivata) from db_stock.ordine, "
                 + " db_stock.prodotto where prodotto_sku = sku group by n_ordine";
 
+        
         try {
             connection = DriverManagerConnectionPool.getConnection();
             ps = connection.prepareStatement(selectSQL);
@@ -294,6 +295,7 @@ public class OrdineDAO {
                 record.add(rs.getString("sum(qty_in_arrivo)"));
                 record.add(rs.getString("sum(qty_in_arrivo * costo)"));
                 record.add(rs.getString("data"));
+                record.add(rs.getString("sum(qty_arrivata)"));
 
                 ordini.add(record);
 

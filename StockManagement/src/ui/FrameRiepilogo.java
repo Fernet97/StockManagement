@@ -12,6 +12,7 @@ import dao.ProdottoDAO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -36,6 +37,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
@@ -61,20 +63,22 @@ class FrameRiepilogo extends JDialog {
     private String messoInStock;
     private String costoTot;
     private boolean giamessoaposto;
-    
-    
-    public FrameRiepilogo(OrdiniAdminPanel panAdmin, String numordine, String dataordine, String costoTot, boolean giamessoaposto ) {
+    private final JScrollPane sp3;
+    private final JPanel pdown;
+    private JLabel notepresenti;
+
+    public FrameRiepilogo(OrdiniAdminPanel panAdmin, String numordine, String dataordine, String costoTot, boolean giamessoaposto) {
         this.panadmin = panAdmin;
         this.Numordine = numordine;
         this.costoTot = costoTot;
         this.giamessoaposto = giamessoaposto;
-        
+
         setModal(true);
 
         ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
         this.setIconImage(img.getImage());
 
-        String[] columnNames = {"#Ordine", "Fornitore", "SKU prodotto", "Costo", "Quantita' arrivata/ Quantità prevista", "Data di arrivo", " E' Arrivato?", "Messo in Stock?", "Gestisci"};
+        String[] columnNames = {"#Ordine", "Fornitore", "SKU prodotto", "Costo", "Quantita' arrivata/ Quantità prevista", "Data di arrivo", " E' Arrivato?", "Messo in Stock?", "Conteggio"};
 
         Object[][] data = {};
 
@@ -88,21 +92,78 @@ class FrameRiepilogo extends JDialog {
         table2 = new JTable(model2);
         table2.getTableHeader().setReorderingAllowed(false);
 
+        table2.getColumnModel().getColumn(6).setCellRenderer(new CustomStockRender());
+        table2.getColumnModel().getColumn(7).setCellRenderer(new CustomStockRender());
+
         table2.getColumnModel().getColumn(8).setCellRenderer(new TableButtonRenderer());
         table2.getColumnModel().getColumn(8).setCellEditor(new TableRenderer(new JCheckBox()));
 
         JScrollPane sp2 = new JScrollPane(table2);
-        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "  #ORDINE: " + numordine + "  del "+dataordine+ "   ", TitledBorder.CENTER, TitledBorder.TOP));
-  
+        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "  #ORDINE: " + numordine + "  del " + dataordine + "   ", TitledBorder.CENTER, TitledBorder.TOP));
         
         add(sp2, BorderLayout.CENTER);
 
+        // VISIBILE SOLO SE PREMO BUTTON NOTE
+        JTextArea casNote = new JTextArea();
+        casNote.setAlignmentX(LEFT_ALIGNMENT);
+        casNote.setLineWrap(true);
+        casNote.setRows(5);
+        casNote.setColumns(20);        
+        casNote.setText("");
+        sp3 = new JScrollPane(casNote);
+        sp3.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "Note", TitledBorder.CENTER, TitledBorder.TOP));
+        
+        
         JButton bannulla = new JButton("Annulla");
         bannulla.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
+            }
+
+        });
+
+        // Dobbiamo autocompilare i conteggi??
+        JButton stockSelezion = new JButton("Metti in Stock");
+        stockSelezion.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Premuto metti in stock selezionati");
+            }
+
+        });
+
+        //BOTTONI COMMENTI
+        JButton comment = new JButton("Note");
+        comment.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            
+                
+                if(casNote.getText().length() > 0){
+                notepresenti.setText("  Sono presenti note per questo ordine");
+                }else notepresenti.setText("");
+                
+                
+               if(comment.getForeground() == Color.red){
+                   remove(sp3);
+                   setVisible(true);
+                    comment.setBackground(Color.GRAY);
+                    comment.setForeground(Color.white);
+                }
+               
+               else{ 
+                    sp3.setVisible(true);
+                    add(sp3, BorderLayout.EAST);
+                    setVisible(true);
+                    comment.setBackground(Color.yellow);
+                    comment.setForeground(Color.red);
+       
+                    
+               }
             }
 
         });
@@ -131,20 +192,20 @@ class FrameRiepilogo extends JDialog {
                             if (model2.getValueAt(i, 6).toString().equals("Sì")) {
                                 // setto a -1 gg
                                 ordinedao.updateGG(Numordine, model2.getValueAt(i, 2).toString(), -1);
-                                
+
                                 // setto la qty arrivata nwll'ordine
                                 ordinedao.setQtyArrivata(Numordine, model2.getValueAt(i, 2).toString(), qtyarriv);
                             }
 
                             // Se è l'ho messo a posto
                             if (model2.getValueAt(i, 7).toString().equals("Sì")) {
-                                
+
                                 // setto a -2 gg
                                 ordinedao.updateGG(Numordine, model2.getValueAt(i, 2).toString(), -2);
-                                
+
                                 //Setto la qty arrivata nell'ordine 
                                 ordinedao.setQtyArrivata(Numordine, model2.getValueAt(i, 2).toString(), qtyarriv);
-                                
+
                                 //Sommo questa qty arrivata alla qty del prodotto corrispondente
                                 ProdottoDAO daop = new ProdottoDAO();
                                 Prodotto p = daop.getBySku(model2.getValueAt(i, 2).toString());
@@ -156,7 +217,7 @@ class FrameRiepilogo extends JDialog {
 
                         }
                     } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex)); 
+                        Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                     }
 
                     setVisible(false);
@@ -166,17 +227,28 @@ class FrameRiepilogo extends JDialog {
 
         });
 
-        JPanel pdown = new JPanel(new GridLayout(1, 3));
-       // pdown.setBackground(Color.red); // FACCIAMO CON IL COLORE DEL SEMAFORO?
+        pdown = new JPanel(new GridLayout(1, 3));
+        // pdown.setBackground(Color.red); // FACCIAMO CON IL COLORE DEL SEMAFORO?
         pdown.setLayout(new GridBagLayout());
-        pdown.add(bconferma);
+
         pdown.add(bannulla);
-                
-                
-        JLabel costoTotale = new JLabel("   Costo totale ordine:  "+ costoTot);
+        pdown.add(bconferma);
+
+        pdown.add(new JLabel("              "));
+
+        JLabel costoTotale = new JLabel("   Costo totale ordine:  " + costoTot);
         costoTotale.setFont(new Font("Arial Black", Font.BOLD, 12));
-        pdown.add(costoTotale);        
-      
+        pdown.add(costoTotale);
+
+        pdown.add(new JLabel("              "));
+
+        pdown.add(stockSelezion);
+        pdown.add(comment);
+        
+        notepresenti = new JLabel("");
+        notepresenti.setForeground(Color.red);
+        pdown.add(notepresenti);
+
 
         add(pdown, BorderLayout.SOUTH);
 
@@ -195,14 +267,14 @@ class FrameRiepilogo extends JDialog {
 
             ProdottoDAO prodao = new ProdottoDAO();
             arrivato = "";
-             messoInStock = "";
-             String datao = "";
+            messoInStock = "";
+            String datao = "";
             for (Ordine ordine : ordaoo.getByNum(Numordine)) {
 
                 if (ordine.getGiorni_alla_consegna() < 0) {
                     arrivato = "Sì";
-                    datao = ordine.getData_arrivo()+ " (arrivato)"; // data quando è arrivata 
-                    
+                    datao = ordine.getData_arrivo() + " (arrivato)"; // data quando è arrivata 
+
                     if (ordine.getGiorni_alla_consegna() <= -2) {
                         messoInStock = "Sì";
                     } else {
@@ -211,18 +283,19 @@ class FrameRiepilogo extends JDialog {
                 } else {
                     arrivato = "No";
                     messoInStock = "No";
-                    datao = ordaoo.dataArrivo(ordine.getN_ordine(), ordine.getProdotto_sku())+ " (previsto)"; // data prevista
+                    datao = ordaoo.dataArrivo(ordine.getN_ordine(), ordine.getProdotto_sku()) + " (previsto)"; // data prevista
                 }
 
                 BigDecimal costoo = new BigDecimal(String.valueOf(prodao.getBySku(ordine.getProdotto_sku()).getCosto()));
-     
-                model2.addRow(new Object[]{ordine.getN_ordine(), ordine.getFk_fornitore(), ordine.getProdotto_sku(),costoo.toPlainString() ,
-                    ordine.getQty_arrivata() +"/"+ordine.getQty_in_arrivo(), datao, arrivato, messoInStock});
+
+                model2.addRow(new Object[]{ordine.getN_ordine(), ordine.getFk_fornitore(), ordine.getProdotto_sku(), costoo.toPlainString(),
+                    ordine.getQty_arrivata() + "/" + ordine.getQty_in_arrivo(), datao, arrivato, messoInStock});
             }
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));     
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         } catch (ParseException ex) {
- Logger.getLogger("genlog").warning("ParseException\n"+StockManagement.printStackTrace(ex));        }
+            Logger.getLogger("genlog").warning("ParseException\n" + StockManagement.printStackTrace(ex));
+        }
 
     }
 
@@ -236,14 +309,51 @@ class FrameRiepilogo extends JDialog {
             setText((value == null) ? "" : value.toString());
 
             setIcon(ImpostaImg("/res/img/pencil.png"));
-            if(giamessoaposto){
+            if (giamessoaposto) {
                 setEnabled(false);
                 setIcon(null);
             }
-            
+
             return this;
         }
 
+    }
+
+    // BUTTON per "è arrivato" e per "Messo in Stock"
+    class CustomStockRender extends JButton implements TableCellRenderer {
+
+        public CustomStockRender() {
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+            // se è colonna è arrivato
+            if (column == 6) {
+                if (value.toString().equals("No")) {
+                    setBackground(new Color(244, 80, 37));    // ROSSO       
+                } else {
+                    // VERDE
+                    setBackground(new Color(126, 169, 93));
+                    // SOLO X BUTTON E' ARRIVATO: diventa giallo se qty conteggiata < qty che doveva arrivare
+                    String s = model2.getValueAt(row, 4).toString();
+                    String qtyconteggiata = s.substring(0, s.indexOf('/'));
+                    String qtyprevista = s.substring(s.indexOf('/') + 1);
+
+                    if (Integer.parseInt(qtyconteggiata) < Integer.parseInt(qtyprevista)) {
+                        setBackground(Color.yellow); // GIALLO
+                    }
+                }
+            } else if (column == 7) {
+                if (value.toString().equals("No")) {
+                    setBackground(new Color(244, 80, 37));    // ROSSO       
+                } else {
+                    setBackground(new Color(126, 169, 93));
+                }
+            }
+
+            return this;
+        }
     }
 
     public class TableRenderer extends DefaultCellEditor {
@@ -271,8 +381,6 @@ class FrameRiepilogo extends JDialog {
             this.table = table;
             this.row = row;
             this.col = column;
-            
-
 
             skusel = table.getValueAt(row, 2).toString();
             button.setForeground(Color.black);
@@ -281,8 +389,8 @@ class FrameRiepilogo extends JDialog {
             label = (value == null) ? "" : value.toString();
             button.setText(label);
             button.setIcon(ImpostaImg("/res/img/pencil.png"));
-        
-            if(giamessoaposto){
+
+            if (giamessoaposto) {
                 button.setEnabled(false);
                 button.setIcon(null);
             }
@@ -297,35 +405,27 @@ class FrameRiepilogo extends JDialog {
                 JDialog f = new JDialog();
                 f.setResizable(false);
                 f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                f.setSize(500, 150);
-                f.setLocationRelativeTo(null); 
+                f.setSize(280, 100);
+                f.setLocationRelativeTo(null);
                 f.setModal(true);
-                
-                
+
                 f.setTitle(Numordine + "| " + skusel);
 
                 ProdottoDAO prodao = new ProdottoDAO();
 
                 JPanel main = new JPanel();
-                main.setLayout(new GridLayout(2, 3));
-
-                JLabel co = new JLabel(" # prodotti arrivati");
-                JLabel c1 = new JLabel("E' arrivato");
-                JLabel c2 = new JLabel("l'ho messo in Stock");
-
+                
+                JLabel co = new JLabel("# prodotti arrivati    ");
                 main.add(co);
-                main.add(c1);
-                main.add(c2);
 
                 JPanel p_arrivati = new JPanel();
                 p_arrivati.setLayout(new GridLayout(1, 2));
-                JTextField qtyarr = new JTextField(10);
-                
-            
+                JTextField qtyarr = new JTextField(5);
+
                 String arrivat = model2.getValueAt(row, 4).toString();
                 arrivat = arrivat.substring(0, arrivat.indexOf("/"));
                 qtyarr.setText(arrivat);
-                
+
                 ((AbstractDocument) qtyarr.getDocument()).setDocumentFilter(new DocumentFilter() {
                     Pattern regEx = Pattern.compile("\\d*");
 
@@ -346,20 +446,17 @@ class FrameRiepilogo extends JDialog {
                 p_arrivati.add(txt);
                 main.add(p_arrivati);
 
-                JCheckBox r1 = new JCheckBox();
-                if(arrivato.equals("Sì")) r1.setSelected(true);
-                else r1.setSelected(false);
-                r1.setAlignmentX(CENTER_ALIGNMENT);
-              
-                JCheckBox r2 = new JCheckBox();
-                if(messoInStock.equals("Sì")) r2.setSelected(true);
-                else r2.setSelected(false);                 
+                /*JCheckBox r2 = new JCheckBox();
+                if (messoInStock.equals("Sì")) {
+                    r2.setSelected(true);
+                } else {
+                    r2.setSelected(false);
+                }
                 r2.setAlignmentX(CENTER_ALIGNMENT);
 
-                main.add(r1);
-                main.add(r2);
+                main.add(r2);*/
 
-                f.add(main);
+                f.add(main, BorderLayout.CENTER);
 
                 JButton ok = new JButton("O K   K   E   Y");
                 ok.addActionListener(new ActionListener() {
@@ -372,17 +469,17 @@ class FrameRiepilogo extends JDialog {
                         model2.setValueAt(qtyarr.getText() + qtyChedovevaArrivare, row, 4);
 
                         // è arrivato
-                        if (r1.isSelected()) {
+                        if (Integer.parseInt(qtyarr.getText()) > 0) {
                             model2.setValueAt("Sì", row, 6);
                         } else {
                             model2.setValueAt("No", row, 6);
                         }
 
-                        if (r2.isSelected()) {
+                    /*    if (r2.isSelected()) {
                             model2.setValueAt("Sì", row, 7);
                         } else {
                             model2.setValueAt("No", row, 7);
-                        }
+                        }*/
 
                         f.setVisible(false);
 
@@ -391,7 +488,6 @@ class FrameRiepilogo extends JDialog {
                 });
                 f.add(ok, BorderLayout.SOUTH);
                 f.setVisible(!giamessoaposto);
-
 
             }
             clicked = false;
