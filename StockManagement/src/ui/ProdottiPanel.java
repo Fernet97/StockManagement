@@ -499,12 +499,25 @@ public class ProdottiPanel extends JPanel {
                         vaiarod.setLocationRelativeTo(null);
 
                         vaiarod.setTitle("Seleziona un fornitore a cui associare il prodotto");
-                        vaiarod.setSize(new Dimension(500, 200));
-                        vaiarod.setLayout(new GridLayout(2, 1));
-                        vaiarod.add(new JLabel("Scegli un fornitore: "));
+                        vaiarod.setSize(new Dimension(500, 150));
+                        vaiarod.setLayout(new GridBagLayout());
                         FornitoreDAO forndao = new FornitoreDAO();
                         jComboBox = new JComboBox<>();
+                        jComboBox.setFont(new Font("Arial Black", Font.BOLD, 20));
                         vaiarod.add(jComboBox);
+                        
+                        vaiarod.add(new JLabel("       "));
+
+                        JButton confermaforn = new JButton("Conferma");
+                        confermaforn.addActionListener(new java.awt.event.ActionListener() {
+                            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                vaiarod.setVisible(false);
+                                frameprinc.VaiAOrdiniconProdFORNULL(jComboBox.getSelectedItem().toString(), prodSceltoxOrdine);
+
+                            }
+                        });
+                        confermaforn.setFont(new Font("Arial Black", Font.BOLD, 20));
+                        vaiarod.add(confermaforn);
 
                         prodSceltoxOrdine = table.getValueAt(row, 0).toString() + "|" + table.getValueAt(row, 2).toString();
 
@@ -521,13 +534,7 @@ public class ProdottiPanel extends JPanel {
                             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                         }
 
-                        jComboBox.addActionListener(new java.awt.event.ActionListener() {
-                            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                vaiarod.setVisible(false);
-                                frameprinc.VaiAOrdiniconProdFORNULL(jComboBox.getSelectedItem().toString(), prodSceltoxOrdine);
-
-                            }
-                        });
+                       
                         vaiarod.setVisible(true);
 
                     } // SE IL FORNITORE ERA GIA' DEFINITO
