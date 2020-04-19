@@ -119,10 +119,10 @@ public class AnagrafichePanel extends JPanel {
                 int OpzioneScelta = JOptionPane.showOptionDialog(null, "Seleziona una tipologia", "", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
                 if (OpzioneScelta != JOptionPane.CLOSED_OPTION) {
                     form = new Formanagrafiche(OpzioneScelta, "ADD", null);
+                    form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     form.setResizable(false);
                     form.setLocationRelativeTo(null);  // CENTRA 
                     form.setVisible(true);
-                    form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 }
             }
         });
@@ -405,7 +405,7 @@ public class AnagrafichePanel extends JPanel {
         public Formanagrafiche(int OpzioneScelta, String mod, String idSelected) {
 
             super.setModal(true);
-            
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             tipologia = OpzioneScelta;
             modalita = mod;
             IdSelezionato = idSelected;
