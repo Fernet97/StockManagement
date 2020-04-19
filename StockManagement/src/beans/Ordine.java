@@ -93,7 +93,6 @@ public class Ordine {
         setCode(this.code);
         setData(generateData());
         this.n_ordine = n_ordine;
-        this.data = data;
         this.note = note;
         this.fk_utente = fk_utente;
          

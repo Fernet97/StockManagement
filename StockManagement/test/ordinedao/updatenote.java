@@ -17,7 +17,7 @@ public class updatenote {
     public static void main(String[] args) throws SQLException {
         OrdineDAO dao = new OrdineDAO();
         
-      dao.updateNote("gesu", "admin", "ORD-1", "gatto");
+      dao.updateNote("gesu", "admin", "ORD-1");
 
         
     }
