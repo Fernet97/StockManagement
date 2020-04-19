@@ -130,9 +130,17 @@ class FrameRiepilogo extends JDialog {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Premuto metti in stock selezionati");
+                
+                if( table2.getSelectedRows().length== 0) JOptionPane.showMessageDialog(null, "Devi selezionare almeno un prodotto!");
+                
+                for (int i = 0; i < table2.getSelectedRows().length; i++) {
+                    // DEVE ESSERE PRIMA ARRIVATO
+                    if(model2.getValueAt(i, 6).toString().equals("Sì"))
+                        model2.setValueAt("Sì", i, 7);
+                    else{
+                        JOptionPane.showMessageDialog(null, "Il prodotto "+model2.getValueAt(i, 2)+" non è ancora arrivato, non puoi metterlo in stock!");}
+                }
             }
-
         });
 
         //BOTTONI COMMENTI

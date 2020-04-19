@@ -544,7 +544,7 @@ public class OrdiniAdminPanel extends JPanel {
             {
                boolean instockk = false;
                 if (button.getText().equals("Apri")) {
-                    if(table.getValueAt(row, 4).toString().equals("3")) {
+                    if(table.getValueAt(row, 5).toString().equals("3")) {
                         instockk = true;
                         
                     }
