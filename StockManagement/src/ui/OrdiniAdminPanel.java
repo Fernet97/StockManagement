@@ -61,7 +61,7 @@ import others.RoundedPanel;
  */
 public class OrdiniAdminPanel extends JPanel {
 
-    public String nomeutente;
+    public static String nomeutente;
     public Prodotto prodottoCorrente;
     public javax.swing.JComboBox<String> jComboBox;
     public DefaultTableModel model;

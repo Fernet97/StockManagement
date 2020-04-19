@@ -235,7 +235,7 @@ class FrameRiepilogo extends JDialog {
                             
                             // SALVO EVENTUALI NOTE
                             if(casNote.getText().length() > 0){
-                                Ordine o = new Ordine(Numordine,casNote.getText(), "BOOOOOOOOOOOOH");
+                                Ordine o = new Ordine(Numordine,casNote.getText(), OrdiniAdminPanel.nomeutente);
                                 if(ordinedao.getNote(Numordine).length()>0 ){
                                     ordinedao.updateNote(o);}
                                 else ordinedao.addNote(o);
