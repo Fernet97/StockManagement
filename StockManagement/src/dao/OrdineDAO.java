@@ -736,14 +736,14 @@ public class OrdineDAO {
     
     //UPDATE `db_stock`.`ordine` SET `data` = '19/04/2020 17:41:00', `note` = 'miao', `fk_utente` = 'gatto silvestro' WHERE (`id` = 'x') and (`prodotto_sku` = 'VOID');
 
-      public synchronized void updateNote(Ordine o) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
+      public synchronized void updateNote(String note, String utentenew, String n_ordine, String utenteold) throws SQLException { //in p c'è il prodotto già modificato (SKUVECCHIO,  parametri nuovi)
         Connection connection = null;
         Statement statement = null;
          Ordine bean = new Ordine();
 
-         String query = "UPDATE " + this.TABLE_NAME + " SET data` = '"+bean.generateData()+"', "
-                 + "`note` = '"+o.getNote()+"', `fk_utente` = '"+o.getFk_utente()+"' "
-                 + "WHERE (`id` = '"+getId(o.getN_ordine()) +"') and (`prodotto_sku` = 'VOID')";
+         String query = "UPDATE " + this.TABLE_NAME + " SET `data` = '"+bean.generateData()+"', "
+                 + "`note` = '"+note+"', `fk_utente` = '"+utentenew+"' "
+                 + "WHERE (`n_ordine` = '"+n_ordine+"') and (`prodotto_sku` = 'VOID') and (`fk_utente` = '"+utenteold+"')";
 
       
 
