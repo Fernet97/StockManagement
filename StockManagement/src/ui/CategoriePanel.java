@@ -142,12 +142,24 @@ class CategoriePanel extends JPanel {
                 add.addActionListener(new ActionListener() {
 
                     public void actionPerformed(ActionEvent arg0) {
+                        modificaframe.setAlwaysOnTop(false);
+           
                         if (name.getText().length() < 2 || name.getText().length() > 45) {
                             modificaframe.setAlwaysOnTop(false);
                             JOptionPane.showMessageDialog(getParent(), "La lunghezza della categoria deve essere compresa tra 2 e 45 caratteri|");
                             modificaframe.setAlwaysOnTop(true);
                             return;
                         }
+                        
+                        
+                        for(int i =0; i< model.getRowCount(); i++){
+                            if(model.getValueAt(i, 0).toString().equals(name.getText().toUpperCase())){
+                                JOptionPane.showMessageDialog(null, "Categoria già esistente!");
+                                return;
+                            }
+                        }
+                        
+                           
                         // Se è una categoria dinamica:
                         if (model.getValueAt(table.getSelectedRow(), 1).toString().equals("DA DEFINIRE")) {
                             int index = list_cat_new.indexOf(model.getValueAt(table.getSelectedRow(), 0).toString());
@@ -158,7 +170,7 @@ class CategoriePanel extends JPanel {
                         else {
                             ProdottoDAO prodao = new ProdottoDAO();
                             try {
-                                prodao.updateCat(model.getValueAt(table.getSelectedRow(), 0).toString(), name.getText());
+                                prodao.updateCat(model.getValueAt(table.getSelectedRow(), 0).toString(), name.getText().toUpperCase());
                                 model.setValueAt(name.getText().toUpperCase(), table.getSelectedRow(), 0);
 
                             } catch (SQLException ex) {
@@ -490,7 +502,16 @@ class CategoriePanel extends JPanel {
         }
 
         public void confermaCategoria() {
+            
             setAlwaysOnTop(false);
+
+            for(int i =0; i< model.getRowCount(); i++){
+                if(model.getValueAt(i, 0).toString().equals(name.getText().toUpperCase())){
+                    JOptionPane.showMessageDialog(null, "Categoria già esistente!");
+                    return;
+                }
+            }
+            
             if (name.getText().length() < 2 || name.getText().length() > 45) {
                 JOptionPane.showMessageDialog(getParent(), "La categoria deve avere lunghezza compresa tra 2 e 45 caratteri!");
             } else {
