@@ -69,7 +69,7 @@ public class FramePrincipale extends JFrame {
     private JTable table;
     private DefaultTableModel model2;
     private JTable table2;
-    public String nomeuser;
+    public /*static*/String nomeuser;
     public Utente user;
     public ButtonDash button;
     public ButtonDash button1;
