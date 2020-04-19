@@ -237,7 +237,7 @@ class FrameRiepilogo extends JDialog {
                             if(casNote.getText().length() > 0){
                                 Ordine o = new Ordine(Numordine,casNote.getText(), OrdiniAdminPanel.nomeutente);
                                 if(ordinedao.getNote(Numordine).length()>0 ){
-                                    ordinedao.updateNote("gesu", "admin", "ORD-1");}
+                                    ordinedao.updateNote(casNote.getText(),  OrdiniAdminPanel.nomeutente, Numordine);}
                                 else ordinedao.addNote(o);
                             }
                             else { // Se ho cancellato i commenti nella casella, allora cancella nel db quel commento
