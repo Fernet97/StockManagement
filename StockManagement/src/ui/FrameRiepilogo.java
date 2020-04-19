@@ -19,9 +19,11 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,6 +68,7 @@ class FrameRiepilogo extends JDialog {
     private final JScrollPane sp3;
     private final JPanel pdown;
     private JLabel notepresenti;
+    private final JTextArea casNote;
 
     public FrameRiepilogo(OrdiniAdminPanel panAdmin, String numordine, String dataordine, String costoTot, boolean giamessoaposto) {
         this.panadmin = panAdmin;
@@ -104,7 +107,7 @@ class FrameRiepilogo extends JDialog {
         add(sp2, BorderLayout.CENTER);
 
         // VISIBILE SOLO SE PREMO BUTTON NOTE
-        JTextArea casNote = new JTextArea();
+        casNote = new JTextArea();
         casNote.setAlignmentX(LEFT_ALIGNMENT);
         casNote.setLineWrap(true);
         casNote.setRows(5);
@@ -150,10 +153,17 @@ class FrameRiepilogo extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
             
-                
+                //Ho settato un testo
                 if(casNote.getText().length() > 0){
-                notepresenti.setText("  Sono presenti note per questo ordine");
-                }else notepresenti.setText("");
+                    OrdineDAO ordao = new OrdineDAO();
+                    try {
+                        if(ordao.getNote(Numordine).length()<=0) notepresenti.setText("     Hai appena aggiunto una nota per quest'ordine");
+                        else notepresenti.setText("     Hai già registrato una nota per questo ordine");
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "errore nel caricamento della nota ..");}
+                    
+                }
+                else notepresenti.setText("");
                 
                 
                if(comment.getForeground() == Color.red){
@@ -222,10 +232,25 @@ class FrameRiepilogo extends JDialog {
                                 daop.update(p);
 
                             }
+                            
+                            // SALVO EVENTUALI NOTE
+                            if(casNote.getText().length() > 0){
+                                Ordine o = new Ordine(Numordine,casNote.getText(), "BOOOOOOOOOOOOH");
+                                if(ordinedao.getNote(Numordine).length()>0 ){
+                                    ordinedao.updateNote(o);}
+                                else ordinedao.addNote(o);
+                            }
+                            else { // Se ho cancellato i commenti nella casella, allora cancella nel db quel commento
+                                 if(ordinedao.getNote(Numordine).length()>=0 ){
+                                    ordinedao.removeNote(Numordine);
+                                 }
+                            }
 
                         }
                     } catch (SQLException ex) {
                         Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(FrameRiepilogo.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                     setVisible(false);
@@ -269,10 +294,13 @@ class FrameRiepilogo extends JDialog {
         model2.setRowCount(0);
 
         OrdineDAO ordaoo = new OrdineDAO();
-
+        
         try {
+            //Prendo eventuali note del db per quest'ordine
+            casNote.setText(ordaoo.getNote(Numordine));
+            if(ordaoo.getNote(Numordine).length()>0)  notepresenti.setText("    Hai già registrato una nota per questo ordine");
+            
             //  String[] columnNames = {"#Ordine","Fornitore" ,"SKU prodotto", "Costo", "Quantita' arrivata", "Data prevista di arrivo", " E' Arrivato?", "Messo in Stock?"};
-
             ProdottoDAO prodao = new ProdottoDAO();
             arrivato = "";
             messoInStock = "";
@@ -298,6 +326,8 @@ class FrameRiepilogo extends JDialog {
 
                 model2.addRow(new Object[]{ordine.getN_ordine(), ordine.getFk_fornitore(), ordine.getProdotto_sku(), costoo.toPlainString(),
                     ordine.getQty_arrivata() + "/" + ordine.getQty_in_arrivo(), datao, arrivato, messoInStock});
+                
+                
             }
         } catch (SQLException ex) {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
@@ -429,6 +459,26 @@ class FrameRiepilogo extends JDialog {
                 JPanel p_arrivati = new JPanel();
                 p_arrivati.setLayout(new GridLayout(1, 2));
                 JTextField qtyarr = new JTextField(5);
+                qtyarr.addKeyListener(new KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent e) {
+                    if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+ 
+                        String qtyChedovevaArrivare = model2.getValueAt(row, 4).toString();
+                        qtyChedovevaArrivare = qtyChedovevaArrivare.substring(qtyChedovevaArrivare.indexOf('/'));
+                        // Setta la qty arrivata davvero
+                        model2.setValueAt(qtyarr.getText() + qtyChedovevaArrivare, row, 4);
+
+                        // è arrivato
+                        if (Integer.parseInt(qtyarr.getText()) > 0) {
+                            model2.setValueAt("Sì", row, 6);
+                        } else {
+                            model2.setValueAt("No", row, 6);
+                        }
+
+                        f.setVisible(false);
+                       
+                    }
+                }});
 
                 String arrivat = model2.getValueAt(row, 4).toString();
                 arrivat = arrivat.substring(0, arrivat.indexOf("/"));
@@ -482,12 +532,6 @@ class FrameRiepilogo extends JDialog {
                         } else {
                             model2.setValueAt("No", row, 6);
                         }
-
-                    /*    if (r2.isSelected()) {
-                            model2.setValueAt("Sì", row, 7);
-                        } else {
-                            model2.setValueAt("No", row, 7);
-                        }*/
 
                         f.setVisible(false);
 
