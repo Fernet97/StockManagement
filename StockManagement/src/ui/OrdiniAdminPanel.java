@@ -634,6 +634,7 @@ public class OrdiniAdminPanel extends JPanel {
         skusel = skuselezionato.substring(0, skuselezionato.indexOf("|"));
         //Quando clicco un prodotto dalla jList mi si apre la finestra Pop-UP
         popup = new JDialog();
+        popup.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         popup.setModal(true);
         popup.setResizable(false);
         popup.setSize(new Dimension(300, 300));

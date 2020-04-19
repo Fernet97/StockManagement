@@ -108,6 +108,7 @@ class CategoriePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddCategoriaDialog input = new AddCategoriaDialog();
+                input.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                 String txt = input.getName();
                 input.setLocationRelativeTo(null);
                 input.setVisible(true);
@@ -132,9 +133,9 @@ class CategoriePanel extends JPanel {
                 }
                 System.out.println("Categoria da modificare " + table.getValueAt(table.getSelectedRow(), 0));
                 JFrame modificaframe = new JFrame("Specifica il nuovo valore per la categoria");
+                modificaframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 modificaframe.setAlwaysOnTop(true);
-                modificaframe.setLocationRelativeTo(null);;
-                modificaframe.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                modificaframe.setLocationRelativeTo(null);
                 modificaframe.setMinimumSize(new Dimension(500, 100));
                 JTextField name = new JTextField(model.getValueAt(table.getSelectedRow(), 0).toString());
                 JButton add = new JButton("Modifica");

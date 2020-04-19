@@ -494,6 +494,7 @@ public class ProdottiPanel extends JPanel {
                     //Se un fornitore non è definito
                     if (table.getValueAt(row, 5).toString().equals("null|  null")) {
                         vaiarod = new JDialog();
+                        vaiarod.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                         vaiarod.setResizable(false);
                         vaiarod.setModal(true);
                         vaiarod.setLocationRelativeTo(null);
