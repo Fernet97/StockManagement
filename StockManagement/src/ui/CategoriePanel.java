@@ -134,7 +134,7 @@ class CategoriePanel extends JPanel {
                 JFrame modificaframe = new JFrame("Specifica il nuovo valore per la categoria");
                 modificaframe.setAlwaysOnTop(true);
                 modificaframe.setLocationRelativeTo(null);;
-                modificaframe.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+                modificaframe.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                 modificaframe.setMinimumSize(new Dimension(500, 100));
                 JTextField name = new JTextField(model.getValueAt(table.getSelectedRow(), 0).toString());
                 JButton add = new JButton("Modifica");
@@ -465,7 +465,7 @@ class CategoriePanel extends JPanel {
         public AddCategoriaDialog() {
             super(new JFrame("Aggiungi Categoria"), "Aggiungi Categoria");
             setAlwaysOnTop(true);
-            this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+            this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             this.setMinimumSize(new Dimension(500, 100));
             this.name = new JTextField();
             name.addKeyListener(new KeyAdapter() {
