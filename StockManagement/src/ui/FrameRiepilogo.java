@@ -136,9 +136,10 @@ class FrameRiepilogo extends JDialog {
                 
                 if( table2.getSelectedRows().length== 0) JOptionPane.showMessageDialog(null, "Devi selezionare almeno un prodotto!");
                 
-                for (int i = 0; i < table2.getSelectedRows().length; i++) {
+                // Gli indici delle righe selezionate
+                for (int i: table2.getSelectedRows()) {
                     // DEVE ESSERE PRIMA ARRIVATO
-                    if(model2.getValueAt(i, 6).toString().equals("Sì"))
+                    if(model2.getValueAt(i, 6).toString().equals("Sì") )
                         model2.setValueAt("Sì", i, 7);
                     else{
                         JOptionPane.showMessageDialog(null, "Il prodotto "+model2.getValueAt(i, 2)+" non è ancora arrivato, non puoi metterlo in stock!");}

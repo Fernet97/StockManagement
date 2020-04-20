@@ -23,6 +23,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -132,11 +134,58 @@ public class OrdiniAdminPanel extends JPanel {
                         for (Fornitore f : forndao.getAll()) {
                             if (f.getIdfornitore().equals(forny)) {
                                 fornyname = f.getFullname();
+                                jComboBox.getModel().setSelectedItem(forny + "|" + fornyname);
                                 break;
                             }
                         }
-                        jComboBox.getModel().setSelectedItem(forny + "|" + fornyname);
-                        
+                        //forny --> con il nuovo fornitore selezionato
+                        //***********************************************************
+                        if (fornyname.equals("")) {
+                            JOptionPane.showMessageDialog(null, "il prodotto non è associato a nessun fornitore.\nPremere ok per continuare");
+                            JDialog vaiarod = new JDialog();
+                            vaiarod.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                            vaiarod.setResizable(false);
+                            vaiarod.setModal(true);
+                            vaiarod.setLocationRelativeTo(null);
+
+                            vaiarod.setTitle("Seleziona un fornitore a cui associare il prodotto");
+                            vaiarod.setSize(new Dimension(500, 150));
+                            vaiarod.setLayout(new GridBagLayout());
+                            JComboBox jComboBoxxx = new JComboBox<>();
+                            jComboBoxxx.setFont(new Font("Arial Black", Font.BOLD, 20));
+                            vaiarod.add(jComboBoxxx);
+
+                            vaiarod.add(new JLabel("       "));
+
+                            JButton confermaforn = new JButton("Conferma");
+                            confermaforn.addActionListener(new java.awt.event.ActionListener() {
+                                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                    vaiarod.dispose();
+                                    System.out.println("Fornitore selezionato:" + jComboBoxxx.getSelectedItem().toString());
+                                    jComboBox.getModel().setSelectedItem(jComboBoxxx.getSelectedItem().toString());
+
+                                }
+                            });
+                            confermaforn.setFont(new Font("Arial Black", Font.BOLD, 20));
+                            vaiarod.add(confermaforn);
+
+                            try {
+                                for (Fornitore f : forndao.getAll()) {
+                                    jComboBoxxx.addItem(f.getIdfornitore() + "|" + f.getFullname());
+                                }
+                                if (jComboBoxxx.getItemCount() == 0) {
+                                    JOptionPane.showMessageDialog(null, "Non hai creato ancora un fornitore!");
+                                    return;
+                                }
+
+                            } catch (SQLException ex) {
+                                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                            }
+
+                            vaiarod.setVisible(true);
+                        }
+                        //******************************************************
+
                         aggiungiTOcarrello(p.getSku() + "|  " + p.getNome());
 
                     }
@@ -260,11 +309,15 @@ public class OrdiniAdminPanel extends JPanel {
         JButton rimuoviprod = new JButton("Elimina prodotto selezionato");
         rimuoviprod.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                for (int i = 0; i < table.getSelectedRows().length; i++) {
+                  // Gli indici delle righe selezionate
+                for (int j=0; j<table.getSelectedRows().length; j++) {
+                    JOptionPane.showMessageDialog(null, "Vuoi togliere il prodotto "+table.getValueAt(table.getSelectedRow(), 0).toString()+ "dal carrello?");
                     model.removeRow(table.getSelectedRow());
-                    costocarrell += Float.parseFloat(table.getValueAt(i, 2).toString()) * Integer.parseInt(table.getValueAt(i, 1).toString());
+                    costocarrell += Float.parseFloat(table.getValueAt(table.getSelectedRow(), 2).toString()) * Integer.parseInt(table.getValueAt(table.getSelectedRow(), 1).toString());
                     costot.setText("Costo totale: " + costocarrell + " euro");
-                }
+                }              
+                
+                
             }
         });
         manageprod.add(rimuoviprod);
@@ -275,6 +328,16 @@ public class OrdiniAdminPanel extends JPanel {
                 model.setRowCount(0);
                 costocarrell = 0;
                 costot.setText("Costo totale: 0 euro");
+                listModel.clear();
+                jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
+                FornitoreDAO daof = new FornitoreDAO();
+                try {
+                    for (Fornitore f : daof.getAll()) {
+                        jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                }
             }
         });
         manageprod.add(svuotaprod);
@@ -293,7 +356,7 @@ public class OrdiniAdminPanel extends JPanel {
         JPanel SXdown = new JPanel();
         SXdown.setLayout(new BoxLayout(SXdown, BoxLayout.PAGE_AXIS));
 
-        String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale","Prodotti arrivati", "Stato ordine", "Controlla ordine", "Ricarica ordine"};
+        String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale", "Prodotti arrivati", "Stato ordine", "Controlla ordine", "Ricarica ordine"};
 
         Object[][] data = {};
 
@@ -350,7 +413,7 @@ public class OrdiniAdminPanel extends JPanel {
             for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
                 BigDecimal costoo = new BigDecimal(String.valueOf(ordine.get(2)));
 
-                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(),ordine.get(4),ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica"});
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(), ordine.get(4), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica"});
             }
         } catch (SQLException ex) {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
@@ -542,11 +605,11 @@ public class OrdiniAdminPanel extends JPanel {
         public Object getCellEditorValue() {
             if (clicked) // SE CLICCATO QUEL BOTTONE:::::::::::::
             {
-               boolean instockk = false;
+                boolean instockk = false;
                 if (button.getText().equals("Apri")) {
-                    if(table.getValueAt(row, 5).toString().equals("3")) {
+                    if (table.getValueAt(row, 5).toString().equals("3")) {
                         instockk = true;
-                        
+
                     }
                     FrameRiepilogo f = new FrameRiepilogo(getInstance(), table.getValueAt(row, 0).toString(), table.getValueAt(row, 1).toString(), table.getValueAt(row, 3).toString(), instockk);
                     f.setResizable(false);
@@ -639,6 +702,26 @@ public class OrdiniAdminPanel extends JPanel {
         popup.setResizable(false);
         popup.setSize(new Dimension(300, 300));
         popup.setLayout(new GridLayout(4, 1));
+        popup.addWindowListener(new WindowAdapter() {
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            public void windowClosing(WindowEvent e) {
+                System.out.println("CHIUDOOOOOOOOOOOOOOOO");
+                listModel.clear();
+                jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
+                FornitoreDAO daof = new FornitoreDAO();
+                try {
+                    for (Fornitore f : daof.getAll()) {
+                        jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                }
+
+            }
+        });
 
         JLabel prodt = new JLabel("   " + skuselezionato);
         prodt.setFont(new Font("Arial Black", Font.ITALIC, 15));
@@ -654,12 +737,36 @@ public class OrdiniAdminPanel extends JPanel {
         panelUP2.add(new JLabel("Giorni alla consegna: "));
         ggallacons = new JTextField(20);
         ggallacons.addKeyListener(new KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent e) {
-                    if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-                        confermaProdotto();
+            public void keyPressed(java.awt.event.KeyEvent e) {
+                if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    confermaProdotto();
+                    listModel.clear();
+                    FornitoreDAO daof = new FornitoreDAO();
+                    if (jComboBox.getSelectedItem().toString().equals("Seleziona un fornitore")) {
+                        return;
                     }
+                    String idfornitore = "";
+                    String selezionato = "";
+                    String subselezionato = "";
+                    selezionato = jComboBox.getSelectedItem().toString();
+                    subselezionato = selezionato.substring(0, selezionato.lastIndexOf("|"));
+
+                    idfornitore = subselezionato;
+                    OrdineDAO daoo = new OrdineDAO();
+                    ProdottoDAO prodao = new ProdottoDAO();
+
+                    try {
+                        for (String sku : daoo.getPFr(idfornitore)) {
+                            Prodotto pp = prodao.getBySku(sku);
+                            ((DefaultListModel) list.getModel()).addElement(pp.getSku() + "|  " + pp.getNome());
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                    }
+
                 }
-            });
+            }
+        });
         panelUP2.add(ggallacons);
         popup.add(panelUP2);
 
@@ -667,65 +774,85 @@ public class OrdiniAdminPanel extends JPanel {
         ButtonConferma.setFont(new Font("Arial Black", Font.ITALIC, 20));
 
         ButtonConferma.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                  confermaProdotto();
+                confermaProdotto();
+                listModel.clear();
+                FornitoreDAO daof = new FornitoreDAO();
+                if (jComboBox.getSelectedItem().toString().equals("Seleziona un fornitore")) {
+                    return;
+                }
+                String idfornitore = "";
+                String selezionato = "";
+                String subselezionato = "";
+                selezionato = jComboBox.getSelectedItem().toString();
+                subselezionato = selezionato.substring(0, selezionato.lastIndexOf("|"));
+
+                idfornitore = subselezionato;
+                OrdineDAO daoo = new OrdineDAO();
+                ProdottoDAO prodao = new ProdottoDAO();
+
+                try {
+                    for (String sku : daoo.getPFr(idfornitore)) {
+                        Prodotto pp = prodao.getBySku(sku);
+                        ((DefaultListModel) list.getModel()).addElement(pp.getSku() + "|  " + pp.getNome());
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                }
+
             }
         });
 
         popup.add(ButtonConferma);
-        popup.setLocationRelativeTo(null); 
+        popup.setLocationRelativeTo(null);
         popup.setVisible(true);
 
     }
-    
-    
-    public void confermaProdotto(){
-    
 
-                   ProdottoDAO pdao = new ProdottoDAO();
+    public void confermaProdotto() {
 
-                try {
-                    Prodotto p = pdao.getBySku(skusel);
+        ProdottoDAO pdao = new ProdottoDAO();
 
-                    if (casellaqty.getText().matches("-?\\d+(\\.\\d+)?") && ggallacons.getText().matches("-?\\d+(\\.\\d+)?")) {
-                        BigDecimal costoo = new BigDecimal(String.valueOf(p.getCosto()));
-                        
-                        if(controlloProdottoUguale(skusel)){
-                            popup.dispose();
-                            JOptionPane.showMessageDialog(getParent(), "Attenzione! Ricorda che:\n1) non puoi associare più fornitori ad un solo prodotto mentre lo stai aggiungendo al carrello.\n2)Non puoi mettere più volte lo stesso prodotto nel carrello durante lo stesso ordine.\n Se vuoi incrementarne la quantità, perchè non modificare tal valore nella tabella del carrello? Easy ;)");
-                            return;
-                        }
+        try {
+            Prodotto p = pdao.getBySku(skusel);
 
-                        model.addRow(new Object[]{skusel, casellaqty.getText(), costoo.toPlainString(), ggallacons.getText(), jComboBox.getSelectedItem().toString()});
+            if (casellaqty.getText().matches("-?\\d+(\\.\\d+)?") && ggallacons.getText().matches("-?\\d+(\\.\\d+)?")) {
+                BigDecimal costoo = new BigDecimal(String.valueOf(p.getCosto()));
 
-                        costocarrell += p.getCosto() * Integer.parseInt(casellaqty.getText());
-                        costot.setText("Costo totale: " + costocarrell + " euro");
-                        Ordine o = new Ordine();
-                        int prossimoord = o.leggiUltimoID() + 1;
-                        numordine.setText("#Ordine: ORD-" + prossimoord);
-                        popup.dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(getParent(), "Scegliere un formato numerico per la quantità ed i giorni all consegna");
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                } 
-    }
-    
-    
-    
-    public boolean controlloProdottoUguale(String skuscelto){
-    
-       for (int i = 0; i < table.getRowCount(); i++) {
-            if(model.getValueAt(i, 0).toString().equals(skuscelto) ) return true;
+                if (controlloProdottoUguale(skusel)) {
+                    popup.dispose();
+                    JOptionPane.showMessageDialog(getParent(), "Attenzione! Ricorda che:\n1) non puoi associare più fornitori ad un solo prodotto mentre lo stai aggiungendo al carrello.\n2)Non puoi mettere più volte lo stesso prodotto nel carrello durante lo stesso ordine.\n Se vuoi incrementarne la quantità, perchè non modificare tal valore nella tabella del carrello? Easy ;)");
+                    return;
+                }
+
+                model.addRow(new Object[]{skusel, casellaqty.getText(), costoo.toPlainString(), ggallacons.getText(), jComboBox.getSelectedItem().toString()});
+
+                costocarrell += p.getCosto() * Integer.parseInt(casellaqty.getText());
+                costot.setText("Costo totale: " + costocarrell + " euro");
+                Ordine o = new Ordine();
+                int prossimoord = o.leggiUltimoID() + 1;
+                numordine.setText("#Ordine: ORD-" + prossimoord);
+                popup.dispose();
+            } else {
+                JOptionPane.showMessageDialog(getParent(), "Scegliere un formato numerico per la quantità ed i giorni all consegna");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
-    
+    }
+
+    public boolean controlloProdottoUguale(String skuscelto) {
+
+        for (int i = 0; i < table.getRowCount(); i++) {
+            System.out.println("Prodotto già nel carrello" + model.getValueAt(i, 0).toString() + "   sku scelto:" + skuscelto);
+            if (model.getValueAt(i, 0).toString().equals(skuscelto)) {
+                return true;
+            }
+        }
+
         return false;
     }
-    
-    
 
     public OrdiniAdminPanel getInstance() {
         return this;

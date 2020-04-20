@@ -352,6 +352,11 @@ public class FramePrincipale extends JFrame {
         }
         
         public void VaiAOrdiniconProdFORNULL(String forn, String prod) {
+            if(ordiniadmin.controlloProdottoUguale(prod.substring(0, prod.indexOf("|")))){
+                JOptionPane.showMessageDialog(null, "non puoi associare più fornitori ad un solo prodotto mentre lo stai aggiungendo al carrello.");
+                return;
+            }
+              
            cardlayout.show(HomePanel, "Ordini");
             ordiniadmin.jComboBox.getModel().setSelectedItem(forn); 
             ((DefaultListModel) ordiniadmin.list.getModel()).addElement(prod);
