@@ -123,7 +123,7 @@ public class CodiciPanel extends JPanel {
             private static final long serialVersionUID = 1L;
 
             public boolean isCellEditable(int row, int column) {
-                return column >= 1; //il numero di celle editabili...
+                return column >= 2; //il numero di celle editabili...
             }
         };
         JTable table = new JTable(model);
