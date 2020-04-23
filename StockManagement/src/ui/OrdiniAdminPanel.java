@@ -73,7 +73,7 @@ public class OrdiniAdminPanel extends JPanel {
     public JList list;
     private final DefaultListModel listModel;
     private final JLabel costot;
-    private float costocarrell = 0;
+    private double costocarrell = 0;
     private final JLabel numordine;
     public JTextField casella;
     public JDialog popup;
@@ -309,12 +309,27 @@ public class OrdiniAdminPanel extends JPanel {
         JButton rimuoviprod = new JButton("Elimina prodotto selezionato");
         rimuoviprod.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                System.out.println("CLICCATO RIMUOVI");
                   // Gli indici delle righe selezionate
-                for (int j=0; j<table.getSelectedRows().length; j++) {
-                    JOptionPane.showMessageDialog(null, "Vuoi togliere il prodotto "+table.getValueAt(table.getSelectedRow(), 0).toString()+ "dal carrello?");
-                    model.removeRow(table.getSelectedRow());
-                    costocarrell += Float.parseFloat(table.getValueAt(table.getSelectedRow(), 2).toString()) * Integer.parseInt(table.getValueAt(table.getSelectedRow(), 1).toString());
-                    costot.setText("Costo totale: " + costocarrell + " euro");
+                for (int j=0; j<table.getRowCount(); j++) {
+                    if(table.isRowSelected(j)){
+                        JOptionPane.showMessageDialog(null, "Vuoi togliere il prodotto "+table.getValueAt(j, 0).toString()+ "dal carrello?");
+                        model.removeRow(j);
+                        costocarrell -= Double.parseDouble(table.getValueAt(j, 2).toString()) * Integer.parseInt(table.getValueAt(j, 1).toString());
+
+
+                        String coast = String.valueOf(costocarrell);
+                        if(coast.contains(".") == true){
+                            int punto = (char) coast.indexOf('.');
+
+                            if(coast.substring(punto).length() > 5){
+                                coast = coast.substring(0, punto+5);
+                                System.out.println(coast);
+                            }
+                        }
+
+                        costot.setText("Costo totale: " + coast + " euro");
+                    }
                 }              
                 
                 
@@ -412,8 +427,19 @@ public class OrdiniAdminPanel extends JPanel {
             // String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale ordine", "In spedizione", "Controlla ordine", "Ricarica ordine"};
             for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
                 BigDecimal costoo = new BigDecimal(String.valueOf(ordine.get(2)));
+                
+                String coast = costoo.toPlainString();
 
-                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(), ordine.get(4), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica"});
+                if(coast.contains(".") == true){
+                    int punto = (char) coast.indexOf('.');
+                    
+                    if(coast.substring(punto).length() > 5){
+                        coast = coast.substring(0, punto+5);
+                        System.out.println(coast);
+                    }
+                }
+                    
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), coast, ordine.get(4), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica"});
             }
         } catch (SQLException ex) {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
@@ -534,7 +560,18 @@ public class OrdiniAdminPanel extends JPanel {
         try {
             for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
                 BigDecimal costoo = new BigDecimal(String.valueOf(ordine.get(2)));
-                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), costoo.toPlainString(), ordine.get(4), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica"});
+                String coast = costoo.toPlainString();
+
+                if(coast.contains(".") == true){
+                    int punto = (char) coast.indexOf('.');
+                    
+                    if(coast.substring(punto).length() > 5){
+                        coast = coast.substring(0, punto+5);
+                        System.out.println(coast);
+                    }
+                }
+                    
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), coast, ordine.get(4), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica"});
             }
         } catch (SQLException ex) {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
@@ -681,7 +718,17 @@ public class OrdiniAdminPanel extends JPanel {
 
                 model.addRow(new Object[]{p.getSku(), o.getQty_in_arrivo(), costoo.toPlainString(), o.getGiorni_alla_consegna(), f.getIdfornitore() + "|" + f.getFullname()});
                 costocarrell += p.getCosto() * o.getQty_in_arrivo();
-                costot.setText("Costo totale: " + costocarrell + " euro");
+                
+                String coast = String.valueOf(costocarrell);
+                if(coast.contains(".") == true){
+                    int punto = (char) coast.indexOf('.');
+                    
+                    if(coast.substring(punto).length() > 5){
+                        coast = coast.substring(0, punto+5);
+                        System.out.println(coast);
+                    }
+                }
+                costot.setText("Costo totale: " + coast + " euro");
                 int prossimoord = o.leggiUltimoID() + 1;
                 numordine.setText("#Ordine: ORD-" + prossimoord);
 
@@ -829,7 +876,19 @@ public class OrdiniAdminPanel extends JPanel {
                 model.addRow(new Object[]{skusel, casellaqty.getText(), costoo.toPlainString(), ggallacons.getText(), jComboBox.getSelectedItem().toString()});
 
                 costocarrell += p.getCosto() * Integer.parseInt(casellaqty.getText());
-                costot.setText("Costo totale: " + costocarrell + " euro");
+                
+                String coast = String.valueOf(costocarrell);
+
+                if(coast.contains(".") == true){
+                    int punto = (char) coast.indexOf('.');
+                    
+                    if(coast.substring(punto).length() > 5){
+                        coast = coast.substring(0, punto+5);
+                        System.out.println(coast);
+                    }
+                }
+                           
+                costot.setText("Costo totale: " + coast + " euro");
                 Ordine o = new Ordine();
                 int prossimoord = o.leggiUltimoID() + 1;
                 numordine.setText("#Ordine: ORD-" + prossimoord);

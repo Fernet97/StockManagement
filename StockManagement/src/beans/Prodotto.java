@@ -25,7 +25,7 @@ public class Prodotto {
     int qty;
     String Categoria;
     boolean instock;
-    float costo;
+    double costo;
     int qty_min;
     String note;
     String foto;
@@ -46,7 +46,7 @@ public class Prodotto {
      * @param foto
      * @param negozio
      */
-    public Prodotto(String sku, String datareg, String nome, int qty, String Categoria, boolean instock, float costo, int qty_min, String note, String foto, boolean negozio) {
+    public Prodotto(String sku, String datareg, String nome, int qty, String Categoria, boolean instock, double costo, int qty_min, String note, String foto, boolean negozio) {
         this.sku = sku;
         this.datareg = datareg;
         this.nome = nome;
@@ -74,7 +74,7 @@ public class Prodotto {
      * @param foto
      * @param negozio
      */
-    public Prodotto(String nome, int qty, String Categoria, boolean instock, float costo, int qty_min, String note, String foto, boolean negozio) throws InterruptedException {
+    public Prodotto(String nome, int qty, String Categoria, boolean instock, double costo, int qty_min, String note, String foto, boolean negozio) throws InterruptedException {
 
         this.nome = nome;
         this.qty = qty;
@@ -144,11 +144,11 @@ public class Prodotto {
         this.instock = instock;
     }
 
-    public float getCosto() {
+    public double getCosto() {
         return costo;
     }
 
-    public void setCosto(float costo) {
+    public void setCosto(double costo) {
         this.costo = costo;
     }
 

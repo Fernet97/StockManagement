@@ -48,7 +48,7 @@ public class ProdottoDAO {
                 bean.setQty(rs.getInt("qty"));
                 bean.setCategoria(rs.getString("categoria"));
                 bean.setInstock(rs.getBoolean("instock"));
-                bean.setCosto(rs.getFloat("costo"));
+                bean.setCosto(rs.getDouble("costo"));
                 bean.setQty_min(rs.getInt("qty_min"));
                 bean.setNote(rs.getString("note"));
                 bean.setFoto(rs.getString("foto"));
@@ -95,7 +95,7 @@ public class ProdottoDAO {
                 bean.setQty(rs.getInt("qty"));
                 bean.setCategoria(rs.getString("categoria"));
                 bean.setInstock(rs.getBoolean("instock"));
-                bean.setCosto(rs.getFloat("costo"));
+                bean.setCosto(rs.getDouble("costo"));
                 bean.setQty_min(rs.getInt("qty_min"));
                 bean.setNote(rs.getString("note"));
                 bean.setFoto(rs.getString("foto"));
@@ -131,7 +131,7 @@ public class ProdottoDAO {
             ps.setInt(4, b.getQty());
             ps.setString(5, b.getCategoria());
             ps.setBoolean(6, b.isInstock());
-            ps.setFloat(7, b.getCosto());
+            ps.setDouble(7, b.getCosto());
             ps.setInt(8, b.getQty_min());
             ps.setString(9, b.getNote());
             ps.setString(10, b.getFoto());
@@ -246,7 +246,7 @@ public class ProdottoDAO {
                 bean.setQty(rs.getInt("qty"));
                 bean.setCategoria(rs.getString("categoria"));
                 bean.setInstock(rs.getBoolean("instock"));
-                bean.setCosto(rs.getFloat("costo"));
+                bean.setCosto(rs.getDouble("costo"));
                 bean.setQty_min(rs.getInt("qty_min"));
                 bean.setNote(rs.getString("note"));
                 bean.setFoto(rs.getString("foto"));
