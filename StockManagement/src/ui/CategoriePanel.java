@@ -108,7 +108,6 @@ class CategoriePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddCategoriaDialog input = new AddCategoriaDialog();
-                input.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                 String txt = input.getName();
                 input.setLocationRelativeTo(null);
                 input.setVisible(true);
@@ -464,9 +463,9 @@ class CategoriePanel extends JPanel {
         private JTextField name;
 
         public AddCategoriaDialog() {
-            super(new JFrame("Aggiungi Categoria"), "Aggiungi Categoria");
+            setTitle("Aggiungi una categoria");
             setAlwaysOnTop(true);
-            this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             this.setMinimumSize(new Dimension(500, 100));
             this.name = new JTextField();
             name.addKeyListener(new KeyAdapter() {
