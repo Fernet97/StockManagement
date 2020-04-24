@@ -34,6 +34,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -177,6 +179,37 @@ public class ProdottiPanel extends JPanel {
             public boolean isCellEditable(int row, int column) {
                 return column >= 10; //il numero di celle editabili...
             }
+            
+            public Class getColumnClass(int column) {
+                switch (column) {
+             /*        case 0:
+                        return String.class; // SKU
+                 case 2:
+                        return String.class; // NOME
+                    case 3:
+                        return String.class; // categoria
+                    case 4:
+                        return Integer.class; // qty
+                    case 5:
+                        return String.class; // In Fornitore
+
+                    case 8:
+                        return String.class; //STRING
+                    case 9:
+                        return Integer.class; //QTY IN ARRIVO
+        */
+                    case 4: 
+                        return Integer.class;  
+                                                
+                    case 9:
+                        return Integer.class;       
+                                             
+                    default:
+                        return String.class;
+                }
+            }
+            
+                   
         };
         table = new JTable(model);
         table.getTableHeader().setReorderingAllowed(false);
@@ -886,9 +919,25 @@ public class ProdottiPanel extends JPanel {
             }
 
             if (ccosto.getText().length() > 15) {
-                JOptionPane.showMessageDialog(this, "Costo non valido!");
+                    JOptionPane.showMessageDialog(this, "Costo maggiore di 15 caratteri!!");
+
                 return false;
             }
+            else{
+                if(ccosto.getText().contains(".") == true){
+                    char punto = (char) ccosto.getText().indexOf('.');
+                    
+                    if(ccosto.getText().substring(punto).length() > 5){
+                        JOptionPane.showMessageDialog(this, "Troppe cifre nella parte decimale!");
+                        return false;
+
+                    }
+                
+                
+                }
+            }
+           
+             
 
             if (cmin.getText().length() > 10) {
                 JOptionPane.showMessageDialog(this, "Quantità minima non valida!");
@@ -912,7 +961,7 @@ public class ProdottiPanel extends JPanel {
 
             //controlla se sono float ...
             try {
-                Float.parseFloat(ccosto.getText());
+                Double.parseDouble(ccosto.getText());
             } catch (NumberFormatException e) {
                 Logger.getLogger("genlog").warning("NumberFormatException\n" + StockManagement.printStackTrace(e));
                 JOptionPane.showMessageDialog(this, "Controlla che le quantità ed il costo siano numeri validi! [Per il costo usare '.' per indicare la parte decimale]");
@@ -929,7 +978,7 @@ public class ProdottiPanel extends JPanel {
             try {
                 int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                 if (a == JOptionPane.YES_OPTION) {
-                    prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
+                    prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Double.parseDouble(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
                     ProdottoDAO dao = new ProdottoDAO();
 
                     if (percorsofoto != null) {
@@ -976,6 +1025,7 @@ public class ProdottiPanel extends JPanel {
 
                 // CONDENSA 0s
                 BigDecimal bd = new BigDecimal(String.valueOf(prodotto.getCosto()));
+                System.out.println("il grande decimalo "+bd.toString());
 
                 ccosto.setText(bd.toPlainString());
                 note.setText(prodotto.getNote());
@@ -1014,7 +1064,7 @@ public class ProdottiPanel extends JPanel {
             try {
                 int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                 if (a == JOptionPane.YES_OPTION) {
-                    Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
+                    Prodotto prod = new Prodotto(casku.getText(), casdatareg.getText(), casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Double.parseDouble(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
 
                     if (percorsofoto != null && !percorsofoto.equals("NULL") && !percorsofoto.equals("null")) {
                         Path sourcepath = Paths.get(percorsofoto);
