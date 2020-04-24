@@ -403,11 +403,12 @@ public class ProdottiPanel extends JPanel {
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
             if (Integer.parseInt(table.getValueAt(row, 9).toString()) > 0) {
-                setBackground(new Color(126, 169, 93));  // VERDE         
+                setBackground(new Color(244, 80, 37));    // ROSSO 
                 setText(table.getValueAt(row, 9).toString());
 
             } else {
-                setBackground(new Color(244, 80, 37));    // ROSSO 
+                setBackground(new Color(126, 169, 93));  // VERDE         
+
                 setText("");
 
             }
