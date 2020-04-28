@@ -418,6 +418,7 @@ public class FramePrincipale extends JFrame {
  Logger.getLogger("genlog").warning("SQLException"+StockManagement.printStackTrace(ex));        }
 
       //  System.out.println("La connessione dopo averla chiusa: " + con);
+      StockManagement.closeFH();
         dispose();
 //        JavaProcessId.kILL();
 
