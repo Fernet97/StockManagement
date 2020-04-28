@@ -11,6 +11,7 @@ import beans.Prodotto;
 import dao.FornitoreDAO;
 import dao.OrdineDAO;
 import dao.ProdottoDAO;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -84,10 +85,19 @@ public class OrdiniAdminPanel extends JPanel {
     public OrdiniAdminPanel(String user) {
         nomeutente = user;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        JPanel top = new JPanel();
+          
+        JButton switchOrd = new JButton(ImpostaImgSwitch("/res/img/refresh.png"));
+        switchOrd.setBackground(UIManager.getColor("nimbusBase"));
+        switchOrd.setText(" Passa a Ordini User GUI");
+        top.add(switchOrd);
+        
         JLabel title = new JLabel("ORDINI ADMIN");
         title.setFont(new Font("Arial Black", Font.BOLD, 40));
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        super.add(title);
+        top.add(title);
+                     
+        super.add(top);
 
         //Pannello centrale
         JPanel princ = new JPanel();
@@ -530,6 +540,16 @@ public class OrdiniAdminPanel extends JPanel {
         return icon;
     }
 
+    public ImageIcon ImpostaImgSwitch(String nomeImmag) {
+
+        ImageIcon icon = new ImageIcon((getClass().getResource(nomeImmag)));
+        Image ImmagineScalata = icon.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+        icon.setImage(ImmagineScalata);
+        return icon;
+    }    
+    
+    
+
     //QUANDO CHIAMARE IL REFRESH DI ORDINI?
     public void refreshTab() {
         // refresh lista fornitori
@@ -916,5 +936,7 @@ public class OrdiniAdminPanel extends JPanel {
         return this;
 
     }
+    
+    
 
 }

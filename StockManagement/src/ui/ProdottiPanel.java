@@ -148,6 +148,8 @@ public class ProdottiPanel extends JPanel {
                 }//debug
 
                 form = new FormProdotti("ADD", null);
+                form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
                 if (!form.nessunacat) {
                     form.setLocationRelativeTo(null);
                     form.setAlwaysOnTop(true);
@@ -643,15 +645,32 @@ public class ProdottiPanel extends JPanel {
 
                     setModal(true);
                     initComponents();
+                    
+                    cforn.setFocusable(false);
+                    
                     casku.setEditable(false);
+                    casku.setFocusable(false);
+
                     casdatareg.setEditable(false);
+                    casdatareg.setFocusable(false);
+                    
                     casku.setBackground(Color.DARK_GRAY);
                     casdatareg.setBackground(Color.DARK_GRAY);
+                    
+                    
 
                     if (modalita.equals("UPDATE")) {
                         setFormAsID(idSelected);
                         cat.setEnabled(false);
                         cat.setBackground(Color.darkGray);
+                    }
+                    else{
+                        casku.setText("AUTOGENERATO");
+                        casku.setForeground(Color.yellow);
+                        
+                        casdatareg.setText("AUTOGENERATO");
+                        casdatareg.setForeground(Color.yellow);
+                           
                     }
 
                     ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
@@ -906,47 +925,62 @@ public class ProdottiPanel extends JPanel {
 
             if (cat.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(this, "Devi scegliere una categoria!!");
+                cat.requestFocus();
                 return false;
             }
 
             if (casname.getText().length() > 45) {
                 JOptionPane.showMessageDialog(this, "Nome troppo lungo!");
+                casname.requestFocus();
                 return false;
             }
 
             if (casqty.getText().length() > 10) {
                 JOptionPane.showMessageDialog(this, "Quantità esagerata!");
+                casqty.requestFocus();
                 return false;
             }
 
-            if (ccosto.getText().length() > 15) {
-                    JOptionPane.showMessageDialog(this, "Costo maggiore di 15 caratteri!!");
 
-                return false;
-            }
-            else{
-                if(ccosto.getText().contains(".") == true){
-                    char punto = (char) ccosto.getText().indexOf('.');
-                    
-                    if(ccosto.getText().substring(punto).length() > 5){
-                        JOptionPane.showMessageDialog(this, "Troppe cifre nella parte decimale!");
-                        return false;
-
-                    }
+            if(ccosto.getText().contains(".") == true){
+                char punto = (char) ccosto.getText().indexOf('.');
                 
+                if(ccosto.getText().substring(0, punto).length()> 7){
+                    JOptionPane.showMessageDialog(this, "Troppe cifre nella parte intera!");
+                    ccosto.requestFocus();
+                    return false;
+                }
+
+                if(ccosto.getText().substring(punto).length() > 5){
+                    JOptionPane.showMessageDialog(this, "Troppe cifre nella parte decimale!");
+                    ccosto.requestFocus();                   
+                    return false;
+
+                }
                 
                 }
-            }
-           
-             
+            else{
+                    
+                if(ccosto.getText().length()> 7){
+                    JOptionPane.showMessageDialog(this, "Troppe cifre!");
+                    ccosto.requestFocus();
+                    return false;
+                }
+            
+            
+                 }
+            
+                   
 
             if (cmin.getText().length() > 10) {
                 JOptionPane.showMessageDialog(this, "Quantità minima non valida!");
+                cmin.requestFocus();
                 return false;
             }
 
             if (note.getText().length() > 65535) {
                 JOptionPane.showMessageDialog(this, "Note troppo lunghe!");
+                note.requestFocus();
                 return false;
             }
 

@@ -413,13 +413,19 @@ public class AnagrafichePanel extends JPanel {
 
             casid.setEditable(false);
             casdatareg.setEditable(false);
+            casid.setFocusable(false);
+            casdatareg.setFocusable(false);
             casid.setBackground(Color.DARK_GRAY);
             casdatareg.setBackground(Color.DARK_GRAY);
+            casid.setForeground(Color.yellow);
+            casdatareg.setForeground(Color.yellow);
 
             if (modalita.equals("UPDATE")) {
-
                 setFormAsID(idSelected);
-
+            }
+            else{
+                casid.setText("AUTOGENERATO");
+                casdatareg.setText("AUTOGENERATO");                
             }
             img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
             setSize(900, 300);
