@@ -419,7 +419,7 @@ public class FramePrincipale extends JFrame {
 
       //  System.out.println("La connessione dopo averla chiusa: " + con);
         dispose();
-        JavaProcessId.kILL();
+//        JavaProcessId.kILL();
 
     }
 
