@@ -345,8 +345,9 @@ public class AnagrafichePanel extends JPanel {
                     form.setVisible(true);
 
                 } else if (button.getText().equals("Ordina")) { // VAI A ORDINI
-                    if(table.getValueAt(row, 0).toString().equals("Fornitore"))
-                        frameprinc.VaiAOrdini(table.getValueAt(row, 1).toString() + "|" + table.getValueAt(row, 3).toString());
+                    if(table.getValueAt(row, 0).toString().equals("Fornitore")){
+                        frameprinc.OrdiniStatus = false;
+                        frameprinc.VaiAOrdini(table.getValueAt(row, 1).toString() + "|" + table.getValueAt(row, 3).toString());}
                     else JOptionPane.showMessageDialog(getParent(), "Puoi fare un ordine solo da un fornitore! [O da Cliente, ma non per adesso]");
 
                 }

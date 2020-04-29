@@ -69,7 +69,7 @@ public class FramePrincipale extends JFrame {
     private JTable table;
     private DefaultTableModel model2;
     private JTable table2;
-    public /*static*/String nomeuser;
+    public String nomeuser;
     public Utente user;
     public ButtonDash button;
     public ButtonDash button1;
@@ -78,6 +78,8 @@ public class FramePrincipale extends JFrame {
     public ButtonDash button4;
     public ButtonDash button5;
     private AnagrafichePanel anagrafiche;
+    public boolean OrdiniStatus = false;
+    
 
     public FramePrincipale(String nomeutente) {
         nomeuser = nomeutente;
@@ -86,12 +88,13 @@ public class FramePrincipale extends JFrame {
     }
 
     public void CreaGUI() {
-        
+
         UtenteDAO daouten = new UtenteDAO();
         try {
             user = daouten.getByID(nomeuser);
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));        }
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+        }
 
         //set icona finestra
         ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
@@ -109,43 +112,38 @@ public class FramePrincipale extends JFrame {
         JPanel dashboard = new JPanel();
         HomePanel.add(dashboard, "Dashboard");
 
-        //Normal User
-        if (user.getPermessi() == 1) {
-            //Aggiungi la carta "ORDINI"    
-            ordini = new OrdiniPanel();
-            HomePanel.add(ordini, "Ordini");
+        ordini = new OrdiniPanel();
+        HomePanel.add(ordini, "Preleva");
+        ordini.setComunicator(this);
 
-        } else {
-            //Aggiungi la carta "ANAGRAFICHE"
-            anagrafiche = new AnagrafichePanel();
-            HomePanel.add(anagrafiche, "Anagrafiche");
-            anagrafiche.setComunicator(this);
+        //Aggiungi la carta "ANAGRAFICHE"
+        anagrafiche = new AnagrafichePanel();
+        HomePanel.add(anagrafiche, "Anagrafiche");
+        anagrafiche.setComunicator(this);
 
-            // Aggiungi la carta "CATEGORIE"
-            categorie = new CategoriePanel();
-            HomePanel.add(categorie, "Categorie");
-            categorie.setComunicator(this);
+        // Aggiungi la carta "CATEGORIE"
+        categorie = new CategoriePanel();
+        HomePanel.add(categorie, "Categorie");
+        categorie.setComunicator(this);
 
-            // Aggiungi la carta "PRODOTTO"
-            prodotti = new ProdottiPanel();
-            HomePanel.add(prodotti, "Prodotti");
-            prodotti.setComunicator(this);
+        // Aggiungi la carta "PRODOTTO"
+        prodotti = new ProdottiPanel();
+        HomePanel.add(prodotti, "Prodotti");
+        prodotti.setComunicator(this);
 
+        // Aggiungi la carta "CODICI"
+        codici = new CodiciPanel();
+        HomePanel.add(codici, "Codici");
 
-            // Aggiungi la carta "CODICI"
-            codici = new CodiciPanel();
-            HomePanel.add(codici, "Codici");
+        //Aggiungi la carta "ORDINIADMIN"
+        ordiniadmin = new OrdiniAdminPanel(nomeuser);
+        HomePanel.add(ordiniadmin, "Ordini"); //Se è admin allora va sempre con etichetta "ordini"
+        ordiniadmin.setComunicator(this);
 
-            //Aggiungi la carta "ORDINIADMIN"
-            ordiniadmin = new OrdiniAdminPanel(nomeuser);
-            HomePanel.add(ordiniadmin, "Ordini"); //Se è admin allora va sempre con etichetta "ordini"
-
-            //Aggiungi la carta "REPORT"
-            JPanel report = new JPanel();
-            report.add(new JLabel(" R E P O R T !  ! !"));
-            HomePanel.add(report, "Report");
-
-        }
+        //Aggiungi la carta "REPORT"
+        JPanel report = new JPanel();
+        report.add(new JLabel(" R E P O R T !  ! !"));
+        HomePanel.add(report, "Report");
 
         //Barra Laterale (rimarrà fissa per ogni schermata)
         pannellolaterale = new JPanel();
@@ -227,44 +225,42 @@ public class FramePrincipale extends JFrame {
         model2.addColumn("Quantità");
         model2.addColumn("#Ordine");
         model2.addColumn("Data arrivo");
-       
+
         table2.setEnabled(false);
         table2.setModel(model2);
         JScrollPane sp2 = new JScrollPane(table2);
         TitoloTab2.add(sp2);
-        
+
         OrdineDAO ordao = new OrdineDAO();
 
         try {
             for (Prodotto prod : daop.getAll()) {
                 if (prod.getQty() <= prod.getQty_min()) {
-                    model.addRow(new Object[]{prod.getSku() +"  !"+ prod.getNome(), prod.getQty()});
+                    model.addRow(new Object[]{prod.getSku() + "  !" + prod.getNome(), prod.getQty()});
 
                 }
-               
-                
-            }
-            
-            for(Ordine o : ordao.getAll()){
-            
-                if(ordao.ggConsegnaPR2(o.getN_ordine(), o.getProdotto_sku()) <=5 && o.getGiorni_alla_consegna()>=0)
-                    model2.addRow(new Object[]{o.getProdotto_sku(), o.getQty_in_arrivo(), o.getN_ordine(), ordao.dataArrivo(o.getN_ordine(), o.getProdotto_sku())});          
 
-                
             }
-            
-            
+
+            for (Ordine o : ordao.getAll()) {
+
+                if (ordao.ggConsegnaPR2(o.getN_ordine(), o.getProdotto_sku()) <= 5 && o.getGiorni_alla_consegna() >= 0) {
+                    model2.addRow(new Object[]{o.getProdotto_sku(), o.getQty_in_arrivo(), o.getN_ordine(), ordao.dataArrivo(o.getN_ordine(), o.getProdotto_sku())});
+                }
+
+            }
+
         } catch (SQLException ex) {
-             Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));        
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
 
         } catch (ParseException ex) {
-             Logger.getLogger("genlog").warning("ParseException\n"+StockManagement.printStackTrace(ex));        
+            Logger.getLogger("genlog").warning("ParseException\n" + StockManagement.printStackTrace(ex));
         }
 
         pannelloTab.setLayout(new GridLayout(2, 1));
         pannelloTab.add(TitoloTab1);
         pannelloTab.add(TitoloTab2);
-       pannelloTab.setBorder(new EmptyBorder(0, 100, 0, 20));
+        pannelloTab.setBorder(new EmptyBorder(0, 100, 0, 20));
 
         dashboard.setLayout(new GridLayout(1, 2));
         dashboard.add(pannellodash);
@@ -302,9 +298,10 @@ public class FramePrincipale extends JFrame {
                 try {
                     riavviaStockManagement();
                 } catch (IOException ex) {
- Logger.getLogger("genlog").warning("IOException\n"+StockManagement.printStackTrace(ex));                
+                    Logger.getLogger("genlog").warning("IOException\n" + StockManagement.printStackTrace(ex));
                 } catch (InterruptedException ex) {
- Logger.getLogger("genlog").warning("InterruptedException\n"+StockManagement.printStackTrace(ex));                }
+                    Logger.getLogger("genlog").warning("InterruptedException\n" + StockManagement.printStackTrace(ex));
+                }
 
             }
         });
@@ -315,9 +312,10 @@ public class FramePrincipale extends JFrame {
                 try {
                     chiudiStockManagement();
                 } catch (IOException ex) {
- Logger.getLogger("genlog").warning("IOException\n"+StockManagement.printStackTrace(ex));               
+                    Logger.getLogger("genlog").warning("IOException\n" + StockManagement.printStackTrace(ex));
                 } catch (InterruptedException ex) {
- Logger.getLogger("genlog").warning("InterruptedException\n"+StockManagement.printStackTrace(ex));                }
+                    Logger.getLogger("genlog").warning("InterruptedException\n" + StockManagement.printStackTrace(ex));
+                }
 
             }
         });
@@ -336,44 +334,54 @@ public class FramePrincipale extends JFrame {
         prodotti.casella.setText(query);
 
     }
-    
-    
-    public void VaiAProdottiInArrivo(){
+
+    public void VaiAProdottiInArrivo() {
         cardlayout.show(HomePanel, "Prodotti");
         prodotti.ViewOnlyInArrivo();
 
     }
     
     
-        public void VaiAOrdini(String forn) {
-           cardlayout.show(HomePanel, "Ordini");
-           ordiniadmin.jComboBox.getModel().setSelectedItem(forn);
-        
+    public void VaiAPreleva() {
+        OrdiniStatus = true;
+        cardlayout.show(HomePanel, "Preleva");
+    }
+   
+    
+
+    public void VaiAOrdini() {
+        cardlayout.show(HomePanel, "Ordini");
+    }
+    
+
+    public void VaiAOrdini(String forn) {
+        cardlayout.show(HomePanel, "Ordini");
+        ordiniadmin.jComboBox.getModel().setSelectedItem(forn);
+
+    }
+
+    public void VaiAOrdiniconProdFORNULL(String forn, String prod) {
+        if (ordiniadmin.controlloProdottoUguale(prod.substring(0, prod.indexOf("|")))) {
+            JOptionPane.showMessageDialog(null, "non puoi associare più fornitori ad un solo prodotto mentre lo stai aggiungendo al carrello.");
+            return;
         }
-        
-        public void VaiAOrdiniconProdFORNULL(String forn, String prod) {
-            if(ordiniadmin.controlloProdottoUguale(prod.substring(0, prod.indexOf("|")))){
-                JOptionPane.showMessageDialog(null, "non puoi associare più fornitori ad un solo prodotto mentre lo stai aggiungendo al carrello.");
-                return;
-            }
-              
-           cardlayout.show(HomePanel, "Ordini");
-            ordiniadmin.jComboBox.getModel().setSelectedItem(forn); 
-            ((DefaultListModel) ordiniadmin.list.getModel()).addElement(prod);
-            ordiniadmin.aggiungiTOcarrello(prod);
-            
-        }   
-        
-         public void VaiAOrdiniconProdFornCEH(String prod){
-           cardlayout.show(HomePanel, "Ordini");
-           ordiniadmin.casella.setText(prod);
-         }
-         
-         public void VaiUtenti(){
-             cardlayout.show(HomePanel, "Anagrafiche");
-             anagrafiche.ViewOnlyUtenti();
-         }
-        
+
+        cardlayout.show(HomePanel, "Ordini");
+        ordiniadmin.jComboBox.getModel().setSelectedItem(forn);
+        ((DefaultListModel) ordiniadmin.list.getModel()).addElement(prod);
+        ordiniadmin.aggiungiTOcarrello(prod);
+
+    }
+
+    public void VaiAOrdiniconProdFornCEH(String prod) {
+        cardlayout.show(HomePanel, "Ordini");
+        ordiniadmin.casella.setText(prod);
+    }
+
+    public void VaiUtenti() {
+        cardlayout.show(HomePanel, "Anagrafiche");
+        anagrafiche.ViewOnlyUtenti();
+    }
 
     public void riavviaStockManagement() throws IOException, InterruptedException {
 
@@ -392,7 +400,8 @@ public class FramePrincipale extends JFrame {
             DriverManagerConnectionPool.releaseConnection(con);
 
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning(" "+ex);        }
+            Logger.getLogger("genlog").warning(" " + ex);
+        }
 
         System.out.println("La connessione dopo averla chiusa: " + con);
         dispose();
@@ -409,22 +418,22 @@ public class FramePrincipale extends JFrame {
             System.out.println("La connessione: " + con);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(getParent(), "Non trovo nessuna connesione :(");
- Logger.getLogger("genlog").warning("SQLException:Non trovo nessuna connesione\n"+StockManagement.printStackTrace(ex));        }
+            Logger.getLogger("genlog").warning("SQLException:Non trovo nessuna connesione\n" + StockManagement.printStackTrace(ex));
+        }
 
         try {
             DriverManagerConnectionPool.releaseConnection(con);
 
         } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException"+StockManagement.printStackTrace(ex));        }
+            Logger.getLogger("genlog").warning("SQLException" + StockManagement.printStackTrace(ex));
+        }
 
-      //  System.out.println("La connessione dopo averla chiusa: " + con);
-      StockManagement.closeFH();
+        //  System.out.println("La connessione dopo averla chiusa: " + con);
+        StockManagement.closeFH();
         dispose();
 //        JavaProcessId.kILL();
 
     }
-
-
 
     class ButtonLaterale extends JPanel { //BOTTONI NAVIGAZIONE DASHBOARD/ANAGRAFICHE ECC
 
@@ -513,21 +522,22 @@ public class FramePrincipale extends JFrame {
                     pan.setBackground(color_etichetta);
 
                     try {
-                        
-                        if(user.getPermessi() == 0){
-                        codici.refreshTab();
-                        prodotti.refreshTab();
-                        categorie.refreshTab();
-                        ordiniadmin.refreshTab();
+
+                        if (user.getPermessi() == 0) {
+                            codici.refreshTab();
+                            prodotti.refreshTab();
+                            categorie.refreshTab();
+                            ordiniadmin.refreshTab();
                         }
                         refresh();
 
-                    } 
-                    catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));                    }
+                    } catch (SQLException ex) {
+                        Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                    }
                     disattivaTuttiIBottoniTranne(bottonepremuto.code);
 
-                    cardlayout.show(HomePanel, tipo);
+                    if(tipo.equals("Ordini") && OrdiniStatus) cardlayout.show(HomePanel, "Preleva");
+                    else cardlayout.show(HomePanel, tipo);
                     HomePanel.setBorder(BorderFactory.createMatteBorder(0, 20, 0, 0, color_etichetta));
                     pannellolaterale.setBorder(new EmptyBorder(10, 0, 0, 10)); // per dare un po di margini
 
@@ -588,37 +598,35 @@ public class FramePrincipale extends JFrame {
         try {
             for (Prodotto prod : daop.getAll()) {
                 if (prod.getQty() <= prod.getQty_min()) {
-                    model.addRow(new Object[]{prod.getSku() +"  !"+ prod.getNome(), prod.getQty()});
-                }  
+                    model.addRow(new Object[]{prod.getSku() + "  !" + prod.getNome(), prod.getQty()});
+                }
             }
-            
-            for(Ordine o : ordao.getAll()){
-                if(ordao.ggConsegnaPR2(o.getN_ordine(), o.getProdotto_sku()) <=5 && o.getGiorni_alla_consegna()>=0)
-                    model2.addRow(new Object[]{o.getProdotto_sku(), o.getQty_in_arrivo(), o.getN_ordine(), ordao.dataArrivo(o.getN_ordine(), o.getProdotto_sku())});          
 
-                
+            for (Ordine o : ordao.getAll()) {
+                if (ordao.ggConsegnaPR2(o.getN_ordine(), o.getProdotto_sku()) <= 5 && o.getGiorni_alla_consegna() >= 0) {
+                    model2.addRow(new Object[]{o.getProdotto_sku(), o.getQty_in_arrivo(), o.getN_ordine(), ordao.dataArrivo(o.getN_ordine(), o.getProdotto_sku())});
+                }
+
             }
-        //Aggiornare numeri sui pannelli della dash ...
-        button.refreshButtonDash();
-        button1.refreshButtonDash();
-        button2.refreshButtonDash();
-        button3.refreshButtonDash();
-        button4.refreshButtonDash();
-        button5.refreshButtonDash();
-        
-        
-    }   catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));        
-    } catch (ParseException ex) {
- Logger.getLogger("genlog").warning("ParseException\n"+StockManagement.printStackTrace(ex));        }
+            //Aggiornare numeri sui pannelli della dash ...
+            button.refreshButtonDash();
+            button1.refreshButtonDash();
+            button2.refreshButtonDash();
+            button3.refreshButtonDash();
+            button4.refreshButtonDash();
+            button5.refreshButtonDash();
+
+        } catch (SQLException ex) {
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+        } catch (ParseException ex) {
+            Logger.getLogger("genlog").warning("ParseException\n" + StockManagement.printStackTrace(ex));
+        }
     }
-    
-    
-    
+
     class ButtonDash extends RoundedPanel { //PANNELLO TOTALE PRODOTTI
 
         private int number;
-        public  RoundedPanel vai;
+        public RoundedPanel vai;
         private String type;
         public JLabel title;
         private JLabel num;
@@ -649,21 +657,20 @@ public class FramePrincipale extends JFrame {
 
         }
 
-        
-        public void refreshButtonDash(){
-                        number = 0;
+        public void refreshButtonDash() {
+            number = 0;
 
             if (type.equals("Totale utenti registrati")) {
-             
+
                 UtenteDAO dao = new UtenteDAO();
                 try {
                     number = dao.getAll().size();
                 } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));        
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
-                 scrittaVai = new JLabel(ImpostaImg("/res/img/users.png"));
-                   vai.removeAll();
-                   
+                scrittaVai = new JLabel(ImpostaImg("/res/img/users.png"));
+                vai.removeAll();
+
                 vai.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -686,10 +693,9 @@ public class FramePrincipale extends JFrame {
                     public void mouseExited(MouseEvent e) {
                     }
                 });
-                   
-                        
+
                 vai.add(scrittaVai);
-                   
+
             }
 
             if (type.equals("Totale prodotti in magazzino")) {
@@ -703,8 +709,8 @@ public class FramePrincipale extends JFrame {
                         number += Integer.parseInt(dao.getCatAndSum().get(key));
                     }
                 } catch (SQLException ex) {
- Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));        
-              }
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                }
 
                 vai.addMouseListener(new MouseListener() {
                     @Override
@@ -730,58 +736,65 @@ public class FramePrincipale extends JFrame {
                 });
 
                 scrittaVai = new JLabel(ImpostaImg("/res/img/prodotti.png"));
-                   vai.removeAll();
+                vai.removeAll();
                 vai.add(scrittaVai);
 
-
             }
 
-            
-        if(type.equals("Totale prodotti in arrivo")){
-            number = 0;
-            OrdineDAO ordao = new OrdineDAO();
-            try {
-            for(Ordine o: ordao.getAll()){
-              if(o.getGiorni_alla_consegna() >= 0)
-                  number+= o.getQty_in_arrivo();
-               
-            }
-            } catch (SQLException ex) {
-                Logger.getLogger("genlog").warning("SQLException\n"+StockManagement.printStackTrace(ex));   
-            }  
-            vai.addMouseListener(new MouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    VaiAProdottiInArrivo();
+            if (type.equals("Totale prodotti in arrivo")) {
+                number = 0;
+                OrdineDAO ordao = new OrdineDAO();
+                try {
+                    for (Ordine o : ordao.getAll()) {
+                        if (o.getGiorni_alla_consegna() >= 0) {
+                            number += o.getQty_in_arrivo();
+                        }
+
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
-                @Override
-                public void mousePressed(MouseEvent e) {}
-
-                @Override
-                public void mouseReleased(MouseEvent e) {}
-
-                @Override
-                public void mouseEntered(MouseEvent e) {}
-
-                @Override
-                public void mouseExited(MouseEvent e) {}
-            });
-            
-            scrittaVai =  new JLabel(ImpostaImg("/res/img/prodotti.png"));   
-                               vai.removeAll();
-            vai.add(scrittaVai);
- 
-        } 
-            
-              if (type.equals("Ordini effettuati")) {
-
-                  Ordine o = new Ordine();
-                  number = o.leggiUltimoID();
-                  
-                                  vai.addMouseListener(new MouseListener() {
+                vai.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        VaiAOrdini("Seleziona un fornitore");
+                        VaiAProdottiInArrivo();
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                    }
+                });
+
+                scrittaVai = new JLabel(ImpostaImg("/res/img/prodotti.png"));
+                vai.removeAll();
+                vai.add(scrittaVai);
+
+            }
+
+            if (type.equals("Ordini effettuati")) {
+
+                Ordine o = new Ordine();
+                number = o.leggiUltimoID();
+
+                vai.addMouseListener(new MouseListener() {
+                    @Override
+                    public void mouseClicked(MouseEvent e){
+                        /*if(OrdiniStatus) VaiAPreleva();  server x manenere vista "Preleva/ordini"
+                        else */ 
+                       OrdiniStatus = false;
+                       VaiAOrdini("Seleziona un fornitore");
                     }
 
                     @Override
@@ -802,35 +815,26 @@ public class FramePrincipale extends JFrame {
                 });
 
                 scrittaVai = new JLabel(ImpostaImg("/res/img/ordini.png"));
-                                   vai.removeAll();
+                vai.removeAll();
 
                 vai.add(scrittaVai);
-               
+
             }
-                  
-     
+
             num.setText(String.valueOf(number));
             num.setFont(new Font("Arial Black", Font.BOLD, 30));
             num.setForeground(Color.white);
             num.setHorizontalAlignment(JLabel.CENTER);
 
-        
-        
         }
-        
-        
 
     }
-    
-    
-    
-    
 
-        public ImageIcon ImpostaImg(String nomeImmag) {
+    public ImageIcon ImpostaImg(String nomeImmag) {
 
-            ImageIcon icon = new ImageIcon(getClass().getResource(nomeImmag));
-            Image ImmagineScalata = icon.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
-            icon.setImage(ImmagineScalata);
-            return icon;
-        }
+        ImageIcon icon = new ImageIcon(getClass().getResource(nomeImmag));
+        Image ImmagineScalata = icon.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
+        icon.setImage(ImmagineScalata);
+        return icon;
+    }
 }

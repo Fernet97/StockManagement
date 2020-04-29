@@ -526,7 +526,8 @@ public class ProdottiPanel extends JPanel {
                     form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     form.setVisible(true);
 
-                } else if (button.getText().equals("Ordina")) { // APRI FORM PER MODIFICARE RECORD
+                } else if (button.getText().equals("Ordina")) { 
+                        frameprinc.OrdiniStatus = false;
                     //Se un fornitore non è definito
                     if (table.getValueAt(row, 5).toString().equals("null|  null")) {
                         vaiarod = new JDialog();

@@ -8,24 +8,28 @@ package ui;
 import beans.Prodotto;
 import dao.OrdineDAO;
 import dao.ProdottoDAO;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import others.RoundedPanel;
@@ -47,6 +51,7 @@ public class OrdiniPanel extends JPanel {
     private final JLabel qty;
     private int qtyAttuale;
     private int qtyMin;
+    public FramePrincipale frameprinc;
 
     public OrdiniPanel() {
 
@@ -54,10 +59,28 @@ public class OrdiniPanel extends JPanel {
         qtyAttuale = 0;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        JLabel title = new JLabel("ORDINI");
-        title.setFont(new Font("Arial Black", Font.BOLD, 40));
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        super.add(title);
+        
+        JPanel top = new JPanel();
+        
+        JLabel title = new JLabel("PRELEVA");
+        title.setFont(new Font("Arial Black", Font.BOLD, 30));
+        top.add(title);
+          
+        JButton switchOrd = new JButton(ImpostaImgSwitch("/res/img/refresh.png"));
+        switchOrd.setBackground(UIManager.getColor("nimbusBase"));
+        switchOrd.setText(" Passa a 'Ordini'");
+        switchOrd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                frameprinc.OrdiniStatus = false;
+                frameprinc.VaiAOrdini();
+            }
+        });
+                
+        top.add(switchOrd);
+                
+                   
+        super.add(top);
+        
 
         JPanel cerca = new JPanel();
         JLabel searchlabel = new JLabel("Cerca prodotto:");
@@ -284,6 +307,20 @@ public class OrdiniPanel extends JPanel {
             infostock.setForeground(Color.red);
 
         }
+
+    }
+    
+        public ImageIcon ImpostaImgSwitch(String nomeImmag) {
+
+        ImageIcon icon = new ImageIcon((getClass().getResource(nomeImmag)));
+        Image ImmagineScalata = icon.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+        icon.setImage(ImmagineScalata);
+        return icon;
+    }  
+        
+        
+    public void setComunicator(FramePrincipale princ) {
+        frameprinc = princ;
 
     }
 }

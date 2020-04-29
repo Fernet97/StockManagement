@@ -81,21 +81,38 @@ public class OrdiniAdminPanel extends JPanel {
     public String skusel;
     private JTextField ggallacons;
     private JTextField casellaqty;
+    private FramePrincipale frameprinc;
+
 
     public OrdiniAdminPanel(String user) {
         nomeutente = user;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        JPanel top = new JPanel();
+        JPanel top = new JPanel(new GridLayout(1, 5));
           
         JButton switchOrd = new JButton(ImpostaImgSwitch("/res/img/refresh.png"));
         switchOrd.setBackground(UIManager.getColor("nimbusBase"));
-        switchOrd.setText(" Passa a Ordini User GUI");
+        switchOrd.setText(" Passa a 'Preleva'");
+        switchOrd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                frameprinc.VaiAPreleva();
+            }
+        });
+        
+        
+        
         top.add(switchOrd);
         
+        top.add(new JLabel("    "));
+        
         JLabel title = new JLabel("ORDINI ADMIN");
-        title.setFont(new Font("Arial Black", Font.BOLD, 40));
+        title.setFont(new Font("Arial Black", Font.BOLD, 30));
         top.add(title);
+        
+        top.add(new JLabel(""));
+
+        top.add(new JLabel(""));
+
                      
         super.add(top);
 
@@ -934,6 +951,11 @@ public class OrdiniAdminPanel extends JPanel {
 
     public OrdiniAdminPanel getInstance() {
         return this;
+
+    }
+    
+    public void setComunicator(FramePrincipale princ) {
+        frameprinc = princ;
 
     }
     
