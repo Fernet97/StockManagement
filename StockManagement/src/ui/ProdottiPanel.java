@@ -181,10 +181,10 @@ public class ProdottiPanel extends JPanel {
             public boolean isCellEditable(int row, int column) {
                 return column >= 10; //il numero di celle editabili...
             }
-            
+
             public Class getColumnClass(int column) {
                 switch (column) {
-             /*        case 0:
+                    /*        case 0:
                         return String.class; // SKU
                  case 2:
                         return String.class; // NOME
@@ -199,19 +199,18 @@ public class ProdottiPanel extends JPanel {
                         return String.class; //STRING
                     case 9:
                         return Integer.class; //QTY IN ARRIVO
-        */
-                    case 4: 
-                        return Integer.class;  
-                                                
+                     */
+                    case 4:
+                        return Integer.class;
+
                     case 9:
-                        return Integer.class;       
-                                             
+                        return Integer.class;
+
                     default:
                         return String.class;
                 }
             }
-            
-                   
+
         };
         table = new JTable(model);
         table.getTableHeader().setReorderingAllowed(false);
@@ -230,6 +229,8 @@ public class ProdottiPanel extends JPanel {
         table.getColumnModel().getColumn(4).setCellRenderer(new CustomRender());
 
         table.getColumnModel().getColumn(6).setCellRenderer(new CustomStockRender());
+
+        table.getColumnModel().getColumn(7).setCellRenderer(new CustomCostoRender()); // costo 
 
         table.getColumnModel().getColumn(9).setCellRenderer(new CustomInArrivoRender());
 
@@ -308,18 +309,26 @@ public class ProdottiPanel extends JPanel {
             Fornitore forni = forndao.getByID(daoo.getFPr(pro.getSku()));
             String forny = forni.getIdfornitore() + "|  " + forni.getFullname();
 
+            String snote = "";
+            if (pro.getNote().length() > 0) {
+                snote = "Sì";
+            } else {
+                snote = "No";
+            }
+
             if (checkOnlyArriv.isSelected()) {
                 if (daoo.getQtyArrSku(pro.getSku()) > 0) { //Aggiungo solo righe che hanno prodotti in arrivo
                     // CONDENSA 0s
                     BigDecimal bd = new BigDecimal(String.valueOf(pro.getCosto()));
-                    model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), pro.getNote(), daoo.getQtyArrSku(pro.getSku()), "Modifica", "Cancella", "Ordina"});
+
+                    model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), snote, daoo.getQtyArrSku(pro.getSku()), "Modifica", "Cancella", "Ordina"});
 
                 }
 
             } else {
                 // CONDENSA 0s
                 BigDecimal bd = new BigDecimal(String.valueOf(pro.getCosto()));
-                model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), pro.getNote(), daoo.getQtyArrSku(pro.getSku()), "Modifica", "Cancella", "Ordina"});
+                model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), snote, daoo.getQtyArrSku(pro.getSku()), "Modifica", "Cancella", "Ordina"});
 
             }
         }
@@ -368,6 +377,37 @@ public class ProdottiPanel extends JPanel {
             }
 
             setText(table.getValueAt(row, 4).toString());
+
+            return this;
+        }
+    }
+
+    // RENDER DELLE QUANTITA'
+    class CustomCostoRender extends JButton implements TableCellRenderer {
+
+        public CustomCostoRender() {
+
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+            setEnabled(false);
+            setFont(new Font("Arial Black", Font.BOLD, 11));
+
+            if (table.getValueAt(row, 7).toString().contains(".") == true) {
+                char punto = (char) table.getValueAt(row, 7).toString().indexOf('.');
+
+                //table.getValueAt(row, 7).toString().trim();
+                if (table.getValueAt(row, 7).toString().substring(punto).length() > 5) {
+                    setText(table.getValueAt(row, 7).toString().substring(0, punto + 5) + " €");
+
+                    return this;
+                }
+
+            }
+
+            setText(table.getValueAt(row, 7).toString() + " €");
 
             return this;
         }
@@ -526,8 +566,8 @@ public class ProdottiPanel extends JPanel {
                     form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     form.setVisible(true);
 
-                } else if (button.getText().equals("Ordina")) { 
-                        frameprinc.OrdiniStatus = false;
+                } else if (button.getText().equals("Ordina")) {
+                    frameprinc.OrdiniStatus = false;
                     //Se un fornitore non è definito
                     if (table.getValueAt(row, 5).toString().equals("null|  null")) {
                         vaiarod = new JDialog();
@@ -543,7 +583,7 @@ public class ProdottiPanel extends JPanel {
                         jComboBox = new JComboBox<>();
                         jComboBox.setFont(new Font("Arial Black", Font.BOLD, 20));
                         vaiarod.add(jComboBox);
-                        
+
                         vaiarod.add(new JLabel("       "));
 
                         JButton confermaforn = new JButton("Conferma");
@@ -572,7 +612,6 @@ public class ProdottiPanel extends JPanel {
                             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                         }
 
-                       
                         vaiarod.setVisible(true);
 
                     } // SE IL FORNITORE ERA GIA' DEFINITO
@@ -646,32 +685,29 @@ public class ProdottiPanel extends JPanel {
 
                     setModal(true);
                     initComponents();
-                    
+
                     cforn.setFocusable(false);
-                    
+
                     casku.setEditable(false);
                     casku.setFocusable(false);
 
                     casdatareg.setEditable(false);
                     casdatareg.setFocusable(false);
-                    
+
                     casku.setBackground(Color.DARK_GRAY);
                     casdatareg.setBackground(Color.DARK_GRAY);
-                    
-                    
 
                     if (modalita.equals("UPDATE")) {
                         setFormAsID(idSelected);
                         cat.setEnabled(false);
                         cat.setBackground(Color.darkGray);
-                    }
-                    else{
+                    } else {
                         casku.setText("AUTOGENERATO");
                         casku.setForeground(Color.yellow);
-                        
+
                         casdatareg.setText("AUTOGENERATO");
                         casdatareg.setForeground(Color.yellow);
-                           
+
                     }
 
                     ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
@@ -761,7 +797,7 @@ public class ProdottiPanel extends JPanel {
             main.add(pqty);
 
             JPanel pcosto = new JPanel();
-            JLabel lcosto = new JLabel("Costo");
+            JLabel lcosto = new JLabel("Costo unitario €");
             ccosto = new JTextField(15);
             ccosto.setAlignmentX(RIGHT_ALIGNMENT);
             pcosto.add(lcosto);
@@ -942,36 +978,31 @@ public class ProdottiPanel extends JPanel {
                 return false;
             }
 
-
-            if(ccosto.getText().contains(".") == true){
+            if (ccosto.getText().contains(".") == true) {
                 char punto = (char) ccosto.getText().indexOf('.');
-                
-                if(ccosto.getText().substring(0, punto).length()> 7){
+
+                if (ccosto.getText().substring(0, punto).length() > 7) {
                     JOptionPane.showMessageDialog(this, "Troppe cifre nella parte intera!");
                     ccosto.requestFocus();
                     return false;
                 }
 
-                if(ccosto.getText().substring(punto).length() > 5){
+                if (ccosto.getText().substring(punto).length() > 5) {
                     JOptionPane.showMessageDialog(this, "Troppe cifre nella parte decimale!");
-                    ccosto.requestFocus();                   
+                    ccosto.requestFocus();
                     return false;
 
                 }
-                
-                }
-            else{
-                    
-                if(ccosto.getText().length()> 7){
+
+            } else {
+
+                if (ccosto.getText().length() > 7) {
                     JOptionPane.showMessageDialog(this, "Troppe cifre!");
                     ccosto.requestFocus();
                     return false;
                 }
-            
-            
-                 }
-            
-                   
+
+            }
 
             if (cmin.getText().length() > 10) {
                 JOptionPane.showMessageDialog(this, "Quantità minima non valida!");
@@ -1061,9 +1092,19 @@ public class ProdottiPanel extends JPanel {
 
                 // CONDENSA 0s
                 BigDecimal bd = new BigDecimal(String.valueOf(prodotto.getCosto()));
-                System.out.println("il grande decimalo "+bd.toString());
+                System.out.println("il grande decimalo " + bd.toString());
 
-                ccosto.setText(bd.toPlainString());
+                if (bd.toPlainString().contains(".") == true) {
+                    char punto = (char) bd.toPlainString().indexOf('.');
+                    if (bd.toPlainString().substring(punto).length() > 5) {
+                        ccosto.setText(bd.toPlainString().substring(0, punto + 5));
+                    }
+                    else ccosto.setText(bd.toPlainString());
+
+                }
+                else ccosto.setText(bd.toPlainString());
+                
+                
                 note.setText(prodotto.getNote());
                 inStock.setSelected(prodotto.isInstock());
 
