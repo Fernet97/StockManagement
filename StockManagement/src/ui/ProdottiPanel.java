@@ -41,6 +41,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
@@ -68,6 +70,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 /**
  *
@@ -474,6 +480,7 @@ public class ProdottiPanel extends JPanel {
             } else if (getText().equals("Ordina")) {
                 setIcon(ImpostaImg("/res/img/ordini.png"));
             }
+            setText("");
 
             return this;
         }
@@ -525,6 +532,8 @@ public class ProdottiPanel extends JPanel {
                 button.setIcon(ImpostaImg("/res/img/ordini.png"));
             }
             clicked = true;
+            
+
             return button;
         }
 
@@ -791,6 +800,21 @@ public class ProdottiPanel extends JPanel {
             JPanel pqty = new JPanel();
             JLabel lqty = new JLabel("Quantità");
             casqty = new JTextField(15);
+            ((AbstractDocument) casqty.getDocument()).setDocumentFilter(new DocumentFilter() {
+                    Pattern regEx = Pattern.compile("\\d*");
+
+                    @Override
+                    public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                        Matcher matcher = regEx.matcher(text);
+                        if (!matcher.matches()) {
+                            return;
+                        }
+                        super.replace(fb, offset, length, text, attrs);
+                    }
+                });
+            
+            
+            
             casqty.setAlignmentX(RIGHT_ALIGNMENT);
             pqty.add(lqty);
             pqty.add(casqty);
@@ -799,7 +823,21 @@ public class ProdottiPanel extends JPanel {
             JPanel pcosto = new JPanel();
             JLabel lcosto = new JLabel("Costo unitario €");
             ccosto = new JTextField(15);
-            ccosto.setAlignmentX(RIGHT_ALIGNMENT);
+          ccosto.setAlignmentX(RIGHT_ALIGNMENT);
+          /*    ((AbstractDocument) ccosto.getDocument()).setDocumentFilter(new DocumentFilter() {
+                    Pattern regEx = Pattern.compile("([0-9]+([.][0-9]*)?|[.][0-9]+)");
+
+                    @Override
+                    public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                        Matcher matcher = regEx.matcher(text);
+                        if (!matcher.matches()) {
+                            return;
+                        }
+                        super.replace(fb, offset, length, text, attrs);
+                    }
+                });    */
+            
+            
             pcosto.add(lcosto);
             pcosto.add(ccosto);
             main.add(pcosto);
@@ -808,6 +846,19 @@ public class ProdottiPanel extends JPanel {
             JLabel lmin = new JLabel("Qty. min");
             cmin = new JTextField(15);
             cmin.setAlignmentX(RIGHT_ALIGNMENT);
+            ((AbstractDocument) cmin.getDocument()).setDocumentFilter(new DocumentFilter() {
+                    Pattern regEx = Pattern.compile("\\d*");
+
+                    @Override
+                    public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                        Matcher matcher = regEx.matcher(text);
+                        if (!matcher.matches()) {
+                            return;
+                        }
+                        super.replace(fb, offset, length, text, attrs);
+                    }
+                });            
+
             pmin.add(lmin);
             pmin.add(cmin);
             main.add(pmin);
@@ -1037,6 +1088,8 @@ public class ProdottiPanel extends JPanel {
 
             return true;
         }
+        
+        
 
         public void getOggettoforFormSave() {
 
