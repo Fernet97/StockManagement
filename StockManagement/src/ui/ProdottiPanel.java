@@ -824,8 +824,8 @@ public class ProdottiPanel extends JPanel {
             JLabel lcosto = new JLabel("Costo unitario €");
             ccosto = new JTextField(15);
           ccosto.setAlignmentX(RIGHT_ALIGNMENT);
-          /*    ((AbstractDocument) ccosto.getDocument()).setDocumentFilter(new DocumentFilter() {
-                    Pattern regEx = Pattern.compile("([0-9]+([.][0-9]*)?|[.][0-9]+)");
+            ((AbstractDocument) ccosto.getDocument()).setDocumentFilter(new DocumentFilter() {
+                    Pattern regEx = Pattern.compile("^\\d*[\\.]?[\\d*]$");
 
                     @Override
                     public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
@@ -835,7 +835,7 @@ public class ProdottiPanel extends JPanel {
                         }
                         super.replace(fb, offset, length, text, attrs);
                     }
-                });    */
+                });    
             
             
             pcosto.add(lcosto);
