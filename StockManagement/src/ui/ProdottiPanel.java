@@ -73,7 +73,10 @@ import javax.swing.table.TableRowSorter;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.DocumentFilter;
+import javax.swing.text.Highlighter;
+import javax.swing.text.Highlighter.HighlightPainter;
 
 /**
  *
@@ -823,20 +826,66 @@ public class ProdottiPanel extends JPanel {
             JPanel pcosto = new JPanel();
             JLabel lcosto = new JLabel("Costo unitario €");
             ccosto = new JTextField(15);
-          ccosto.setAlignmentX(RIGHT_ALIGNMENT);
+            ccosto.setAlignmentX(RIGHT_ALIGNMENT);
             ((AbstractDocument) ccosto.getDocument()).setDocumentFilter(new DocumentFilter() {
-                    Pattern regEx = Pattern.compile("^\\d*[\\.]?[\\d*]$");
-
+            Pattern regEx = Pattern.compile("^\\d*(\\.\\d*)?$");
                     @Override
                     public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                        char punto = '.';
+                        int x = 0;
+                        int counter = 0;  
+                        
                         Matcher matcher = regEx.matcher(text);
+                        
                         if (!matcher.matches()) {
                             return;
                         }
+                        
+                       while ((x = (ccosto.getText().indexOf(punto, x) + 1)) > 0) {           
+                            counter++;
+                            if(counter >1){
+                                return;
+                            }
+                        }
+                                   
                         super.replace(fb, offset, length, text, attrs);
                     }
-                });    
+                }); 
             
+            ccosto.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void changedUpdate(DocumentEvent arg0) {}
+
+                @Override
+                public void removeUpdate(DocumentEvent arg0) {
+                          // Highlighter highlighter = ccosto.getHighlighter();
+                          //highlighter.removeAllHighlights();              
+                         System.out.println("removeeeeeeeee");              
+                }
+
+                    @Override
+                    public void insertUpdate(DocumentEvent e) { 
+                        char punto = '.';
+                        int x = 0;
+                        int counter = 0;    
+                        
+                    try {
+                    while ((x = (ccosto.getText().indexOf(punto, x) + 1)) > 0) {           
+                            counter++;
+                            if(counter >1){
+                                Highlighter highlighter = ccosto.getHighlighter();
+                                HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
+                                highlighter.addHighlight(x-1 , x, painter);                                
+                            }
+
+                        }
+
+                    } catch (BadLocationException ex) {
+                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }                  
+            }
+            });
+
             
             pcosto.add(lcosto);
             pcosto.add(ccosto);
