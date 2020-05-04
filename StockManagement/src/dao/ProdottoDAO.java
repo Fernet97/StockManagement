@@ -350,5 +350,44 @@ public class ProdottoDAO {
         }
 
     }
+     
+     
+       public synchronized Prodotto getByNome(String nome) throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+
+        Prodotto bean = new Prodotto();
+
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE nome = "+nome+"";
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            ps = connection.prepareStatement(selectSQL);
+           
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                bean.setSku(rs.getString("sku"));
+                bean.setNome(rs.getString("nome"));
+                //fornitore
+                bean.setNote(rs.getString("note"));
+
+
+            }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+
+        }
+        return bean;
+    }
 
 }
