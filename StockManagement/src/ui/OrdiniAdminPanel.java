@@ -126,7 +126,7 @@ public class OrdiniAdminPanel extends JPanel {
         sxpan.setBorder(BorderFactory.createLineBorder(new Color(27, 32, 36), 50));
 
         JPanel orizontalprod = new JPanel();
-        JLabel prodtext = new JLabel("Sku Prodotto");
+        JLabel prodtext = new JLabel("Cerca prodotto:");
         prodtext.setFont(new Font("Arial Black", Font.BOLD, 20));
         orizontalprod.add(prodtext);
 
@@ -149,7 +149,17 @@ public class OrdiniAdminPanel extends JPanel {
                 try {
                     Prodotto p = prodao.getBySku(text);
                     if (p.getSku() == null) {
+                        //++++++++++++++++++++
+                        //e' un nome?
+                        // fai getByNome di prodottoDAO.. esistono nomi?
+                            // Sì apri popup con tabella con gli sku associati a quel nome
+                                // SKU| NOME|  FORNITORE|   NOTE|  Visualizza|  agg. al carrello|
+                                // lo sku selezionato va poi passato alla casella "Cerca Prodotto"
+                            //No --> non ho trovato niente
+                        
                         casella.setBackground(Color.red);
+
+                        
                     } else {
                         casella.setBackground(Color.green);
                         ((DefaultListModel) list.getModel()).addElement(p.getSku() + "|  " + p.getNome());
