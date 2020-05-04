@@ -124,7 +124,7 @@ public class StockManagement {
             try {
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             } catch (Exception ex) {
-                Logger.getLogger("genlog").warning("Exception\n" + StockManagement.printStackTrace(e));
+                Logger.getLogger("genlog").warning("Exception\n" + StockManagement.printStackTrace(ex));
             }
         }
 

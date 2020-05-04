@@ -344,7 +344,8 @@ public class OrdiniAdminPanel extends JPanel {
                         costocarrell -= Double.parseDouble(table.getValueAt(j, 2).toString()) * Integer.parseInt(table.getValueAt(j, 1).toString());
 
 
-                        String coast = String.valueOf(costocarrell);
+                        BigDecimal bd = new BigDecimal(String.valueOf(costocarrell));
+                        String coast = String.valueOf(bd.toPlainString());
                         if(coast.contains(".") == true){
                             int punto = (char) coast.indexOf('.');
 
@@ -754,8 +755,8 @@ public class OrdiniAdminPanel extends JPanel {
 
                 model.addRow(new Object[]{p.getSku(), o.getQty_in_arrivo(), costoo.toPlainString(), o.getGiorni_alla_consegna(), f.getIdfornitore() + "|" + f.getFullname()});
                 costocarrell += p.getCosto() * o.getQty_in_arrivo();
-                
-                String coast = String.valueOf(costocarrell);
+                BigDecimal bd = new BigDecimal(String.valueOf(costocarrell));
+                String coast = String.valueOf(bd.toPlainString());             
                 if(coast.contains(".") == true){
                     int punto = (char) coast.indexOf('.');
                     
@@ -912,8 +913,9 @@ public class OrdiniAdminPanel extends JPanel {
                 model.addRow(new Object[]{skusel, casellaqty.getText(), costoo.toPlainString(), ggallacons.getText(), jComboBox.getSelectedItem().toString()});
 
                 costocarrell += p.getCosto() * Integer.parseInt(casellaqty.getText());
+                BigDecimal bd = new BigDecimal(String.valueOf(costocarrell));
                 
-                String coast = String.valueOf(costocarrell);
+                String coast = String.valueOf(bd.toPlainString());
 
                 if(coast.contains(".") == true){
                     int punto = (char) coast.indexOf('.');
