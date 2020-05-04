@@ -910,7 +910,17 @@ public class OrdiniAdminPanel extends JPanel {
                     return;
                 }
 
-                model.addRow(new Object[]{skusel, casellaqty.getText(), costoo.toPlainString(), ggallacons.getText(), jComboBox.getSelectedItem().toString()});
+                String costouny= costoo.toPlainString();
+                if(costoo.toPlainString().contains(".") == true){
+                    int punto = (char) costoo.toPlainString().indexOf('.');
+                    
+                    if(costoo.toPlainString().substring(punto).length() > 5){
+                        costouny = costoo.toPlainString().substring(0, punto+5);
+                        System.out.println(costoo.toPlainString());
+                    }
+                }
+                          
+                model.addRow(new Object[]{skusel, casellaqty.getText(),costouny+" €" , ggallacons.getText(), jComboBox.getSelectedItem().toString()});
 
                 costocarrell += p.getCosto() * Integer.parseInt(casellaqty.getText());
                 BigDecimal bd = new BigDecimal(String.valueOf(costocarrell));
