@@ -30,6 +30,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -150,16 +151,42 @@ public class OrdiniAdminPanel extends JPanel {
                     Prodotto p = prodao.getBySku(text);
                     if (p.getSku() == null) {
                         //++++++++++++++++++++
-                        //e' un nome?
-                        // fai getByNome di prodottoDAO.. esistono nomi?
-                            // Sì apri popup con tabella con gli sku associati a quel nome
+                        //non e' nemmeno un nome?
+                       if( prodao.getByNome(text).size()<=0){
+                        casella.setForeground(Color.white);
+                        casella.setBackground(Color.red);
+                          // System.out.println("non c'è nessun nome");
+                       }
+                       else{
+                          // System.out.println("c'è un nome");
+                                                      // Sì apri popup con tabella con gli sku associati a quel nome
                                 // SKU| NOME|  FORNITORE|   NOTE|  Visualizza|  agg. al carrello|
                                 // lo sku selezionato va poi passato alla casella "Cerca Prodotto"
                             //No --> non ho trovato niente
-                        
-                        casella.setBackground(Color.red);
+                        casella.setBackground(Color.yellow);
+                        casella.setForeground(Color.red);   
+                        KeyAdapter keylistener = new KeyAdapter() {
+                               @Override
+                               public void keyPressed(java.awt.event.KeyEvent e) {
+                                   if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                                       try {
+                                           FrameNomeProdotto frameprod = new FrameNomeProdotto(casella, text);
+                                           frameprod.setSize(800, 300);
+                                           frameprod.setVisible(true);
+                                           frameprod.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                                           frameprod.setResizable(false);
+                                           casella.removeKeyListener(this);
+                                       } catch (SQLException ex) {
+                                           Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+                                       }
+                                   }
+                               }
+                           };
+                               
+                        casella.addKeyListener(keylistener); // Se ho trovati con il prodotto, e premo invio                    
+                       }
 
-                        
+                                             
                     } else {
                         casella.setBackground(Color.green);
                         ((DefaultListModel) list.getModel()).addElement(p.getSku() + "|  " + p.getNome());
@@ -178,48 +205,51 @@ public class OrdiniAdminPanel extends JPanel {
                         //forny --> con il nuovo fornitore selezionato
                         //***********************************************************
                         if (fornyname.equals("")) {
-                            JOptionPane.showMessageDialog(null, "il prodotto non è associato a nessun fornitore.\nPremere ok per continuare");
-                            JDialog vaiarod = new JDialog();
-                            vaiarod.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                            vaiarod.setResizable(false);
-                            vaiarod.setModal(true);
-                            vaiarod.setLocationRelativeTo(null);
+                           int OpzioneScelta =  JOptionPane.showConfirmDialog(null, "il prodotto non è associato a nessun fornitore.\nVuoi associarlo ad un fornitore e aggiungerlo al carrello?");
+                           if (OpzioneScelta == JOptionPane.OK_OPTION) {
+                                JDialog vaiarod = new JDialog();
+                                vaiarod.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                                vaiarod.setResizable(false);
+                                vaiarod.setModal(true);
+                                vaiarod.setLocationRelativeTo(null);
 
-                            vaiarod.setTitle("Seleziona un fornitore a cui associare il prodotto");
-                            vaiarod.setSize(new Dimension(500, 150));
-                            vaiarod.setLayout(new GridBagLayout());
-                            JComboBox jComboBoxxx = new JComboBox<>();
-                            jComboBoxxx.setFont(new Font("Arial Black", Font.BOLD, 20));
-                            vaiarod.add(jComboBoxxx);
+                                vaiarod.setTitle("Seleziona un fornitore a cui associare il prodotto");
+                                vaiarod.setSize(new Dimension(500, 150));
+                                vaiarod.setLayout(new GridBagLayout());
+                                JComboBox jComboBoxxx = new JComboBox<>();
+                                jComboBoxxx.setFont(new Font("Arial Black", Font.BOLD, 20));
+                                vaiarod.add(jComboBoxxx);
 
-                            vaiarod.add(new JLabel("       "));
+                                vaiarod.add(new JLabel("       "));
 
-                            JButton confermaforn = new JButton("Conferma");
-                            confermaforn.addActionListener(new java.awt.event.ActionListener() {
-                                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                    vaiarod.dispose();
-                                    System.out.println("Fornitore selezionato:" + jComboBoxxx.getSelectedItem().toString());
-                                    jComboBox.getModel().setSelectedItem(jComboBoxxx.getSelectedItem().toString());
+                                JButton confermaforn = new JButton("Conferma");
+                                confermaforn.addActionListener(new java.awt.event.ActionListener() {
+                                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                        vaiarod.dispose();
+                                        System.out.println("Fornitore selezionato:" + jComboBoxxx.getSelectedItem().toString());
+                                        jComboBox.getModel().setSelectedItem(jComboBoxxx.getSelectedItem().toString());
 
+                                    }
+                                });
+                                confermaforn.setFont(new Font("Arial Black", Font.BOLD, 20));
+                                vaiarod.add(confermaforn);
+
+                                try {
+                                    for (Fornitore f : forndao.getAll()) {
+                                        jComboBoxxx.addItem(f.getIdfornitore() + "|" + f.getFullname());
+                                    }
+                                    if (jComboBoxxx.getItemCount() == 0) {
+                                        JOptionPane.showMessageDialog(null, "Non hai creato ancora un fornitore!");
+                                        return;
+                                    }
+
+                                } catch (SQLException ex) {
+                                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                                 }
-                            });
-                            confermaforn.setFont(new Font("Arial Black", Font.BOLD, 20));
-                            vaiarod.add(confermaforn);
 
-                            try {
-                                for (Fornitore f : forndao.getAll()) {
-                                    jComboBoxxx.addItem(f.getIdfornitore() + "|" + f.getFullname());
-                                }
-                                if (jComboBoxxx.getItemCount() == 0) {
-                                    JOptionPane.showMessageDialog(null, "Non hai creato ancora un fornitore!");
-                                    return;
-                                }
-
-                            } catch (SQLException ex) {
-                                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                            }
-
-                            vaiarod.setVisible(true);
+                                vaiarod.setVisible(true);
+                           
+                           }  else return;
                         }
                         //******************************************************
 
@@ -235,6 +265,8 @@ public class OrdiniAdminPanel extends JPanel {
 
             @Override
             public void removeUpdate(DocumentEvent arg0) {
+                  casella.setBackground(Color.gray);
+                  casella.setForeground(Color.white);
             }
         });
 

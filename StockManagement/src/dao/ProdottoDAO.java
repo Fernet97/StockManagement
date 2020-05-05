@@ -352,14 +352,16 @@ public class ProdottoDAO {
     }
      
      
-       public synchronized Prodotto getByNome(String nome) throws SQLException {
+       public synchronized Collection<Prodotto> getByNome(String nome) throws SQLException {
 
         Connection connection = null;
         PreparedStatement ps = null;
 
-        Prodotto bean = new Prodotto();
 
-        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE nome = "+nome+"";
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE nome = '"+nome+"'";
+           //System.out.println(selectSQL);
+           
+        Collection<Prodotto> prodotti = new LinkedList<Prodotto>();
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -369,13 +371,11 @@ public class ProdottoDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-
+                Prodotto bean = new Prodotto();
                 bean.setSku(rs.getString("sku"));
                 bean.setNome(rs.getString("nome"));
-                //fornitore
                 bean.setNote(rs.getString("note"));
-
-
+                prodotti.add(bean);
             }
         } finally {
             try {
@@ -387,7 +387,7 @@ public class ProdottoDAO {
             }
 
         }
-        return bean;
+        return prodotti;
     }
 
 }
