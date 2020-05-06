@@ -261,10 +261,10 @@ public class ProdottiPanel extends JPanel {
         //******* funzione di ricerca *******************+
         TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(table.getModel());
         table.setRowSorter(rowSorter);
-        table.setAutoCreateRowSorter(true);
-         TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
-          table.setRowSorter(sorter);
-          sorter.setComparator(1, new Comparator<String>()
+        //table.setAutoCreateRowSorter(true);
+        // TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
+          //table.setRowSorter(sorter);
+          rowSorter.setComparator(1, new Comparator<String>()
           {
              @Override
              public int compare(String o1, String o2)
