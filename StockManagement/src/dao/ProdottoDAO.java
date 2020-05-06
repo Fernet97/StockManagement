@@ -374,6 +374,7 @@ public class ProdottoDAO {
                 Prodotto bean = new Prodotto();
                 bean.setSku(rs.getString("sku"));
                 bean.setNome(rs.getString("nome"));
+                bean.setCosto(rs.getDouble("costo"));
                 bean.setNote(rs.getString("note"));
                 prodotti.add(bean);
             }
