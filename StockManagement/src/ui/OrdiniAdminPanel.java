@@ -83,6 +83,7 @@ public class OrdiniAdminPanel extends JPanel {
     private JTextField ggallacons;
     private JTextField casellaqty;
     private FramePrincipale frameprinc;
+    private final JPanelNomeProdotto tabnomeprodotto;
 
 
     public OrdiniAdminPanel(String user) {
@@ -122,9 +123,9 @@ public class OrdiniAdminPanel extends JPanel {
         princ.setLayout(new GridLayout(2, 2, 20, 20));
 
         JPanel sxpan = new JPanel();
-        sxpan.setLayout(new BoxLayout(sxpan, BoxLayout.PAGE_AXIS));
+        sxpan.setLayout(new BoxLayout(sxpan, BoxLayout.Y_AXIS));
         princ.add(sxpan);
-        sxpan.setBorder(BorderFactory.createLineBorder(new Color(27, 32, 36), 50));
+        //sxpan.setBorder(BorderFactory.createLineBorder(new Color(27, 32, 36), 50));
 
         JPanel orizontalprod = new JPanel();
         JLabel prodtext = new JLabel("Cerca prodotto:");
@@ -169,16 +170,14 @@ public class OrdiniAdminPanel extends JPanel {
                                @Override
                                public void keyPressed(java.awt.event.KeyEvent e) {
                                    if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-                                       try {
-                                           FrameNomeProdotto frameprod = new FrameNomeProdotto(casella, text);
-                                           frameprod.setSize(800, 300);
-                                           frameprod.setVisible(true);
-                                           frameprod.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                                           frameprod.setResizable(false);
+                                    /*   try {
+                                           
                                            casella.removeKeyListener(this);
                                        } catch (SQLException ex) {
                                            Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-                                       }
+                                       }*/
+                                        
+                                        tabnomeprodotto.aggiornaNome(casella.getText());
                                    }
                                }
                            };
@@ -267,6 +266,7 @@ public class OrdiniAdminPanel extends JPanel {
             public void removeUpdate(DocumentEvent arg0) {
                   casella.setBackground(Color.gray);
                   casella.setForeground(Color.white);
+                  tabnomeprodotto.aggiornaNome(casella.getText());
             }
         });
 
@@ -274,6 +274,7 @@ public class OrdiniAdminPanel extends JPanel {
         sxpan.add(orizontalprod);
 
         jComboBox = new JComboBox<>();
+        jComboBox.setVisible(false); //Logica nascosta
         jComboBox.setFont(new Font("Arial Black", Font.BOLD, 30));
         // Aggiungi i nomi del fornitori
         jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
@@ -317,6 +318,8 @@ public class OrdiniAdminPanel extends JPanel {
             }
         });
         sxpan.add(jComboBox);
+        
+        //Logica nascosta
         listModel = new DefaultListModel();
         list = new JList(listModel);
         JScrollPane scrollPane = new JScrollPane(list);
@@ -335,7 +338,10 @@ public class OrdiniAdminPanel extends JPanel {
                 aggiungiTOcarrello(list.getSelectedValue().toString());
             }
         });
-        sxpan.add(scrollPane);
+        
+        //****************************************
+        tabnomeprodotto = new JPanelNomeProdotto(casella,"");        
+        sxpan.add(tabnomeprodotto);
 
         JPanel dxpan = new JPanel();
         dxpan.setLayout(new BoxLayout(dxpan, BoxLayout.PAGE_AXIS));

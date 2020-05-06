@@ -17,6 +17,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
@@ -45,20 +47,20 @@ import javax.swing.text.DocumentFilter;
  *
  * @author Fernet
  */
-public class FrameNomeProdotto extends JDialog{
+public class JPanelNomeProdotto extends JPanel{
     
     private DefaultTableModel model;
     private final JTable table;
     private JTextField casella;
+    private final JScrollPane sp2;
     
    
-    public FrameNomeProdotto(JTextField casella, String text) throws SQLException{
+    public JPanelNomeProdotto(JTextField casella, String text){
         this.casella = casella;
+
+        setLayout(new GridLayout(1, 1));
         
-        setTitle(" Seleziona un prodotto da aggiungere al carrello  ");
-        setModal(true);
-        
-        String[] columnNames = {"SKU", "Nome", "Fornitore", "Note",  "Aggiungi al carrello"};
+        String[] columnNames = {"SKU", "Nome", "Fornitore","Costo", "Note",  "Aggiungi al carrello"};
 
         Object[][] data = {};
 
@@ -66,28 +68,32 @@ public class FrameNomeProdotto extends JDialog{
             private static final long serialVersionUID = 1L;
 
             public boolean isCellEditable(int row, int column) {
-                return column >= 4; //il numero di celle editabili...
+                return column >= 5; //il numero di celle editabili...
             }
         };
         table = new JTable(model);
-        table.getColumnModel().getColumn(4).setCellRenderer(new TableButtonRenderer());
-        table.getColumnModel().getColumn(4).setCellEditor(new TableRenderer(new JCheckBox()));
+        table.getColumnModel().getColumn(5).setCellRenderer(new TableButtonRenderer());
+        table.getColumnModel().getColumn(5).setCellEditor(new TableRenderer(new JCheckBox()));
 
-        JScrollPane sp2 = new JScrollPane(table);
+        sp2 = new JScrollPane(table);
         sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), " Prodotti con nome: "+text+ " ", TitledBorder.CENTER, TitledBorder.TOP));
         
-        add(sp2, BorderLayout.CENTER);
+        add(sp2);
         
         
         ProdottoDAO prodao = new ProdottoDAO();
         OrdineDAO ordao = new OrdineDAO();
-        
+    
+    try {
         for(Prodotto p: prodao.getByNome(text)){
-            model.addRow(new Object[]{p.getSku(), p.getNome(), ordao.getFPr(p.getSku()), p.getNote(), ""});
-        
+
+              model.addRow(new Object[]{p.getSku(), p.getNome(), ordao.getFPr(p.getSku()),p.getCosto(), p.getNote(), ""});
+            } 
+       
+        } catch (SQLException ex) {
+            Logger.getLogger(JPanelNomeProdotto.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     
     }
     
@@ -145,7 +151,6 @@ public class FrameNomeProdotto extends JDialog{
             if (clicked) // SE CLICCATO QUEL BOTTONE:::::::::::::
             {
                 casella.setText(model.getValueAt(row, 0).toString());
-                chiudi();
 
             }
             clicked = false;
@@ -163,12 +168,26 @@ public class FrameNomeProdotto extends JDialog{
     }
     
     
-    public void chiudi(){
-        setModal(false);
-        dispose();
     
-    
+    public void aggiornaNome(String newtext){
+        
+        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), " Prodotti con nome: "+newtext+ " ", TitledBorder.CENTER, TitledBorder.TOP));  
+        ProdottoDAO prodao= new ProdottoDAO();
+        OrdineDAO ordao = new OrdineDAO();
+        model.setRowCount(0);
+             
+      try {
+        for(Prodotto p: prodao.getByNome(newtext)){
+
+              model.addRow(new Object[]{p.getSku(), p.getNome(), ordao.getFPr(p.getSku()),p.getCosto(), p.getNote(), ""});
+            } 
+       
+        } catch (SQLException ex) {
+            Logger.getLogger(JPanelNomeProdotto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
+
     
     
     public ImageIcon ImpostaImg(String nomeImmag) {
