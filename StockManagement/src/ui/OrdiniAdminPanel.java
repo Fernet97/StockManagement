@@ -142,7 +142,10 @@ public class OrdiniAdminPanel extends JPanel {
 
             @Override
             public void insertUpdate(DocumentEvent arg0) {
+                casella.setForeground(Color.white);
                 casella.setBackground(Color.gray);
+                if(casella.getText().length()==0) 
+                    return;
                 String text = casella.getText();
                 OrdineDAO ordinedao = new OrdineDAO();
                 String forny = "";
@@ -166,23 +169,7 @@ public class OrdiniAdminPanel extends JPanel {
                             //No --> non ho trovato niente
                         casella.setBackground(Color.yellow);
                         casella.setForeground(Color.red);   
-                        KeyAdapter keylistener = new KeyAdapter() {
-                               @Override
-                               public void keyPressed(java.awt.event.KeyEvent e) {
-                                   if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-                                    /*   try {
-                                           
-                                           casella.removeKeyListener(this);
-                                       } catch (SQLException ex) {
-                                           Logger.getLogger(OrdiniAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-                                       }*/
-                                        
-                                        tabnomeprodotto.aggiornaNome(casella.getText());
-                                   }
-                               }
-                           };
-                               
-                        casella.addKeyListener(keylistener); // Se ho trovati con il prodotto, e premo invio                    
+                        tabnomeprodotto.aggiornaNome(casella.getText());     
                        }
 
                                              
@@ -264,8 +251,7 @@ public class OrdiniAdminPanel extends JPanel {
 
             @Override
             public void removeUpdate(DocumentEvent arg0) {
-                  casella.setBackground(Color.gray);
-                  casella.setForeground(Color.white);
+                  insertUpdate(arg0);
                   tabnomeprodotto.aggiornaNome(casella.getText());
             }
         });
