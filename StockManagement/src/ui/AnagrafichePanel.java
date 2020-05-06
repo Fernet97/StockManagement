@@ -227,8 +227,8 @@ public class AnagrafichePanel extends JPanel {
                 setIcon(ImpostaImg("/res/img/pencil.png"));
             } else if (getText().equals("Cancella")) {
                 setIcon(ImpostaImg("/res/img/eraser.png"));
-            } else if (getText().equals("Ordina")) {
-                setIcon(ImpostaImg("/res/img/ordini.png"));
+            } else if (getText().equals("Prodotti")) {
+                setIcon(ImpostaImg("/res/img/prodotti.png"));
             }
 
             return this;
@@ -271,8 +271,8 @@ public class AnagrafichePanel extends JPanel {
                 button.setIcon(ImpostaImg("/res/img/pencil.png"));
             } else if (button.getText().equals("Cancella")) {
                 button.setIcon(ImpostaImg("/res/img/eraser.png"));
-            } else if (button.getText().equals("Ordini")) {
-                button.setIcon(ImpostaImg("/res/img/ordini.png"));
+            } else if (button.getText().equals("Prodotti")) {
+                button.setIcon(ImpostaImg("/res/img/prodotti.png"));
             }
             clicked = true;
             return button;
@@ -344,10 +344,13 @@ public class AnagrafichePanel extends JPanel {
                     form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     form.setVisible(true);
 
-                } else if (button.getText().equals("Ordina")) { // VAI A ORDINI
+                } else if (button.getText().equals("Prodotti")) { // VAI A prodotti con questo fornitore
                     if(table.getValueAt(row, 0).toString().equals("Fornitore")){
-                        frameprinc.OrdiniStatus = false;
-                        frameprinc.VaiAOrdini(table.getValueAt(row, 1).toString() + "|" + table.getValueAt(row, 3).toString());}
+                        //Prima con questo andavo in ordini ...
+                        //frameprinc.OrdiniStatus = false;
+                        //frameprinc.VaiAOrdini(table.getValueAt(row, 1).toString() + "|" + table.getValueAt(row, 3).toString());
+                        frameprinc.VaiAProdotti(table.getValueAt(row, 1).toString()+"| "+table.getValueAt(row, 3).toString());
+                    }
                     else JOptionPane.showMessageDialog(getParent(), "Puoi fare un ordine solo da un fornitore! [O da Cliente, ma non per adesso]");
 
                 }
@@ -1072,14 +1075,14 @@ public class AnagrafichePanel extends JPanel {
         if (checkforn.isSelected()) {
             // Aggiorno con le nuove
             for (Fornitore forn : daof.getAll()) {
-                model.addRow(new Object[]{forn.getTipo(), forn.getIdfornitore(), forn.getDatareg(), forn.getFullname(), forn.getP_iva(), forn.getIndirizzo(), forn.getTel(), forn.getEmail(), forn.getNote(), "Modifica", "Cancella", "Ordina"});
+                model.addRow(new Object[]{forn.getTipo(), forn.getIdfornitore(), forn.getDatareg(), forn.getFullname(), forn.getP_iva(), forn.getIndirizzo(), forn.getTel(), forn.getEmail(), forn.getNote(), "Modifica", "Cancella", "Prodotti"});
             }
         }
 
         if (checkuten.isSelected()) {
             // Aggiorno con le nuove
             for (Utente utente : daou.getAll()) {
-                model.addRow(new Object[]{utente.getTipo(), utente.getIdutente(), utente.getDatareg(), utente.getFullname(), utente.getCF(), utente.getIndirizzo(), utente.getTelefono(), utente.getEmail(), utente.getNote(), "Modifica", "Cancella", "Ordina"});
+                model.addRow(new Object[]{utente.getTipo(), utente.getIdutente(), utente.getDatareg(), utente.getFullname(), utente.getCF(), utente.getIndirizzo(), utente.getTelefono(), utente.getEmail(), utente.getNote(), "Modifica", "Cancella", "Prodotti"});
             }
         }
 
