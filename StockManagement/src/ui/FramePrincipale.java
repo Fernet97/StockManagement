@@ -393,14 +393,14 @@ public class FramePrincipale extends JFrame {
             System.out.println("La connessione: " + con);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(getParent(), "Non trovo nessuna connesione :(");
-            Logger.getLogger(FramePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
 
         try {
             DriverManagerConnectionPool.releaseConnection(con);
 
         } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning(" " + ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + ex);
         }
 
         System.out.println("La connessione dopo averla chiusa: " + con);

@@ -91,7 +91,7 @@ public class JPanelNomeProdotto extends JPanel{
             } 
        
         } catch (SQLException ex) {
-            Logger.getLogger(JPanelNomeProdotto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
         
     
@@ -183,7 +183,7 @@ public class JPanelNomeProdotto extends JPanel{
             } 
        
         } catch (SQLException ex) {
-            Logger.getLogger(JPanelNomeProdotto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
         
     }

@@ -893,7 +893,7 @@ public class ProdottiPanel extends JPanel {
                         }
 
                     } catch (BadLocationException ex) {
-                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                       Logger.getLogger("genlog").warning("BadLocationException\n" + StockManagement.printStackTrace(ex));
                     }                  
             }
             });

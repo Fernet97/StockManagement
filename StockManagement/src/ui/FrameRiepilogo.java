@@ -161,7 +161,8 @@ class FrameRiepilogo extends JDialog {
                         if(ordao.getNote(Numordine).length()<=0) notepresenti.setText("     Hai appena aggiunto una nota per quest'ordine");
                         else notepresenti.setText("     Hai già registrato una nota per questo ordine");
                     } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(null, "errore nel caricamento della nota ..");}
+                        JOptionPane.showMessageDialog(null, "errore nel caricamento della nota ..");
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));}
                     
                 }
                 else notepresenti.setText("");
@@ -252,6 +253,7 @@ class FrameRiepilogo extends JDialog {
                         Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                     } catch (InterruptedException ex) {
                         Logger.getLogger(FrameRiepilogo.class.getName()).log(Level.SEVERE, null, ex);
+                         Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                     }
 
                     dispose();
