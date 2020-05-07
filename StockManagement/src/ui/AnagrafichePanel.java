@@ -20,6 +20,9 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -174,6 +177,26 @@ public class AnagrafichePanel extends JPanel {
         //******* funzione di ricerca *******************+
         TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(table.getModel());
         table.setRowSorter(rowSorter);
+        
+        rowSorter.setSortable(0, false);
+        rowSorter.setSortable(9, false); 
+        rowSorter.setSortable(10, false);// toglie il sort alle colonne di modifica cancella, ordina e tipo
+        rowSorter.setSortable(11, false);
+        
+          rowSorter.setComparator(2, new Comparator<String>()
+          {
+             @Override
+             public int compare(String o1, String o2)
+             {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+                LocalDateTime ldt1, ldt2;
+                ldt1 = LocalDateTime.parse(o1, formatter);
+                ldt2 = LocalDateTime.parse(o2, formatter);
+                return ldt1.compareTo(ldt2);
+             }
+          });
+
+
 
         casella.getDocument().addDocumentListener(new DocumentListener() {
 
