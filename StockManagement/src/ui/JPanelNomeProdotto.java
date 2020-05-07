@@ -130,7 +130,11 @@ public class JPanelNomeProdotto extends JPanel{
             button.setOpaque(true);
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    fireEditingStopped();
+                    try{
+                    fireEditingStopped();}
+                    catch(ArrayIndexOutOfBoundsException ex){
+                     Logger.getLogger("genlog").warning("ArrayIndexOutOfBoundsException\nJPanelNomeProdotto\n" + StockManagement.printStackTrace(ex));
+                    }
                 }
             });
         }
@@ -153,7 +157,7 @@ public class JPanelNomeProdotto extends JPanel{
                 casella.setText(model.getValueAt(row, 0).toString());
 
             }
-            clicked = false;
+           // clicked = false;
             return "";
         }
 
