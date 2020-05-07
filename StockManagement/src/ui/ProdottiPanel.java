@@ -195,27 +195,19 @@ public class ProdottiPanel extends JPanel {
 
             public Class getColumnClass(int column) {
                 switch (column) {
-                    /*        case 0:
-                        return String.class; // SKU
-                 case 2:
-                        return String.class; // NOME
-                    case 3:
-                        return String.class; // categoria
-                    case 4:
-                        return Integer.class; // qty
-                    case 5:
-                        return String.class; // In Fornitore
 
-                    case 8:
-                        return String.class; //STRING
-                    case 9:
-                        return Integer.class; //QTY IN ARRIVO
-                     */
+                    case 6:
+                        return Boolean.class;//instock
+                        
+                    case 7:
+                        return BigDecimal.class;//costo
+                        
                     case 4:
-                        return Integer.class;
+                        return Integer.class;//qty
 
                     case 9:
-                        return Integer.class;
+                        return Integer.class;//qty in arrivo
+
 
                     default:
                         return String.class;
@@ -261,6 +253,9 @@ public class ProdottiPanel extends JPanel {
         //******* funzione di ricerca *******************+
         TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(table.getModel());
         table.setRowSorter(rowSorter);
+       rowSorter.setSortable(10, false);// toglie il sort alle colonne di modifica cancella ed ordina
+       rowSorter.setSortable(11, false);
+       rowSorter.setSortable(12, false);
         //table.setAutoCreateRowSorter(true);
         // TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
           //table.setRowSorter(sorter);
