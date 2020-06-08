@@ -32,6 +32,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -57,6 +59,10 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import others.RoundedPanel;
 
 /**
@@ -848,12 +854,40 @@ public class OrdiniAdminPanel extends JPanel {
         JPanel panelUP1 = new JPanel();
         panelUP1.add(new JLabel("Quantità da ordinare; "));
         casellaqty = new JTextField(20);
+        ((AbstractDocument) casellaqty.getDocument()).setDocumentFilter(new DocumentFilter() {
+                    Pattern regEx = Pattern.compile("\\d*");
+
+                    @Override
+                    public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                        Matcher matcher = regEx.matcher(text);
+                        if (!matcher.matches()) {
+                            return;
+                        }
+                        super.replace(fb, offset, length, text, attrs);
+                    }
+                });
+        
         panelUP1.add(casellaqty);
         popup.add(panelUP1);
 
         JPanel panelUP2 = new JPanel();
         panelUP2.add(new JLabel("Giorni alla consegna: "));
         ggallacons = new JTextField(20);
+        ((AbstractDocument) ggallacons.getDocument()).setDocumentFilter(new DocumentFilter() {
+            Pattern regEx = Pattern.compile("\\d*");
+
+            @Override
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                Matcher matcher = regEx.matcher(text);
+                if (!matcher.matches()) {
+                    return;
+                }
+                    
+                super.replace(fb, offset, length, text, attrs);
+            }
+        });
+        
+   
         ggallacons.addKeyListener(new KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent e) {
                 if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
@@ -934,8 +968,9 @@ public class OrdiniAdminPanel extends JPanel {
 
         try {
             Prodotto p = pdao.getBySku(skusel);
+            
+            if(!(ggallacons.getText().length() > 4)  && !(casellaqty.getText().length() > 6)){
 
-            if (casellaqty.getText().matches("-?\\d+(\\.\\d+)?") && ggallacons.getText().matches("-?\\d+(\\.\\d+)?")) {
                 BigDecimal costoo = new BigDecimal(String.valueOf(p.getCosto()));
 
                 if (controlloProdottoUguale(skusel)) {
@@ -975,9 +1010,9 @@ public class OrdiniAdminPanel extends JPanel {
                 int prossimoord = o.leggiUltimoID() + 1;
                 numordine.setText("#Ordine: ORD-" + prossimoord);
                 popup.dispose();
-            } else {
-                JOptionPane.showMessageDialog(getParent(), "Scegliere un formato numerico per la quantità ed i giorni all consegna");
-            }
+                
+            }else JOptionPane.showMessageDialog(null, "Errore lunghezza dati! Giorni alla consegna: max 4 cifre. Quantità da ordinare: max 6 cifre.");
+           
         } catch (SQLException ex) {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }

@@ -465,6 +465,11 @@ class FrameRiepilogo extends JDialog {
                 qtyarr.addKeyListener(new KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent e) {
                     if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                        
+                            if(qtyarr.getText().length()> 6){
+                            JOptionPane.showMessageDialog(null, "Il valore della quantità arrivata non può essere maggiore di 6 cifre!");
+                            return;
+                            }
  
                         String qtyChedovevaArrivare = model2.getValueAt(row, 4).toString();
                         qtyChedovevaArrivare = qtyChedovevaArrivare.substring(qtyChedovevaArrivare.indexOf('/'));
@@ -523,6 +528,11 @@ class FrameRiepilogo extends JDialog {
                 ok.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        
+                        if(qtyarr.getText().length()> 6){
+                            JOptionPane.showMessageDialog(null, "Il valore della quantità arrivata non può essere maggiore di 6 cifre!");
+                            return;
+                        }
 
                         String qtyChedovevaArrivare = model2.getValueAt(row, 4).toString();
                         qtyChedovevaArrivare = qtyChedovevaArrivare.substring(qtyChedovevaArrivare.indexOf('/'));
