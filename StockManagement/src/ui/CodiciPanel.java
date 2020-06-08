@@ -149,6 +149,8 @@ public class CodiciPanel extends JPanel {
         //******* funzione di ricerca *******************+
         TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(table.getModel());
         table.setRowSorter(rowSorter);
+        rowSorter.setSortable(1, false);
+        rowSorter.setSortable(2, false);
 
         casella.getDocument().addDocumentListener(new DocumentListener() {
 

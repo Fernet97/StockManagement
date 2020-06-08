@@ -294,6 +294,7 @@ class CategoriePanel extends JPanel {
         //******* funzione di ricerca *******************+
         TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(table.getModel());
         table.setRowSorter(rowSorter);
+        rowSorter.setSortable(2, false);// toglie il sorting alla colonna query
 
         casella.getDocument().addDocumentListener(new DocumentListener() {
 

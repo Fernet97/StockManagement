@@ -179,6 +179,10 @@ public class AnagrafichePanel extends JPanel {
         table.setRowSorter(rowSorter);
         
         rowSorter.setSortable(0, false);
+        rowSorter.setSortable(4, false); 
+        rowSorter.setSortable(5, false); 
+        rowSorter.setSortable(6, false); 
+        rowSorter.setSortable(7, false); 
         rowSorter.setSortable(9, false); 
         rowSorter.setSortable(10, false);// toglie il sort alle colonne di modifica cancella, ordina e tipo
         rowSorter.setSortable(11, false);
