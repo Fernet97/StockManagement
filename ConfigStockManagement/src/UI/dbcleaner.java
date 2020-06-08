@@ -2,6 +2,7 @@ package UI;
 
 import beans.Utente;
 import database.DriverManagerConnectionPool;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,7 +19,12 @@ import java.sql.Statement;
 public class dbcleaner {
 
     public void dbCleaner() throws InterruptedException, SQLException {
-Utente u = new Utente();
+        File f = new File("./DATA/CONFIG/aikkop.aksn");
+        if (f.exists()){
+            f.delete();
+        }
+        
+        Utente u = new Utente();
         Connection connection = null;
         Statement statement = null;
         String query = "  DELETE FROM ordine; DELETE FROM cliente; DELETE FROM prodotto_has_prodotto; DELETE FROM prodotto; DELETE FROM fornitore; DELETE FROM utente";
