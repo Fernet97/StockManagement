@@ -41,7 +41,7 @@ public class StockManagement {
         if (!directory.mkdir()) {
         }
         
-        // CREA CARTELLA DI ROOT DEI DATI
+        // CREA CARTELLA DEI FILE DI CONFIGURAZIONE
         File dir = new File("./DATA/CONFIG");
         if (!dir.mkdir()) {
         }

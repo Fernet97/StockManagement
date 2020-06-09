@@ -81,10 +81,10 @@ public class Config_StockManagement extends JPasswordField {
                 JOptionPane.showMessageDialog(null, "Nessuna Configurazione disponibile.");
 
             } else {
-                pswd = pass("Inserisci password del db", "DBCleaner");
+                pswd = pass("!!!ATTENZIONE Stai per CANCELLARE IL DB!!! Inserisci password del db", "DBCleaner");
                 if (pswd == null)return;
                 if (pswd.equals(get())) {
-                    pswd = pass("Inserisci nuovamente la password per cancellare il db", "DBCleaner");
+                    pswd = pass("!!!ATTENZIONE, OPERAZIONE IRREVERSIBILE. Stai per CANCELLARE DB!!! Inserisci nuovamente la password", "DBCleaner");
                      if (pswd == null)return;
                     if (pswd.equals(get())) {
                         cleaner.dbCleaner();
