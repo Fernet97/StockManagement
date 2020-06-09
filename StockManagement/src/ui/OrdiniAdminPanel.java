@@ -332,7 +332,7 @@ public class OrdiniAdminPanel extends JPanel {
         });
         
         //****************************************
-        tabnomeprodotto = new JPanelNomeProdotto(casella,"");        
+        tabnomeprodotto = new JPanelNomeProdotto(casella,"", false);        
         sxpan.add(tabnomeprodotto);
 
         JPanel dxpan = new JPanel();

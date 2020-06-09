@@ -5,7 +5,10 @@
  */
 package ui;
 
+import beans.Fornitore;
+import beans.Ordine;
 import beans.Prodotto;
+import dao.FornitoreDAO;
 import dao.OrdineDAO;
 import dao.ProdottoDAO;
 import java.awt.BorderLayout;
@@ -18,20 +21,37 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.table.DefaultTableModel;
 import others.RoundedPanel;
 
 /**
@@ -39,32 +59,26 @@ import others.RoundedPanel;
  * @author Fernet
  */
 public class OrdiniPanel extends JPanel {
-
     public Prodotto prodottoCorrente;
-    private final ProdottoDAO dao;
-    private final JLabel infosku;
-    private final JLabel infonome;
-    private final JLabel infocat;
-    private final JTextArea infonote;
-    private final JLabel infostock;
-    private final JTextField casella;
-    private final JLabel qty;
-    private int qtyAttuale;
-    private int qtyMin;
-    public FramePrincipale frameprinc;
+    public javax.swing.JComboBox<String> jComboBox;
+    public DefaultTableModel model;
+    private JTable table;
+    public JList list;
+    private final DefaultListModel listModel;
+    private double costocarrell = 0;
+    public JTextField casella;
+    public JDialog popup;
+    public String skusel;
+    private JTextField ggallacons;
+    private JTextField casellaqty;
+    private FramePrincipale frameprinc;
+    private final JPanelNomeProdotto tabnomeprodotto;
 
-    public OrdiniPanel() {
 
-        dao = new ProdottoDAO();
-        qtyAttuale = 0;
-
+    public OrdiniPanel() {  
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        
-        JPanel top = new JPanel();
-        
-        JLabel title = new JLabel("PRELEVA");
-        title.setFont(new Font("Arial Black", Font.BOLD, 30));
-        top.add(title);
+
+        JPanel top = new JPanel(new GridLayout(1, 5));
           
         JButton switchOrd = new JButton(ImpostaImgSwitch("/res/img/refresh.png"));
         switchOrd.setBackground(UIManager.getColor("nimbusBase"));
@@ -75,145 +89,291 @@ public class OrdiniPanel extends JPanel {
                 frameprinc.VaiAOrdini();
             }
         });
-                
-        top.add(switchOrd);
-                
-                   
-        super.add(top);
         
+        
+        top.add(switchOrd);
+        
+        top.add(new JLabel("    "));
+        
+        JLabel title = new JLabel("PRELEVA");
+        title.setFont(new Font("Arial Black", Font.BOLD, 30));
+        top.add(title);
+        
+        top.add(new JLabel(""));
 
-        JPanel cerca = new JPanel();
-        JLabel searchlabel = new JLabel("Cerca prodotto:");
-        searchlabel.setFont(new Font("Arial Black", Font.BOLD, 20));
-        casella = new JTextField(30);
-        casella.addCaretListener(new CaretListener() {
-            @Override
-            public void caretUpdate(CaretEvent e) {
-                try {
+        top.add(new JLabel(""));
 
-                    aggiornaScheda(casella.getText());
-                } catch (SQLException ex) {
-                    casella.setBackground(Color.red);
-                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                }
-
-            }
-        });
-
-        cerca.add(searchlabel);
-        cerca.add(casella);
-        cerca.setMaximumSize(new Dimension(1000, 100));
-
-        super.add(cerca);
+                     
+        super.add(top);
 
         //Pannello centrale
         JPanel princ = new JPanel();
-        princ.setLayout(new GridLayout(2, 2, 40, 40));
+        princ.setLayout(new GridLayout(1, 2, 20, 20));
+
+        JPanel sxpan = new JPanel();
+        sxpan.setLayout(new BoxLayout(sxpan, BoxLayout.Y_AXIS));
+        princ.add(sxpan);
+        //sxpan.setBorder(BorderFactory.createLineBorder(new Color(27, 32, 36), 50));
+
+        JPanel orizontalprod = new JPanel();
+        JLabel prodtext = new JLabel("Cerca prodotto:");
+        prodtext.setFont(new Font("Arial Black", Font.BOLD, 20));
+        orizontalprod.add(prodtext);
+
+        casella = new JTextField();
+        casella.setColumns(30);
+        
+        //METTERE LISTENER CASELLA
+        
+        orizontalprod.add(casella);
+        sxpan.add(orizontalprod);
+
+        jComboBox = new JComboBox<>();
+        jComboBox.setVisible(false); //Logica nascosta
+        jComboBox.setFont(new Font("Arial Black", Font.BOLD, 30));
+        // Aggiungi i nomi del fornitori
+        jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
+        FornitoreDAO daof = new FornitoreDAO();
+        try {
+            for (Fornitore f : daof.getAll()) {
+
+                jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+        }
+        jComboBox.setForeground(Color.black);
+        jComboBox.setBackground(Color.DARK_GRAY);
+        jComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                // SVUOTA LA LISTA DI PRODOTTI
+                listModel.clear();
+                FornitoreDAO daof = new FornitoreDAO();
+                if (jComboBox.getSelectedItem().toString().equals("Seleziona un fornitore")) {
+                    return;
+                }
+                String idfornitore = "";
+                String selezionato = "";
+                String subselezionato = "";
+                selezionato = jComboBox.getSelectedItem().toString();
+                subselezionato = selezionato.substring(0, selezionato.lastIndexOf("|"));
+
+                idfornitore = subselezionato;
+                OrdineDAO daoo = new OrdineDAO();
+                ProdottoDAO prodao = new ProdottoDAO();
+
+                try {
+                    for (String sku : daoo.getPFr(idfornitore)) {
+                        Prodotto pp = prodao.getBySku(sku);
+                        ((DefaultListModel) list.getModel()).addElement(pp.getSku() + "|  " + pp.getNome());
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                }
+            }
+        });
+        sxpan.add(jComboBox);
+        
+        //Logica nascosta
+        listModel = new DefaultListModel();
+        list = new JList(listModel);
+        JScrollPane scrollPane = new JScrollPane(list);
+        scrollPane.setBounds(10, 11, 227, 239);
+
+        list.addMouseListener(new MouseAdapter() {
+            public void mouseReleased(MouseEvent e) {
+                // se non è doppio click
+                if (e.getClickCount() != 2) {
+                    return;
+                }
+                int index = list.getSelectedIndex(); // Prodotto selezionato dalla jlist
+                String s = (String) list.getSelectedValue();
+
+                //aggiungiTOcarrello(list.getSelectedValue().toString());
+            }
+        });
+        
+        //****************************************
+        tabnomeprodotto = new JPanelNomeProdotto(casella,"", true);  
+        sxpan.add(tabnomeprodotto);
+
+        JPanel carre = new JPanel();
+        carre.setLayout(new BoxLayout(carre, BoxLayout.PAGE_AXIS));
+        carre.add(Box.createRigidArea(new Dimension(20, 0)));
+        JLabel infolabel = new JLabel("     Carrello:    ");
+        infolabel.setFont(new Font("Arial Black", Font.ITALIC, 40));
+
+        JPanel info = new RoundedPanel();
+        info.setBackground(new Color(151, 109, 248));
+        info.add(Box.createRigidArea(new Dimension(50, 10)));
+        info.setLayout(new BoxLayout(info, BoxLayout.PAGE_AXIS));
+
+        table = new JTable();
+        table.getTableHeader().setReorderingAllowed(false);
+
+        model = new DefaultTableModel() {
+            private static final long serialVersionUID = 1L;
+
+            public boolean isCellEditable(int row, int column) {
+                if (column == 0 || column == 2 || column == 4) {
+                    return false; //il numero di celle NON editabili...
+                } else {
+                    return true;
+                }
+            }
+        };
+        model.addColumn("SKU");
+        model.addColumn("Nome");
+        model.addColumn("Qty Prelevata");
+        model.addColumn("Categoria");
+        model.addColumn("Note");
+        model.addColumn("Negozio");
+        table.setModel(model);
+
+        JScrollPane sp = new JScrollPane(table);
+
+        info.add(sp);
+
+        JPanel manageprod = new JPanel();
+        manageprod.setLayout(new GridBagLayout());
+        JButton rimuoviprod = new JButton("Elimina prod. selezionato");
+        rimuoviprod.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                  // Gli indici delle righe selezionate
+                for (int j=0; j<table.getRowCount(); j++) {
+                    if(table.isRowSelected(j)){
+                        JOptionPane.showMessageDialog(null, "Vuoi togliere il prodotto "+table.getValueAt(j, 0).toString()+ "dal carrello?");
+                        model.removeRow(j);
+                        costocarrell -= Double.parseDouble(table.getValueAt(j, 2).toString()) * Integer.parseInt(table.getValueAt(j, 1).toString());
+
+
+                        BigDecimal bd = new BigDecimal(String.valueOf(costocarrell));
+                        String coast = String.valueOf(bd.toPlainString());
+                        if(coast.contains(".") == true){
+                            int punto = (char) coast.indexOf('.');
+
+                            if(coast.substring(punto).length() > 5){
+                                coast = coast.substring(0, punto+5);
+                                System.out.println(coast);
+                            }
+                        }
+
+                    }
+                }              
+                
+                
+            }
+        });
+        manageprod.add(rimuoviprod);
+
+        JButton svuotaprod = new JButton("Svuota carrello");
+        svuotaprod.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.setRowCount(0);
+                costocarrell = 0;
+                listModel.clear();
+                jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
+                FornitoreDAO daof = new FornitoreDAO();
+                try {
+                    for (Fornitore f : daof.getAll()) {
+                        jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                }
+            }
+        });
+        manageprod.add(svuotaprod);
+        
+        JLabel prodAggiunti = new JLabel("        #Prodotti aggiunti: XXX        ");
+        prodAggiunti.setFont(new Font("Arial Black", Font.BOLD, 15));
+        prodAggiunti.setForeground(Color.red);
+        manageprod.add(prodAggiunti);
+
+        
+        JButton effettuaPrelievo  = new JButton("       PRELEVA       ");
+        effettuaPrelievo.setFont(new Font("Arial Black", Font.BOLD, 16));
+        manageprod.add(effettuaPrelievo);
+        
+        info.add(manageprod);
+
+        infolabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        carre.add(infolabel);
+        carre.add(info);
+
+        sxpan.add(carre);
+
+
 
         JPanel fotopan = new JPanel();
-        princ.add(fotopan); //Aggiungi pannello x Foto a Ovest
-        fotopan.setBackground(new Color(128, 128, 128));
-        fotopan.setBorder(BorderFactory.createLineBorder(new Color(27, 32, 36), 50));
-        fotopan.add(new JLabel("FOTO"));
+        fotopan.setLayout(new BoxLayout(fotopan, BoxLayout.PAGE_AXIS));
+        fotopan.setBorder(new EmptyBorder(40, 40, 40, 40));
+        RoundedPanel photo = new RoundedPanel();
+        photo.setBackground(Color.darkGray);
+        fotopan.add(photo);
+        
+        princ.add(fotopan);
 
-        JPanel info = new JPanel();
-        info.setLayout(new GridLayout(5, 2, 20, 20));
-        info.setBorder(BorderFactory.createLineBorder(new Color(27, 32, 36), 20));
+        super.add(princ);
 
-        JLabel infolabel = new JLabel("SKU prodotto:");
-        infolabel.setFont(new Font("Arial Black", Font.BOLD, 30));
-        infolabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        info.add(infolabel);
+    }
 
-        infosku = new JLabel("");
-        infosku.setFont(new Font("Arial Black", Font.BOLD, 20));
-        infosku.setForeground(new Color(244, 80, 37));
-        infosku.setAlignmentX(Component.CENTER_ALIGNMENT);
-        info.add(infosku);
+    public ImageIcon ImpostaImg(String nomeImmag) {
 
-        JLabel infolabel2 = new JLabel("Nome:");
-        infolabel2.setFont(new Font("Arial Black", Font.BOLD, 20));
-        infolabel2.setAlignmentX(Component.CENTER_ALIGNMENT);
-        info.add(infolabel2);
+        ImageIcon icon = new ImageIcon((getClass().getResource(nomeImmag)));
+        Image ImmagineScalata = icon.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT);
+        icon.setImage(ImmagineScalata);
+        return icon;
+    }
 
-        infonome = new JLabel("");
-        infonome.setFont(new Font("Arial Black", Font.BOLD, 20));
-        infonome.setForeground(new Color(244, 80, 37));
-        infonome.setAlignmentX(Component.CENTER_ALIGNMENT);
-        info.add(infonome);
+    public ImageIcon ImpostaImgSwitch(String nomeImmag) {
 
-        JLabel infolabel3 = new JLabel("Categoria:");
-        infolabel3.setFont(new Font("Arial Black", Font.BOLD, 20));
-        infolabel3.setAlignmentX(Component.CENTER_ALIGNMENT);
-        info.add(infolabel3);
+        ImageIcon icon = new ImageIcon((getClass().getResource(nomeImmag)));
+        Image ImmagineScalata = icon.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+        icon.setImage(ImmagineScalata);
+        return icon;
+    }    
+    
+    
 
-        infocat = new JLabel("");
-        infocat.setFont(new Font("Arial Black", Font.BOLD, 20));
-        infocat.setForeground(new Color(244, 80, 37));
-        infocat.setAlignmentX(Component.CENTER_ALIGNMENT);
-        info.add(infocat);
+    //QUANDO CHIAMARE IL REFRESH DI ORDINI?
+    public void refreshTab() {
+        // refresh lista fornitori
+        // BISOGNA SVUOTARE E RICARICARE LISTA FORN
+        //System.out.println("R   E   F   R   E   S   H   !   !   !");
+        jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
+        FornitoreDAO daof = new FornitoreDAO();
+        try {
+            for (Fornitore f : daof.getAll()) {
+                jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+        }
 
-        JLabel infolabel4 = new JLabel("Note:");
-        infolabel4.setFont(new Font("Arial Black", Font.BOLD, 20));
-        infolabel4.setAlignmentX(Component.CENTER_ALIGNMENT);
-        info.add(infolabel4);
+        casella.setBackground(Color.gray);
+        casella.setText("");
+        jComboBox.setSelectedIndex(0);
+        listModel.clear();
+        // model.setRowCount(0); magari il carrello non lo svuoto ogni volta al cambio scheda
 
-        infonote = new JTextArea("");
-        infonote.setFont(new Font("Arial Black", Font.ITALIC, 15));
-        infonote.setEditable(false);
-        infonote.setLineWrap(true);
-        infonote.setForeground(Color.white);
-        infonote.setAlignmentX(Component.CENTER_ALIGNMENT);
-        info.add(infonote);
 
-        JLabel infolabel5 = new JLabel("In Stock?:");
-        infolabel5.setFont(new Font("Arial Black", Font.BOLD, 20));
-        infolabel5.setAlignmentX(Component.CENTER_ALIGNMENT);
-        info.add(infolabel5);
 
-        infostock = new JLabel("");
-        infostock.setFont(new Font("Arial Black", Font.BOLD, 20));
-        infostock.setAlignmentX(Component.CENTER_ALIGNMENT);
-        info.add(infostock);
+    }
 
-        princ.add(info);
 
-        /**
-         * * PRENDI E CONFERMA *********
-         */
-        JPanel SXdown = new RoundedPanel();
-        SXdown.setLayout(new GridLayout(6, 1));
-        SXdown.add(new JLabel(""));
-        SXdown.add(new JLabel(""));
 
-        JPanel quantityPanel = new JPanel(new GridBagLayout());
-        JLabel infolabel6 = new JLabel("Quantità:   ");
-        infolabel6.setFont(new Font("Arial Black", Font.BOLD, 30));
-        quantityPanel.add(infolabel6);
-        qty = new JLabel("");
-        qty.setFont(new Font("Arial Black", Font.BOLD, 40));
-        qty.setForeground(new Color(244, 80, 37));
-        quantityPanel.add(qty);
-        SXdown.add(quantityPanel);
+        
+        
+    public void setComunicator(FramePrincipale princ) {
+        frameprinc = princ;
 
-        JPanel quantityPanel2 = new JPanel(new GridBagLayout());
-        JLabel daprendere = new JLabel("Prendi:  ");
-        daprendere.setFont(new Font("Arial Black", Font.BOLD, 30));
-        quantityPanel2.add(daprendere);
-        JTextField quantdaprend = new JTextField(10);
-        quantdaprend.setFont(new Font("Arial Black", Font.BOLD, 30));
-        quantityPanel2.add(quantdaprend);
-        SXdown.add(quantityPanel2);
+    }
+}
 
-        SXdown.add(new JLabel(""));
-        SXdown.add(new JLabel(""));
 
-        princ.add(SXdown);
 
-        JPanel DXdown = new JPanel(new GridBagLayout());
-        JButton conferma = new JButton("   Conferma    ");
-        conferma.setFont(new Font("Arial Black", Font.ITALIC, 40));
-        conferma.setMinimumSize(new Dimension(100, 50));
+      /*
         conferma.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -275,52 +435,4 @@ public class OrdiniPanel extends JPanel {
         princ.add(DXdown);
 
         super.add(princ);
-
-    }
-
-    public void aggiornaScheda(String sku) throws SQLException {
-
-        prodottoCorrente = dao.getBySku(sku);
-
-        casella.setBackground(Color.green);
-
-        infosku.setText(prodottoCorrente.getSku());
-        infonome.setText(prodottoCorrente.getNome());
-        infocat.setText(prodottoCorrente.getCategoria());
-        infonote.setText(prodottoCorrente.getNote());
-        qtyAttuale = prodottoCorrente.getQty();
-
-        qtyMin = prodottoCorrente.getQty_min();
-        qty.setText(Integer.toString(prodottoCorrente.getQty()) + " Min = " + prodottoCorrente.getQty_min());
-        if (prodottoCorrente.getQty() <= prodottoCorrente.getQty_min()) {
-            qty.setForeground(Color.red);
-        } else {
-            qty.setForeground(Color.green);
-        }
-
-        if (prodottoCorrente.isInstock()) {
-            infostock.setText("SI");
-            infostock.setForeground(Color.green);
-
-        } else {
-            infostock.setText("NO");
-            infostock.setForeground(Color.red);
-
-        }
-
-    }
-    
-        public ImageIcon ImpostaImgSwitch(String nomeImmag) {
-
-        ImageIcon icon = new ImageIcon((getClass().getResource(nomeImmag)));
-        Image ImmagineScalata = icon.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
-        icon.setImage(ImmagineScalata);
-        return icon;
-    }  
-        
-        
-    public void setComunicator(FramePrincipale princ) {
-        frameprinc = princ;
-
-    }
-}
+*/

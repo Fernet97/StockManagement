@@ -50,16 +50,24 @@ import javax.swing.text.DocumentFilter;
 public class JPanelNomeProdotto extends JPanel{
     
     private DefaultTableModel model;
-    private final JTable table;
+    private  JTable table;
     private JTextField casella;
-    private final JScrollPane sp2;
+    private  JScrollPane sp2;
+    private String text;
     
    
-    public JPanelNomeProdotto(JTextField casella, String text){
+    public JPanelNomeProdotto(JTextField casella, String text, boolean PrelevaMode){
         this.casella = casella;
+        this.text = text;
+        
 
         setLayout(new GridLayout(1, 1));
         
+        
+        if(PrelevaMode) {
+            modePreleva();
+            return;
+        }
         String[] columnNames = {"SKU", "Nome", "Fornitore","Costo", "Note",  "Aggiungi al carrello"};
 
         Object[][] data = {};
@@ -202,4 +210,25 @@ public class JPanelNomeProdotto extends JPanel{
         return icon;
     }
     
+    
+    public void modePreleva(){
+        String[] columnNames = {"SKU", "Nome", "Categoria", "Qty", "Qty prelevabile", "Note", "Negozio", "Add al carrello" };
+
+        Object[][] data = {};
+
+        model = new DefaultTableModel(data, columnNames) {
+            private static final long serialVersionUID = 1L;
+
+            public boolean isCellEditable(int row, int column) {
+                return column >= 7; //il numero di celle editabili...
+            }
+        };
+        table = new JTable(model);
+
+        sp2 = new JScrollPane(table);
+        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), " Prodotti con nome: "+text+ " ", TitledBorder.CENTER, TitledBorder.TOP));
+        
+        add(sp2);
+        
+    }
 }
