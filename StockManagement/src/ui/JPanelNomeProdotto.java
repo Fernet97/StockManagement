@@ -54,11 +54,12 @@ public class JPanelNomeProdotto extends JPanel{
     private JTextField casella;
     private  JScrollPane sp2;
     private String text;
-    
+    private boolean PrelevaMode;
    
     public JPanelNomeProdotto(JTextField casella, String text, boolean PrelevaMode){
         this.casella = casella;
         this.text = text;
+        this.PrelevaMode = PrelevaMode;
         
 
         setLayout(new GridLayout(1, 1));
@@ -68,6 +69,7 @@ public class JPanelNomeProdotto extends JPanel{
             modePreleva();
             return;
         }
+        
         String[] columnNames = {"SKU", "Nome", "Fornitore","Costo", "Note",  "Aggiungi al carrello"};
 
         Object[][] data = {};
@@ -94,7 +96,6 @@ public class JPanelNomeProdotto extends JPanel{
     
     try {
         for(Prodotto p: prodao.getByNome(text)){
-
               model.addRow(new Object[]{p.getSku(), p.getNome(), ordao.getFPr(p.getSku()),p.getCosto(), p.getNote(), ""});
             } 
        
@@ -188,10 +189,10 @@ public class JPanelNomeProdotto extends JPanel{
         OrdineDAO ordao = new OrdineDAO();
         model.setRowCount(0);
              
-      try {
+      try {   
         for(Prodotto p: prodao.getByNome(newtext)){
-
-              model.addRow(new Object[]{p.getSku(), p.getNome(), ordao.getFPr(p.getSku()),p.getCosto(), p.getNote(), ""});
+              if(PrelevaMode)  model.addRow(new Object[]{p.getSku(), p.getNome(), p.getCategoria(), String.valueOf(p.getQty()), String.valueOf(p.getQty() - p.getQty_min()),  p.getNote(), p.isNegozio(), "" });
+              else model.addRow(new Object[]{p.getSku(), p.getNome(), ordao.getFPr(p.getSku()),p.getCosto(), p.getNote(), ""});
             } 
        
         } catch (SQLException ex) {
@@ -212,7 +213,7 @@ public class JPanelNomeProdotto extends JPanel{
     
     
     public void modePreleva(){
-        String[] columnNames = {"SKU", "Nome", "Categoria", "Qty", "Qty prelevabile", "Note", "Negozio", "Add al carrello" };
+        String[] columnNames = {"SKU", "Nome", "Categoria", "Qty", "Qty prelevabile", "Note", "Negozio", "Add al Carrello"};
 
         Object[][] data = {};
 
@@ -223,12 +224,20 @@ public class JPanelNomeProdotto extends JPanel{
                 return column >= 7; //il numero di celle editabili...
             }
         };
+       
         table = new JTable(model);
+        table.getColumnModel().getColumn(7).setCellRenderer(new TableButtonRenderer());
+        table.getColumnModel().getColumn(7).setCellEditor(new TableRenderer(new JCheckBox()));
 
         sp2 = new JScrollPane(table);
         sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), " Prodotti con nome: "+text+ " ", TitledBorder.CENTER, TitledBorder.TOP));
         
         add(sp2);
+        
+        ProdottoDAO prodao = new ProdottoDAO();
+        OrdineDAO ordao = new OrdineDAO();
+
+        
         
     }
 }

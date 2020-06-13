@@ -21,6 +21,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
@@ -29,6 +30,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -51,7 +54,13 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import others.RoundedPanel;
 
 /**
@@ -59,27 +68,24 @@ import others.RoundedPanel;
  * @author Fernet
  */
 public class OrdiniPanel extends JPanel {
+
     public Prodotto prodottoCorrente;
     public javax.swing.JComboBox<String> jComboBox;
     public DefaultTableModel model;
     private JTable table;
-    public JList list;
-    private final DefaultListModel listModel;
+    private DefaultListModel listModel;
     private double costocarrell = 0;
     public JTextField casella;
     public JDialog popup;
     public String skusel;
-    private JTextField ggallacons;
-    private JTextField casellaqty;
     private FramePrincipale frameprinc;
-    private final JPanelNomeProdotto tabnomeprodotto;
+    private JPanelNomeProdotto tabnomeprodotto;
 
-
-    public OrdiniPanel() {  
+    public OrdiniPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JPanel top = new JPanel(new GridLayout(1, 5));
-          
+
         JButton switchOrd = new JButton(ImpostaImgSwitch("/res/img/refresh.png"));
         switchOrd.setBackground(UIManager.getColor("nimbusBase"));
         switchOrd.setText(" Passa a 'Ordini'");
@@ -89,21 +95,19 @@ public class OrdiniPanel extends JPanel {
                 frameprinc.VaiAOrdini();
             }
         });
-        
-        
+
         top.add(switchOrd);
-        
+
         top.add(new JLabel("    "));
-        
+
         JLabel title = new JLabel("PRELEVA");
         title.setFont(new Font("Arial Black", Font.BOLD, 30));
         top.add(title);
-        
-        top.add(new JLabel(""));
 
         top.add(new JLabel(""));
 
-                     
+        top.add(new JLabel(""));
+
         super.add(top);
 
         //Pannello centrale
@@ -122,79 +126,76 @@ public class OrdiniPanel extends JPanel {
 
         casella = new JTextField();
         casella.setColumns(30);
-        
-        //METTERE LISTENER CASELLA
-        
+        casella.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void changedUpdate(DocumentEvent arg0) {
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent arg0) {
+                try {
+                    casella.setForeground(Color.white);
+                    casella.setBackground(Color.gray);
+                    if (casella.getText().length() == 0) {
+                        return;
+                    }
+
+                    String text = casella.getText();
+
+                    ProdottoDAO prodao = new ProdottoDAO();
+                    Prodotto p = prodao.getBySku(text);
+                    if (p.getSku() == null) {
+                        //++++++++++++++++++++
+                        //non e' nemmeno un nome?
+                        if (prodao.getByNome(text).size() <= 0) {
+                            casella.setForeground(Color.white);
+                            casella.setBackground(Color.red);
+                            // System.out.println("non c'è nessun nome");
+                        } else {
+                            casella.setBackground(Color.yellow);
+                            casella.setForeground(Color.red);
+                            tabnomeprodotto.aggiornaNome(casella.getText());
+                        }
+
+                    } else { // SE HA TROVATO UNO SKU
+
+                        OrdineDAO ordinedao = new OrdineDAO();
+                        if (ordinedao.getFPr(text) == null || ordinedao.getFPr(text).length() < 2) {
+                            System.out.println("E' uno sku senza fonritore");
+                            JOptionPane.showMessageDialog(null, "Non puoi prelevare il prodotto!!");
+                            casella.setBackground(Color.red);
+                            return;
+                        }
+
+                        casella.setBackground(Color.green);
+                        skusel = text;
+                        System.out.println("SCEGLIERE LA QTY DA PRELEVARE");
+                        // CASELLA SCELTA QTY
+                        windowPrelCreate();
+
+                        //DOPO AGGIUNGI AL CARRELLO
+                    }
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                insertUpdate(e);
+                tabnomeprodotto.aggiornaNome(casella.getText());
+            }
+
+        }
+        );
+
         orizontalprod.add(casella);
         sxpan.add(orizontalprod);
 
-        jComboBox = new JComboBox<>();
-        jComboBox.setVisible(false); //Logica nascosta
-        jComboBox.setFont(new Font("Arial Black", Font.BOLD, 30));
-        // Aggiungi i nomi del fornitori
-        jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
-        FornitoreDAO daof = new FornitoreDAO();
-        try {
-            for (Fornitore f : daof.getAll()) {
-
-                jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-        }
-        jComboBox.setForeground(Color.black);
-        jComboBox.setBackground(Color.DARK_GRAY);
-        jComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                // SVUOTA LA LISTA DI PRODOTTI
-                listModel.clear();
-                FornitoreDAO daof = new FornitoreDAO();
-                if (jComboBox.getSelectedItem().toString().equals("Seleziona un fornitore")) {
-                    return;
-                }
-                String idfornitore = "";
-                String selezionato = "";
-                String subselezionato = "";
-                selezionato = jComboBox.getSelectedItem().toString();
-                subselezionato = selezionato.substring(0, selezionato.lastIndexOf("|"));
-
-                idfornitore = subselezionato;
-                OrdineDAO daoo = new OrdineDAO();
-                ProdottoDAO prodao = new ProdottoDAO();
-
-                try {
-                    for (String sku : daoo.getPFr(idfornitore)) {
-                        Prodotto pp = prodao.getBySku(sku);
-                        ((DefaultListModel) list.getModel()).addElement(pp.getSku() + "|  " + pp.getNome());
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                }
-            }
-        });
-        sxpan.add(jComboBox);
-        
-        //Logica nascosta
-        listModel = new DefaultListModel();
-        list = new JList(listModel);
-        JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setBounds(10, 11, 227, 239);
-
-        list.addMouseListener(new MouseAdapter() {
-            public void mouseReleased(MouseEvent e) {
-                // se non è doppio click
-                if (e.getClickCount() != 2) {
-                    return;
-                }
-                int index = list.getSelectedIndex(); // Prodotto selezionato dalla jlist
-                String s = (String) list.getSelectedValue();
-
-                //aggiungiTOcarrello(list.getSelectedValue().toString());
-            }
-        });
-        
         //****************************************
-        tabnomeprodotto = new JPanelNomeProdotto(casella,"", true);  
+        tabnomeprodotto = new JPanelNomeProdotto(casella, "", true);
         sxpan.add(tabnomeprodotto);
 
         JPanel carre = new JPanel();
@@ -239,29 +240,27 @@ public class OrdiniPanel extends JPanel {
         JButton rimuoviprod = new JButton("Elimina prod. selezionato");
         rimuoviprod.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                  // Gli indici delle righe selezionate
-                for (int j=0; j<table.getRowCount(); j++) {
-                    if(table.isRowSelected(j)){
-                        JOptionPane.showMessageDialog(null, "Vuoi togliere il prodotto "+table.getValueAt(j, 0).toString()+ "dal carrello?");
+                // Gli indici delle righe selezionate
+                for (int j = 0; j < table.getRowCount(); j++) {
+                    if (table.isRowSelected(j)) {
+                        JOptionPane.showMessageDialog(null, "Vuoi togliere il prodotto " + table.getValueAt(j, 0).toString() + "dal carrello?");
                         model.removeRow(j);
                         costocarrell -= Double.parseDouble(table.getValueAt(j, 2).toString()) * Integer.parseInt(table.getValueAt(j, 1).toString());
 
-
                         BigDecimal bd = new BigDecimal(String.valueOf(costocarrell));
                         String coast = String.valueOf(bd.toPlainString());
-                        if(coast.contains(".") == true){
+                        if (coast.contains(".") == true) {
                             int punto = (char) coast.indexOf('.');
 
-                            if(coast.substring(punto).length() > 5){
-                                coast = coast.substring(0, punto+5);
+                            if (coast.substring(punto).length() > 5) {
+                                coast = coast.substring(0, punto + 5);
                                 System.out.println(coast);
                             }
                         }
 
                     }
-                }              
-                
-                
+                }
+
             }
         });
         manageprod.add(rimuoviprod);
@@ -272,29 +271,19 @@ public class OrdiniPanel extends JPanel {
                 model.setRowCount(0);
                 costocarrell = 0;
                 listModel.clear();
-                jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
-                FornitoreDAO daof = new FornitoreDAO();
-                try {
-                    for (Fornitore f : daof.getAll()) {
-                        jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                }
             }
         });
         manageprod.add(svuotaprod);
-        
+
         JLabel prodAggiunti = new JLabel("        #Prodotti aggiunti: XXX        ");
         prodAggiunti.setFont(new Font("Arial Black", Font.BOLD, 15));
         prodAggiunti.setForeground(Color.red);
         manageprod.add(prodAggiunti);
 
-        
-        JButton effettuaPrelievo  = new JButton("       PRELEVA       ");
+        JButton effettuaPrelievo = new JButton("       PRELEVA       ");
         effettuaPrelievo.setFont(new Font("Arial Black", Font.BOLD, 16));
         manageprod.add(effettuaPrelievo);
-        
+
         info.add(manageprod);
 
         infolabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -303,15 +292,13 @@ public class OrdiniPanel extends JPanel {
 
         sxpan.add(carre);
 
-
-
         JPanel fotopan = new JPanel();
         fotopan.setLayout(new BoxLayout(fotopan, BoxLayout.PAGE_AXIS));
         fotopan.setBorder(new EmptyBorder(40, 40, 40, 40));
         RoundedPanel photo = new RoundedPanel();
         photo.setBackground(Color.darkGray);
         fotopan.add(photo);
-        
+
         princ.add(fotopan);
 
         super.add(princ);
@@ -332,9 +319,7 @@ public class OrdiniPanel extends JPanel {
         Image ImmagineScalata = icon.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
         icon.setImage(ImmagineScalata);
         return icon;
-    }    
-    
-    
+    }
 
     //QUANDO CHIAMARE IL REFRESH DI ORDINI?
     public void refreshTab() {
@@ -357,23 +342,95 @@ public class OrdiniPanel extends JPanel {
         listModel.clear();
         // model.setRowCount(0); magari il carrello non lo svuoto ogni volta al cambio scheda
 
-
-
     }
 
-
-
-        
-        
     public void setComunicator(FramePrincipale princ) {
         frameprinc = princ;
 
     }
+
+    public void windowPrelCreate() {
+        
+
+        try {
+            JDialog f = new JDialog();
+            f.setResizable(false);
+            f.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            f.setSize(300, 115);
+            f.setLocationRelativeTo(null);
+            f.setModal(true);
+            
+            f.setTitle(skusel);
+            
+            ProdottoDAO prodao = new ProdottoDAO();
+            Prodotto pro = prodao.getBySku(skusel);
+            
+            JPanel main = new JPanel();
+            
+            JLabel co = new JLabel("Quantità da prelevare:    ");
+            main.add(co);
+            
+            JPanel p_arrivati = new JPanel();
+            p_arrivati.setLayout(new GridLayout(1, 2));
+            JTextField qtyp = new JTextField(5);
+            qtyp.addKeyListener(new KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent e) {
+                    if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                        
+                        if (qtyp.getText().length() > (pro.getQty() - pro.getQty_min())) {
+                            JOptionPane.showMessageDialog(null, "!");
+                            return;
+                        }
+                        f.dispose();
+                        
+                    }
+                }
+            });
+                        
+            ((AbstractDocument) qtyp.getDocument()).setDocumentFilter(new DocumentFilter() {
+                Pattern regEx = Pattern.compile("\\d*");
+                
+                @Override
+                public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                    Matcher matcher = regEx.matcher(text);
+                    if (!matcher.matches()) {
+                        return;
+                    }
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            });
+            
+            p_arrivati.add(qtyp);
+            JLabel txt = new JLabel(" /"+ (pro.getQty()- pro.getQty_min()));
+            p_arrivati.add(txt);
+            main.add(p_arrivati);
+            
+            f.add(main, BorderLayout.CENTER);
+            
+            JButton ok = new JButton("O K   K   E   Y");
+            ok.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    
+                    if (qtyp.getText().length() > 6) {
+                        JOptionPane.showMessageDialog(null, "Il valore della quantità arrivata non può essere maggiore di 6 cifre!");
+                        return;
+                    }
+                    f.dispose();
+
+                }
+                
+            });
+            f.add(ok, BorderLayout.SOUTH);
+            f.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }
 
-
-
-      /*
+/*
         conferma.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -435,4 +492,4 @@ public class OrdiniPanel extends JPanel {
         princ.add(DXdown);
 
         super.add(princ);
-*/
+ */

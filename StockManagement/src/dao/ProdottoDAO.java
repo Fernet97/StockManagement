@@ -376,6 +376,14 @@ public class ProdottoDAO {
                 bean.setNome(rs.getString("nome"));
                 bean.setCosto(rs.getDouble("costo"));
                 bean.setNote(rs.getString("note"));
+              
+                bean.setCategoria(rs.getString("categoria"));
+                bean.setQty(rs.getInt("qty"));
+                bean.setQty_min(rs.getInt("qty_min"));
+                
+                if(rs.getInt("negozio") == 1) bean.setNegozio(true);
+                else bean.setNegozio(false);
+                
                 prodotti.add(bean);
             }
         } finally {
