@@ -80,6 +80,8 @@ public class OrdiniPanel extends JPanel {
     public String skusel;
     private FramePrincipale frameprinc;
     private JPanelNomeProdotto tabnomeprodotto;
+    private  JLabel prodAggiunti;
+    private int numprodaggiunti = 0;
 
     public OrdiniPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -245,19 +247,8 @@ public class OrdiniPanel extends JPanel {
                     if (table.isRowSelected(j)) {
                         JOptionPane.showMessageDialog(null, "Vuoi togliere il prodotto " + table.getValueAt(j, 0).toString() + "dal carrello?");
                         model.removeRow(j);
-                        costocarrell -= Double.parseDouble(table.getValueAt(j, 2).toString()) * Integer.parseInt(table.getValueAt(j, 1).toString());
-
-                        BigDecimal bd = new BigDecimal(String.valueOf(costocarrell));
-                        String coast = String.valueOf(bd.toPlainString());
-                        if (coast.contains(".") == true) {
-                            int punto = (char) coast.indexOf('.');
-
-                            if (coast.substring(punto).length() > 5) {
-                                coast = coast.substring(0, punto + 5);
-                                System.out.println(coast);
-                            }
-                        }
-
+                        numprodaggiunti -= Integer.parseInt(model.getValueAt(j, 2).toString());
+                        prodAggiunti.setText("        #Prodotti aggiunti: "+String.valueOf(numprodaggiunti)+"        ");
                     }
                 }
 
@@ -269,19 +260,74 @@ public class OrdiniPanel extends JPanel {
         svuotaprod.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 model.setRowCount(0);
-                costocarrell = 0;
+                numprodaggiunti = 0;
+                prodAggiunti.setText("        #Prodotti aggiunti: "+String.valueOf(numprodaggiunti)+"        ");
                 listModel.clear();
             }
         });
         manageprod.add(svuotaprod);
 
-        JLabel prodAggiunti = new JLabel("        #Prodotti aggiunti: XXX        ");
+        prodAggiunti = new JLabel("        #Prodotti aggiunti: 0        ");
         prodAggiunti.setFont(new Font("Arial Black", Font.BOLD, 15));
         prodAggiunti.setForeground(Color.red);
         manageprod.add(prodAggiunti);
 
         JButton effettuaPrelievo = new JButton("       PRELEVA       ");
         effettuaPrelievo.setFont(new Font("Arial Black", Font.BOLD, 16));
+        effettuaPrelievo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di voler prelevare i prodotti specificati nel carrello?");
+                if (OpzioneScelta == JOptionPane.OK_OPTION){
+                    ProdottoDAO prodao = new ProdottoDAO();
+                    Prodotto prodCorrente =  null;
+                    
+                try{
+                    for (int i = 0; i < model.getRowCount(); i++) {
+                        prodCorrente = prodao.getBySku(model.getValueAt(i, 0).toString());
+
+                        if(check(prodottoCorrente, Integer.parseInt(model.getValueAt(i, 2).toString()))){ // Se la qty da prelevare è corretta
+                            prodCorrente.setQty(prodCorrente.getQty() - Integer.parseInt(model.getValueAt(i, 2).toString()));
+                            prodao.update(prodCorrente);
+                        }
+                        
+                    
+                    }
+                    
+                    refreshTab();
+                }catch(SQLException ex){  ex.printStackTrace(); }
+                ;
+                }
+                
+            }
+            
+
+            private boolean check(Prodotto prodottoCorrente, int qtydaTogliere) {
+
+                if (!prodottoCorrente.isInstock()) {
+                    JOptionPane.showMessageDialog(getParent(), "Il prodotto non è in stock !!!");
+                    return false;
+                }
+                if (qtydaTogliere <= 0) {
+                    JOptionPane.showMessageDialog(getParent(), "inserisci una quantità positiva");
+                    return false;
+                }
+
+                if (qtydaTogliere > (prodottoCorrente.getQty() - prodottoCorrente.getQty_min())) {
+                    JOptionPane.showMessageDialog(getParent(), "Non puoi prendere più di " + (prodottoCorrente.getQty() - prodottoCorrente.getQty_min()) + " unità!");
+                    return false;
+                }
+
+                if (qtydaTogliere > prodottoCorrente.getQty()) {
+                    JOptionPane.showMessageDialog(getParent(), "Non puoi prendere più di " + prodottoCorrente.getQty() + " unità!");
+                    return false;
+                }
+
+                return true;
+
+            }
+        });
+        
         manageprod.add(effettuaPrelievo);
 
         info.add(manageprod);
@@ -323,24 +369,10 @@ public class OrdiniPanel extends JPanel {
 
     //QUANDO CHIAMARE IL REFRESH DI ORDINI?
     public void refreshTab() {
-        // refresh lista fornitori
-        // BISOGNA SVUOTARE E RICARICARE LISTA FORN
-        //System.out.println("R   E   F   R   E   S   H   !   !   !");
-        jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
-        FornitoreDAO daof = new FornitoreDAO();
-        try {
-            for (Fornitore f : daof.getAll()) {
-                jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-        }
 
         casella.setBackground(Color.gray);
         casella.setText("");
-        jComboBox.setSelectedIndex(0);
         listModel.clear();
-        // model.setRowCount(0); magari il carrello non lo svuoto ogni volta al cambio scheda
 
     }
 
@@ -378,9 +410,11 @@ public class OrdiniPanel extends JPanel {
                     if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
                         
                         if (qtyp.getText().length() > (pro.getQty() - pro.getQty_min())) {
-                            JOptionPane.showMessageDialog(null, "!");
+                            JOptionPane.showMessageDialog(null, "Non puoi prelevare più di "+ (pro.getQty() - pro.getQty_min())+ " unità!");
                             return;
                         }
+                        // CHECK SE QUESTO PRODOTTO E? GIA' NEL CARRELLO
+                        addToCarrello(Integer.parseInt(qtyp.getText()));
                         f.dispose();
                         
                     }
@@ -411,12 +445,15 @@ public class OrdiniPanel extends JPanel {
             ok.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    
-                    if (qtyp.getText().length() > 6) {
-                        JOptionPane.showMessageDialog(null, "Il valore della quantità arrivata non può essere maggiore di 6 cifre!");
+
+                    if (qtyp.getText().length() > (pro.getQty() - pro.getQty_min())) {
+                        JOptionPane.showMessageDialog(null, "Non puoi prelevare più di "+ (pro.getQty() - pro.getQty_min())+ " unità!");
                         return;
                     }
+                    // CHECK SE QUESTO PRODOTTO E? GIA' NEL CARRELLO
+                    addToCarrello(Integer.parseInt(qtyp.getText()));              
                     f.dispose();
+
 
                 }
                 
@@ -426,6 +463,26 @@ public class OrdiniPanel extends JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+
+
+
+    public void addToCarrello(int qtyScelta){
+    
+        try {
+
+            ProdottoDAO prodao = new ProdottoDAO();
+            Prodotto p = prodao.getBySku(skusel);
+            model.addRow(new Object[]{p.getSku(), p.getNome(), qtyScelta, p.getCategoria(), p.getNote(), p.isNegozio()});
+            numprodaggiunti += qtyScelta;
+            prodAggiunti.setText("        #Prodotti aggiunti: "+String.valueOf(numprodaggiunti)+"        ");
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
     }
 
 }
