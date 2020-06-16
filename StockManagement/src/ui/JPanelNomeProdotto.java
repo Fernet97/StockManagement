@@ -195,6 +195,7 @@ public class JPanelNomeProdotto extends JPanel{
               else model.addRow(new Object[]{p.getSku(), p.getNome(), ordao.getFPr(p.getSku()),p.getCosto(), p.getNote(), ""});
             } 
        
+        
         } catch (SQLException ex) {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }

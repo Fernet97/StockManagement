@@ -56,6 +56,8 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
@@ -73,8 +75,6 @@ public class OrdiniPanel extends JPanel {
     public javax.swing.JComboBox<String> jComboBox;
     public DefaultTableModel model;
     private JTable table;
-    private DefaultListModel listModel;
-    private double costocarrell = 0;
     public JTextField casella;
     public JDialog popup;
     public String skusel;
@@ -82,6 +82,7 @@ public class OrdiniPanel extends JPanel {
     private JPanelNomeProdotto tabnomeprodotto;
     private  JLabel prodAggiunti;
     private int numprodaggiunti = 0;
+    private final RoundedPanel photo;
 
     public OrdiniPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -198,6 +199,7 @@ public class OrdiniPanel extends JPanel {
 
         //****************************************
         tabnomeprodotto = new JPanelNomeProdotto(casella, "", true);
+
         sxpan.add(tabnomeprodotto);
 
         JPanel carre = new JPanel();
@@ -231,8 +233,15 @@ public class OrdiniPanel extends JPanel {
         model.addColumn("Categoria");
         model.addColumn("Note");
         model.addColumn("Negozio");
+
         table.setModel(model);
 
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+        public void valueChanged(ListSelectionEvent event) {
+            setPhoto(table.getValueAt(table.getSelectedRow(), 0).toString());
+        }
+    });
+        
         JScrollPane sp = new JScrollPane(table);
 
         info.add(sp);
@@ -262,7 +271,6 @@ public class OrdiniPanel extends JPanel {
                 model.setRowCount(0);
                 numprodaggiunti = 0;
                 prodAggiunti.setText("        #Prodotti aggiunti: "+String.valueOf(numprodaggiunti)+"        ");
-                listModel.clear();
             }
         });
         manageprod.add(svuotaprod);
@@ -280,15 +288,14 @@ public class OrdiniPanel extends JPanel {
                 int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di voler prelevare i prodotti specificati nel carrello?");
                 if (OpzioneScelta == JOptionPane.OK_OPTION){
                     ProdottoDAO prodao = new ProdottoDAO();
-                    Prodotto prodCorrente =  null;
                     
                 try{
                     for (int i = 0; i < model.getRowCount(); i++) {
-                        prodCorrente = prodao.getBySku(model.getValueAt(i, 0).toString());
+                        prodottoCorrente = prodao.getBySku(model.getValueAt(i, 0).toString());
 
                         if(check(prodottoCorrente, Integer.parseInt(model.getValueAt(i, 2).toString()))){ // Se la qty da prelevare è corretta
-                            prodCorrente.setQty(prodCorrente.getQty() - Integer.parseInt(model.getValueAt(i, 2).toString()));
-                            prodao.update(prodCorrente);
+                            prodottoCorrente.setQty(prodottoCorrente.getQty() - Integer.parseInt(model.getValueAt(i, 2).toString()));
+                            prodao.update(prodottoCorrente);
                         }
                         
                     
@@ -296,7 +303,7 @@ public class OrdiniPanel extends JPanel {
                     
                     refreshTab();
                 }catch(SQLException ex){  ex.printStackTrace(); }
-                ;
+                
                 }
                 
             }
@@ -341,7 +348,7 @@ public class OrdiniPanel extends JPanel {
         JPanel fotopan = new JPanel();
         fotopan.setLayout(new BoxLayout(fotopan, BoxLayout.PAGE_AXIS));
         fotopan.setBorder(new EmptyBorder(40, 40, 40, 40));
-        RoundedPanel photo = new RoundedPanel();
+        photo = new RoundedPanel();
         photo.setBackground(Color.darkGray);
         fotopan.add(photo);
 
@@ -369,10 +376,11 @@ public class OrdiniPanel extends JPanel {
 
     //QUANDO CHIAMARE IL REFRESH DI ORDINI?
     public void refreshTab() {
-
         casella.setBackground(Color.gray);
         casella.setText("");
-        listModel.clear();
+        prodAggiunti.setText("        #Prodotti aggiunti: 0        ");
+        model.setColumnCount(0);
+        
 
     }
 
@@ -482,6 +490,14 @@ public class OrdiniPanel extends JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    
+    }
+    
+    
+    
+    public void setPhoto(String sku){
+    
+        photo.setBackground(Color.red);
     
     }
 
