@@ -278,6 +278,8 @@ public class FramePrincipale extends JFrame {
         JMenuBar menu = new JMenuBar();
         JMenu m1 = new JMenu("Info");
         JMenu m2 = new JMenu("Profilo");
+        JMenu m3 = new JMenu("Modalità");
+        JMenu m4 = new JMenu("Tools");
 
         JMenuItem itemAbout = new JMenuItem("Manuale");
         itemAbout.addActionListener(new ActionListener() {
@@ -288,7 +290,9 @@ public class FramePrincipale extends JFrame {
         });
         m1.add(itemAbout);
 
-        JMenuItem itemAggiorna = new JMenuItem("Riavvio");
+        
+        JMenuItem itemprofilo = new JMenuItem("Info Utente");
+        JMenuItem itemAggiorna = new JMenuItem("Logout");
         JMenuItem itemChiudi = new JMenuItem("Chiudi");
 
         itemAggiorna.addActionListener(new ActionListener() {
@@ -320,11 +324,30 @@ public class FramePrincipale extends JFrame {
             }
         });
 
+        m2.add(itemprofilo);
         m2.add(itemAggiorna);
         m2.add(itemChiudi);
 
+        
+        JMenuItem itemnegozio = new JMenuItem("Negozio");
+        JMenuItem itemmagazzino = new JMenuItem("Magazzino");
+        m3.add(itemnegozio);
+        m3.add(itemmagazzino);
+        
+        
+        JMenuItem itemSettings = new JMenuItem("Settings");
+        JMenuItem itemuserlog = new JMenuItem("User Log");
+        JMenuItem itemGenLog = new JMenuItem("Gen. Log");
+        m4.add(itemSettings);
+        m4.add(itemuserlog);
+        m4.add(itemGenLog);
+        
+        
+        
         menu.add(m1);
         menu.add(m2);
+        menu.add(m3);
+        menu.add(m4);
         setJMenuBar(menu);
     }
 
