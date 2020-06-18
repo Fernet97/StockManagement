@@ -987,7 +987,10 @@ public class ProdottiPanel extends JPanel {
                         jFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp", "tiff"));
                         jFileChooser.setCurrentDirectory(new File("./"));
                         jFileChooser.setAcceptAllFileFilterUsed(false);
-                        int result = jFileChooser.showOpenDialog(new JFrame());
+
+                        JFrame framechooser = new JFrame();
+                        framechooser.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        int result = jFileChooser.showOpenDialog(framechooser);
                         if (result == JFileChooser.APPROVE_OPTION) {
                             // File selezionato
                             File selectedFile = jFileChooser.getSelectedFile();
@@ -998,8 +1001,15 @@ public class ProdottiPanel extends JPanel {
                             icon.setImage(ImmagineScalata);
                             bfoto.setIcon(icon);
                             setAlwaysOnTop(true);
+                            framechooser.dispose();
 
                         }
+                        else {
+                            jFileChooser.cancelSelection();
+                            framechooser.dispose();
+                        }
+                        
+                        
                     } catch (StringIndexOutOfBoundsException ex) {// mi dava -1 alla riga 664
                         Logger.getLogger("userlog").warning("StringIndexOutOfBoundsException: percorso foto \n" + StockManagement.printStackTrace(ex));
 
@@ -1234,7 +1244,7 @@ public class ProdottiPanel extends JPanel {
                 cat.setSelectedItem(prodotto.getCategoria());
                 percorsofoto = prodotto.getFoto();
                 ImageIcon icon;
-                if (percorsofoto == null) {
+                if (percorsofoto == null || percorsofoto.equals("null") || percorsofoto.equals("NULL")) {
                     icon = new ImageIcon(getClass().getResource("/res/img/upload.png"));
                 } else {
                     icon = new ImageIcon(percorsofoto);
