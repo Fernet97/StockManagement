@@ -59,6 +59,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -80,9 +81,9 @@ public class OrdiniPanel extends JPanel {
     public String skusel;
     private FramePrincipale frameprinc;
     private JPanelNomeProdotto tabnomeprodotto;
-    private  JLabel prodAggiunti;
+    private JLabel prodAggiunti;
     private int numprodaggiunti = 0;
-    private final RoundedPanel photo;
+    private final JButton photobtn;
 
     public OrdiniPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -199,7 +200,7 @@ public class OrdiniPanel extends JPanel {
 
         //****************************************
         tabnomeprodotto = new JPanelNomeProdotto(casella, "", true);
-
+        tabnomeprodotto.setComunicator(this);
         sxpan.add(tabnomeprodotto);
 
         JPanel carre = new JPanel();
@@ -220,11 +221,7 @@ public class OrdiniPanel extends JPanel {
             private static final long serialVersionUID = 1L;
 
             public boolean isCellEditable(int row, int column) {
-                if (column == 0 || column == 2 || column == 4) {
-                    return false; //il numero di celle NON editabili...
-                } else {
-                    return true;
-                }
+                return false;
             }
         };
         model.addColumn("SKU");
@@ -233,15 +230,19 @@ public class OrdiniPanel extends JPanel {
         model.addColumn("Categoria");
         model.addColumn("Note");
         model.addColumn("Negozio");
+        
+                
+
 
         table.setModel(model);
+        table.getColumnModel().getColumn(5).setCellRenderer(new CustomNegozioRender());
 
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-        public void valueChanged(ListSelectionEvent event) {
-            setPhoto(table.getValueAt(table.getSelectedRow(), 0).toString());
-        }
-    });
-        
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                setPhoto(table.getValueAt(table.getSelectedRow(), 0).toString());
+            }
+        });
+
         JScrollPane sp = new JScrollPane(table);
 
         info.add(sp);
@@ -257,7 +258,7 @@ public class OrdiniPanel extends JPanel {
                         JOptionPane.showMessageDialog(null, "Vuoi togliere il prodotto " + table.getValueAt(j, 0).toString() + "dal carrello?");
                         model.removeRow(j);
                         numprodaggiunti -= Integer.parseInt(model.getValueAt(j, 2).toString());
-                        prodAggiunti.setText("        #Prodotti aggiunti: "+String.valueOf(numprodaggiunti)+"        ");
+                        prodAggiunti.setText("        #Prodotti aggiunti: " + String.valueOf(numprodaggiunti) + "        ");
                     }
                 }
 
@@ -270,7 +271,7 @@ public class OrdiniPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 model.setRowCount(0);
                 numprodaggiunti = 0;
-                prodAggiunti.setText("        #Prodotti aggiunti: "+String.valueOf(numprodaggiunti)+"        ");
+                prodAggiunti.setText("        #Prodotti aggiunti: " + String.valueOf(numprodaggiunti) + "        ");
             }
         });
         manageprod.add(svuotaprod);
@@ -286,28 +287,28 @@ public class OrdiniPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di voler prelevare i prodotti specificati nel carrello?");
-                if (OpzioneScelta == JOptionPane.OK_OPTION){
+                if (OpzioneScelta == JOptionPane.OK_OPTION) {
                     ProdottoDAO prodao = new ProdottoDAO();
-                    
-                try{
-                    for (int i = 0; i < model.getRowCount(); i++) {
-                        prodottoCorrente = prodao.getBySku(model.getValueAt(i, 0).toString());
 
-                        if(check(prodottoCorrente, Integer.parseInt(model.getValueAt(i, 2).toString()))){ // Se la qty da prelevare è corretta
-                            prodottoCorrente.setQty(prodottoCorrente.getQty() - Integer.parseInt(model.getValueAt(i, 2).toString()));
-                            prodao.update(prodottoCorrente);
+                    try {
+                        for (int i = 0; i < model.getRowCount(); i++) {
+                            prodottoCorrente = prodao.getBySku(model.getValueAt(i, 0).toString());
+
+                            if (check(prodottoCorrente, Integer.parseInt(model.getValueAt(i, 2).toString()))) { // Se la qty da prelevare è corretta
+                                prodottoCorrente.setQty(prodottoCorrente.getQty() - Integer.parseInt(model.getValueAt(i, 2).toString()));
+                                prodao.update(prodottoCorrente);
+                            }
+
                         }
-                        
-                    
+
+                        refreshTab();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
                     }
-                    
-                    refreshTab();
-                }catch(SQLException ex){  ex.printStackTrace(); }
-                
+
                 }
-                
+
             }
-            
 
             private boolean check(Prodotto prodottoCorrente, int qtydaTogliere) {
 
@@ -334,7 +335,7 @@ public class OrdiniPanel extends JPanel {
 
             }
         });
-        
+
         manageprod.add(effettuaPrelievo);
 
         info.add(manageprod);
@@ -348,8 +349,11 @@ public class OrdiniPanel extends JPanel {
         JPanel fotopan = new JPanel();
         fotopan.setLayout(new BoxLayout(fotopan, BoxLayout.PAGE_AXIS));
         fotopan.setBorder(new EmptyBorder(40, 40, 40, 40));
-        photo = new RoundedPanel();
+        RoundedPanel photo = new RoundedPanel();
+        photo.setLayout(new GridLayout(1, 1));
         photo.setBackground(Color.darkGray);
+        photobtn = new JButton();
+        photo.add(photobtn);
         fotopan.add(photo);
 
         princ.add(fotopan);
@@ -379,8 +383,8 @@ public class OrdiniPanel extends JPanel {
         casella.setBackground(Color.gray);
         casella.setText("");
         prodAggiunti.setText("        #Prodotti aggiunti: 0        ");
-        model.setColumnCount(0);
-        
+        model.setRowCount(0);
+
 
     }
 
@@ -390,7 +394,6 @@ public class OrdiniPanel extends JPanel {
     }
 
     public void windowPrelCreate() {
-        
 
         try {
             JDialog f = new JDialog();
@@ -399,39 +402,44 @@ public class OrdiniPanel extends JPanel {
             f.setSize(300, 115);
             f.setLocationRelativeTo(null);
             f.setModal(true);
-            
+
             f.setTitle(skusel);
-            
+
             ProdottoDAO prodao = new ProdottoDAO();
             Prodotto pro = prodao.getBySku(skusel);
-            
+
             JPanel main = new JPanel();
-            
+
             JLabel co = new JLabel("Quantità da prelevare:    ");
             main.add(co);
-            
+
             JPanel p_arrivati = new JPanel();
             p_arrivati.setLayout(new GridLayout(1, 2));
             JTextField qtyp = new JTextField(5);
             qtyp.addKeyListener(new KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent e) {
                     if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-                        
-                        if (qtyp.getText().length() > (pro.getQty() - pro.getQty_min())) {
-                            JOptionPane.showMessageDialog(null, "Non puoi prelevare più di "+ (pro.getQty() - pro.getQty_min())+ " unità!");
+
+                         if (Integer.parseInt(qtyp.getText()) > (pro.getQty() - pro.getQty_min())) {
+                            JOptionPane.showMessageDialog(null, "Non puoi prelevare più di " + (pro.getQty() - pro.getQty_min()) + " unità!");
                             return;
                         }
                         // CHECK SE QUESTO PRODOTTO E? GIA' NEL CARRELLO
+                        if (controlloProdottoUguale(skusel)) {
+                            JOptionPane.showMessageDialog(null, "Hai già aggiunto questo prodotto al carrello!!");
+                            f.dispose();
+                            return;
+                        }
                         addToCarrello(Integer.parseInt(qtyp.getText()));
                         f.dispose();
-                        
+
                     }
                 }
             });
-                        
+
             ((AbstractDocument) qtyp.getDocument()).setDocumentFilter(new DocumentFilter() {
                 Pattern regEx = Pattern.compile("\\d*");
-                
+
                 @Override
                 public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
                     Matcher matcher = regEx.matcher(text);
@@ -441,30 +449,34 @@ public class OrdiniPanel extends JPanel {
                     super.replace(fb, offset, length, text, attrs);
                 }
             });
-            
+
             p_arrivati.add(qtyp);
-            JLabel txt = new JLabel(" /"+ (pro.getQty()- pro.getQty_min()));
+            JLabel txt = new JLabel(" /" + (pro.getQty() - pro.getQty_min()));
             p_arrivati.add(txt);
             main.add(p_arrivati);
-            
+
             f.add(main, BorderLayout.CENTER);
-            
+
             JButton ok = new JButton("O K   K   E   Y");
             ok.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
-                    if (qtyp.getText().length() > (pro.getQty() - pro.getQty_min())) {
-                        JOptionPane.showMessageDialog(null, "Non puoi prelevare più di "+ (pro.getQty() - pro.getQty_min())+ " unità!");
+                    if (Integer.parseInt(qtyp.getText()) > (pro.getQty() - pro.getQty_min())) {
+                        JOptionPane.showMessageDialog(null, "Non puoi prelevare più di " + (pro.getQty() - pro.getQty_min()) + " unità!");
                         return;
                     }
                     // CHECK SE QUESTO PRODOTTO E? GIA' NEL CARRELLO
-                    addToCarrello(Integer.parseInt(qtyp.getText()));              
+                    if (controlloProdottoUguale(skusel)) {
+                        JOptionPane.showMessageDialog(null, "Hai già aggiunto questo prodotto al carrello!!");
+                        f.dispose();
+                        return;
+                    }
+                    addToCarrello(Integer.parseInt(qtyp.getText()));
                     f.dispose();
 
-
                 }
-                
+
             });
             f.add(ok, BorderLayout.SOUTH);
             f.setVisible(true);
@@ -473,32 +485,78 @@ public class OrdiniPanel extends JPanel {
         }
     }
 
+    public void addToCarrello(int qtyScelta) {
 
-
-
-    public void addToCarrello(int qtyScelta){
-    
         try {
 
             ProdottoDAO prodao = new ProdottoDAO();
             Prodotto p = prodao.getBySku(skusel);
             model.addRow(new Object[]{p.getSku(), p.getNome(), qtyScelta, p.getCategoria(), p.getNote(), p.isNegozio()});
             numprodaggiunti += qtyScelta;
-            prodAggiunti.setText("        #Prodotti aggiunti: "+String.valueOf(numprodaggiunti)+"        ");
+            prodAggiunti.setText("        #Prodotti aggiunti: " + String.valueOf(numprodaggiunti) + "        ");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void setPhoto(String sku) {
+
+        try {
+            ProdottoDAO prodao = new ProdottoDAO();
+            Prodotto p = prodao.getBySku(sku);
+            if(p.getFoto() == null || p.getFoto().equals("null")){
+                photobtn.setText("NESSUNA FOTO\n PER QUESTO PRODOTTO");
+            } 
+            System.out.println(p.getFoto());
+            ImageIcon icon = new ImageIcon(p.getFoto());
+            Image ImmagineScalata = icon.getImage().getScaledInstance(600, 600, Image.SCALE_DEFAULT);
+            icon.setImage(ImmagineScalata);
+            photobtn.setIcon(icon);
+            photobtn.setText("");
+            
+            //photobtn.setBackground(Color.red);
             
             
         } catch (SQLException ex) {
             Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
+        
+
+    }
+
+    public boolean controlloProdottoUguale(String skuscelto) {
+        System.out.println("Controllo Prodotto uguale");
+        for (int i = 0; i < table.getRowCount(); i++) {
+            System.out.println("Prodotto già nel carrello" + model.getValueAt(i, 0).toString() + "   sku scelto:" + skuscelto);
+            if (model.getValueAt(i, 0).toString().equals(skuscelto)) {
+                return true;
+            }
+        }
+
+        return false;
     }
     
     
     
-    public void setPhoto(String sku){
-    
-        photo.setBackground(Color.red);
-    
+        class CustomNegozioRender extends JButton implements TableCellRenderer {
+
+        public CustomNegozioRender() {
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+                if (value.toString().equals("false")) {
+                    setBackground(new Color(244, 80, 37));    
+                } else if(value.toString().equals("true")){
+                    setBackground(new Color(126, 169, 93));
+                }
+            
+
+            return this;
+        }
     }
 
 }
