@@ -854,6 +854,29 @@ public class AnagrafichePanel extends JPanel {
 
         private void setFormAsID(String idSelected) {
 
+            // CLIENTE
+            if (tipologia == 0) {
+                ClienteDAO dao = new ClienteDAO();
+
+                try {
+                    Cliente cliente = dao.getByID(idSelected);
+
+                    casid.setText(String.valueOf(cliente.getIdcliente()));
+                    casdatareg.setText(cliente.getDatareg());
+                    casfullname.setText(cliente.getFullname());
+                    cascfiva.setText(cliente.getCf());
+                    casindirizzo.setText(cliente.getIndirizzo());
+                    castel.setText(cliente.getTel());
+                    casemail.setText(cliente.getEmail());
+                    note.setText(cliente.getNote());
+
+                } catch (SQLException ex) {
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+                }
+
+            }
+            
+            
             // FORNITORE
             if (tipologia == 1) {
                 FornitoreDAO dao = new FornitoreDAO();
@@ -903,7 +926,8 @@ public class AnagrafichePanel extends JPanel {
 
         public boolean check() {
 
-            if (tipologia != 1) {
+            //Sutente
+            if (tipologia == 2) {
                 if (casfullname.getText().isEmpty() || cascfiva.getText().isEmpty() || casindirizzo.getText().isEmpty()
                         || castel.getText().isEmpty() || casemail.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Riempi tutti i campi! ['Note' è opzionale]");
@@ -919,8 +943,28 @@ public class AnagrafichePanel extends JPanel {
                     return false;
                 }
                 
-             // se è un fornitore   
-            } else if (tipologia == 1) {
+            }
+            
+            // Cliente
+            else if(tipologia == 0){         
+                  if (casfullname.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Specificare un nome!");
+                    /*
+                    DA FARE:
+                    Se non si specifica un nome, verrà chiesto di generare un nome automatico composto
+                    dall'ID cliente incrementale generato dal DB
+                    */
+                    return false;
+                }
+                if (cascfiva.getText().length() > 45) {
+                    JOptionPane.showMessageDialog(this, "CF troppo lungo!");
+                    return false;
+                }           
+            
+            }
+            
+            // se è un fornitore   
+            else if (tipologia == 1) {
                 if (casfullname.getText().isEmpty() || cascfiva.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Riempi tutti i campi! ['Note', 'Telefono', 'email', 'indirizzo' sono opzionali]");
                     return false;
@@ -985,7 +1029,7 @@ public class AnagrafichePanel extends JPanel {
                         ClienteDAO dao = new ClienteDAO();
                         client = new Cliente(casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
 
-                        //dao.add(client);
+                        dao.add(client);
                         form.dispose();
                     }
                 }
@@ -1037,17 +1081,17 @@ public class AnagrafichePanel extends JPanel {
             Cliente client;
 
             try {
-                /* Cliente
+                // Cliente
                 if (tipologia == 0) {
                     ClienteDAO dao = new ClienteDAO();
-                    client = new Cliente(casid.getText(), casdatareg.getText(), casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
+                    client = new Cliente(Integer.parseInt(casid.getText()),  casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), note.getText());
 
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                     if (a == JOptionPane.YES_OPTION) {
-                       // dao.update(client);
+                         dao.update(client);
                         form.setVisible(false);
                     }
-                }*/
+                }
 
                 // Fornitore
                 if (tipologia == 1) {
@@ -1100,6 +1144,7 @@ public class AnagrafichePanel extends JPanel {
 
         FornitoreDAO daof = new FornitoreDAO();
         UtenteDAO daou = new UtenteDAO();
+        ClienteDAO daoc = new ClienteDAO();
 
         if (checkforn.isSelected()) {
             // Aggiorno con le nuove
@@ -1112,6 +1157,14 @@ public class AnagrafichePanel extends JPanel {
             // Aggiorno con le nuove
             for (Utente utente : daou.getAll()) {
                 model.addRow(new Object[]{utente.getTipo(), utente.getIdutente(), utente.getDatareg(), utente.getFullname(), utente.getCF(), utente.getIndirizzo(), utente.getTelefono(), utente.getEmail(), utente.getNote(), "Modifica", "Cancella", "Prodotti"});
+            }
+        }
+        
+        
+        if (checkclient.isSelected()) {
+            // Aggiorno con le nuove
+            for (Cliente cliente : daoc.getAll()) {
+                model.addRow(new Object[]{cliente.getTipo(), cliente.getIdcliente(), cliente.getDatareg(), cliente.getFullname(), cliente.getCf(), cliente.getIndirizzo(), cliente.getTel(), cliente.getEmail(), cliente.getNote(), "Modifica", "Cancella", "Prodotti"});
             }
         }
 

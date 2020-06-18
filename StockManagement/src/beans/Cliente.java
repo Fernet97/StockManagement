@@ -35,7 +35,7 @@ public class Cliente {
      * @param email
      * @param note 
      */
-    public Cliente(String datareg, String fullname, String cf, String indirizzo, String tel, String email, String note) {
+    public Cliente(String fullname, String cf, String indirizzo, String tel, String email, String note) {
 
          setDatareg(generateData());
         this.fullname = fullname;
@@ -57,14 +57,14 @@ public class Cliente {
      * @param email
      * @param note 
      */
-    public Cliente(String fullname, String cf, String indirizzo, String tel, String email, String note) {
+    public Cliente(int idcliente, String fullname, String cf, String indirizzo, String tel, String email, String note) {
+        this.idcliente = idcliente;
         this.fullname = fullname;
         this.cf = cf;
         this.indirizzo = indirizzo;
         this.tel = tel;
         this.email = email;
         this.note = note;
-  setDatareg(generateData());
 
     }
 

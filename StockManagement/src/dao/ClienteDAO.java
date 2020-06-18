@@ -139,13 +139,10 @@ public class ClienteDAO {
         Connection connection = null;
         Statement statement = null;
 
-
-
-
         Logger.getLogger("userlog").info("id del cliente da modificare: \n" + c.getIdcliente());
 //UPDATE `db_stock`.`cliente` SET `idcliente` = '2', `datareg` = '?', `fullname` = '?', `cf` = '?', `indirizzo` = '?', `tel` = '?', `email` = '?', `note` = '?' WHERE (`idcliente` = '1');
 
-        String query = "UPDATE "+this.TABLE_NAME+" SET  `datareg` = '"+c.getDatareg()+"', `fullname` = '"+c.getFullname()+"', `cf` = '"+c.getCf()+"', `indirizzo` = '"+c.getIndirizzo()+"', `tel` = '"+c.getTel()+"', `email` = '"+c.getEmail()+"', `note` = '"+c.getNote()+"' WHERE (`idcliente` = '"+c.getIdcliente()+"')";
+        String query = "UPDATE "+this.TABLE_NAME+" SET `fullname` = '"+c.getFullname()+"', `cf` = '"+c.getCf()+"', `indirizzo` = '"+c.getIndirizzo()+"', `tel` = '"+c.getTel()+"', `email` = '"+c.getEmail()+"', `note` = '"+c.getNote()+"' WHERE (`idcliente` = '"+c.getIdcliente()+"')";
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
