@@ -821,7 +821,9 @@ public class AnagrafichePanel extends JPanel {
                     public void actionPerformed(ActionEvent e) {
                         if (modalita.equals("ADD")) {
                             if (check()) {
-                                getOggettoforFormSave();
+                                if(caspwd.getText().length() > 0)  getOggettoforFormSave();
+                                else JOptionPane.showMessageDialog(null, "Password obbligatoria!");
+                                
                             }
                         } else if (check()) {
                             getOggettoforFormUpdate();
@@ -881,12 +883,10 @@ public class AnagrafichePanel extends JPanel {
 
                 try {
                     Utente u = dao.getByID(idSelected);
-
                     casid.setText(u.getIdutente());
                     casdatareg.setText(u.getDatareg());
                     casfullname.setText(u.getFullname());
                     cascfiva.setText(u.getCF());
-                    caspwd.setText(u.getPwd());
                     casindirizzo.setText(u.getIndirizzo());
                     castel.setText(u.getTelefono());
                     casemail.setText(u.getEmail());
@@ -1068,8 +1068,10 @@ public class AnagrafichePanel extends JPanel {
                     int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
                     if (a == JOptionPane.YES_OPTION) {
                         uten = new Utente(casid.getText(), casdatareg.getText(), casfullname.getText(), cascfiva.getText(), casindirizzo.getText(), castel.getText(), casemail.getText(), caspwd.getText(), permess.getSelectedIndex(), note.getText());
-
-                        dao.update(uten);
+                        
+                        if(caspwd.getText().length() > 0) dao.updatePwd(uten);
+                        else dao.update(uten);
+                        
                         form.dispose();
                     }
                 }
