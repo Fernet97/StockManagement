@@ -347,7 +347,7 @@ public class AnagrafichePanel extends JPanel {
                         if (table.getValueAt(row, 0).toString().equals("Cliente")) {
                             ClienteDAO dao = new ClienteDAO();
                             try {
-                                //dao.remove(table.getValueAt(row, 1).toString());
+                                dao.remove(Integer.parseInt(table.getValueAt(row, 1).toString()));
                             } catch (Exception e) {
                                 Logger.getLogger("genlog").warning("Exception\n" + StockManagement.printStackTrace(e));
                                 

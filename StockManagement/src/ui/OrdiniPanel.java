@@ -511,7 +511,7 @@ public class OrdiniPanel extends JPanel {
             } 
             System.out.println(p.getFoto());
             ImageIcon icon = new ImageIcon(p.getFoto());
-            Image ImmagineScalata = icon.getImage().getScaledInstance(600, 600, Image.SCALE_DEFAULT);
+            Image ImmagineScalata = icon.getImage().getScaledInstance(600, 800, Image.SCALE_DEFAULT);
             icon.setImage(ImmagineScalata);
             photobtn.setIcon(icon);
             photobtn.setText("");
