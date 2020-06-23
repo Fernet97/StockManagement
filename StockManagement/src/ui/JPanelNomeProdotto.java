@@ -49,31 +49,30 @@ import javax.swing.text.DocumentFilter;
  *
  * @author Fernet
  */
-public class JPanelNomeProdotto extends JPanel{
-    
+public class JPanelNomeProdotto extends JPanel {
+
     private DefaultTableModel model;
-    private  JTable table;
+    private JTable table;
     private JTextField casella;
-    private  JScrollPane sp2;
+    private JScrollPane sp2;
     private String text;
     private boolean PrelevaMode;
     private OrdiniPanel Ordinipanel;
-   
-    public JPanelNomeProdotto(JTextField casella, String text, boolean PrelevaMode){
+    private TableRenderer myTableRender;
+
+    public JPanelNomeProdotto(JTextField casella, String text, boolean PrelevaMode) {
         this.casella = casella;
         this.text = text;
         this.PrelevaMode = PrelevaMode;
-        
 
         setLayout(new GridLayout(1, 1));
-        
-        
-        if(PrelevaMode) {
+
+        if (PrelevaMode) {
             modePreleva();
             return;
         }
-        
-        String[] columnNames = {"SKU", "Nome", "Fornitore","Costo", "Note",  "Aggiungi al carrello"};
+
+        String[] columnNames = {"SKU", "Nome", "Fornitore", "Costo", "Note", "Aggiungi al carrello"};
 
         Object[][] data = {};
 
@@ -89,28 +88,25 @@ public class JPanelNomeProdotto extends JPanel{
         table.getColumnModel().getColumn(5).setCellEditor(new TableRenderer(new JCheckBox()));
 
         sp2 = new JScrollPane(table);
-        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), " Prodotti con nome: "+text+ " ", TitledBorder.CENTER, TitledBorder.TOP));
-        
+        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), " Prodotti con nome: " + text + " ", TitledBorder.CENTER, TitledBorder.TOP));
+
         add(sp2);
-        
-        
+
         ProdottoDAO prodao = new ProdottoDAO();
         OrdineDAO ordao = new OrdineDAO();
-    
-    try {
-        for(Prodotto p: prodao.getByNome(text)){
-              model.addRow(new Object[]{p.getSku(), p.getNome(), ordao.getFPr(p.getSku()),p.getCosto(), p.getNote(), ""});
-            } 
-       
+
+        try {
+            for (Prodotto p : prodao.getByNome(text)) {
+                model.addRow(new Object[]{p.getSku(), p.getNome(), ordao.getFPr(p.getSku()), p.getCosto(), p.getNote(), ""});
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
-        
-    
+
     }
-    
-    
-     class TableButtonRenderer extends JButton implements TableCellRenderer {
+
+    class TableButtonRenderer extends JButton implements TableCellRenderer {
 
         public TableButtonRenderer() {
             setOpaque(true);
@@ -125,7 +121,7 @@ public class JPanelNomeProdotto extends JPanel{
         }
 
     }
-     
+
     public class TableRenderer extends DefaultCellEditor {
 
         private JButton button;
@@ -142,11 +138,9 @@ public class JPanelNomeProdotto extends JPanel{
             button.setOpaque(true);
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    try{
-                    fireEditingStopped();
-                    }
-                    catch(ArrayIndexOutOfBoundsException ex){
-                     Logger.getLogger("genlog").warning("ArrayIndexOutOfBoundsException\nJPanelNomeProdotto\n" + StockManagement.printStackTrace(ex));
+                    try {
+                        fireEditingStopped();
+                    } catch (ArrayIndexOutOfBoundsException ex) {
                     }
                 }
             });
@@ -170,7 +164,7 @@ public class JPanelNomeProdotto extends JPanel{
                 casella.setText(model.getValueAt(row, 0).toString());
 
             }
-           // clicked = false;
+            // clicked = false;
             return "";
         }
 
@@ -180,34 +174,37 @@ public class JPanelNomeProdotto extends JPanel{
         }
 
         protected void fireEditingStopped() {
-            super.fireEditingStopped();
+            try {
+                super.fireEditingStopped();
+            } catch (ArrayIndexOutOfBoundsException ex) {
+            }
         }
     }
-    
-    
-    
-    public void aggiornaNome(String newtext){
-        
-        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), " Prodotti con nome: "+newtext+ " ", TitledBorder.CENTER, TitledBorder.TOP));  
-        ProdottoDAO prodao= new ProdottoDAO();
+
+    public void aggiornaNome(String newtext) {
+
+        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), " Prodotti con nome: " + newtext + " ", TitledBorder.CENTER, TitledBorder.TOP));
+        ProdottoDAO prodao = new ProdottoDAO();
         OrdineDAO ordao = new OrdineDAO();
-        model.setRowCount(0);
-             
-      try {   
-        for(Prodotto p: prodao.getByNome(newtext)){
-              if(PrelevaMode)  model.addRow(new Object[]{p.getSku(), p.getNome(), p.getCategoria(), String.valueOf(p.getQty()), String.valueOf(p.getQty() - p.getQty_min()),  p.getNote(), p.isNegozio(), "" });
-              else model.addRow(new Object[]{p.getSku(), p.getNome(), ordao.getFPr(p.getSku()),p.getCosto(), p.getNote(), ""});
-            } 
-       
-        
+
+        //myTableRender.fireEditingStopped();
+            model.setRowCount(0);
+
+        try {
+            for (Prodotto p : prodao.getByNome(newtext)) {
+                if (PrelevaMode) {
+                    model.addRow(new Object[]{p.getSku(), p.getNome(), p.getCategoria(), String.valueOf(p.getQty()), String.valueOf(p.getQty() - p.getQty_min()), p.getNote(), p.isNegozio(), ""});
+                } else {
+                    model.addRow(new Object[]{p.getSku(), p.getNome(), ordao.getFPr(p.getSku()), p.getCosto(), p.getNote(), ""});
+                }
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
-        
+
     }
 
-    
-    
     public ImageIcon ImpostaImg(String nomeImmag) {
 
         ImageIcon icon = new ImageIcon((getClass().getResource(nomeImmag)));
@@ -215,9 +212,8 @@ public class JPanelNomeProdotto extends JPanel{
         icon.setImage(ImmagineScalata);
         return icon;
     }
-    
-    
-    public void modePreleva(){
+
+    public void modePreleva() {
         String[] columnNames = {"SKU", "Nome", "Categoria", "Qty", "Qty prelevabile", "Note", "Negozio", "Add al Carrello"};
 
         Object[][] data = {};
@@ -229,35 +225,34 @@ public class JPanelNomeProdotto extends JPanel{
                 return column >= 7; //il numero di celle editabili...
             }
         };
-       
+
         table = new JTable(model);
-        
+
         table.getColumnModel().getColumn(6).setCellRenderer(new CustomNegozioRender());
 
-               
         table.getColumnModel().getColumn(7).setCellRenderer(new TableButtonRenderer());
-        table.getColumnModel().getColumn(7).setCellEditor(new TableRenderer(new JCheckBox()));
-        
+        myTableRender = new TableRenderer(new JCheckBox());
+        table.getColumnModel().getColumn(7).setCellEditor(myTableRender);
+
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
-                //Ordinipanel.setPhoto(table.getValueAt(table.getSelectedRow(), 0).toString());
+                if(model.getRowCount() > 0)
+                     Ordinipanel.setPhoto(table.getValueAt(table.getSelectedRow(), 0).toString());
             }
         });
 
         sp2 = new JScrollPane(table);
-        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), " Prodotti con nome: "+text+ " ", TitledBorder.CENTER, TitledBorder.TOP));
-        
+        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), " Prodotti con nome: " + text + " ", TitledBorder.CENTER, TitledBorder.TOP));
+
         add(sp2);
-        
-        
+
     }
-    
-      public void setComunicator(OrdiniPanel ordinipanel) {
+
+    public void setComunicator(OrdiniPanel ordinipanel) {
         Ordinipanel = ordinipanel;
 
     }
-    
-    
+
     class CustomNegozioRender extends JButton implements TableCellRenderer {
 
         public CustomNegozioRender() {
@@ -266,12 +261,11 @@ public class JPanelNomeProdotto extends JPanel{
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
-                if (value.toString().equals("false")) {
-                    setBackground(new Color(244, 80, 37));    
-                } else if(value.toString().equals("true")){
-                    setBackground(new Color(126, 169, 93));
-                }
-            
+            if (value.toString().equals("false")) {
+                setBackground(new Color(244, 80, 37));
+            } else if (value.toString().equals("true")) {
+                setBackground(new Color(126, 169, 93));
+            }
 
             return this;
         }

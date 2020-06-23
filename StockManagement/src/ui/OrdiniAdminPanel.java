@@ -376,6 +376,7 @@ public class OrdiniAdminPanel extends JPanel {
         JButton rimuoviprod = new JButton("Elimina prodotto selezionato");
         rimuoviprod.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
                   // Gli indici delle righe selezionate
                 for (int j=0; j<table.getRowCount(); j++) {
                     if(table.isRowSelected(j)){
