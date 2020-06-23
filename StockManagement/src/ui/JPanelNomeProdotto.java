@@ -236,8 +236,10 @@ public class JPanelNomeProdotto extends JPanel {
 
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
-                if(model.getRowCount() > 0)
-                     Ordinipanel.setPhoto(table.getValueAt(table.getSelectedRow(), 0).toString());
+                if(model.getRowCount() > 0 && table.getSelectedRow()!= -1){
+                    System.out.println("Riga selezionata:"+ table.getSelectedRow());
+                    Ordinipanel.setPhoto(table.getValueAt(table.getSelectedRow(), 0).toString());
+                }
             }
         });
 
