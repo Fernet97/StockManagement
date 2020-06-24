@@ -315,16 +315,15 @@ public class ProdottiPanel extends JPanel {
     public void refreshTab() throws SQLException {
 
         //Cancello vecchie righe...
+        System.out.println("righe prima:"+ model.getRowCount());
         model.setRowCount(0);
+        System.out.println("righe dopo:"+ model.getRowCount());
 
         ProdottoDAO dao = new ProdottoDAO();
         FornitoreDAO forndao = new FornitoreDAO();
 
         OrdineDAO daoo = new OrdineDAO();
 
-        if (checkOnlyArriv.isSelected()) {
-
-        }
 
         for (Prodotto pro : dao.getAll()) {
             Fornitore forni = forndao.getByID(daoo.getFPr(pro.getSku()));
@@ -352,6 +351,9 @@ public class ProdottiPanel extends JPanel {
                 model.addRow(new Object[]{pro.getSku(), pro.getDatareg(), pro.getNome(), pro.getCategoria(), pro.getQty(), forny, pro.isInstock(), bd.toPlainString(), snote, daoo.getQtyArrSku(pro.getSku()), "Modifica", "Cancella", "Ordina"});
 
             }
+            
+                    System.out.println("righe dopo aggiunta:"+ model.getRowCount());
+
         }
 
         try {
@@ -575,7 +577,6 @@ public class ProdottiPanel extends JPanel {
                         ProdottoDAO daor = new ProdottoDAO();
                         try {
                             daor.remove(table.getValueAt(row, 0).toString());
-
                             refreshTab();
                         } catch (SQLException ex) {
                             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));

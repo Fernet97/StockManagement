@@ -381,8 +381,10 @@ public class OrdiniAdminPanel extends JPanel {
                 for (int j=0; j<table.getRowCount(); j++) {
                     if(table.isRowSelected(j)){
                         JOptionPane.showMessageDialog(null, "Vuoi togliere il prodotto "+table.getValueAt(j, 0).toString()+ "dal carrello?");
+                        double val = Double.parseDouble(table.getValueAt(j, 2).toString().replaceFirst("€", ""));
+
+                        costocarrell -= val * Integer.parseInt(table.getValueAt(j, 1).toString());
                         model.removeRow(j);
-                        costocarrell -= Double.parseDouble(table.getValueAt(j, 2).toString()) * Integer.parseInt(table.getValueAt(j, 1).toString());
 
 
                         BigDecimal bd = new BigDecimal(String.valueOf(costocarrell));

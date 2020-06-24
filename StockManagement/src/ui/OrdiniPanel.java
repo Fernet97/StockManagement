@@ -239,7 +239,9 @@ public class OrdiniPanel extends JPanel {
 
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
-                setPhoto(table.getValueAt(table.getSelectedRow(), 0).toString());
+                 if(model.getRowCount() > 0 && table.getSelectedRow()!= -1){
+                    setPhoto(table.getValueAt(table.getSelectedRow(), 0).toString());
+                 }
             }
         });
 
@@ -256,8 +258,8 @@ public class OrdiniPanel extends JPanel {
                 for (int j = 0; j < table.getRowCount(); j++) {
                     if (table.isRowSelected(j)) {
                         JOptionPane.showMessageDialog(null, "Vuoi togliere il prodotto " + table.getValueAt(j, 0).toString() + "dal carrello?");
-                        model.removeRow(j);
                         numprodaggiunti -= Integer.parseInt(model.getValueAt(j, 2).toString());
+                        model.removeRow(j);
                         prodAggiunti.setText("        #Prodotti aggiunti: " + String.valueOf(numprodaggiunti) + "        ");
                     }
                 }
@@ -419,6 +421,12 @@ public class OrdiniPanel extends JPanel {
             qtyp.addKeyListener(new KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent e) {
                     if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                        
+                        if(Integer.parseInt(qtyp.getText()) <= 0){
+                            JOptionPane.showMessageDialog(null, "Nessuna unità prelevabile!");
+                            return;
+                        }
+
 
                          if (Integer.parseInt(qtyp.getText()) > (pro.getQty() - pro.getQty_min())) {
                             JOptionPane.showMessageDialog(null, "Non puoi prelevare più di " + (pro.getQty() - pro.getQty_min()) + " unità!");
@@ -461,6 +469,11 @@ public class OrdiniPanel extends JPanel {
             ok.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    
+                    if(Integer.parseInt(qtyp.getText()) <= 0){
+                        JOptionPane.showMessageDialog(null, "Nessuna unità prelevabile!");
+                        return;
+                    }
 
                     if (Integer.parseInt(qtyp.getText()) > (pro.getQty() - pro.getQty_min())) {
                         JOptionPane.showMessageDialog(null, "Non puoi prelevare più di " + (pro.getQty() - pro.getQty_min()) + " unità!");
