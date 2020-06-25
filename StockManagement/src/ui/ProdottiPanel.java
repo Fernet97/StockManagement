@@ -218,7 +218,6 @@ public class ProdottiPanel extends JPanel {
         table = new JTable(model);
         table.getTableHeader().setReorderingAllowed(false);
 
-        model.addRow(data); // DA CANCELLARE
 
         try {
             refreshTab(); // Aggiorna tavola con  i fornitori del db;
@@ -315,17 +314,18 @@ public class ProdottiPanel extends JPanel {
     public void refreshTab() throws SQLException {
 
         //Cancello vecchie righe...
-        System.out.println("righe prima:"+ model.getRowCount());
-        model.setRowCount(0);
-        System.out.println("righe dopo:"+ model.getRowCount());
+        
+       model.setRowCount(0);
 
         ProdottoDAO dao = new ProdottoDAO();
         FornitoreDAO forndao = new FornitoreDAO();
 
         OrdineDAO daoo = new OrdineDAO();
 
-
+        
+        
         for (Prodotto pro : dao.getAll()) {
+            
             Fornitore forni = forndao.getByID(daoo.getFPr(pro.getSku()));
             String forny = forni.getIdfornitore() + "|  " + forni.getFullname();
 
@@ -352,7 +352,7 @@ public class ProdottiPanel extends JPanel {
 
             }
             
-                    System.out.println("righe dopo aggiunta:"+ model.getRowCount());
+
 
         }
 
@@ -658,7 +658,11 @@ public class ProdottiPanel extends JPanel {
         }
 
         protected void fireEditingStopped() {
-            super.fireEditingStopped();
+            try{
+                super.fireEditingStopped();}
+            catch(Exception e){
+                System.out.println("MANNAGGIA **********");
+            } 
         }
     }
 
@@ -1291,7 +1295,7 @@ public class ProdottiPanel extends JPanel {
                 Logger.getLogger("genlog").warning("IOException\n" + StockManagement.printStackTrace(ex));
             }
 
-            try {
+          try {
                 refreshTab();
             } catch (SQLException ex) {
                 Logger.getLogger("genlog").warning("SQLException" + StockManagement.printStackTrace(ex));

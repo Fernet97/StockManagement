@@ -401,7 +401,7 @@ public class AnagrafichePanel extends JPanel {
             try {
                 super.fireEditingStopped();
             } catch (Exception ex) {
-                Logger.getLogger("genlog").warning("Exception\n- - - - - BUG SUPREMO - - - - -\n" + StockManagement.printStackTrace(ex));
+                System.out.println("MANNAGGIA *******");
             };
         }
     }
