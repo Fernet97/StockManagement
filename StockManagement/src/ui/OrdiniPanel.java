@@ -167,7 +167,7 @@ public class OrdiniPanel extends JPanel {
                         OrdineDAO ordinedao = new OrdineDAO();
                         if (ordinedao.getFPr(text) == null || ordinedao.getFPr(text).length() < 2) {
                             System.out.println("E' uno sku senza fonritore");
-                            JOptionPane.showMessageDialog(null, "Non puoi prelevare il prodotto!!");
+                            JOptionPane.showMessageDialog(null, "Fornitore non associato. Contattare l'amministratore.");
                             casella.setBackground(Color.red);
                             return;
                         }
@@ -175,6 +175,10 @@ public class OrdiniPanel extends JPanel {
                         casella.setBackground(Color.green);
                         skusel = text;
                         System.out.println("SCEGLIERE LA QTY DA PRELEVARE");
+                        if(!p.isInstock()){
+                            JOptionPane.showMessageDialog(null, "Prodotto non in stock. Contattare l'amministratore.");
+                            return;
+                        }
                         // CASELLA SCELTA QTY
                         windowPrelCreate();
 
@@ -501,9 +505,10 @@ public class OrdiniPanel extends JPanel {
     public void addToCarrello(int qtyScelta) {
 
         try {
-
+            
             ProdottoDAO prodao = new ProdottoDAO();
             Prodotto p = prodao.getBySku(skusel);
+
             model.addRow(new Object[]{p.getSku(), p.getNome(), qtyScelta, p.getCategoria(), p.getNote(), p.isNegozio()});
             numprodaggiunti += qtyScelta;
             prodAggiunti.setText("        #Prodotti aggiunti: " + String.valueOf(numprodaggiunti) + "        ");
