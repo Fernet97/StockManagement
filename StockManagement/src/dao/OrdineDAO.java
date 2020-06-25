@@ -37,7 +37,7 @@ public class OrdineDAO {
         Collection<Ordine> ordini = new LinkedList<Ordine>();
 
         String selectSQL = "select* from " + this.TABLE_NAME + " where prodotto_sku != 'VOID'";
-
+        
         try {
             connection = DriverManagerConnectionPool.getConnection();
             ps = connection.prepareStatement(selectSQL);
@@ -446,8 +446,8 @@ public class OrdineDAO {
             // get data della consegna
             LocalDate consegna = db.plusDays(bean.getGiorni_alla_consegna());
 
-            Logger.getLogger("userlog").info("now data " + now.format(formatter) + " db data " + db.format(formatter)
-                    + " consegna " + consegna.format(formatter));
+           /* Logger.getLogger("userlog").info("now data " + now.format(formatter) + " db data " + db.format(formatter)
+                    + " consegna " + consegna.format(formatter));*/
 
             // Se è -1 allora è arrivato, se è -2 è messo anche in stock
             if (bean.getGiorni_alla_consegna() == -2) {
@@ -514,8 +514,8 @@ public class OrdineDAO {
 
                 int gg = (int) DAYS.between(consegna, now);
                 array[i] = gg;
-                Logger.getLogger("userlog").info("now data " + now.format(formatter) + " db data " + db.format(formatter)
-                        + " consegna " + consegna.format(formatter) + " giorni mancanti  " + gg);
+             /*   Logger.getLogger("userlog").info("now data " + now.format(formatter) + " db data " + db.format(formatter)
+                        + " consegna " + consegna.format(formatter) + " giorni mancanti  " + gg);*/
                 i++;
             }
         } finally {
@@ -575,7 +575,7 @@ public class OrdineDAO {
             // get data della consegna
             LocalDate consegna = db.plusDays(bean.getGiorni_alla_consegna());
 
-            Logger.getLogger("userlog").info("data prevista di arrivo " + consegna.format(formatter));
+           // Logger.getLogger("userlog").info("data prevista di arrivo " + consegna.format(formatter));
 
             return consegna.format(formatter);
 
@@ -620,8 +620,8 @@ public class OrdineDAO {
                 LocalDate consegna = db.plusDays(bean.getGiorni_alla_consegna());
 
                 gg = (int) DAYS.between(consegna, now);
-                Logger.getLogger("userlog").info("now data " + now.format(formatter) + " db data " + db.format(formatter)
-                        + " consegna " + consegna.format(formatter) + " giorni mancanti  " + gg);
+               /* Logger.getLogger("userlog").info("now data " + now.format(formatter) + " db data " + db.format(formatter)
+                        + " consegna " + consegna.format(formatter) + " giorni mancanti  " + gg);*/
                 i++;
             }
         } finally {
@@ -714,7 +714,7 @@ public class OrdineDAO {
                 + "`giorni_alla_consegna`, `data_arrivo`, `note`, `fk_utente`, `prodotto_sku`, `fk_cliente`, `id`)"
                 + " VALUES ('" + o.getN_ordine() + "', '" + bean.generateData() + "', '0', '0', '0', '0', '" + o.getNote() + "',"
                 + " '" + o.getFk_utente() + "', 'VOID', '0', '" +  getId(o.getN_ordine()) + "')";
-
+         
         try {
             connection = DriverManagerConnectionPool.getConnection();
             statement = connection.createStatement();
