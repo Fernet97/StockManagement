@@ -16,6 +16,7 @@ import database.DriverManagerConnectionPool;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -79,6 +80,7 @@ public class FramePrincipale extends JFrame {
     public ButtonDash button5;
     private AnagrafichePanel anagrafiche;
     public boolean OrdiniStatus = false;
+    private JLabel TitleLaterale;
     
 
     public FramePrincipale(String nomeutente) {
@@ -147,16 +149,16 @@ public class FramePrincipale extends JFrame {
 
         //Barra Laterale (rimarrà fissa per ogni schermata)
         pannellolaterale = new JPanel();
-        JLabel TitleLaterale = new JLabel("       DASHBOARD       "); //Per dare ampiezza al jpanel
-        TitleLaterale.setFont(new Font("Arial Black", Font.BOLD, 20));
+        TitleLaterale = new JLabel("User: "+ nomeuser); //Per dare ampiezza al jpanel
+        TitleLaterale.setFont(new Font("monospace", Font.BOLD, 18));
         pannellolaterale.setLayout(new BoxLayout(pannellolaterale, BoxLayout.Y_AXIS));
         TitleLaterale.setAlignmentX(CENTER_ALIGNMENT);
 
-        pannellolaterale.add(new JLabel("Accesso come " + nomeuser));
         pannellolaterale.add(TitleLaterale);
 
         pannelloOpzioni = new JPanel();
-        pannelloOpzioni.setLayout(new GridLayout(7, 1, 30, 30));
+        pannelloOpzioni.setBackground(new Color(13, 33, 59));
+        pannelloOpzioni.setLayout(new BoxLayout(pannelloOpzioni, BoxLayout.Y_AXIS));
         pannelloOpzioni.add(new ButtonLaterale("Dashboard"));
         pannelloOpzioni.add(new ButtonLaterale("Anagrafiche"));
         pannelloOpzioni.add(new ButtonLaterale("Categorie"));
@@ -165,7 +167,8 @@ public class FramePrincipale extends JFrame {
         pannelloOpzioni.add(new ButtonLaterale("Ordini"));
         pannelloOpzioni.add(new ButtonLaterale("Report"));
         pannelloOpzioni.setAlignmentX(CENTER_ALIGNMENT);
-        //pannelloOpzioni.setBackground(new Color( 128, 128, 128));
+        pannelloOpzioni.setBorder(BorderFactory.createMatteBorder(-1, -1, -1, -1, new Color(27, 32, 36)));
+        pannelloOpzioni.setMaximumSize(new Dimension(500, 750));
         pannellolaterale.add(pannelloOpzioni);
 
         pannellolaterale.setBorder(new EmptyBorder(10, 0, 0, 40)); // per dare un po di margini
@@ -466,13 +469,16 @@ public class FramePrincipale extends JFrame {
         private JLabel icon;
         private int code;
         private final JPanel pan;
+        private final JPanel cuscino;
+        private final JPanel panetichetta;
+        private final JLabel testo;
 
         public ButtonLaterale(String tipo) {
             super();
             this.tipo = tipo;
-            super.setBackground(new Color(128, 128, 128));
+            super.setBackground(new Color(13, 33, 59));
 
-            super.setLayout(new GridLayout(1, 2));
+            super.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
             if (tipo.equals("Dashboard")) {
                 icon = new JLabel(ImpostaImg("/res/img/home.png"));
@@ -515,34 +521,44 @@ public class FramePrincipale extends JFrame {
                 code = 6;
             }
 
-            JPanel etichetta1 = new JPanel();
-            etichetta1.setBackground(color_etichetta);
+            cuscino = new JPanel();
+            cuscino.setBackground(new Color(13, 33, 59));
 
             pan = new JPanel();
-            pan.setBackground(new Color(128, 128, 128));
+            pan.setBackground(new Color(13, 33, 59));
             icon.setBorder(new EmptyBorder(5, 0, 0, 0));
             icon.setHorizontalAlignment(JLabel.CENTER);
-            JLabel testo = new JLabel(tipo);
-            testo.setFont(new Font("Arial Black", Font.BOLD, 18));
+            icon.setMaximumSize(new Dimension(25, 25));
+            testo = new JLabel(tipo);
+            testo.setFont(new Font("monospace", Font.BOLD, 12));
             testo.setHorizontalAlignment(JLabel.CENTER);
-            pan.setLayout(new GridLayout(2, 1));
+           
+            pan.setLayout(new GridLayout(1, 3, 10, 10));
+            panetichetta = new JPanel();
+            panetichetta.setBackground(new Color(13, 33, 59));
+            pan.add(panetichetta);
             pan.add(icon);
             pan.add(testo);
 
-            super.add(etichetta1);
             super.add(pan);
+            super.add(cuscino);
 
+            
             super.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    pan.setBackground(color_etichetta);
+                    panetichetta.setBackground(color_etichetta);
                 }
 
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     ButtonLaterale bottonepremuto = (ButtonLaterale) e.getSource();
                     bottonepremuto.premuto = true;
-                    pan.setBackground(color_etichetta);
+                    pan.setBackground(new Color(27, 32, 36));
+                    cuscino.setBackground(new Color(27, 32, 36));
+                    testo.setForeground(color_etichetta);
+                    TitleLaterale.setForeground(color_etichetta);
+
 
                     try {
 
@@ -561,8 +577,7 @@ public class FramePrincipale extends JFrame {
 
                     if(tipo.equals("Ordini") && OrdiniStatus) cardlayout.show(HomePanel, "Preleva");
                     else cardlayout.show(HomePanel, tipo);
-                    HomePanel.setBorder(BorderFactory.createMatteBorder(0, 20, 0, 0, color_etichetta));
-                    pannellolaterale.setBorder(new EmptyBorder(10, 0, 0, 10)); // per dare un po di margini
+                    
 
                 }
 
@@ -578,8 +593,11 @@ public class FramePrincipale extends JFrame {
                 public void mouseExited(MouseEvent e) {
                     ButtonLaterale bottonepremuto = (ButtonLaterale) e.getSource();
                     if (!bottonepremuto.premuto) {
-                        pan.setBackground(new Color(128, 128, 128));
+                        panetichetta.setBackground(new Color(13, 33, 59));
+                        cuscino.setBackground(new Color(13, 33, 59));
+                        testo.setForeground(Color.white);
                     }
+                    
 
                 }
 
@@ -592,7 +610,10 @@ public class FramePrincipale extends JFrame {
 
                 if (i != cod) {
                     ButtonLaterale b = (ButtonLaterale) pannelloOpzioni.getComponent(i);
-                    b.pan.setBackground(new Color(128, 128, 128));
+                    b.panetichetta.setBackground(new Color(13, 33, 59));
+                    b.pan.setBackground(new Color(13, 33, 59));
+                    b.cuscino.setBackground(new Color(13, 33, 59));
+                    b.testo.setForeground(Color.white);
                     b.premuto = false;
                 }
 
