@@ -94,7 +94,33 @@ public class StockManagement {
             
         }
 
-        UIManager.put("control", new Color(27, 32, 36));
+        UIManager.put("control", new Color(19, 24, 40));
+        UIManager.put("Table.alternateRowColor", new Color(24, 53, 90));
+        UIManager.put("T", new Color(10, 25, 43));
+        
+ /*       
+
+
+
+
+
+
+
+
+Table.selectionForeground
+Table.sortIconColor
+TableHeader.ancestorInputMap
+TableHeader.background
+TableHeader.cellBorder
+TableHeader.focusCellBackground
+TableHeader.font
+TableHeader.foreground
+TableHeaderUI
+TableUI*/
+        
+        
+        
+        
         UIManager.put("info", new Color(40, 45, 51));
         UIManager.put("nimbusBase", new Color(40, 45, 51));
         UIManager.put("nimbusAlertYellow", new Color(248, 187, 0));
@@ -110,7 +136,7 @@ public class StockManagement {
         UIManager.put("nimbusSelectionBackground", Color.DARK_GRAY);
         UIManager.put("text", Color.white);
 
-        UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("Arial Black", Font.BOLD, 14));
+        UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("Arial", Font.BOLD, 14));
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
