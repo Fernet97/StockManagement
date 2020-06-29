@@ -12,3 +12,4 @@
 /ConfigStockManagement/DATA/
 /ConfigStockManagement/nbproject/
 /ConfigStockManagement/nbproject/private/private.properties
+*.properties
