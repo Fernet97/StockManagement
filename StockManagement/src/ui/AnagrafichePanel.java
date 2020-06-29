@@ -401,8 +401,9 @@ public class AnagrafichePanel extends JPanel {
             try {
                 super.fireEditingStopped();
             } catch (Exception ex) {
-                System.out.println("MANNAGGIA *******");
-            };
+                Logger.getLogger("genlog").warning(ex.getMessage());
+
+            }
         }
     }
 

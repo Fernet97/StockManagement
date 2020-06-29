@@ -661,7 +661,8 @@ public class ProdottiPanel extends JPanel {
             try{
                 super.fireEditingStopped();}
             catch(Exception e){
-                System.out.println("MANNAGGIA **********");
+                Logger.getLogger("genlog").warning(e.getMessage());
+
             } 
         }
     }
