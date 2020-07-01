@@ -92,7 +92,21 @@ class FrameRiepilogo extends JDialog {
                 return column >= 8; //il numero di celle editabili...
             }
         };
-        table2 = new JTable(model2);
+        table2 = new JTable(model2){
+         public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+            Component comp = super.prepareRenderer(renderer, row, column);
+            if(column >=5) return comp;
+
+            Color alternateColor = new Color(24, 53, 90);
+            Color whiteColor = new Color(10, 25, 43);
+            if(!comp.getBackground().equals(getSelectionBackground())) {
+               Color c = (row % 2 == 0 ? alternateColor : whiteColor);
+               comp.setBackground(c);
+               c = null;
+            }
+            return comp;
+         }
+      };;
         table2.getTableHeader().setReorderingAllowed(false);
 
         table2.getColumnModel().getColumn(6).setCellRenderer(new CustomStockRender());
@@ -102,7 +116,7 @@ class FrameRiepilogo extends JDialog {
         table2.getColumnModel().getColumn(8).setCellEditor(new TableRenderer(new JCheckBox()));
 
         JScrollPane sp2 = new JScrollPane(table2);
-        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "  #ORDINE: " + numordine + "  del " + dataordine + "   ", TitledBorder.CENTER, TitledBorder.TOP));
+        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, new Color(24, 53, 90), new Color(24, 53, 90)), "  #ORDINE: " + numordine + "  del " + dataordine + "   ", TitledBorder.CENTER, TitledBorder.TOP));
         
         add(sp2, BorderLayout.CENTER);
 
@@ -114,7 +128,7 @@ class FrameRiepilogo extends JDialog {
         casNote.setColumns(20);        
         casNote.setText("");
         sp3 = new JScrollPane(casNote);
-        sp3.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "Note", TitledBorder.CENTER, TitledBorder.TOP));
+        sp3.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED,new Color(24, 53, 90), new Color(24, 53, 90)), "Note", TitledBorder.CENTER, TitledBorder.TOP));
         
         
         JButton bannulla = new JButton("Annulla");

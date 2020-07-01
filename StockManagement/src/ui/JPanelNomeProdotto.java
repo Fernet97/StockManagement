@@ -83,12 +83,25 @@ public class JPanelNomeProdotto extends JPanel {
                 return column >= 5; //il numero di celle editabili...
             }
         };
-        table = new JTable(model);
+        table = new JTable(model){
+         public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+            Component comp = super.prepareRenderer(renderer, row, column);
+            if(column == 5) return comp;
+            Color alternateColor = new Color(24, 53, 90);
+            Color whiteColor = new Color(10, 25, 43);
+            if(!comp.getBackground().equals(getSelectionBackground())) {
+               Color c = (row % 2 == 0 ? alternateColor : whiteColor);
+               comp.setBackground(c);
+               c = null;
+            }
+            return comp;
+         }
+      };
         table.getColumnModel().getColumn(5).setCellRenderer(new TableButtonRenderer());
         table.getColumnModel().getColumn(5).setCellEditor(new TableRenderer(new JCheckBox()));
 
         sp2 = new JScrollPane(table);
-        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), " Prodotti con nome: " + text + " ", TitledBorder.CENTER, TitledBorder.TOP));
+        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, new Color(24, 53, 90), new Color(24, 53, 90)), " Prodotti con nome: " + text + " ", TitledBorder.CENTER, TitledBorder.TOP));
 
         add(sp2);
 
@@ -244,7 +257,7 @@ public class JPanelNomeProdotto extends JPanel {
         });
 
         sp2 = new JScrollPane(table);
-        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), " Prodotti con nome: " + text + " ", TitledBorder.CENTER, TitledBorder.TOP));
+        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, new Color(24, 53, 90), new Color(24, 53, 90)), " Prodotti con nome: " + text + " ", TitledBorder.CENTER, TitledBorder.TOP));
 
         add(sp2);
 

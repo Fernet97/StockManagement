@@ -214,7 +214,7 @@ public class OrdiniPanel extends JPanel {
         infolabel.setFont(new Font("Arial Black", Font.ITALIC, 40));
 
         JPanel info = new RoundedPanel();
-        info.setBackground(new Color(151, 109, 248));
+        info.setBackground( new Color(24, 53, 90));
         info.add(Box.createRigidArea(new Dimension(50, 10)));
         info.setLayout(new BoxLayout(info, BoxLayout.PAGE_AXIS));
 

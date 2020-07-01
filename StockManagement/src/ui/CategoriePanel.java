@@ -273,7 +273,19 @@ class CategoriePanel extends JPanel {
                 return column >= 2; //il numero di celle editabili...
             }
         };
-        table = new JTable(model);
+        table = new JTable(model){
+         public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+            Component comp = super.prepareRenderer(renderer, row, column);
+            Color alternateColor = new Color(24, 53, 90);
+            Color whiteColor = new Color(10, 25, 43);
+            if(!comp.getBackground().equals(getSelectionBackground())) {
+               Color c = (row % 2 == 0 ? alternateColor : whiteColor);
+               comp.setBackground(c);
+               c = null;
+            }
+            return comp;
+         }
+      };
         table.getTableHeader().setReorderingAllowed(false);
 
         try {
@@ -294,6 +306,7 @@ class CategoriePanel extends JPanel {
         //******* funzione di ricerca *******************+
         TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(table.getModel());
         table.setRowSorter(rowSorter);
+        
         rowSorter.setSortable(2, false);// toglie il sorting alla colonna query
 
         casella.getDocument().addDocumentListener(new DocumentListener() {

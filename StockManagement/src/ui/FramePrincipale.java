@@ -16,8 +16,10 @@ import database.DriverManagerConnectionPool;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -49,6 +51,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import others.RoundedPanel;
 
 /**
@@ -210,7 +213,22 @@ public class FramePrincipale extends JFrame {
 
         JPanel TitoloTab1 = new JPanel(new GridLayout(1, 1));
         TitoloTab1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, new Color(66, 139, 221), new Color(66, 139, 221)), "prodotti in esaurimento", TitledBorder.RIGHT, TitledBorder.TOP));
-        table = new JTable();
+        table = new JTable() {
+         public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+            Component comp = super.prepareRenderer(renderer, row, column);
+            Color alternateColor = new Color(24, 53, 90);
+            Color whiteColor = new Color(10, 25, 43);
+            if(!comp.getBackground().equals(getSelectionBackground())) {
+               Color c = (row % 2 == 0 ? alternateColor : whiteColor);
+               comp.setBackground(c);
+               c = null;
+            }
+            return comp;
+         }
+      };
+        
+        table.setFont(new Font("Arial", Font.PLAIN, 15));
+        table.setRowHeight(30);
         table.setEnabled(false);
         model = new DefaultTableModel();
         model.addColumn("Nome");
@@ -221,15 +239,29 @@ public class FramePrincipale extends JFrame {
 
         JPanel TitoloTab2 = new JPanel(new GridLayout(1, 1));
         TitoloTab2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, new Color(66, 139, 221), new Color(66, 139, 221)), "Prodotti in arrivo", TitledBorder.RIGHT, TitledBorder.TOP));
-        table2 = new JTable();
+        table2 = new JTable(){
+         public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+            Component comp = super.prepareRenderer(renderer, row, column);
+            Color alternateColor = new Color(24, 53, 90);
+            Color whiteColor = new Color(10, 25, 43);
+            if(!comp.getBackground().equals(getSelectionBackground())) {
+               Color c = (row % 2 == 0 ? alternateColor : whiteColor);
+               comp.setBackground(c);
+               c = null;
+            }
+            return comp;
+         }
+      };
+        table2.setFont(new Font("Arial", Font.PLAIN, 15));
+        table2.setRowHeight(30);
         model2 = new DefaultTableModel();
         model2.addColumn("Nome");
         model2.addColumn("Quantità");
         model2.addColumn("#Ordine");
         model2.addColumn("Data arrivo");
-
-        table2.setEnabled(false);
         table2.setModel(model2);
+        table2.setEnabled(false);
+
         JScrollPane sp2 = new JScrollPane(table2);
         TitoloTab2.add(sp2);
 
@@ -459,7 +491,6 @@ public class FramePrincipale extends JFrame {
         private JLabel icon;
         private int code;
         private final JPanel pan;
-        private final JPanel cuscino;
         private final JPanel panetichetta;
         private final JLabel testo;
         private String pathfoto;
@@ -470,88 +501,89 @@ public class FramePrincipale extends JFrame {
             super.setBackground(new Color(38, 44, 70));
 
             super.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-
+            
             if (tipo.equals("Dashboard")) {
                 pathfoto = "/res/img/home.png";
 
-                color_etichetta = new Color(244, 80, 37);
+                color_etichetta = new Color(73, 49, 145);
                 code = 0;
 
             }
             if (tipo.equals("Ordini")) {
                 pathfoto = "/res/img/ordini.png";
-                color_etichetta = new Color(236, 50, 213);
+                color_etichetta = new Color(211, 213, 253);
                 code = 5;
 
             }
             if (tipo.equals("Anagrafiche")) {
                 pathfoto = "/res/img/anagrafiche.png";
 
-                color_etichetta = new Color(151, 109, 248);
+                color_etichetta = new Color(228, 63, 90);
                 code = 1;
             }
 
             if (tipo.equals("Categorie")) {
                 pathfoto = "/res/img/categorie.png";
-                color_etichetta = new Color(118, 47, 53);
+                color_etichetta = new Color(246,100,26);
                 code = 2;
             }
             if (tipo.equals("Codici")) {
                 pathfoto = "/res/img/codici.png";
-                color_etichetta = new Color(126, 169, 93);
+                color_etichetta = new Color(56, 168, 127);
                 code = 4;
             }
 
             if (tipo.equals("Prodotti")) {
                 pathfoto = "/res/img/prodotti.png";
-                color_etichetta = new Color(250, 190, 80);
+                color_etichetta = new Color(243, 169, 2);
                 code = 3;
             }
 
             if (tipo.equals("Report")) {
                 pathfoto = "/res/img/report.png";
-                color_etichetta = new Color(92, 91, 47);
+                color_etichetta = new Color(29, 175, 215);
                 code = 6;
             }
 
-            cuscino = new JPanel();
-            cuscino.setBackground(new Color(38, 44, 70));
-
+            
+            panetichetta = new JPanel();
+            panetichetta.setBackground(color_etichetta);
+            
             pan = new JPanel();
             icon = new JLabel(ImpostaImg(pathfoto));
+            icon.setBorder(new EmptyBorder(0, 20, 0, 20));
             pan.setBackground(new Color(38, 44, 70));
-            icon.setBorder(new EmptyBorder(5, 0, 0, 0));
-            icon.setHorizontalAlignment(JLabel.CENTER);
-            icon.setMaximumSize(new Dimension(25, 25));
             testo = new JLabel(tipo);
             testo.setFont(new Font("Arial", Font.PLAIN, 18));
-            testo.setHorizontalAlignment(JLabel.CENTER);
-
-            pan.setLayout(new GridLayout(1, 3, 10, 10));
-            panetichetta = new JPanel();
-            panetichetta.setBackground(new Color(38, 44, 70));
-            pan.add(icon);
+            testo.setBorder(new EmptyBorder(0, 20, 0, 30));
+            pan.setLayout(new GridBagLayout());
+            
             pan.add(testo);
+            
+
 
             super.add(panetichetta);
+            super.add(icon);
             super.add(pan);
-            super.add(cuscino);
 
             super.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    panetichetta.setBackground(color_etichetta);
-                    icon.setIcon(ImpostaImg(pathfoto.replace(".", "_a.")));
+                    String pathfotoa = pathfoto.replace(".", "_a.");
+                  
+                     ButtonLaterale bottonepremuto = (ButtonLaterale) e.getSource();
+                    if(!bottonepremuto.premuto) icon.setIcon(ImpostaImg(pathfotoa));  //Cambia in Accesso solo se non è premuto
                 }
 
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     ButtonLaterale bottonepremuto = (ButtonLaterale) e.getSource();
+                    bottonepremuto.setBackground(new Color(19, 24, 40));
                     bottonepremuto.premuto = true;
                     pan.setBackground(new Color(19, 24, 40));
-                    cuscino.setBackground(new Color(19, 24, 40));
                     TitleLaterale.setForeground(color_etichetta);
-                    //icon.setIcon(ImpostaImg(pathfoto.replace(".", "_c.")));
+                    String pathfotoa = pathfoto.replace(".", "_c.");
+                    icon.setIcon(ImpostaImg(pathfotoa));
 
 
                     try {
@@ -589,8 +621,6 @@ public class FramePrincipale extends JFrame {
                 public void mouseExited(MouseEvent e) {
                     ButtonLaterale bottonepremuto = (ButtonLaterale) e.getSource();
                     if (!bottonepremuto.premuto) {
-                        panetichetta.setBackground(new Color(38, 44, 70));
-                        cuscino.setBackground(new Color(38, 44, 70));
                         testo.setForeground(Color.white);
                         icon.setIcon(ImpostaImg(pathfoto));
 
@@ -607,10 +637,10 @@ public class FramePrincipale extends JFrame {
 
                 if (i != cod) {
                     ButtonLaterale b = (ButtonLaterale) pannelloOpzioni.getComponent(i);
-                    b.panetichetta.setBackground(new Color(38, 44, 70));
                     b.pan.setBackground(new Color(38, 44, 70));
-                    b.cuscino.setBackground(new Color(38, 44, 70));
-                    icon.setIcon(ImpostaImg(pathfoto));
+                    b.setBackground(new Color(38, 44, 70));
+                    b.icon.setIcon(ImpostaImg(b.pathfoto));
+                    System.out.println("disattiv:"+ b.pathfoto);
                     b.testo.setForeground(Color.white);
                     b.premuto = false;
                 }

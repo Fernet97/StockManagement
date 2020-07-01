@@ -126,7 +126,19 @@ public class CodiciPanel extends JPanel {
                 return column >= 2; //il numero di celle editabili...
             }
         };
-        JTable table = new JTable(model);
+        JTable table = new JTable(model){
+         public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+            Component comp = super.prepareRenderer(renderer, row, column);
+            Color alternateColor = new Color(24, 53, 90);
+            Color whiteColor = new Color(10, 25, 43);
+            if(!comp.getBackground().equals(getSelectionBackground())) {
+               Color c = (row % 2 == 0 ? alternateColor : whiteColor);
+               comp.setBackground(c);
+               c = null;
+            }
+            return comp;
+         }
+      };
         table.getTableHeader().setReorderingAllowed(false);
 
         try {

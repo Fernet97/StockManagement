@@ -342,11 +342,23 @@ public class OrdiniAdminPanel extends JPanel {
         infolabel.setFont(new Font("Arial Black", Font.ITALIC, 40));
 
         JPanel info = new RoundedPanel();
-        info.setBackground(new Color(151, 109, 248));
+        info.setBackground( new Color(24, 53, 90));
         info.add(Box.createRigidArea(new Dimension(50, 10)));
         info.setLayout(new BoxLayout(info, BoxLayout.PAGE_AXIS));
 
-        table = new JTable();
+        table = new JTable(){
+         public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+            Component comp = super.prepareRenderer(renderer, row, column);
+            Color alternateColor = new Color(24, 53, 90);
+            Color whiteColor = new Color(10, 25, 43);
+            if(!comp.getBackground().equals(getSelectionBackground())) {
+               Color c = (row % 2 == 0 ? alternateColor : whiteColor);
+               comp.setBackground(c);
+               c = null;
+            }
+            return comp;
+         }
+      };
         table.getTableHeader().setReorderingAllowed(false);
 
         model = new DefaultTableModel() {
@@ -452,7 +464,20 @@ public class OrdiniAdminPanel extends JPanel {
                 return column >= 6; //il numero di celle editabili...
             }
         };
-        table2 = new JTable(model2);
+        table2 = new JTable(model2){
+         public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+            Component comp = super.prepareRenderer(renderer, row, column);
+            if(column == 5) return comp;
+            Color alternateColor = new Color(24, 53, 90);
+            Color whiteColor = new Color(10, 25, 43);
+            if(!comp.getBackground().equals(getSelectionBackground())) {
+               Color c = (row % 2 == 0 ? alternateColor : whiteColor);
+               comp.setBackground(c);
+               c = null;
+            }
+            return comp;
+         }
+      };
         table2.getTableHeader().setReorderingAllowed(false);
         // model2.addRow(data); // DA CANCELLARE
 
@@ -465,7 +490,7 @@ public class OrdiniAdminPanel extends JPanel {
         table2.getColumnModel().getColumn(7).setCellEditor(new TableRenderer(new JCheckBox()));
 
         JScrollPane sp2 = new JScrollPane(table2);
-        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), "Riepilogo ordini effettuati", TitledBorder.CENTER, TitledBorder.TOP));
+        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, new Color(24, 53, 90), new Color(24, 53, 90)), "Riepilogo ordini effettuati", TitledBorder.CENTER, TitledBorder.TOP));
         SXdown.add(sp2);
         JButton ordinerimuovi = new JButton("Cancella ordine selezionato");
         ordinerimuovi.addActionListener(new ActionListener() {
