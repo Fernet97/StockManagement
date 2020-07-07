@@ -196,7 +196,7 @@ public class JPanelNomeProdotto extends JPanel {
 
     public void aggiornaNome(String newtext) {
 
-        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.red, Color.red), " Prodotti con nome: " + newtext + " ", TitledBorder.CENTER, TitledBorder.TOP));
+        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, new Color(24, 53, 90), new Color(24, 53, 90)), " Prodotti con nome: " + newtext + " ", TitledBorder.CENTER, TitledBorder.TOP));
         ProdottoDAO prodao = new ProdottoDAO();
         OrdineDAO ordao = new OrdineDAO();
 

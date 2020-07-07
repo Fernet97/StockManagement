@@ -792,10 +792,10 @@ public class OrdiniAdminPanel extends JPanel {
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
             if (Integer.parseInt(table2.getValueAt(row, 5).toString()) == 3) {
-                setBackground(new Color(126, 169, 93));  // VERDE          
+                setBackground(new Color(98, 190, 92));  // VERDE           
 
             } else if (Integer.parseInt(table2.getValueAt(row, 5).toString()) == 0) {
-                setBackground(new Color(244, 80, 37));    // ROSSO 
+                setBackground(new Color(198, 59, 52));    // ROSSO  
             } else if (Integer.parseInt(table2.getValueAt(row, 5).toString()) == 2) {
                 setBackground(Color.yellow); // GIALLO
             }

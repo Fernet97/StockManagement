@@ -386,10 +386,10 @@ class FrameRiepilogo extends JDialog {
             // se è colonna è arrivato
             if (column == 6) {
                 if (value.toString().equals("No")) {
-                    setBackground(new Color(244, 80, 37));    // ROSSO       
+                     setBackground(new Color(198, 59, 52));    // ROSSO     
                 } else {
                     // VERDE
-                    setBackground(new Color(126, 169, 93));
+                     setBackground(new Color(98, 190, 92));  // VERDE 
                     // SOLO X BUTTON E' ARRIVATO: diventa giallo se qty conteggiata < qty che doveva arrivare
                     String s = model2.getValueAt(row, 4).toString();
                     String qtyconteggiata = s.substring(0, s.indexOf('/'));
@@ -401,9 +401,9 @@ class FrameRiepilogo extends JDialog {
                 }
             } else if (column == 7) {
                 if (value.toString().equals("No")) {
-                    setBackground(new Color(244, 80, 37));    // ROSSO       
+                    setBackground(new Color(198, 59, 52));    // ROSSO       
                 } else {
-                    setBackground(new Color(126, 169, 93));
+                     setBackground(new Color(98, 190, 92));  // VERDE 
                 }
             }
 

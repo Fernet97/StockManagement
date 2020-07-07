@@ -270,7 +270,7 @@ public class AnagrafichePanel extends JPanel {
             } else if (getText().equals("Cancella")) {
                 setIcon(ImpostaImg("/res/img/eraser.png"));
             } else if (getText().equals("Prodotti")) {
-                setIcon(ImpostaImg("/res/img/prodotti.png"));
+                setIcon(ImpostaImg("/res/img/prodotti_a.png"));
             }
 
             return this;
@@ -314,7 +314,7 @@ public class AnagrafichePanel extends JPanel {
             } else if (button.getText().equals("Cancella")) {
                 button.setIcon(ImpostaImg("/res/img/eraser.png"));
             } else if (button.getText().equals("Prodotti")) {
-                button.setIcon(ImpostaImg("/res/img/prodotti.png"));
+                button.setIcon(ImpostaImg("/res/img/prodotti_a.png"));
             }
             clicked = true;
             return button;

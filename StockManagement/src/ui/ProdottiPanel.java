@@ -408,10 +408,12 @@ public class ProdottiPanel extends JPanel {
             }
 
             if (Integer.parseInt(table.getValueAt(row, 4).toString()) <= p.getQty_min()) {
+                setForeground(Color.white);
 
-                setBackground(new Color(244, 80, 37));    // ROSSO        
+                setBackground(new Color(198, 59, 52));    // ROSSO        
             } else {
-                setBackground(new Color(126, 169, 93));  // VERDE
+               setBackground(new Color(98, 190, 92));  // VERDE
+                setForeground(Color.black);
             }
 
             setText(table.getValueAt(row, 4).toString());
@@ -461,10 +463,12 @@ public class ProdottiPanel extends JPanel {
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
             if ((table.getValueAt(row, 6).toString().equals("true"))) {
-                setBackground(new Color(126, 169, 93));  // VERDE          
+                setBackground(new Color(98, 190, 92));  // VERDE         
 
             } else {
-                setBackground(new Color(244, 80, 37));    // ROSSO 
+                setBackground(new Color(198, 59, 52));    // ROSSO   
+                                setForeground(Color.white);
+
             }
 
             setText("");
@@ -483,11 +487,12 @@ public class ProdottiPanel extends JPanel {
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
             if (Integer.parseInt(table.getValueAt(row, 9).toString()) > 0) {
-                setBackground(new Color(244, 80, 37));    // ROSSO 
+                 setBackground(new Color(198, 59, 52));    // ROSSO   
                 setText(table.getValueAt(row, 9).toString());
+                setForeground(Color.white);
 
             } else {
-                setBackground(new Color(126, 169, 93));  // VERDE         
+               setBackground(new Color(98, 190, 92));  // VERDE     
 
                 setText("");
 
@@ -510,7 +515,7 @@ public class ProdottiPanel extends JPanel {
             } else if (getText().equals("Cancella")) {
                 setIcon(ImpostaImg("/res/img/eraser.png"));
             } else if (getText().equals("Ordina")) {
-                setIcon(ImpostaImg("/res/img/ordini.png"));
+                setIcon(ImpostaImg("/res/img/ordini_a.png"));
             }
             setText("");
 
@@ -561,7 +566,7 @@ public class ProdottiPanel extends JPanel {
             } else if (button.getText().equals("Cancella")) {
                 button.setIcon(ImpostaImg("/res/img/eraser.png"));
             } else if (button.getText().equals("Ordina")) {
-                button.setIcon(ImpostaImg("/res/img/ordini.png"));
+                button.setIcon(ImpostaImg("/res/img/ordini_a.png"));
             }
             clicked = true;
             
