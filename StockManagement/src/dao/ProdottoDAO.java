@@ -398,5 +398,53 @@ public class ProdottoDAO {
         }
         return prodotti;
     }
+       
+       
+       public synchronized Collection<Prodotto> getByNome2(String nome) throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+
+
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE nome LIKE  '%"+nome+"%'";
+           //System.out.println(selectSQL);
+           
+        Collection<Prodotto> prodotti = new LinkedList<Prodotto>();
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            ps = connection.prepareStatement(selectSQL);
+           
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Prodotto bean = new Prodotto();
+                bean.setSku(rs.getString("sku"));
+                bean.setNome(rs.getString("nome"));
+                bean.setCosto(rs.getDouble("costo"));
+                bean.setNote(rs.getString("note"));
+              
+                bean.setCategoria(rs.getString("categoria"));
+                bean.setQty(rs.getInt("qty"));
+                bean.setQty_min(rs.getInt("qty_min"));
+                
+                if(rs.getInt("negozio") == 1) bean.setNegozio(true);
+                else bean.setNegozio(false);
+                
+                prodotti.add(bean);
+            }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+
+        }
+        return prodotti;
+    }
 
 }
