@@ -147,6 +147,8 @@ public class ProdottiPanel extends JPanel {
         panSopra.add(new JLabel(" "));
 
         JButton buttonNew = new JButton("ADD NEW");
+        buttonNew.setBackground(new Color( 165,204 ,107 ));
+        buttonNew.setForeground(Color.black);
         //*************+* BOTTONE AGGIUNGI NUOVA RIGA**************************
         buttonNew.addActionListener(new ActionListener() {
 
@@ -219,6 +221,8 @@ public class ProdottiPanel extends JPanel {
          public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
             Component comp = super.prepareRenderer(renderer, row, column);
             if(column == 4 || column == 6 || column == 7 || column == 9) return comp;
+            
+
             Color alternateColor = new Color(24, 53, 90);
             Color whiteColor = new Color(10, 25, 43);
             if(!comp.getBackground().equals(getSelectionBackground())) {
@@ -515,7 +519,7 @@ public class ProdottiPanel extends JPanel {
             } else if (getText().equals("Cancella")) {
                 setIcon(ImpostaImg("/res/img/eraser.png"));
             } else if (getText().equals("Ordina")) {
-                setIcon(ImpostaImg("/res/img/ordini_a.png"));
+                setIcon(ImpostaImg("/res/img/ordini_green.png"));
             }
             setText("");
 
@@ -566,7 +570,7 @@ public class ProdottiPanel extends JPanel {
             } else if (button.getText().equals("Cancella")) {
                 button.setIcon(ImpostaImg("/res/img/eraser.png"));
             } else if (button.getText().equals("Ordina")) {
-                button.setIcon(ImpostaImg("/res/img/ordini_a.png"));
+                button.setIcon(ImpostaImg("/res/img/ordini_green.png"));
             }
             clicked = true;
             

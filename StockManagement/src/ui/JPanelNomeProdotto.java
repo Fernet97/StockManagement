@@ -109,7 +109,7 @@ public class JPanelNomeProdotto extends JPanel {
         OrdineDAO ordao = new OrdineDAO();
 
         try {
-            for (Prodotto p : prodao.getByNome(text)) {
+            for (Prodotto p : prodao.getByNome2(text)) {
                 model.addRow(new Object[]{p.getSku(), p.getNome(), ordao.getFPr(p.getSku()), p.getCosto(), p.getNote(), ""});
             }
 
@@ -204,7 +204,7 @@ public class JPanelNomeProdotto extends JPanel {
             model.setRowCount(0);
 
         try {
-            for (Prodotto p : prodao.getByNome(newtext)) {
+            for (Prodotto p : prodao.getByNome2(newtext)) {
                 if (PrelevaMode) {
                     model.addRow(new Object[]{p.getSku(), p.getNome(), p.getCategoria(), String.valueOf(p.getQty()), String.valueOf(p.getQty() - p.getQty_min()), p.getNote(), p.isNegozio(), ""});
                 } else {

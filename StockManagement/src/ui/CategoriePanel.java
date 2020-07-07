@@ -102,6 +102,8 @@ class CategoriePanel extends JPanel {
         panSopra.add(cerca);
 
         JButton buttonNew = new JButton("ADD NEW");
+        buttonNew.setBackground(new Color( 165,204 ,107 ));
+        buttonNew.setForeground(Color.black);
         //*************+* BOTTONE AGGIUNGI NUOVA RIGA**************************
         buttonNew.addActionListener(new ActionListener() {
 
@@ -123,6 +125,8 @@ class CategoriePanel extends JPanel {
         buttonNew.setFont(new Font("Arial Black", Font.BOLD, 13));
         panSopra.add(buttonNew);
         JButton buttonModifica = new JButton("Modifica");
+        buttonModifica.setBackground(new Color( 255,200 ,18 ));
+        buttonModifica.setForeground(Color.black);
         buttonModifica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -202,6 +206,7 @@ class CategoriePanel extends JPanel {
         buttonModifica.setFont(new Font("Arial Black", Font.BOLD, 13));
         panSopra.add(buttonModifica);
         JButton buttonCancella = new JButton("Cancella");
+                buttonCancella.setBackground(new Color( 255,50 ,50 ));
         buttonCancella.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -254,6 +259,7 @@ class CategoriePanel extends JPanel {
             }
         });
         buttonCancella.setFont(new Font("Arial Black", Font.BOLD, 13));
+        
         panSopra.add(buttonCancella);
 
         super.add(panSopra);

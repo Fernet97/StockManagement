@@ -162,7 +162,7 @@ public class OrdiniAdminPanel extends JPanel {
                     if (p.getSku() == null) {
                         //++++++++++++++++++++
                         //non e' nemmeno un nome?
-                       if( prodao.getByNome(text).size()<=0){
+                       if( prodao.getByNome2(text).size()<=0){
                         casella.setForeground(Color.white);
                         casella.setBackground(Color.red);
                           // System.out.println("non c'è nessun nome");
