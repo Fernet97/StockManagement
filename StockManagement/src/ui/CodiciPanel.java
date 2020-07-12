@@ -65,7 +65,6 @@ public class CodiciPanel extends JPanel {
         super.add(title);
 
         JPanel panSopra = new JPanel();
-        panSopra.setLayout(new GridLayout(1, 3));
         panSopra.setMaximumSize(new Dimension(1420, 300));
         JPanel cerca = new JPanel();
         JLabel searchlabel = new JLabel("Cerca:");
@@ -73,11 +72,14 @@ public class CodiciPanel extends JPanel {
         JTextField casella = new JTextField(20);
         cerca.add(searchlabel);
         cerca.add(casella);
+        cerca.setBorder(new EmptyBorder(0, 0, 0, 900));
         panSopra.add(cerca);
 
         panSopra.add(new JLabel(" "));
 
         JButton buttonNew = new JButton("Apri cartella");
+         buttonNew.setBackground(new Color( 255,200 ,18 ));
+        buttonNew.setForeground(Color.black);
         //*************+* STAMPA SELEZIONATI**************************
         buttonNew.addActionListener(new ActionListener() {
 

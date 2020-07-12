@@ -121,13 +121,14 @@ public class ProdottiPanel extends JPanel {
         super.add(title);
 
         JPanel panSopra = new JPanel();
-        panSopra.setLayout(new GridLayout(1, 3));
+        panSopra.setLayout(new GridBagLayout());
         panSopra.setMaximumSize(new Dimension(1420, 300));
-        JPanel cerca = new JPanel();
+        JPanel cerca = new JPanel(new GridBagLayout());
         JLabel searchlabel = new JLabel("Cerca:");
         searchlabel.setFont(new Font("Arial Black", Font.BOLD, 20));
         casella = new JTextField(20);
         cerca.add(searchlabel);
+        cerca.setBorder(new EmptyBorder(0, 0, 0, 850));
         cerca.add(casella);
 
         ActionListener actionListener = new ActionListener() {

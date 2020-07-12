@@ -814,10 +814,13 @@ public class OrdiniAdminPanel extends JPanel {
             FornitoreDAO forndao = new FornitoreDAO();
             ProdottoDAO prodao = new ProdottoDAO();
 
+            costocarrell = 0;
+
+                            
             for (Ordine o : ordao.getByNum(numerordine)) {
+                
                 Fornitore f = forndao.getByID(o.getFk_fornitore());
                 Prodotto p = prodao.getBySku(o.getProdotto_sku());
-                costocarrell = 0;
 
                 BigDecimal costoo = new BigDecimal(String.valueOf(p.getCosto()));
 

@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -75,7 +76,7 @@ public class AnagrafichePanel extends JPanel {
         super.add(title);
 
         JPanel panSopra = new JPanel();
-        panSopra.setLayout(new GridLayout(1, 3));
+        panSopra.setLayout(new GridBagLayout());
         panSopra.setMaximumSize(new Dimension(1420, 300));
         JPanel cerca = new JPanel();
         JLabel searchlabel = new JLabel("Cerca:");
@@ -83,6 +84,7 @@ public class AnagrafichePanel extends JPanel {
         JTextField casella = new JTextField(20);
         cerca.add(searchlabel);
         cerca.add(casella);
+        cerca.setBorder(new EmptyBorder(0, 0, 0, 250));
         panSopra.add(cerca);
 
         JPanel panelcheck = new JPanel();
@@ -109,9 +111,13 @@ public class AnagrafichePanel extends JPanel {
         panelcheck.add(checkforn);
         panelcheck.add(checkuten);
         panelcheck.add(checkclient);
+        panelcheck.setBorder(new EmptyBorder(0, 18, 0, 482));
         panSopra.add(panelcheck);
+        
 
         JButton buttonNew = new JButton("ADD NEW");
+        buttonNew.setBackground(new Color( 165,204 ,107 ));
+        buttonNew.setForeground(Color.black);
         //*************+* BOTTONE AGGIUNGI NUOVA RIGA**************************
         buttonNew.addActionListener(new ActionListener() {
 
