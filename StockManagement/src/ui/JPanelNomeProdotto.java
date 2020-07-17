@@ -206,7 +206,7 @@ public class JPanelNomeProdotto extends JPanel {
         try {
             for (Prodotto p : prodao.getByNome2(newtext)) {
                 if (PrelevaMode) {
-                    model.addRow(new Object[]{p.getSku(), p.getNome(), p.getCategoria(), String.valueOf(p.getQty()), String.valueOf(p.getQty() - p.getQty_min()), p.getNote(), p.isNegozio(), ""});
+                    model.addRow(new Object[]{p.getSku(), p.getNome(), p.getCategoria(), String.valueOf(p.getQty()), String.valueOf(p.getQty() - p.getQty_min()), p.getNote(), p.isInstock(), ""});
                 } else {
                     model.addRow(new Object[]{p.getSku(), p.getNome(), ordao.getFPr(p.getSku()), p.getCosto(), p.getNote(), ""});
                 }
@@ -227,7 +227,7 @@ public class JPanelNomeProdotto extends JPanel {
     }
 
     public void modePreleva() {
-        String[] columnNames = {"SKU", "Nome", "Categoria", "Qty", "Qty prelevabile", "Note", "Negozio", "Add al Carrello"};
+        String[] columnNames = {"SKU", "Nome", "Categoria", "Qty", "Qty prelevabile", "Note", "Stock", "Add al Carrello"};
 
         Object[][] data = {};
 
@@ -241,7 +241,7 @@ public class JPanelNomeProdotto extends JPanel {
 
         table = new JTable(model);
 
-        table.getColumnModel().getColumn(6).setCellRenderer(new CustomNegozioRender());
+        table.getColumnModel().getColumn(6).setCellRenderer(new CustomStockRender());
 
         table.getColumnModel().getColumn(7).setCellRenderer(new TableButtonRenderer());
         myTableRender = new TableRenderer(new JCheckBox());
@@ -268,9 +268,9 @@ public class JPanelNomeProdotto extends JPanel {
 
     }
 
-    class CustomNegozioRender extends JButton implements TableCellRenderer {
+    class CustomStockRender extends JButton implements TableCellRenderer {
 
-        public CustomNegozioRender() {
+        public CustomStockRender() {
         }
 
         @Override

@@ -53,6 +53,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
@@ -755,7 +756,7 @@ public class OrdiniAdminPanel extends JPanel {
                     }
                     FrameRiepilogo f = new FrameRiepilogo(getInstance(), table.getValueAt(row, 0).toString(), table.getValueAt(row, 1).toString(), table.getValueAt(row, 3).toString(), instockk);
                     f.setResizable(false);
-                    f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    //f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     f.setSize(1400, 400);
                     f.setLocationRelativeTo(null);  // CENTRA 
                     f.setVisible(true);

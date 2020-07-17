@@ -20,6 +20,8 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -37,11 +39,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -76,7 +80,20 @@ class FrameRiepilogo extends JDialog {
         this.costoTot = costoTot;
         this.giamessoaposto = giamessoaposto;
 
+        setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         setModal(true);
+        
+        addWindowListener( new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent we) {
+                        int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di uscire ed annullare le modifiche?");
+
+                        if (OpzioneScelta == JOptionPane.OK_OPTION) {
+                            dispose();
+                         }
+                        
+                    }
+                } );
 
         ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
         this.setIconImage(img.getImage());
@@ -136,7 +153,12 @@ class FrameRiepilogo extends JDialog {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose();
+                  int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di uscire ed annullare le modifiche?");
+
+                if (OpzioneScelta == JOptionPane.OK_OPTION) {
+
+                    dispose();
+            }
             }
 
         });
@@ -303,6 +325,9 @@ class FrameRiepilogo extends JDialog {
         add(pdown, BorderLayout.SOUTH);
 
         refreshOrdini();
+        
+        
+
 
     }
 

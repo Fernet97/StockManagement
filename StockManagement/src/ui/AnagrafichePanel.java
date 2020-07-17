@@ -279,6 +279,7 @@ public class AnagrafichePanel extends JPanel {
                 setIcon(ImpostaImg("/res/img/prodotti_a.png"));
             }
 
+            setText("");
             return this;
         }
     }

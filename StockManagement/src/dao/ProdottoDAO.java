@@ -381,8 +381,11 @@ public class ProdottoDAO {
                 bean.setQty(rs.getInt("qty"));
                 bean.setQty_min(rs.getInt("qty_min"));
                 
-                if(rs.getInt("negozio") == 1) bean.setNegozio(true);
-                else bean.setNegozio(false);
+                if(rs.getInt("instock") == 1) {
+                    bean.setInstock(true);
+                    
+                }
+                else bean.setInstock(false);
                 
                 prodotti.add(bean);
             }
@@ -429,8 +432,11 @@ public class ProdottoDAO {
                 bean.setQty(rs.getInt("qty"));
                 bean.setQty_min(rs.getInt("qty_min"));
                 
-                if(rs.getInt("negozio") == 1) bean.setNegozio(true);
-                else bean.setNegozio(false);
+                if(rs.getInt("instock") == 1) {
+                    bean.setInstock(true);
+                    
+                }
+                else bean.setInstock(false);
                 
                 prodotti.add(bean);
             }

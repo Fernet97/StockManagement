@@ -233,13 +233,13 @@ public class OrdiniPanel extends JPanel {
         model.addColumn("Qty Prelevata");
         model.addColumn("Categoria");
         model.addColumn("Note");
-        model.addColumn("Negozio");
+        model.addColumn("Stock");
         
                 
 
 
         table.setModel(model);
-        table.getColumnModel().getColumn(5).setCellRenderer(new CustomNegozioRender());
+        table.getColumnModel().getColumn(5).setCellRenderer(new CustomStockRender());
 
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
@@ -509,7 +509,7 @@ public class OrdiniPanel extends JPanel {
             ProdottoDAO prodao = new ProdottoDAO();
             Prodotto p = prodao.getBySku(skusel);
 
-            model.addRow(new Object[]{p.getSku(), p.getNome(), qtyScelta, p.getCategoria(), p.getNote(), p.isNegozio()});
+            model.addRow(new Object[]{p.getSku(), p.getNome(), qtyScelta, p.getCategoria(), p.getNote(), p.isInstock()});
             numprodaggiunti += qtyScelta;
             prodAggiunti.setText("        #Prodotti aggiunti: " + String.valueOf(numprodaggiunti) + "        ");
 
@@ -558,9 +558,9 @@ public class OrdiniPanel extends JPanel {
     
     
     
-        class CustomNegozioRender extends JButton implements TableCellRenderer {
+        class CustomStockRender extends JButton implements TableCellRenderer {
 
-        public CustomNegozioRender() {
+        public CustomStockRender() {
         }
 
         @Override
