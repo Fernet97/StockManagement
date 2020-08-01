@@ -82,6 +82,7 @@ public class AnagrafichePanel extends JPanel {
         JLabel searchlabel = new JLabel("Cerca:");
         searchlabel.setFont(new Font("Arial Black", Font.BOLD, 20));
         JTextField casella = new JTextField(20);
+        casella.setBackground(Color.darkGray);
         cerca.add(searchlabel);
         cerca.add(casella);
         cerca.setBorder(new EmptyBorder(0, 0, 0, 250));
@@ -569,6 +570,7 @@ public class AnagrafichePanel extends JPanel {
                 note = new JTextArea("");
                 note.setAlignmentX(LEFT_ALIGNMENT);
                 note.setLineWrap(true);
+                note.setWrapStyleWord(true);
                 note.setRows(5);
                 note.setColumns(20);
                 pandown.add(notext);
@@ -688,6 +690,7 @@ public class AnagrafichePanel extends JPanel {
                 note = new JTextArea("");
                 note.setAlignmentX(LEFT_ALIGNMENT);
                 note.setLineWrap(true);
+                note.setWrapStyleWord(true);
                 note.setRows(5);
                 note.setColumns(20);
                 pandown.add(notext);
@@ -831,6 +834,7 @@ public class AnagrafichePanel extends JPanel {
                 note = new JTextArea("");
                 note.setAlignmentX(LEFT_ALIGNMENT);
                 note.setLineWrap(true);
+                note.setWrapStyleWord(true);
                 note.setRows(5);
                 note.setColumns(20);
                 pandown.add(notext);

@@ -51,7 +51,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import others.RoundedPanel;
 
 /**
@@ -84,6 +86,13 @@ public class FramePrincipale extends JFrame {
     private AnagrafichePanel anagrafiche;
     public boolean OrdiniStatus = false;
     private JLabel TitleLaterale;
+    public ButtonLaterale lateralDashProdotti;
+    private ButtonLaterale lateralDashAnagrafiche;
+    private ButtonLaterale lateralDashCategoria;
+    private ButtonLaterale lateralDashCodici;
+    private ButtonLaterale lateralDashOrdini;
+    private ButtonLaterale lateralDashReport;
+    private ButtonLaterale lateralDashDash;
 
     public FramePrincipale(String nomeutente) {
         nomeuser = nomeutente;
@@ -161,13 +170,23 @@ public class FramePrincipale extends JFrame {
         pannelloOpzioni = new JPanel();
         pannelloOpzioni.setBackground(new Color(38, 44, 70));
         pannelloOpzioni.setLayout(new BoxLayout(pannelloOpzioni, BoxLayout.Y_AXIS));
-        pannelloOpzioni.add(new ButtonLaterale("Dashboard"));
-        pannelloOpzioni.add(new ButtonLaterale("Anagrafiche"));
-        pannelloOpzioni.add(new ButtonLaterale("Categorie"));
-        pannelloOpzioni.add(new ButtonLaterale("Prodotti"));
-        pannelloOpzioni.add(new ButtonLaterale("Codici"));
-        pannelloOpzioni.add(new ButtonLaterale("Ordini"));
-        pannelloOpzioni.add(new ButtonLaterale("Report"));
+        
+        
+        lateralDashDash = new ButtonLaterale("Dashboard");
+        lateralDashAnagrafiche = new ButtonLaterale("Anagrafiche");
+        lateralDashProdotti = new ButtonLaterale("Prodotti");
+        lateralDashCategoria = new ButtonLaterale("Categorie");
+        lateralDashCodici = new ButtonLaterale("Codici");
+        lateralDashOrdini = new ButtonLaterale("Ordini");
+        lateralDashReport = new ButtonLaterale("Report");
+        
+        pannelloOpzioni.add(lateralDashDash);
+        pannelloOpzioni.add(lateralDashAnagrafiche);
+        pannelloOpzioni.add(lateralDashCategoria);
+        pannelloOpzioni.add(lateralDashProdotti);
+        pannelloOpzioni.add(lateralDashCodici);
+        pannelloOpzioni.add(lateralDashOrdini);
+        pannelloOpzioni.add(lateralDashReport);
         pannelloOpzioni.setAlignmentX(CENTER_ALIGNMENT);
         pannelloOpzioni.setBorder(BorderFactory.createMatteBorder(-1, -1, -1, -1, new Color(19, 24, 40)));
         pannelloOpzioni.setMaximumSize(new Dimension(500, 750));
@@ -207,6 +226,9 @@ public class FramePrincipale extends JFrame {
         button5 = new ButtonDash("ORDINI EFFETUATI");
         button5.setBackground(new Color(26, 42, 79));
         pannellodash.add(button5);
+        
+        
+        VaiADash();  // Tieni premuto sulla schermata iniziale l'etichetta DashBoard
 
         //Le tabelle ...
         ProdottoDAO daop = new ProdottoDAO();
@@ -231,6 +253,7 @@ public class FramePrincipale extends JFrame {
         table.setRowHeight(30);
         table.setEnabled(false);
         model = new DefaultTableModel();
+        model.addColumn("SKU");
         model.addColumn("Nome");
         model.addColumn("Quantità");
         table.setModel(model);
@@ -255,31 +278,38 @@ public class FramePrincipale extends JFrame {
         table2.setFont(new Font("Arial", Font.PLAIN, 15));
         table2.setRowHeight(30);
         model2 = new DefaultTableModel();
+        model2.addColumn("SKU");
         model2.addColumn("Nome");
         model2.addColumn("Quantità");
         model2.addColumn("#Ordine");
         model2.addColumn("Data arrivo");
         table2.setModel(model2);
+
+        
+        
         table2.setEnabled(false);
 
         JScrollPane sp2 = new JScrollPane(table2);
         TitoloTab2.add(sp2);
 
         OrdineDAO ordao = new OrdineDAO();
+        ProdottoDAO prodao = new ProdottoDAO();
 
         try {
             for (Prodotto prod : daop.getAll()) {
                 if (prod.getQty() <= prod.getQty_min()) {
-                    model.addRow(new Object[]{prod.getSku() + "  !" + prod.getNome(), prod.getQty()});
+                    
+                    model.addRow(new Object[]{prod.getSku(), prod.getNome(), prod.getQty()});
 
                 }
 
             }
 
             for (Ordine o : ordao.getAll()) {
-
+                
                 if (ordao.ggConsegnaPR2(o.getN_ordine(), o.getProdotto_sku()) <= 5 && o.getGiorni_alla_consegna() >= 0) {
-                    model2.addRow(new Object[]{o.getProdotto_sku(), o.getQty_in_arrivo(), o.getN_ordine(), ordao.dataArrivo(o.getN_ordine(), o.getProdotto_sku())});
+                    Prodotto p = prodao.getBySku(o.getProdotto_sku());
+                    model2.addRow(new Object[]{o.getProdotto_sku(), p.getNome(), o.getQty_in_arrivo(), o.getN_ordine(), ordao.dataArrivo(o.getN_ordine(), o.getProdotto_sku())});
                 }
 
             }
@@ -380,35 +410,132 @@ public class FramePrincipale extends JFrame {
         setJMenuBar(menu);
     }
 
+    
+    
+
+        public void disattivaTuttiIBottoniTranne(int cod) {
+        for (int i = 0; i < pannelloOpzioni.getComponentCount(); i++) {
+
+            if (i != cod) {
+                ButtonLaterale b = (ButtonLaterale) pannelloOpzioni.getComponent(i);
+                b.pan.setBackground(new Color(38, 44, 70));
+                b.setBackground(new Color(38, 44, 70));
+                b.icon.setIcon(ImpostaImg(b.pathfoto, 30));
+                System.out.println("disattiv:"+ b.pathfoto);
+                b.testo.setForeground(Color.white);
+                b.premuto = false;
+            }
+
+        }
+
+        }
+        
+        
+    public void VaiADash(){
+            
+        // Schiaccia etichetta
+        lateralDashDash.setBackground(new Color(19, 24, 40));
+        lateralDashDash.premuto = true;
+        lateralDashDash.pan.setBackground(new Color(19, 24, 40));
+        TitleLaterale.setForeground(lateralDashDash.color_etichetta);
+        String pathfotoa = lateralDashDash.pathfoto.replace(".", "_c.");
+        lateralDashDash.icon.setIcon(ImpostaImg(pathfotoa, 30));
+        
+        disattivaTuttiIBottoniTranne(lateralDashDash.code);
+        
+        cardlayout.show(HomePanel, "Dashboard");
+        
+    }
+    
+    
     public void VaiAProdotti(String query) {
-        //prodotti.casella
+        
+        // Schiaccia etichetta
+        lateralDashProdotti.setBackground(new Color(19, 24, 40));
+        lateralDashProdotti.premuto = true;
+        lateralDashProdotti.pan.setBackground(new Color(19, 24, 40));
+        TitleLaterale.setForeground(lateralDashProdotti.color_etichetta);
+        String pathfotoa = lateralDashProdotti.pathfoto.replace(".", "_c.");
+        lateralDashProdotti.icon.setIcon(ImpostaImg(pathfotoa, 30));
+        
+        disattivaTuttiIBottoniTranne(lateralDashProdotti.code);
+        
         cardlayout.show(HomePanel, "Prodotti");
         prodotti.casella.setText(query);
 
     }
 
     public void VaiAProdottiInArrivo() {
+        
+        lateralDashProdotti.setBackground(new Color(19, 24, 40));
+        lateralDashProdotti.premuto = true;
+        lateralDashProdotti.pan.setBackground(new Color(19, 24, 40));
+        TitleLaterale.setForeground(lateralDashProdotti.color_etichetta);
+        String pathfotoa = lateralDashProdotti.pathfoto.replace(".", "_c.");
+        lateralDashProdotti.icon.setIcon(ImpostaImg(pathfotoa, 30));
+        
+        disattivaTuttiIBottoniTranne(lateralDashProdotti.code);
+                
+
         cardlayout.show(HomePanel, "Prodotti");
         prodotti.ViewOnlyInArrivo();
 
     }
 
     public void VaiAPreleva() {
+        
+        lateralDashOrdini.setBackground(new Color(19, 24, 40));
+        lateralDashOrdini.premuto = true;
+        lateralDashOrdini.pan.setBackground(new Color(19, 24, 40));
+        TitleLaterale.setForeground(lateralDashOrdini.color_etichetta);
+        String pathfotoa = lateralDashOrdini.pathfoto.replace(".", "_c.");
+        lateralDashOrdini.icon.setIcon(ImpostaImg(pathfotoa, 30));
+        
+        disattivaTuttiIBottoniTranne(lateralDashOrdini.code);
+        
         OrdiniStatus = true;
         cardlayout.show(HomePanel, "Preleva");
     }
 
     public void VaiAOrdini() {
+        lateralDashOrdini.setBackground(new Color(19, 24, 40));
+        lateralDashOrdini.premuto = true;
+        lateralDashOrdini.pan.setBackground(new Color(19, 24, 40));
+        TitleLaterale.setForeground(lateralDashOrdini.color_etichetta);
+        String pathfotoa = lateralDashOrdini.pathfoto.replace(".", "_c.");
+        lateralDashOrdini.icon.setIcon(ImpostaImg(pathfotoa, 30));
+        
+        disattivaTuttiIBottoniTranne(lateralDashOrdini.code);
+        
         cardlayout.show(HomePanel, "Ordini");
     }
 
     public void VaiAOrdini(String forn) {
+
+                lateralDashOrdini.setBackground(new Color(19, 24, 40));
+        lateralDashOrdini.premuto = true;
+        lateralDashOrdini.pan.setBackground(new Color(19, 24, 40));
+        TitleLaterale.setForeground(lateralDashOrdini.color_etichetta);
+        String pathfotoa = lateralDashOrdini.pathfoto.replace(".", "_c.");
+        lateralDashOrdini.icon.setIcon(ImpostaImg(pathfotoa, 30));
+        
+        disattivaTuttiIBottoniTranne(lateralDashOrdini.code);
         cardlayout.show(HomePanel, "Ordini");
         ordiniadmin.jComboBox.getModel().setSelectedItem(forn);
 
     }
 
     public void VaiAOrdiniconProdFORNULL(String forn, String prod) {
+        
+        lateralDashOrdini.setBackground(new Color(19, 24, 40));
+        lateralDashOrdini.premuto = true;
+        lateralDashOrdini.pan.setBackground(new Color(19, 24, 40));
+        TitleLaterale.setForeground(lateralDashOrdini.color_etichetta);
+        String pathfotoa = lateralDashOrdini.pathfoto.replace(".", "_c.");
+        lateralDashOrdini.icon.setIcon(ImpostaImg(pathfotoa, 30));
+        
+        disattivaTuttiIBottoniTranne(lateralDashOrdini.code);
+        
         if (ordiniadmin.controlloProdottoUguale(prod.substring(0, prod.indexOf("|")))) {
             JOptionPane.showMessageDialog(null, "non puoi associare più fornitori ad un solo prodotto mentre lo stai aggiungendo al carrello.");
             return;
@@ -422,11 +549,31 @@ public class FramePrincipale extends JFrame {
     }
 
     public void VaiAOrdiniconProdFornCEH(String prod) {
+        
+        lateralDashOrdini.setBackground(new Color(19, 24, 40));
+        lateralDashOrdini.premuto = true;
+        lateralDashOrdini.pan.setBackground(new Color(19, 24, 40));
+        TitleLaterale.setForeground(lateralDashOrdini.color_etichetta);
+        String pathfotoa = lateralDashOrdini.pathfoto.replace(".", "_c.");
+        lateralDashOrdini.icon.setIcon(ImpostaImg(pathfotoa, 30));
+        
+        disattivaTuttiIBottoniTranne(lateralDashOrdini.code);
+        
         cardlayout.show(HomePanel, "Ordini");
         ordiniadmin.casella.setText(prod);
     }
 
     public void VaiUtenti() {
+        
+        lateralDashAnagrafiche.setBackground(new Color(19, 24, 40));
+        lateralDashAnagrafiche.premuto = true;
+        lateralDashAnagrafiche.pan.setBackground(new Color(19, 24, 40));
+        TitleLaterale.setForeground(lateralDashAnagrafiche.color_etichetta);
+        String pathfotoa = lateralDashAnagrafiche.pathfoto.replace(".", "_c.");
+        lateralDashAnagrafiche.icon.setIcon(ImpostaImg(pathfotoa, 30));
+        
+        disattivaTuttiIBottoniTranne(lateralDashAnagrafiche.code);
+       
         cardlayout.show(HomePanel, "Anagrafiche");
         anagrafiche.ViewOnlyUtenti();
     }
@@ -666,18 +813,23 @@ public class FramePrincipale extends JFrame {
         model2.setRowCount(0);
 
         OrdineDAO ordao = new OrdineDAO();
+        ProdottoDAO prodao = new ProdottoDAO();
+
 
         try {
             for (Prodotto prod : daop.getAll()) {
                 if (prod.getQty() <= prod.getQty_min()) {
-                    model.addRow(new Object[]{prod.getSku() + "  !" + prod.getNome(), prod.getQty()});
+                    model.addRow(new Object[]{prod.getSku(), prod.getNome(), prod.getQty()});
                 }
             }
 
             for (Ordine o : ordao.getAll()) {
                 if (ordao.ggConsegnaPR2(o.getN_ordine(), o.getProdotto_sku()) <= 5 && o.getGiorni_alla_consegna() >= 0) {
-                    model2.addRow(new Object[]{o.getProdotto_sku(), o.getQty_in_arrivo(), o.getN_ordine(), ordao.dataArrivo(o.getN_ordine(), o.getProdotto_sku())});
+                    Prodotto p = prodao.getBySku(o.getProdotto_sku());
+                    model2.addRow(new Object[]{o.getProdotto_sku(), p.getNome(), o.getQty_in_arrivo(), o.getN_ordine(), ordao.dataArrivo(o.getN_ordine(), o.getProdotto_sku())});
                 }
+                
+                
 
             }
             //Aggiornare numeri sui pannelli della dash ...
@@ -735,7 +887,7 @@ public class FramePrincipale extends JFrame {
             if (type.equals("SPESE TOTALI")) {
                 title.setForeground(new Color(29, 175, 215));
                 vai.setBackground(new Color(29, 175, 215));
-                scrittaVai = new JLabel(ImpostaImg("/res/img/report.png"));
+                scrittaVai = new JLabel(ImpostaImg("/res/img/report.png", 60));
                 vai.removeAll();
 
                 vai.add(scrittaVai);
@@ -745,7 +897,7 @@ public class FramePrincipale extends JFrame {
             if (type.equals("VENDITE TOTALI")) {
                 title.setForeground(new Color(29, 175, 215));
                 vai.setBackground(new Color(29, 175, 215));
-                scrittaVai = new JLabel(ImpostaImg("/res/img/report.png"));
+                scrittaVai = new JLabel(ImpostaImg("/res/img/report.png", 60));
                 vai.removeAll();
 
                 vai.add(scrittaVai);
@@ -762,7 +914,7 @@ public class FramePrincipale extends JFrame {
                 } catch (SQLException ex) {
                     Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
-                scrittaVai = new JLabel(ImpostaImg("/res/img/anagrafiche.png"));
+                scrittaVai = new JLabel(ImpostaImg("/res/img/anagrafiche.png", 60));
                 vai.removeAll();
 
                 vai.addMouseListener(new MouseListener() {
@@ -832,7 +984,7 @@ public class FramePrincipale extends JFrame {
                     }
                 });
 
-                scrittaVai = new JLabel(ImpostaImg("/res/img/prodotti.png"));
+                scrittaVai = new JLabel(ImpostaImg("/res/img/prodotti.png", 60));
                 vai.removeAll();
                 vai.add(scrittaVai);
 
@@ -878,7 +1030,7 @@ public class FramePrincipale extends JFrame {
                     }
                 });
 
-                scrittaVai = new JLabel(ImpostaImg("/res/img/prodotti.png"));
+                scrittaVai = new JLabel(ImpostaImg("/res/img/prodotti.png", 60));
                 vai.removeAll();
                 vai.add(scrittaVai);
 
@@ -917,7 +1069,7 @@ public class FramePrincipale extends JFrame {
                     }
                 });
 
-                scrittaVai = new JLabel(ImpostaImg("/res/img/ordini.png"));
+                scrittaVai = new JLabel(ImpostaImg("/res/img/ordini.png", 60));
                 vai.removeAll();
 
                 vai.add(scrittaVai);
@@ -933,10 +1085,10 @@ public class FramePrincipale extends JFrame {
 
     }
 
-    public ImageIcon ImpostaImg(String nomeImmag) {
+    public ImageIcon ImpostaImg(String nomeImmag, int dim) {
 
         ImageIcon icon = new ImageIcon(getClass().getResource(nomeImmag));
-        Image ImmagineScalata = icon.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
+        Image ImmagineScalata = icon.getImage().getScaledInstance(dim, dim, Image.SCALE_DEFAULT);
         icon.setImage(ImmagineScalata);
         return icon;
     }

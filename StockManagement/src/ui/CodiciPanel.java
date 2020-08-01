@@ -70,6 +70,7 @@ public class CodiciPanel extends JPanel {
         JLabel searchlabel = new JLabel("Cerca:");
         searchlabel.setFont(new Font("Arial Black", Font.BOLD, 20));
         JTextField casella = new JTextField(20);
+        casella.setBackground(Color.darkGray);
         cerca.add(searchlabel);
         cerca.add(casella);
         cerca.setBorder(new EmptyBorder(0, 0, 0, 900));
@@ -86,12 +87,6 @@ public class CodiciPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                //Cancella tutti i qr code png vecchi:
-                File directory = new File("./DATA/QRCODE");
-                File[] files = directory.listFiles();
-                for (File f : files) {
-                    f.delete();
-                }
 
                 //refresh
                 try {
@@ -234,16 +229,11 @@ public class CodiciPanel extends JPanel {
             setText((value == null) ? "" : value.toString());
             if (getText().equals("Stampa")) {
                 setIcon(ImpostaImg("/res/img/printer.png"));
-            } else {//Altrimenti imposta il suo qr CODE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! settare come icona il qrCode relativo allo sku di questa riga
-                try {
-                    String percorsoQRgenerato = generaQRdaSKU(table.getValueAt(row, 0).toString());
-                    setIcon(new ImageIcon(percorsoQRgenerato));
-                    setText(percorsoQRgenerato.substring(9));
-                } catch (IOException ex) {
-                    Logger.getLogger("genlog").warning("IOException\n" + StockManagement.printStackTrace(ex));
-                } catch (WriterException ex) {
-                    Logger.getLogger("genlog").warning("WriterException\n" + StockManagement.printStackTrace(ex));
-                }
+            } else { //Altrimenti imposta il suo qr CODE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! settare come icona il qrCode relativo allo sku di questa riga
+                String percorsoQR1 = "./DATA/QRCODE/"+table.getValueAt(row, 0).toString();
+                String percorsoQR = percorsoQR1.substring(0, percorsoQR1.indexOf('-'))+ ".png";
+                setIcon(new ImageIcon(percorsoQR));
+                setText(percorsoQR);
 
             }
             return this;

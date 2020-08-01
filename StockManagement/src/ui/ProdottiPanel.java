@@ -8,6 +8,11 @@ package ui;
 import org.apache.commons.io.FilenameUtils;
 import beans.Fornitore;
 import beans.Prodotto;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import dao.FornitoreDAO;
 import dao.OrdineDAO;
 import dao.ProdottoDAO;
@@ -29,6 +34,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.math.BigDecimal;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -127,6 +133,7 @@ public class ProdottiPanel extends JPanel {
         JLabel searchlabel = new JLabel("Cerca:");
         searchlabel.setFont(new Font("Arial Black", Font.BOLD, 20));
         casella = new JTextField(20);
+        casella.setBackground(Color.darkGray);
         cerca.add(searchlabel);
         cerca.setBorder(new EmptyBorder(0, 0, 0, 850));
         cerca.add(casella);
@@ -346,6 +353,15 @@ public class ProdottiPanel extends JPanel {
         
         for (Prodotto pro : dao.getAll()) {
             
+           try {
+               //Genera sku del prodotto corrente
+               generaQRdaSKU(pro.getSku());
+           } catch (IOException ex) {
+               Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (WriterException ex) {
+               Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+           }
+            
             Fornitore forni = forndao.getByID(daoo.getFPr(pro.getSku()));
             String forny = forni.getIdfornitore() + "|  " + forni.getFullname();
 
@@ -394,6 +410,23 @@ public class ProdottiPanel extends JPanel {
 
     }
 
+    
+    
+    public String generaQRdaSKU(String sku) throws IOException, WriterException {
+
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(sku, BarcodeFormat.QR_CODE, 130, 130);
+
+        Path path = FileSystems.getDefault().getPath("./DATA/QRCODE/" + sku.substring(0, sku.indexOf("-")) + ".png");
+        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
+
+        return "./DATA/QRCODE/" + sku.substring(0, sku.indexOf("-")) + ".png"; //Ritorna il percorso del QR generato
+    }
+    
+    
+    
+    
+    
     // RENDER DELLE QUANTITA'
     class CustomRender extends JButton implements TableCellRenderer {
 
@@ -602,6 +635,11 @@ public class ProdottiPanel extends JPanel {
                         ProdottoDAO daor = new ProdottoDAO();
                         try {
                             daor.remove(table.getValueAt(row, 0).toString());
+                             // Elimina la foto associata
+                             String percorsoQR1 = "./DATA/QRCODE/"+table.getValueAt(row, 0).toString();
+                             String percorsoQR = percorsoQR1.substring(0, percorsoQR1.indexOf('-'))+ ".png";
+                             File filecanc = new File(percorsoQR);
+                             filecanc.delete();
                             refreshTab();
                         } catch (SQLException ex) {
                             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
@@ -999,6 +1037,7 @@ public class ProdottiPanel extends JPanel {
             note = new JTextArea("");
             note.setAlignmentX(LEFT_ALIGNMENT);
             note.setLineWrap(true);
+            note.setWrapStyleWord(true);
             note.setRows(5);
             note.setColumns(20);
             pandown.add(notext);

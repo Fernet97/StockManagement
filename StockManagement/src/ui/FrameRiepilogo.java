@@ -98,7 +98,7 @@ class FrameRiepilogo extends JDialog {
         ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
         this.setIconImage(img.getImage());
 
-        String[] columnNames = {"#Ordine", "Fornitore", "SKU prodotto", "Costo", "Quantita' arrivata/ Quantità prevista", "Data di arrivo", " E' Arrivato?", "Messo in Stock?", "Conteggio"};
+        String[] columnNames = { "SKU", "Nome Prodotto", "Fornitore" ,"Costo", "Quantita' arrivata/ Quantità prevista", "Data di arrivo", " E' Arrivato?", "Messo in Stock?", "Conteggio"};
 
         Object[][] data = {};
 
@@ -141,6 +141,7 @@ class FrameRiepilogo extends JDialog {
         casNote = new JTextArea();
         casNote.setAlignmentX(LEFT_ALIGNMENT);
         casNote.setLineWrap(true);
+        casNote.setWrapStyleWord(true);
         casNote.setRows(5);
         casNote.setColumns(20);        
         casNote.setText("");
@@ -365,8 +366,9 @@ class FrameRiepilogo extends JDialog {
                 }
 
                 BigDecimal costoo = new BigDecimal(String.valueOf(prodao.getBySku(ordine.getProdotto_sku()).getCosto()));
-
-                model2.addRow(new Object[]{ordine.getN_ordine(), ordine.getFk_fornitore(), ordine.getProdotto_sku(), costoo.toPlainString(),
+                Prodotto p = prodao.getBySku(ordine.getProdotto_sku());
+       
+                model2.addRow(new Object[]{ordine.getProdotto_sku(), p.getNome() ,ordine.getFk_fornitore(), costoo.toPlainString(),
                     ordine.getQty_arrivata() + "/" + ordine.getQty_in_arrivo(), datao, arrivato, messoInStock});
                 
                 

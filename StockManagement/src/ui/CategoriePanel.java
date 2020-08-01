@@ -96,6 +96,7 @@ class CategoriePanel extends JPanel {
         JLabel searchlabel = new JLabel("Cerca:");
         searchlabel.setFont(new Font("Arial Black", Font.BOLD, 20));
         JTextField casella = new JTextField(20);
+        casella.setBackground(Color.darkGray);
         cerca.add(searchlabel);
         cerca.add(casella);
         cerca.setBorder(new EmptyBorder(0, 0, 0, 800));

@@ -130,6 +130,7 @@ public class OrdiniPanel extends JPanel {
 
         casella = new JTextField();
         casella.setColumns(30);
+        casella.setBackground(Color.darkGray);
         casella.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -140,7 +141,7 @@ public class OrdiniPanel extends JPanel {
             public void insertUpdate(DocumentEvent arg0) {
                 try {
                     casella.setForeground(Color.white);
-                    casella.setBackground(Color.gray);
+                    casella.setBackground(Color.darkGray);
                     if (casella.getText().length() == 0) {
                         return;
                     }
@@ -225,7 +226,8 @@ public class OrdiniPanel extends JPanel {
             private static final long serialVersionUID = 1L;
 
             public boolean isCellEditable(int row, int column) {
-                return false;
+                if(column == 2) return true;
+                else return false;
             }
         };
         model.addColumn("SKU");
@@ -386,7 +388,7 @@ public class OrdiniPanel extends JPanel {
 
     //QUANDO CHIAMARE IL REFRESH DI ORDINI?
     public void refreshTab() {
-        casella.setBackground(Color.gray);
+        casella.setBackground(Color.darkGray);
         casella.setText("");
         prodAggiunti.setText("        #Prodotti aggiunti: 0        ");
         model.setRowCount(0);
@@ -438,7 +440,7 @@ public class OrdiniPanel extends JPanel {
                         }
                         // CHECK SE QUESTO PRODOTTO E? GIA' NEL CARRELLO
                         if (controlloProdottoUguale(skusel)) {
-                            JOptionPane.showMessageDialog(null, "Hai già aggiunto questo prodotto al carrello!!");
+                            JOptionPane.showMessageDialog(null, "Hai già aggiunto questo prodotto al carrello!! (Modifica la quantità nel carrello per aggiungere nuovi prodotti)");
                             f.dispose();
                             return;
                         }

@@ -53,6 +53,7 @@ public class StockManagement {
         // CREA CARTELLA QRCODE
         File directory1 = new File("./DATA/QRCODE/");
         if (!directory1.mkdir()) {
+            
         }
 
         // CREA CARTELLA IMG
@@ -108,6 +109,9 @@ public class StockManagement {
         UIManager.put("nimbusSelectedText", Color.white);
         //quando seleziona casella
         UIManager.put("nimbusSelectionBackground", Color.DARK_GRAY);
+        UIManager.put("TextField.background", Color.DARK_GRAY);
+        UIManager.put("PasswordField.background", Color.DARK_GRAY);
+        UIManager.put("TextArea.background", Color.DARK_GRAY);
         UIManager.put("text", Color.white);
 
         UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("Arial", Font.PLAIN, 14));

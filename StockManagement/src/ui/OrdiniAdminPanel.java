@@ -150,7 +150,7 @@ public class OrdiniAdminPanel extends JPanel {
             @Override
             public void insertUpdate(DocumentEvent arg0) {
                 casella.setForeground(Color.white);
-                casella.setBackground(Color.gray);
+                casella.setBackground(Color.darkGray);
                 if(casella.getText().length()==0) 
                     return;
                 String text = casella.getText();
@@ -652,7 +652,7 @@ public class OrdiniAdminPanel extends JPanel {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
 
-        casella.setBackground(Color.gray);
+        casella.setBackground(Color.darkGray);
         casella.setText("");
         costot.setText("Costo totale: 0 euro");
         numordine.setText("#Ordine:");
