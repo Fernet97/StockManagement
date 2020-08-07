@@ -1001,6 +1001,11 @@ public class OrdiniAdminPanel extends JPanel {
         try {
             Prodotto p = pdao.getBySku(skusel);
             
+            if(ggallacons.getText().length() == 0 || casellaqty.getText().length() ==0){
+                JOptionPane.showMessageDialog(null, "Attenazione! riempire tuti i campi!");
+                return;            
+            }
+            
             if(!(ggallacons.getText().length() > 4)  && !(casellaqty.getText().length() > 6)){
 
                 BigDecimal costoo = new BigDecimal(String.valueOf(p.getCosto()));

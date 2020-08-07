@@ -86,8 +86,7 @@ class FrameRiepilogo extends JDialog {
         addWindowListener( new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent we) {
-                        int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di uscire ed annullare le modifiche?");
-
+                        int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di uscire ed annullare le modifiche?", "", JOptionPane.YES_NO_OPTION);
                         if (OpzioneScelta == JOptionPane.OK_OPTION) {
                             dispose();
                          }
@@ -179,7 +178,7 @@ class FrameRiepilogo extends JDialog {
                     if(model2.getValueAt(i, 6).toString().equals("Sì") )
                         model2.setValueAt("Sì", i, 7);
                     else{
-                        JOptionPane.showMessageDialog(null, "Il prodotto "+model2.getValueAt(i, 2)+" non è ancora arrivato, non puoi metterlo in stock!");}
+                        JOptionPane.showMessageDialog(null, "Il prodotto "+model2.getValueAt(i, 0)+" non è ancora arrivato, non puoi metterlo in stock!");}
                 }
             }
         });
@@ -233,7 +232,9 @@ class FrameRiepilogo extends JDialog {
 
                 int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di voler apportare le seguenti modifiche?????");
 
+                
                 if (OpzioneScelta == JOptionPane.OK_OPTION) {
+                    
 
                     try {
                         OrdineDAO ordinedao = new OrdineDAO();
@@ -248,24 +249,24 @@ class FrameRiepilogo extends JDialog {
                             // Se è arrivato
                             if (model2.getValueAt(i, 6).toString().equals("Sì")) {
                                 // setto a -1 gg
-                                ordinedao.updateGG(Numordine, model2.getValueAt(i, 2).toString(), -1);
+                                ordinedao.updateGG(Numordine, model2.getValueAt(i, 0).toString(), -1);
 
                                 // setto la qty arrivata nwll'ordine
-                                ordinedao.setQtyArrivata(Numordine, model2.getValueAt(i, 2).toString(), qtyarriv);
+                                ordinedao.setQtyArrivata(Numordine, model2.getValueAt(i, 0).toString(), qtyarriv);
                             }
 
                             // Se è l'ho messo a posto
                             if (model2.getValueAt(i, 7).toString().equals("Sì")) {
 
                                 // setto a -2 gg
-                                ordinedao.updateGG(Numordine, model2.getValueAt(i, 2).toString(), -2);
+                                ordinedao.updateGG(Numordine, model2.getValueAt(i, 0).toString(), -2);
 
                                 //Setto la qty arrivata nell'ordine 
-                                ordinedao.setQtyArrivata(Numordine, model2.getValueAt(i, 2).toString(), qtyarriv);
+                                ordinedao.setQtyArrivata(Numordine, model2.getValueAt(i, 0).toString(), qtyarriv);
 
                                 //Sommo questa qty arrivata alla qty del prodotto corrispondente
                                 ProdottoDAO daop = new ProdottoDAO();
-                                Prodotto p = daop.getBySku(model2.getValueAt(i, 2).toString());
+                                Prodotto p = daop.getBySku(model2.getValueAt(i, 0).toString());
                                 p.setQty(p.getQty() + qtyarriv); // SOMMO LA NUOVA QTY ARRIVATA
                                 p.setInstock(true);
                                 daop.update(p);
