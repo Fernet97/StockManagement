@@ -58,6 +58,8 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.text.AbstractDocument;
@@ -91,6 +93,7 @@ public class OrdiniAdminPanel extends JPanel {
     private JTextField casellaqty;
     private FramePrincipale frameprinc;
     private final JPanelNomeProdotto tabnomeprodotto;
+    private final JButton conferma;
 
 
     public OrdiniAdminPanel(String user) {
@@ -366,6 +369,7 @@ public class OrdiniAdminPanel extends JPanel {
             private static final long serialVersionUID = 1L;
 
             public boolean isCellEditable(int row, int column) {
+     
                 if (column == 0 || column == 2 || column == 4) {
                     return false; //il numero di celle NON editabili...
                 } else {
@@ -379,6 +383,26 @@ public class OrdiniAdminPanel extends JPanel {
         model.addColumn("Giorni all'arrivo");
         model.addColumn("Fornitore");
         table.setModel(model);
+        
+        table.getModel().addTableModelListener(new TableModelListener() {
+
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                for(int i = 0; i < model.getRowCount(); i++){
+                    System.out.println("miiiaoeo");
+                if(model.getValueAt(i, 1).toString().isEmpty() || model.getValueAt(i, 3).toString().isEmpty()){
+                    
+                    JOptionPane.showMessageDialog(getParent(), "prodotto " + model.getValueAt(i, 0) + " parametri errati");
+                    conferma.setEnabled(false);
+                    return;
+                }
+               
+                }
+                conferma.setEnabled(true);
+                
+            }
+        });
+        
 
         JScrollPane sp = new JScrollPane(table);
 
@@ -564,7 +588,7 @@ public class OrdiniAdminPanel extends JPanel {
         costot.setForeground(Color.red);
         DXdown.add(costot);
 
-        JButton conferma = new JButton("   Effettua ordine    ");
+        conferma = new JButton("   Effettua ordine    ");
         conferma.setFont(new Font("Arial Black", Font.ITALIC, 40));
         conferma.setMinimumSize(new Dimension(100, 50));
         conferma.setAlignmentX(Component.CENTER_ALIGNMENT);
