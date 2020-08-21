@@ -390,13 +390,40 @@ public class OrdiniAdminPanel extends JPanel {
             public void tableChanged(TableModelEvent e) {
                 for(int i = 0; i < model.getRowCount(); i++){
                     System.out.println("miiiaoeo");
+                    
                 if(model.getValueAt(i, 1).toString().isEmpty() || model.getValueAt(i, 3).toString().isEmpty()){
                     
                     JOptionPane.showMessageDialog(getParent(), "prodotto " + model.getValueAt(i, 0) + " parametri errati");
                     conferma.setEnabled(false);
                     return;
                 }
-               
+                
+                
+   
+                
+            try {
+                    Integer.parseInt(model.getValueAt(i, 1).toString());
+                    Integer.parseInt(model.getValueAt(i, 3).toString());
+                    
+                }
+                catch(NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(getParent(), "Puoi inserire solo numeri!!!");
+                    conferma.setEnabled(false);
+                    return;
+                }
+            
+            
+               if(Integer.parseInt(model.getValueAt(i, 1).toString())<=0){
+                   JOptionPane.showMessageDialog(getParent(), "Non puoi inserire numeri negativi!");
+                   conferma.setEnabled(false);
+                   return;
+               }
+               if(Integer.parseInt(model.getValueAt(i, 3).toString())<=0){
+                   JOptionPane.showMessageDialog(getParent(), "Non puoi inserire numeri negativi!");
+                   conferma.setEnabled(false);
+                   return;
+               }
+              
                 }
                 conferma.setEnabled(true);
                 

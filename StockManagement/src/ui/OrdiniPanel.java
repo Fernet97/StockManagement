@@ -58,6 +58,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.text.AbstractDocument;
@@ -84,6 +86,7 @@ public class OrdiniPanel extends JPanel {
     private JLabel prodAggiunti;
     private int numprodaggiunti = 0;
     private final JButton photobtn;
+    private final JButton effettuaPrelievo;
 
     public OrdiniPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -250,6 +253,49 @@ public class OrdiniPanel extends JPanel {
                  }
             }
         });
+        
+        
+      table.getModel().addTableModelListener(new TableModelListener() {
+
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                for(int i = 0; i < model.getRowCount(); i++){
+                    System.out.println("miiiaoeo");
+                    
+                if(model.getValueAt(i, 2).toString().isEmpty()){
+                    
+                    JOptionPane.showMessageDialog(getParent(), "prodotto " + model.getValueAt(i, 0) + " parametri errati");
+                     effettuaPrelievo.setEnabled(false);
+                    return;
+                }
+                
+            try {
+                    Integer.parseInt(model.getValueAt(i, 2).toString());
+                    
+                }
+                catch(NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(getParent(), "Puoi inserire solo numeri!!!");
+                     effettuaPrelievo.setEnabled(false);
+                    return;
+                }
+            
+            
+                if(Integer.parseInt(model.getValueAt(i, 2).toString())<=0){
+                    JOptionPane.showMessageDialog(getParent(), "Non puoi inserire numeri negativi!");
+                    effettuaPrelievo.setEnabled(false);
+                    return;
+                }
+               
+              
+                }
+                 effettuaPrelievo.setEnabled(true);
+                
+            }
+        });
+        
+        
+        
+        
 
         JScrollPane sp = new JScrollPane(table);
 
@@ -289,7 +335,7 @@ public class OrdiniPanel extends JPanel {
         prodAggiunti.setForeground(Color.red);
         manageprod.add(prodAggiunti);
 
-        JButton effettuaPrelievo = new JButton("       PRELEVA       ");
+        effettuaPrelievo = new JButton("       PRELEVA       ");
         effettuaPrelievo.setFont(new Font("Arial Black", Font.BOLD, 16));
         effettuaPrelievo.addActionListener(new ActionListener() {
             @Override
