@@ -89,8 +89,10 @@ public class OrdiniPanel extends JPanel {
     private int numprodaggiunti = 0;
     private final JButton photobtn;
     private final JButton effettuaPrelievo;
-    private final JPanel fotopan;
-
+    private JPanel fotopan;
+    public boolean ViewOrdiniRiep = false;
+    private final RoundedPanel photo;
+    
     public OrdiniPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -337,10 +339,26 @@ public class OrdiniPanel extends JPanel {
         JButton RiepilogoOrdini = new JButton("Riepilogo Ordini");
         RiepilogoOrdini.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                
                 JButton btn = (JButton) e.getSource();
-                btn.setBackground(Color.YELLOW);
-                btn.setForeground(Color.RED);  
-                renderViewRiepilogo();
+                
+                if(ViewOrdiniRiep == false){
+                    btn.setBackground(Color.YELLOW);
+                    btn.setForeground(Color.RED);  
+                    renderViewRiepilogo();
+                    ViewOrdiniRiep = true;
+                }
+                
+                else{
+                    btn.setBackground(Color.darkGray);
+                    btn.setForeground(Color.white); 
+                    fotopan.removeAll();
+                    fotopan.add(photo);
+                    fotopan.updateUI();
+                    ViewOrdiniRiep = false;
+                
+                }
+                
                 
             }
         });
@@ -424,7 +442,7 @@ public class OrdiniPanel extends JPanel {
         fotopan = new JPanel();
         fotopan.setLayout(new BoxLayout(fotopan, BoxLayout.PAGE_AXIS));
         fotopan.setBorder(new EmptyBorder(40, 40, 40, 40));
-        RoundedPanel photo = new RoundedPanel();
+        photo = new RoundedPanel();
         photo.setLayout(new GridLayout(1, 1));
         photo.setBackground(Color.darkGray);
         photobtn = new JButton();
@@ -459,7 +477,8 @@ public class OrdiniPanel extends JPanel {
         casella.setText("");
         prodAggiunti.setText("        #Prodotti aggiunti: 0        ");
         model.setRowCount(0);
-
+        
+        
 
     }
 
@@ -629,11 +648,12 @@ public class OrdiniPanel extends JPanel {
     
     public void renderViewRiepilogo(){
     
-      
+     
       fotopan.removeAll();
+      fotopan.updateUI();
+      
 
-
-        String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale", "Prodotti arrivati", "Ricarica ordine"};
+        String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale", "Ricarica ordine"};
 
         Object[][] data = {};
 
@@ -647,7 +667,7 @@ public class OrdiniPanel extends JPanel {
         JTable table2 = new JTable(model2){
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
                 Component comp = super.prepareRenderer(renderer, row, column);
-                if(column == 5) return comp;
+                if(column == 4) return comp;
                 Color alternateColor = new Color(24, 53, 90);
                 Color whiteColor = new Color(10, 25, 43);
                 if(!comp.getBackground().equals(getSelectionBackground())) {
@@ -660,8 +680,8 @@ public class OrdiniPanel extends JPanel {
         };
         table2.getTableHeader().setReorderingAllowed(false);
 
-        table2.getColumnModel().getColumn(5).setCellRenderer(new TableButtonRenderer());
-        table2.getColumnModel().getColumn(5).setCellEditor(new TableRenderer(new JCheckBox()));
+        table2.getColumnModel().getColumn(4).setCellRenderer(new TableButtonRenderer());
+        table2.getColumnModel().getColumn(4).setCellEditor(new TableRenderer(new JCheckBox()));
 
 
         JScrollPane sp2 = new JScrollPane(table2);
@@ -709,13 +729,11 @@ public class OrdiniPanel extends JPanel {
                     }
                 }
                     
-                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), coast, ordine.get(4), ordaoo.isArrivato(ordine.get(0)), "Apri", "Ricarica"});
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), coast,  "Ricarica"});
             }
         } catch (SQLException ex) {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-        } catch (ParseException ex) {
-            Logger.getLogger("genlog").warning("ParseException\n" + StockManagement.printStackTrace(ex));
-        }
+        } 
 
 
         fotopan.revalidate();
@@ -786,8 +804,11 @@ public class OrdiniPanel extends JPanel {
                 
                 if (button.getText().equals("Ricarica")) {
                     
-                    
-
+                    /*
+                    model.setRowCount(0); //Svuota carrello
+                    refreshTab();
+                    caricaOrdine(table.getValueAt(row, 0).toString()); 
+*/
                 }
 
             }
