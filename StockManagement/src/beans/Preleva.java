@@ -21,7 +21,7 @@ public class Preleva {
     private static int code = 0;
     private String n_ordine;
     private static String data = " ";
-    private int qty;
+    private int qty; //in db si chiama "qnty"
     private String fk_utente;
     private String prodotto_sku;
     private String note;

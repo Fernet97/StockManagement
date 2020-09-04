@@ -73,7 +73,7 @@ public class PrelevaDAO {
         Collection<Preleva> Prelievo = new LinkedList<Preleva>();
         //SELECT * FROM prodotti WHERE sku = '1';
 
-        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE n_ordine = '" + o + "' and prodotto_sku != 'VOID'";// void identifica le note su ordini
+        String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE n_ordine = '" + o + "' and prodotto_sku != 'VOID'";// void identifica le note
 
         try {
             connection = DriverManagerConnectionPool.getConnection();
@@ -142,7 +142,7 @@ public class PrelevaDAO {
 
 
 
-    public synchronized void removeOrd(String n_ordine) throws SQLException { // da decidere se serve (forse solo all admin)
+    public synchronized void removeOrd(String n_ordine) throws SQLException {// solo all admin
         Connection connection = null;
         Statement statement = null;
         String query = "DELETE FROM " + this.TABLE_NAME + " WHERE  (`n_ordine` = '" + n_ordine + "');";
@@ -212,7 +212,7 @@ public class PrelevaDAO {
         ArrayList<ArrayList<String>> ordini = new ArrayList<>(5);
 
         String selectSQL = "select n_ordine ,data , sum(qnty) , sum(qnty * costo), fk_utente from db_stock.preleva, "
-                + " db_stock.prodotto where prodotto_sku = sku group by n_ordine"; // aggiunto fkutente
+                + " db_stock.prodotto where prodotto_sku = sku group by n_ordine"; 
 
         
         try {
@@ -245,45 +245,9 @@ public class PrelevaDAO {
         return ordini;
     }
 
-//    /**
-//     * ritorna il numero di ordini effettuati
-//     *
-//     * @return
-//     * @throws SQLException
-//     */
-//    public synchronized int qtyPrelievo() throws SQLException { // forse non serve
-//
-//        Connection connection = null;
-//        PreparedStatement ps = null;
-//
-//        int n = 0;
-//
-//        String sql = "select count(distinct n_ordine) from " + this.TABLE_NAME;
-//
-//        try {
-//            connection = DriverManagerConnectionPool.getConnection();
-//            ps = connection.prepareStatement(sql);
-//
-//            ResultSet rs = ps.executeQuery();
-//
-//            n = rs.getInt("count(distinct n_ordine)");
-//
-//        } finally {
-//            try {
-//                if (ps != null) {
-//                    ps.close();
-//                }
-//            } finally {
-//                DriverManagerConnectionPool.releaseConnection(connection);
-//                return n;
-//
-//            }
-//
-//        }
-//    }
 
     
-    public synchronized void addNote(Preleva o) throws SQLException { // da pulire
+    public synchronized void addNote(Preleva o) throws SQLException { // da testare
         Connection connection = null;
         Statement statement = null;
         Preleva bean = new Preleva();
