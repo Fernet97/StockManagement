@@ -42,6 +42,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -454,6 +455,12 @@ public class OrdiniPanel extends JPanel {
         super.add(princ);
 
     }
+    
+    
+    public OrdiniPanel getInstance() {
+             return this;
+
+    }
 
     public ImageIcon ImpostaImg(String nomeImmag) {
 
@@ -653,7 +660,7 @@ public class OrdiniPanel extends JPanel {
       fotopan.updateUI();
       
 
-        String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale", "Ricarica ordine"};
+        String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale", "Ricarica ordine", "Visualizza"};
 
         Object[][] data = {};
 
@@ -668,6 +675,7 @@ public class OrdiniPanel extends JPanel {
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
                 Component comp = super.prepareRenderer(renderer, row, column);
                 if(column == 4) return comp;
+                if(column == 5) return comp;
                 Color alternateColor = new Color(24, 53, 90);
                 Color whiteColor = new Color(10, 25, 43);
                 if(!comp.getBackground().equals(getSelectionBackground())) {
@@ -683,6 +691,8 @@ public class OrdiniPanel extends JPanel {
         table2.getColumnModel().getColumn(4).setCellRenderer(new TableButtonRenderer());
         table2.getColumnModel().getColumn(4).setCellEditor(new TableRenderer(new JCheckBox()));
 
+        table2.getColumnModel().getColumn(5).setCellRenderer(new TableButtonRenderer());
+        table2.getColumnModel().getColumn(5).setCellEditor(new TableRenderer(new JCheckBox()));
 
         JScrollPane sp2 = new JScrollPane(table2);
         sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, new Color(24, 53, 90), new Color(24, 53, 90)), "Riepilogo ordini effettuati", TitledBorder.CENTER, TitledBorder.TOP));
@@ -729,7 +739,7 @@ public class OrdiniPanel extends JPanel {
                     }
                 }
                     
-                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), coast,  "Ricarica"});
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), coast,  "Ricarica", "Visualizza"});
             }
         } catch (SQLException ex) {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
@@ -806,9 +816,22 @@ public class OrdiniPanel extends JPanel {
                     
                     /*
                     model.setRowCount(0); //Svuota carrello
-                    refreshTab();
+                    refreshTab();d
                     caricaOrdine(table.getValueAt(row, 0).toString()); 
 */
+                }
+                
+                
+            if (button.getText().equals("Visualizza")) {
+                    
+                    FrameRiepPreleva f = new FrameRiepPreleva(getInstance(), "ordineXXX", "DAtaORDINNN", "898$");
+                    f.setResizable(false);
+                    //f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    f.setSize(1000, 400);
+                    f.setLocationRelativeTo(null);  // CENTRA 
+                    f.setVisible(true);
+                    f.setTitle("Riepilogo ordine: " + table.getValueAt(row, 0));
+                    //f.setTitle("#ORDINE: PRE-1 del 28/07/2020 @admin");
                 }
 
             }
@@ -846,6 +869,9 @@ public class OrdiniPanel extends JPanel {
             return this;
         }
     }
+        
+        
+
 
 }
 
