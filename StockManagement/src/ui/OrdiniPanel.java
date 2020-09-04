@@ -7,9 +7,11 @@ package ui;
 
 import beans.Fornitore;
 import beans.Ordine;
+import beans.Preleva;
 import beans.Prodotto;
 import dao.FornitoreDAO;
 import dao.OrdineDAO;
+import dao.PrelevaDAO;
 import dao.ProdottoDAO;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -93,6 +95,7 @@ public class OrdiniPanel extends JPanel {
     private JPanel fotopan;
     public boolean ViewOrdiniRiep = false;
     private final RoundedPanel photo;
+    private DefaultTableModel model2;
     
     public OrdiniPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -383,6 +386,14 @@ public class OrdiniPanel extends JPanel {
                 int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di voler prelevare i prodotti specificati nel carrello?");
                 if (OpzioneScelta == JOptionPane.OK_OPTION) {
                     ProdottoDAO prodao = new ProdottoDAO();
+                    PrelevaDAO predao = new PrelevaDAO();
+                    
+                    Preleva bean = new Preleva();
+                    try {
+                        bean.startOrdine();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger("genlog").warning("InterruptedException\n" + StockManagement.printStackTrace(ex));
+                    }
 
                     try {
                         for (int i = 0; i < model.getRowCount(); i++) {
@@ -391,6 +402,11 @@ public class OrdiniPanel extends JPanel {
                             if (check(prodottoCorrente, Integer.parseInt(model.getValueAt(i, 2).toString()))) { // Se la qty da prelevare è corretta
                                 prodottoCorrente.setQty(prodottoCorrente.getQty() - Integer.parseInt(model.getValueAt(i, 2).toString()));
                                 prodao.update(prodottoCorrente);
+                                
+                               Preleva pre = new Preleva(Integer.parseInt(model.getValueAt(i, 2).toString()), "Un utente", model.getValueAt(i, 0).toString());
+                                predao.add(pre);
+                                
+                                
                             }
 
                         }
@@ -398,6 +414,8 @@ public class OrdiniPanel extends JPanel {
                         refreshTab();
                     } catch (SQLException ex) {
                         ex.printStackTrace();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
@@ -480,10 +498,35 @@ public class OrdiniPanel extends JPanel {
 
     //QUANDO CHIAMARE IL REFRESH DI ORDINI?
     public void refreshTab() {
-        casella.setBackground(Color.darkGray);
-        casella.setText("");
-        prodAggiunti.setText("        #Prodotti aggiunti: 0        ");
-        model.setRowCount(0);
+        try {
+            casella.setBackground(Color.darkGray);
+            casella.setText("");
+            prodAggiunti.setText("        #Prodotti aggiunti: 0        ");
+            model.setRowCount(0);
+            model2.setRowCount(0);
+            
+            PrelevaDAO predao = new PrelevaDAO();
+            
+            
+            for (ArrayList<String> ordine : predao.groupByPrelievi()) {
+                BigDecimal costoo = new BigDecimal(String.valueOf(ordine.get(2)));
+                String coast = costoo.toPlainString();
+
+                if(coast.contains(".") == true){
+                    int punto = (char) coast.indexOf('.');
+                    
+                    if(coast.substring(punto).length() > 5){
+                        coast = coast.substring(0, punto+5);
+                        System.out.println(coast);
+                    }
+                }
+                // CAZZZZZ
+                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), coast,  "Ricarica", "Visualizza"});
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
 
@@ -664,7 +707,7 @@ public class OrdiniPanel extends JPanel {
 
         Object[][] data = {};
 
-        DefaultTableModel model2 = new DefaultTableModel(data, columnNames) {
+        model2 = new DefaultTableModel(data, columnNames) {
             private static final long serialVersionUID = 1L;
 
             public boolean isCellEditable(int row, int column) {
@@ -721,11 +764,11 @@ public class OrdiniPanel extends JPanel {
         });
         fotopan.add(ordinerimuovi);
 
-        OrdineDAO ordaoo = new OrdineDAO();
+        PrelevaDAO ordaoo = new PrelevaDAO();
 
         try {
             // String[] columnNames = {"# Ordine", "Data ordine", "# prodotti ordinati", "Costo Totale ordine", "In spedizione", "Controlla ordine", "Ricarica ordine"};
-            for (ArrayList<String> ordine : ordaoo.groupByOrdini()) {
+            for (ArrayList<String> ordine : ordaoo.groupByPrelievi()) {
                 BigDecimal costoo = new BigDecimal(String.valueOf(ordine.get(2)));
                 
                 String coast = costoo.toPlainString();
@@ -824,7 +867,7 @@ public class OrdiniPanel extends JPanel {
                 
             if (button.getText().equals("Visualizza")) {
                     
-                    FrameRiepPreleva f = new FrameRiepPreleva(getInstance(), "ordineXXX", "DAtaORDINNN", "898$");
+                    FrameRiepPreleva f = new FrameRiepPreleva(getInstance(), table.getValueAt(row, 0).toString(), table.getValueAt(row, 1).toString(), "898$");
                     f.setResizable(false);
                     //f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     f.setSize(1000, 400);

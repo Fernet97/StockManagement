@@ -5,7 +5,12 @@
  */
 package ui;
 
+import beans.Ordine;
+import beans.Preleva;
+import beans.Prodotto;
 import dao.OrdineDAO;
+import dao.PrelevaDAO;
+import dao.ProdottoDAO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -16,7 +21,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -45,9 +52,15 @@ class FrameRiepPreleva extends JDialog{
     private final JTable table2;
     private final JTextArea casNote;
     private final JScrollPane sp3;
+    private final String Numordine;
+    private final String dataordine;
      
     public FrameRiepPreleva(OrdiniPanel pan, String numordine, String dataordine, String costoTot){
 
+         this.Numordine = numordine;
+         this.dataordine = dataordine;
+         
+        
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         setModal(true);
         addWindowListener( new WindowAdapter() {
@@ -153,9 +166,38 @@ class FrameRiepPreleva extends JDialog{
         add(leftpan, BorderLayout.EAST);
 
 
-               
+        refreshOrdini();
         
         
+    }
+    
+    
+     public void refreshOrdini() {
+
+        model2.setRowCount(0);
+
+         PrelevaDAO ordaoo = new PrelevaDAO();
+        
+        try {
+            //Prendo eventuali note del db per quest'ordine
+           // casNote.setText(ordaoo.getNote(Numordine));
+            //if(ordaoo.getNote(Numordine).length()>0)  notepresenti.setText("    Hai già registrato una nota per questo ordine");
+            
+            //  String[] columnNames = {"#Ordine","Fornitore" ,"SKU prodotto", "Costo", "Quantita' arrivata", "Data prevista di arrivo", " E' Arrivato?", "Messo in Stock?"};
+            ProdottoDAO prodao = new ProdottoDAO();
+            for (Preleva ordine : ordaoo.getByNum(Numordine)) {
+
+                BigDecimal costoo = new BigDecimal(String.valueOf(prodao.getBySku(ordine.getProdotto_sku()).getCosto()));
+                Prodotto p = prodao.getBySku(ordine.getProdotto_sku());
+       
+               model2.addRow(new Object[]{ordine.getProdotto_sku(), p.getNome() ,costoo.toPlainString(),ordine.getQty()});
+                
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+        } 
+
     }
     
 }
