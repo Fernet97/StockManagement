@@ -73,13 +73,13 @@ public class Preleva {
  * @param fk_utente
  * @throws InterruptedException 
  */
-    /* public Ordine(String n_ordine, String note, String fk_utente) throws InterruptedException {
+     public Preleva(String n_ordine, String note, String fk_utente) throws InterruptedException {
         setCode(this.code);
         setData(generateData());
         this.n_ordine = n_ordine;
         this.note = note;
         this.fk_utente = fk_utente;
-         }*/
+         }
 
     
 
