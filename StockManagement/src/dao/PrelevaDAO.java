@@ -251,9 +251,11 @@ public class PrelevaDAO {
         Connection connection = null;
         Statement statement = null;
         Preleva bean = new Preleva();
+      //  INSERT INTO `db_stock`.`preleva` ( `n_ordine`, `data`, `qnty`, `fk_utente`, `prodotto_sku`, `note`, `id`) VALUES ('PRE-2', 'ORA', '0', 'admin', 'VOID', 'MIIIIAAAOAAOAO', '2');
+
 //INSERT INTO `db_stock`.`preleva` (`n_ordine`, `data`, `qnty`, `fk_utente`, `prodotto_sku`, `note`, `id`) VALUES ('a', 'data', '0', 'admin', 'VOID', 'NOTE', 'ID');
          String query = "INSERT INTO " + this.TABLE_NAME + "(`n_ordine`, `data`, `qnty`, `fk_utente`, `prodotto_sku`, `note`, `id`)"
-                + " VALUES ('" + o.getN_ordine() + "', '" + bean.generateData() + ", '0', '"+ o.getFk_utente()+"', 'VOID', "
+                + " VALUES ('" + o.getN_ordine() + "', '" + bean.generateData() + "', '0', '"+ o.getFk_utente()+"', 'VOID', "
                  + " '"+ o.getNote() +"', '" +  getId(o.getN_ordine()) + "')";
          
          
