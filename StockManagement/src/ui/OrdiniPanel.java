@@ -857,11 +857,9 @@ public class OrdiniPanel extends JPanel {
                 
                 if (button.getText().equals("Ricarica")) {
                     
-                    /*
-                    model.setRowCount(0); //Svuota carrello
-                    refreshTab();d
-                    caricaOrdine(table.getValueAt(row, 0).toString()); 
-*/
+                    model.setRowCount(0);
+                    refreshTab();
+                    caricaOrdine(table.getValueAt(row, 0).toString());
                 }
                 
                 
@@ -914,9 +912,33 @@ public class OrdiniPanel extends JPanel {
     }
         
         
+        
+       public void caricaOrdine(String numerordine) {
+    
+        try {
+            JOptionPane.showMessageDialog(this, "Sto caricando l'ordine " + numerordine + " nel carrello ...");
+            
+            ProdottoDAO prodao = new ProdottoDAO();
+            PrelevaDAO ordao = new PrelevaDAO();
 
+            //costocarrell = 0;
+            
+            int i = 0;
+            for (Preleva o : ordao.getByNum(numerordine)) {
+                
+                Prodotto p = prodao.getBySku(o.getProdotto_sku());
 
-}
+                model.addRow(new Object[]{p.getSku(), p.getNome(), o.getQty(), p.getCategoria(), p.getNote(), p.isInstock()});
+                numprodaggiunti += Integer.parseInt(model.getValueAt(i++, 2).toString());
+                prodAggiunti.setText("        #Prodotti aggiunti: " + String.valueOf(numprodaggiunti) + "        ");
+                
+                
+            } 
+        } catch (SQLException ex) {
+            Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       }   
+ }
 
 /*
         conferma.addActionListener(new ActionListener() {
