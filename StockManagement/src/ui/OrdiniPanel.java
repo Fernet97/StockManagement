@@ -744,7 +744,7 @@ public class OrdiniPanel extends JPanel {
         ordinerimuovi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                OrdineDAO daor = new OrdineDAO();
+                PrelevaDAO daor = new PrelevaDAO();
                 try {
                     for (int i = 0; i < table2.getSelectedRows().length; i++) {
 
