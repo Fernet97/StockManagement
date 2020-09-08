@@ -24,6 +24,7 @@ import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -53,12 +54,17 @@ class FrameRiepPreleva extends JDialog{
     private final JTextArea casNote;
     private final JScrollPane sp3;
     private final String Numordine;
-    private final String dataordine;
+    private final String Dataordine;
+    private final String User;
+    private final JButton comment;
+    private OrdiniPanel ordinipanel;
      
-    public FrameRiepPreleva(OrdiniPanel pan, String numordine, String dataordine, String costoTot){
+    public FrameRiepPreleva(OrdiniPanel pan, String numordine, String dataordine, String user){
 
+         this.ordinipanel = pan;
          this.Numordine = numordine;
-         this.dataordine = dataordine;
+         this.Dataordine = dataordine;
+         this.User = user;
          
         
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
@@ -109,7 +115,7 @@ class FrameRiepPreleva extends JDialog{
       
        table2.getTableHeader().setReorderingAllowed(false);
             JScrollPane sp2 = new JScrollPane(table2);
-        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, new Color(24, 53, 90), new Color(24, 53, 90)), "#ORDINE: PRE-1 del 28/07/2020 @admin", TitledBorder.CENTER, TitledBorder.TOP));
+        sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, new Color(24, 53, 90), new Color(24, 53, 90)), "#ORDINE: "+Numordine+" del "+Dataordine+" @"+User+" ", TitledBorder.CENTER, TitledBorder.TOP));
         
         add(sp2, BorderLayout.CENTER);
       
@@ -143,12 +149,32 @@ class FrameRiepPreleva extends JDialog{
 
         });
         
-        JButton comment = new JButton("Salva");
+        comment = new JButton("Salva");
         comment.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                    PrelevaDAO ordinedao = new PrelevaDAO();
+                    
+                    try{
+                            // SALVO EVENTUALI NOTE
+                            if(casNote.getText().length() > 0){
+                                Preleva o = new Preleva(Numordine,casNote.getText(), OrdiniAdminPanel.nomeutente);
+                                if(ordinedao.getNote(Numordine).length()>0 ){
+                                    ordinedao.updateNote(casNote.getText(),  OrdiniAdminPanel.nomeutente, Numordine);}
+                                else ordinedao.addNote(o);
+                            }
+                            else { // Se ho cancellato i commenti nella casella, allora cancella nel db quel commento
+                                 if(ordinedao.getNote(Numordine).length()>=0 ){
+                                    ordinedao.removeNote(Numordine);
+                                 }
+                            }
+                    } catch (InterruptedException ex) {        
+                    Logger.getLogger(FrameRiepPreleva.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(FrameRiepPreleva.class.getName()).log(Level.SEVERE, null, ex);
+                }        
+                            
             }
 
         });
@@ -173,6 +199,7 @@ class FrameRiepPreleva extends JDialog{
     
     
      public void refreshOrdini() {
+         
 
         model2.setRowCount(0);
 
@@ -194,6 +221,11 @@ class FrameRiepPreleva extends JDialog{
                 
                 
             }
+            
+            //CARICA NOTE
+            casNote.setText(ordaoo.getNote(Numordine));
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         } 

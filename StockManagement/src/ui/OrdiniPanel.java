@@ -30,6 +30,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -403,7 +404,7 @@ public class OrdiniPanel extends JPanel {
                                 prodottoCorrente.setQty(prodottoCorrente.getQty() - Integer.parseInt(model.getValueAt(i, 2).toString()));
                                 prodao.update(prodottoCorrente);
                                 
-                               Preleva pre = new Preleva(Integer.parseInt(model.getValueAt(i, 2).toString()), "Un utente", model.getValueAt(i, 0).toString());
+                               Preleva pre = new Preleva(Integer.parseInt(model.getValueAt(i, 2).toString()), frameprinc.nomeuser, model.getValueAt(i, 0).toString());
                                 predao.add(pre);
                                 
                                 
@@ -865,14 +866,15 @@ public class OrdiniPanel extends JPanel {
                 
             if (button.getText().equals("Visualizza")) {
                     
-                    FrameRiepPreleva f = new FrameRiepPreleva(getInstance(), table.getValueAt(row, 0).toString(), table.getValueAt(row, 1).toString(), "898$");
-                    f.setResizable(false);
-                    //f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    f.setSize(1000, 400);
-                    f.setLocationRelativeTo(null);  // CENTRA 
-                    f.setVisible(true);
-                    f.setTitle("Riepilogo ordine: " + table.getValueAt(row, 0));
-                    //f.setTitle("#ORDINE: PRE-1 del 28/07/2020 @admin");
+                        FrameRiepPreleva f = new FrameRiepPreleva(getInstance(), table.getValueAt(row, 0).toString(), table.getValueAt(row, 1).toString(), "FaifunzionareBeneGetID");
+                        f.setResizable(false);
+                        //f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        f.setSize(1000, 400);
+                        f.setLocationRelativeTo(null);  // CENTRA
+                        f.setVisible(true);
+                        f.setTitle("Riepilogo ordine: " + table.getValueAt(row, 0));
+                        //f.setTitle("#ORDINE: PRE-1 del 28/07/2020 @admin");
+                    
                 }
 
             }
