@@ -435,7 +435,7 @@ public class OrdiniPanel extends JPanel {
                 }
 
                 if (qtydaTogliere > (prodottoCorrente.getQty() - prodottoCorrente.getQty_min())) {
-                    JOptionPane.showMessageDialog(getParent(), "Non puoi prendere più di " + (prodottoCorrente.getQty() - prodottoCorrente.getQty_min()) + " unità!");
+                    JOptionPane.showMessageDialog(getParent(), "Attenzione! quantità insufficiente per "+ prodottoCorrente.getSku()+ "\nNon puoi prelevare più di "+ (prodottoCorrente.getQty() - prodottoCorrente.getQty_min()) + " unità!\nIl prodotto non verrà aggiunto nell'ordine");
                     return false;
                 }
 
@@ -502,6 +502,7 @@ public class OrdiniPanel extends JPanel {
         try {
             casella.setBackground(Color.darkGray);
             casella.setText("");
+            numprodaggiunti = 0;
             prodAggiunti.setText("        #Prodotti aggiunti: 0        ");
             model.setRowCount(0);
             model2.setRowCount(0);
@@ -857,10 +858,10 @@ public class OrdiniPanel extends JPanel {
                 boolean instockk = false;
                 
                 if (button.getText().equals("Ricarica")) {
-                    
                     model.setRowCount(0);
                     refreshTab();
                     caricaOrdine(table.getValueAt(row, 0).toString());
+                    
                 }
                 
                 
