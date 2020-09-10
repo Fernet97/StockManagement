@@ -112,6 +112,12 @@ public class StockManagement {
         UIManager.put("TextField.background", Color.DARK_GRAY);
         UIManager.put("PasswordField.background", Color.DARK_GRAY);
         UIManager.put("TextArea.background", Color.DARK_GRAY);
+        
+        UIManager.put("TextField.selectionBackground", new Color(66, 139, 221));
+        UIManager.put("PasswordField.selectionBackground", new Color(66, 139, 221));
+        UIManager.put("TextArea.selectionBackground", new Color(66, 139, 221));
+
+        
         UIManager.put("text", Color.white);
 
         UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("Arial", Font.PLAIN, 14));
