@@ -397,6 +397,39 @@ public class PrelevaDAO {
         }
 
     } 
+       
+        public synchronized String getUser(String nordine) throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+
+String user = "";
+
+        String selectSQL = "select fk_utente from preleva where n_ordine = "+nordine+" and prodotto_sku!='VOID' limit 1";
+
+        try {
+            connection = DriverManagerConnectionPool.getConnection();
+            ps = connection.prepareStatement(selectSQL);
+
+            ResultSet rs = ps.executeQuery();
+
+
+                user=(rs.getString("fk_utente"));
+
+
+            
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } finally {
+                DriverManagerConnectionPool.releaseConnection(connection);
+            }
+
+        }
+        return user;
+    }
     
 
 }// chiude la classe
