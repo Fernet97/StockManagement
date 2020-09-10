@@ -39,6 +39,8 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -72,10 +74,24 @@ class FrameRiepPreleva extends JDialog{
         addWindowListener( new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent we) {
-                        int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di uscire ed annullare le modifiche?", "", JOptionPane.YES_NO_OPTION);
-                        if (OpzioneScelta == JOptionPane.OK_OPTION) {
-                            dispose();
-                         }
+                        
+                    try {
+                        PrelevaDAO ordinedao = new PrelevaDAO();
+                        if(!ordinedao.getNote(Numordine).equals(casNote.getText())){
+                            int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di uscire ed annullare le modifiche?", "", JOptionPane.YES_NO_OPTION);
+                            if (OpzioneScelta == JOptionPane.OK_OPTION) {
+                                dispose();
+                             }
+                        
+                        } else dispose();
+                       
+                        
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(FrameRiepPreleva.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                        
+                     
                         
                     }
                 } );
@@ -131,6 +147,37 @@ class FrameRiepPreleva extends JDialog{
         casNote.setRows(5);
         casNote.setColumns(20);        
         casNote.setText("");
+        casNote.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void changedUpdate(DocumentEvent arg0) {
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent arg0) {
+                try {
+                    PrelevaDAO ordinedao = new PrelevaDAO();
+                    if(!ordinedao.getNote(Numordine).equals(casNote.getText())) comment.setEnabled(true);
+                    else  comment.setEnabled(false);
+                } catch (SQLException ex) {
+                    Logger.getLogger(FrameRiepPreleva.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                try {
+                    PrelevaDAO ordinedao = new PrelevaDAO();
+                    if(!ordinedao.getNote(Numordine).equals(casNote.getText())) comment.setEnabled(true);
+                    else  comment.setEnabled(false);
+                } catch (SQLException ex) {
+                    Logger.getLogger(FrameRiepPreleva.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        }
+        );
+
         sp3 = new JScrollPane(casNote);
         
         
@@ -150,13 +197,20 @@ class FrameRiepPreleva extends JDialog{
         });
         
         comment = new JButton("Salva");
+        
+        
         comment.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                     PrelevaDAO ordinedao = new PrelevaDAO();
                     
-                    try{
+                    try{  
+                        int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di uscire ed annullare le modifiche?", "", JOptionPane.YES_NO_OPTION);
+                            if (OpzioneScelta == JOptionPane.OK_OPTION) {
+                            
+                        
+                        
                             // SALVO EVENTUALI NOTE
                             if(casNote.getText().length() > 0){
                                 Preleva o = new Preleva(Numordine,casNote.getText(), OrdiniAdminPanel.nomeutente);
@@ -169,6 +223,10 @@ class FrameRiepPreleva extends JDialog{
                                     ordinedao.removeNote(Numordine);
                                  }
                             }
+                            
+                            
+                           comment.setEnabled(false);
+                    }
                     } catch (InterruptedException ex) {        
                     Logger.getLogger(FrameRiepPreleva.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex) {
@@ -223,6 +281,7 @@ class FrameRiepPreleva extends JDialog{
             }
             
             //CARICA NOTE
+            comment.setEnabled(false);
             casNote.setText(ordaoo.getNote(Numordine));
             
             
