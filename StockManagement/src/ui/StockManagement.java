@@ -30,7 +30,7 @@ public class StockManagement {
 
     private static Logger logger = Logger.getLogger("genlog");
     private static FileHandler fh;
-    private static String version = "Versione Software 1.0.0 beta 1";
+    private static String version = "Versione Software 1.0.0 beta 2";
 
     public static void main(String[] args) throws InterruptedException, IOException {
 

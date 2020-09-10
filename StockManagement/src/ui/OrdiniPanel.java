@@ -866,8 +866,9 @@ public class OrdiniPanel extends JPanel {
                 
                 
             if (button.getText().equals("Visualizza")) {
-                    
-                        FrameRiepPreleva f = new FrameRiepPreleva(getInstance(), table.getValueAt(row, 0).toString(), table.getValueAt(row, 1).toString(), "FaifunzionareBeneGetID");
+                    try {
+                        PrelevaDAO predao = new PrelevaDAO();
+                        FrameRiepPreleva f = new FrameRiepPreleva(getInstance(), table.getValueAt(row, 0).toString(), table.getValueAt(row, 1).toString(), predao.getUser(table.getValueAt(row, 0).toString()));
                         f.setResizable(false);
                         //f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         f.setSize(1000, 400);
@@ -875,6 +876,9 @@ public class OrdiniPanel extends JPanel {
                         f.setVisible(true);
                         f.setTitle("Riepilogo ordine: " + table.getValueAt(row, 0));
                         //f.setTitle("#ORDINE: PRE-1 del 28/07/2020 @admin");
+                    } catch (SQLException ex) {
+                        Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     
                 }
 
