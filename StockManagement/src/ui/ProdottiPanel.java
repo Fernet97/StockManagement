@@ -135,7 +135,7 @@ public class ProdottiPanel extends JPanel {
         casella = new JTextField(20);
         casella.setBackground(Color.darkGray);
         cerca.add(searchlabel);
-        cerca.setBorder(new EmptyBorder(0, 0, 0, 850));
+        cerca.setBorder(new EmptyBorder(0, 0, 0, 650));
         cerca.add(casella);
 
         ActionListener actionListener = new ActionListener() {
@@ -152,11 +152,62 @@ public class ProdottiPanel extends JPanel {
         cerca.add(checkOnlyArriv);
         panSopra.add(cerca);
 
-        panSopra.add(new JLabel(" "));
+        
+        
+        JButton buttonStock = new JButton("DISPONIBILITA'");
+        buttonStock.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              
+                try{
+                    int a = JOptionPane.showConfirmDialog(getParent(), "Modificare la disponibilità dei prodotti selezionati?");
+                    if (a == JOptionPane.YES_OPTION) {
+
+                        if( table.getSelectedRows().length== 0) JOptionPane.showMessageDialog(null, "Devi selezionare almeno un prodotto!");
+
+                        ProdottoDAO prodao = new ProdottoDAO();
+
+                        // Gli indici delle righe selezionate
+                        for (int i: table.getSelectedRows()) {
+
+                            Prodotto p = prodao.getBySku(table.getValueAt(i, 0).toString());
+                            
+                            if(table.getValueAt(i, 6).toString().equals("true")) {
+                                p.setInstock(false);
+                                table.setValueAt("false", i, 6);}
+                            
+                            else{ 
+                                p.setInstock(true);
+                                table.setValueAt("true", i, 6);
+                            }
+                            
+                            prodao.update(p);
+
+                        }
+
+
+                }
+                }catch(SQLException ex){
+                    //miaooo
+                }
+
+            }
+        });
+        
+        
+        buttonStock.setBackground(new Color( 255,200 ,18 ));
+        buttonStock.setForeground(Color.black);
+        buttonStock.setFont(new Font("Arial Black", Font.BOLD, 15));
+        panSopra.add(buttonStock);
+        
+        
 
         JButton buttonNew = new JButton("ADD NEW");
         buttonNew.setBackground(new Color( 165,204 ,107 ));
         buttonNew.setForeground(Color.black);
+        buttonNew.setFont(new Font("Arial Black", Font.BOLD, 15));
+
         //*************+* BOTTONE AGGIUNGI NUOVA RIGA**************************
         buttonNew.addActionListener(new ActionListener() {
 
@@ -182,8 +233,10 @@ public class ProdottiPanel extends JPanel {
 
             }
         });
-        buttonNew.setFont(new Font("Arial Black", Font.BOLD, 15));
+        
         panSopra.add(buttonNew);
+
+       
 
         super.add(panSopra);
 
@@ -192,7 +245,7 @@ public class ProdottiPanel extends JPanel {
         TitoloTab1.setLayout(new GridLayout(1, 1));
         TitoloTab1.setBorder(new EmptyBorder(0, 100, 20, 100));
 
-        String[] columnNames = {"sku", "Data reg.", "Nome", "Categoria", "Quantità", "Fornitore", "In Stock?", "Costo", "Note", "Quantità in arrivo", "Modifica", "Cancella", "Ordina"};
+        String[] columnNames = {"sku", "Data reg.", "Nome", "Categoria", "Quantità", "Fornitore", "Disponibilità", "Costo", "Note", "Quantità in arrivo", "Modifica", "Cancella", "Ordina"};
 
         Object[][] data = {};
 
@@ -1096,7 +1149,7 @@ public class ProdottiPanel extends JPanel {
 
             JPanel panstock = new JPanel();
             panstock.add(new JLabel("        "));
-            inStock = new JCheckBox("In Stock");
+            inStock = new JCheckBox("Disponibiltà");
             inStock.setFont(new Font("Arial Black", Font.BOLD, 15));
             panstock.add(inStock);
             pandown.add(panstock);

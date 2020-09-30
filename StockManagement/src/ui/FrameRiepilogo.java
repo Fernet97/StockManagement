@@ -97,7 +97,7 @@ class FrameRiepilogo extends JDialog {
         ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
         this.setIconImage(img.getImage());
 
-        String[] columnNames = { "SKU", "Nome Prodotto", "Fornitore" ,"Costo", "Quantita' arrivata/ Quantità prevista", "Data di arrivo", " E' Arrivato?", "Messo in Stock?", "Conteggio"};
+        String[] columnNames = { "SKU", "Nome Prodotto", "Fornitore" ,"Costo", "Quantita' arrivata/ Quantità prevista", "Data di arrivo", "Consegnato", "Disponibilità", "Conteggio"};
 
         Object[][] data = {};
 
@@ -164,7 +164,7 @@ class FrameRiepilogo extends JDialog {
         });
 
         // Dobbiamo autocompilare i conteggi??
-        JButton stockSelezion = new JButton("Metti in Stock");
+        JButton stockSelezion = new JButton("Disponibilità");
         stockSelezion.addActionListener(new ActionListener() {
 
             @Override
