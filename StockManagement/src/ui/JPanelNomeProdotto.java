@@ -29,17 +29,23 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -51,7 +57,7 @@ import javax.swing.text.DocumentFilter;
  */
 public class JPanelNomeProdotto extends JPanel {
 
-    private DefaultTableModel model;
+    public DefaultTableModel model;
     private JTable table;
     private JTextField casella;
     private JScrollPane sp2;
@@ -64,6 +70,10 @@ public class JPanelNomeProdotto extends JPanel {
         this.casella = casella;
         this.text = text;
         this.PrelevaMode = PrelevaMode;
+        
+
+        
+        
 
         setLayout(new GridLayout(1, 1));
 
@@ -99,6 +109,8 @@ public class JPanelNomeProdotto extends JPanel {
       };
         table.getColumnModel().getColumn(5).setCellRenderer(new TableButtonRenderer());
         table.getColumnModel().getColumn(5).setCellEditor(new TableRenderer(new JCheckBox()));
+        
+
 
         sp2 = new JScrollPane(table);
         sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, new Color(24, 53, 90), new Color(24, 53, 90)), " Prodotti con nome: " + text + " ", TitledBorder.CENTER, TitledBorder.TOP));
@@ -194,6 +206,8 @@ public class JPanelNomeProdotto extends JPanel {
         }
     }
 
+    
+    //Penso che a questo punto sia un metodo inutile
     public void aggiornaNome(String newtext) {
 
         sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, new Color(24, 53, 90), new Color(24, 53, 90)), " Prodotti con nome: " + newtext + " ", TitledBorder.CENTER, TitledBorder.TOP));
@@ -268,11 +282,165 @@ public class JPanelNomeProdotto extends JPanel {
                 }
             }
         });
+        
+        
+        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(table.getModel());
+        table.setRowSorter(rowSorter);
+        
+            casella.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void changedUpdate(DocumentEvent arg0) {
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent arg0) {
+                    ProdottoDAO prodao = new ProdottoDAO();
+                    OrdineDAO ordinedao = new OrdineDAO();
+
+                String text = casella.getText();
+                
+                  if (text.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                    casella.setBackground(Color.darkGray);
+                    casella.setForeground(Color.white);
+                    
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter(text));
+                    try {
+                        Prodotto p = prodao.getBySku(text);
+                        if(p.getSku() != null){ //sE è UNO SKU
+                            casella.setBackground(Color.green);
+                            casella.setForeground(Color.black);
+                            
+                            if(!p.isInstock()){ //però il prodotto non è in stock ..
+                                casella.setBackground(Color.ORANGE);
+                                casella.setForeground(Color.black);
+                                JOptionPane.showMessageDialog(null, "Prodotto non in stock. Contattare l'amministratore.");
+                                return;
+                            }
+                            
+                            //Però non è associato nessun fornitore..
+                            if (ordinedao.getFPr(text) == null || ordinedao.getFPr(text).length() < 2) {
+                                casella.setBackground(Color.ORANGE);
+                                casella.setForeground(Color.black);
+                                System.out.println("E' uno sku senza fonritore");
+                                JOptionPane.showMessageDialog(null, "Fornitore non associato. Contattare l'amministratore.");
+                                return;
+                            }
+                            
+                           Ordinipanel.windowPrelCreate();
+
+                            
+                            
+                        }
+                        else {
+                            casella.setBackground(Color.yellow);
+                            casella.setForeground(Color.red);
+                        }
+                        
+                    if(rowSorter.getViewRowCount()  < 1){
+                            casella.setBackground(Color.red);
+                            casella.setForeground(Color.white);
+                    }
+                    
+                    if(casella.getText().length() <= 0){
+                        System.out.println("nulla");
+                        casella.setBackground(Color.darkGray);
+                        casella.setForeground(Color.white);
+                     }
+                        
+
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                    ProdottoDAO prodao = new ProdottoDAO();
+                    OrdineDAO ordinedao = new OrdineDAO();
+
+                String text = casella.getText();
+                
+                  if (text.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                    casella.setBackground(Color.darkGray);
+                    casella.setForeground(Color.white);
+                    
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter(text));
+                    try {
+                        Prodotto p = prodao.getBySku(text);
+                        if(p.getSku() != null){ //sE è UNO SKU
+                            casella.setBackground(Color.green);
+                            casella.setForeground(Color.black);
+                            
+                            if(!p.isInstock()){ //però il prodotto non è in stock ..
+                                casella.setBackground(Color.ORANGE);
+                                casella.setForeground(Color.black);
+                                JOptionPane.showMessageDialog(null, "Prodotto non in stock. Contattare l'amministratore.");
+                                return;
+                            }
+                            
+                            //Però non è associato nessun fornitore..
+                            if (ordinedao.getFPr(text) == null || ordinedao.getFPr(text).length() < 2) {
+                                casella.setBackground(Color.ORANGE);
+                                casella.setForeground(Color.black);
+                                System.out.println("E' uno sku senza fonritore");
+                                JOptionPane.showMessageDialog(null, "Fornitore non associato. Contattare l'amministratore.");
+                                return;
+                            }
+                            
+                            Ordinipanel.windowPrelCreate();
+                            
+                        }
+                        else {
+                            casella.setBackground(Color.yellow);
+                            casella.setForeground(Color.red);
+                        }
+                        
+                    if(rowSorter.getViewRowCount()  < 1){
+                            casella.setBackground(Color.red);
+                            casella.setForeground(Color.white);
+                    }
+                    
+                    if(casella.getText().length() <= 0){
+                        System.out.println("nulla");
+                        casella.setBackground(Color.darkGray);
+                        casella.setForeground(Color.white);
+                     }
+                        
+
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+        );
+            
+        
 
         sp2 = new JScrollPane(table);
         sp2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, new Color(24, 53, 90), new Color(24, 53, 90)), " Prodotti con nome: " + text + " ", TitledBorder.CENTER, TitledBorder.TOP));
 
         add(sp2);
+        
+        
+        ProdottoDAO prodao = new ProdottoDAO();
+        OrdineDAO ordao = new OrdineDAO();
+
+        try {
+            for (Prodotto p : prodao.getAll()) {
+                    model.addRow(new Object[]{p.getSku(), p.getNome(), p.getCategoria(), String.valueOf(p.getQty()), String.valueOf(p.getQty() - p.getQty_min()), p.getNote(), p.isInstock(), ""});
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
+        }
 
     }
 

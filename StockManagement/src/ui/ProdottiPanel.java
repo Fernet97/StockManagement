@@ -359,22 +359,78 @@ public class ProdottiPanel extends JPanel {
 
             @Override
             public void insertUpdate(DocumentEvent arg0) {
+                ProdottoDAO prodao = new ProdottoDAO();
                 String text = casella.getText();
-
-                if (text.trim().length() == 0) {
+                
+                  if (text.trim().length() == 0) {
                     rowSorter.setRowFilter(null);
+                    casella.setBackground(Color.darkGray);
+                    casella.setForeground(Color.white);
+                    
                 } else {
                     rowSorter.setRowFilter(RowFilter.regexFilter(text));
+                    try {
+                        if(prodao.getBySku(text).getSku() != null){
+                            casella.setBackground(Color.green);
+                            casella.setForeground(Color.black);
+                        }
+                        else {
+                            casella.setBackground(Color.yellow);
+                            casella.setForeground(Color.red);
+                        }
+                        
+                    if(rowSorter.getViewRowCount()  < 1){
+                            casella.setBackground(Color.red);
+                            casella.setForeground(Color.white);
+                    }
+                    
+                    if(casella.getText().length() <= 0){
+                        System.out.println("nulla");
+                        casella.setBackground(Color.darkGray);
+                        casella.setForeground(Color.white);
+                     }
+                        
+
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
 
             @Override
             public void removeUpdate(DocumentEvent arg0) {
+                ProdottoDAO prodao = new ProdottoDAO();
                 String text = casella.getText();
+               
                 if (text.trim().length() == 0) {
                     rowSorter.setRowFilter(null);
+                    casella.setBackground(Color.darkGray);
+                    casella.setForeground(Color.white);
+                    
                 } else {
                     rowSorter.setRowFilter(RowFilter.regexFilter(text));
+
+                    try {
+                        if(prodao.getBySku(text).getSku() != null){
+                            casella.setBackground(Color.green);
+                            casella.setForeground(Color.black);
+                        }
+                        else {
+                            casella.setBackground(Color.yellow);
+                            casella.setForeground(Color.red);
+                        }
+                        
+                    if(rowSorter.getViewRowCount() < 1 ){
+                            casella.setBackground(Color.red);
+                            casella.setForeground(Color.white);
+                    }
+                    
+
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         });
