@@ -678,9 +678,7 @@ public class ProdottiPanel extends JPanel {
         private boolean clicked;
         private int row, col;
         private JTable table;
-        private String prodSceltoxOrdine;
-        private JDialog vaiarod;
-        private JComboBox<String> jComboBox;
+
 
         public ClientsTableRenderer(JCheckBox checkBox) {
             super(checkBox);
@@ -765,58 +763,7 @@ public class ProdottiPanel extends JPanel {
 
                 } else if (button.getText().equals("Ordina")) {
                     frameprinc.OrdiniStatus = false;
-                    //Se un fornitore non è definito
-                    if (table.getValueAt(row, 5).toString().equals("null|  null")) {
-                        vaiarod = new JDialog();
-                        vaiarod.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                        vaiarod.setResizable(false);
-                        vaiarod.setModal(true);
-                        vaiarod.setLocationRelativeTo(null);
-
-                        vaiarod.setTitle("Seleziona un fornitore a cui associare il prodotto");
-                        vaiarod.setSize(new Dimension(500, 150));
-                        vaiarod.setLayout(new GridBagLayout());
-                        FornitoreDAO forndao = new FornitoreDAO();
-                        jComboBox = new JComboBox<>();
-                        jComboBox.setFont(new Font("Arial Black", Font.BOLD, 20));
-                        vaiarod.add(jComboBox);
-
-                        vaiarod.add(new JLabel("       "));
-
-                        JButton confermaforn = new JButton("Conferma");
-                        confermaforn.addActionListener(new java.awt.event.ActionListener() {
-                            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                vaiarod.dispose();
-                                frameprinc.VaiAOrdiniconProdFORNULL(jComboBox.getSelectedItem().toString(), prodSceltoxOrdine);
-
-                            }
-                        });
-                        confermaforn.setFont(new Font("Arial Black", Font.BOLD, 20));
-                        vaiarod.add(confermaforn);
-
-                        prodSceltoxOrdine = table.getValueAt(row, 0).toString() + "|" + table.getValueAt(row, 2).toString();
-
-                        try {
-                            for (Fornitore f : forndao.getAll()) {
-                                jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
-                            }
-                            if (jComboBox.getItemCount() == 0) {
-                                JOptionPane.showMessageDialog(null, "Non hai creato ancora un fornitore!");
-                                return new String(label);
-                            }
-
-                        } catch (SQLException ex) {
-                            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                        }
-
-                        vaiarod.setVisible(true);
-
-                    } // SE IL FORNITORE ERA GIA' DEFINITO
-                    else {
-                        frameprinc.VaiAOrdiniconProdFornCEH(table.getValueAt(row, 0).toString());
-
-                    }
-
+                    frameprinc.VaiAOrdiniconProdFornCEH(table.getValueAt(row, 0).toString());
                 }
 
             }

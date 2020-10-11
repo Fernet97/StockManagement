@@ -521,7 +521,6 @@ public class FramePrincipale extends JFrame {
         
         disattivaTuttiIBottoniTranne(lateralDashOrdini.code);
         cardlayout.show(HomePanel, "Ordini");
-        ordiniadmin.jComboBox.getModel().setSelectedItem(forn);
 
     }
 
@@ -542,9 +541,7 @@ public class FramePrincipale extends JFrame {
         }
 
         cardlayout.show(HomePanel, "Ordini");
-        ordiniadmin.jComboBox.getModel().setSelectedItem(forn);
-        ((DefaultListModel) ordiniadmin.list.getModel()).addElement(prod);
-        ordiniadmin.aggiungiTOcarrello(prod);
+        ordiniadmin.aggiungiTOcarrello(prod, forn);
 
     }
 
@@ -740,7 +737,12 @@ public class FramePrincipale extends JFrame {
                             prodotti.refreshTab();
                             categorie.refreshTab();
                             ordiniadmin.refreshTab();
+                            
+
+                            
+                            
                         }
+                        ordini.tabnomeprodotto.refresh();
                         refresh();
 
                     } catch (SQLException ex) {

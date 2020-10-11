@@ -88,7 +88,7 @@ public class OrdiniPanel extends JPanel {
     public JDialog popup;
     public String skusel;
     private FramePrincipale frameprinc;
-    private JPanelNomeProdotto tabnomeprodotto;
+    public JPanelNomeProdotto tabnomeprodotto;
     private JLabel prodAggiunti;
     private int numprodaggiunti = 0;
     private final JButton photobtn;

@@ -38,7 +38,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -76,13 +75,10 @@ public class OrdiniAdminPanel extends JPanel {
 
     public static String nomeutente;
     public Prodotto prodottoCorrente;
-    public javax.swing.JComboBox<String> jComboBox;
     public DefaultTableModel model;
     private JTable table;
     private final DefaultTableModel model2;
     private final JTable table2;
-    public JList list;
-    private final DefaultListModel listModel;
     private final JLabel costot;
     private double costocarrell = 0;
     private final JLabel numordine;
@@ -92,7 +88,7 @@ public class OrdiniAdminPanel extends JPanel {
     private JTextField ggallacons;
     private JTextField casellaqty;
     private FramePrincipale frameprinc;
-    private final JPanelNomeProdotto tabnomeprodotto;
+    public final JPanelNomeProdotto tabnomeprodotto;
     private final JButton conferma;
 
 
@@ -144,199 +140,15 @@ public class OrdiniAdminPanel extends JPanel {
 
         casella = new JTextField();
         casella.setColumns(30);
-        casella.getDocument().addDocumentListener(new DocumentListener() {
-
-            @Override
-            public void changedUpdate(DocumentEvent arg0) {
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent arg0) {
-                casella.setForeground(Color.white);
-                casella.setBackground(Color.darkGray);
-                if(casella.getText().length()==0) 
-                    return;
-                String text = casella.getText();
-                OrdineDAO ordinedao = new OrdineDAO();
-                String forny = "";
-
-                ProdottoDAO prodao = new ProdottoDAO();
-                try {
-                    Prodotto p = prodao.getBySku(text);
-                    if (p.getSku() == null) {
-                        //++++++++++++++++++++
-                        //non e' nemmeno un nome?
-                       if( prodao.getByNome2(text).size()<=0){
-                        casella.setForeground(Color.white);
-                        casella.setBackground(Color.red);
-                          // System.out.println("non c'è nessun nome");
-                       }
-                       else{
-                          // System.out.println("c'è un nome");
-                                                      // Sì apri popup con tabella con gli sku associati a quel nome
-                                // SKU| NOME|  FORNITORE|   NOTE|  Visualizza|  agg. al carrello|
-                                // lo sku selezionato va poi passato alla casella "Cerca Prodotto"
-                            //No --> non ho trovato niente
-                        casella.setBackground(Color.yellow);
-                        casella.setForeground(Color.red);   
-                        tabnomeprodotto.aggiornaNome(casella.getText());     
-                       }
-
-                                             
-                    } else {
-                        casella.setBackground(Color.green);
-                        ((DefaultListModel) list.getModel()).addElement(p.getSku() + "|  " + p.getNome());
-
-                        forny = ordinedao.getFPr(text);
-
-                        FornitoreDAO forndao = new FornitoreDAO();
-                        String fornyname = "";
-                        for (Fornitore f : forndao.getAll()) {
-                            if (f.getIdfornitore().equals(forny)) {
-                                fornyname = f.getFullname();
-                                jComboBox.getModel().setSelectedItem(forny + "|" + fornyname);
-                                break;
-                            }
-                        }
-                        //forny --> con il nuovo fornitore selezionato
-                        //***********************************************************
-                        if (fornyname.equals("")) {
-                           int OpzioneScelta =  JOptionPane.showConfirmDialog(null, "il prodotto non è associato a nessun fornitore.\nVuoi associarlo ad un fornitore e aggiungerlo al carrello?");
-                           if (OpzioneScelta == JOptionPane.OK_OPTION) {
-                                JDialog vaiarod = new JDialog();
-                                vaiarod.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                                vaiarod.setResizable(false);
-                                vaiarod.setModal(true);
-                                vaiarod.setLocationRelativeTo(null);
-
-                                vaiarod.setTitle("Seleziona un fornitore a cui associare il prodotto");
-                                vaiarod.setSize(new Dimension(500, 150));
-                                vaiarod.setLayout(new GridBagLayout());
-                                JComboBox jComboBoxxx = new JComboBox<>();
-                                jComboBoxxx.setFont(new Font("Arial Black", Font.BOLD, 20));
-                                vaiarod.add(jComboBoxxx);
-
-                                vaiarod.add(new JLabel("       "));
-
-                                JButton confermaforn = new JButton("Conferma");
-                                confermaforn.addActionListener(new java.awt.event.ActionListener() {
-                                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                        vaiarod.dispose();
-                                        System.out.println("Fornitore selezionato:" + jComboBoxxx.getSelectedItem().toString());
-                                        jComboBox.getModel().setSelectedItem(jComboBoxxx.getSelectedItem().toString());
-
-                                    }
-                                });
-                                confermaforn.setFont(new Font("Arial Black", Font.BOLD, 20));
-                                vaiarod.add(confermaforn);
-
-                                try {
-                                    for (Fornitore f : forndao.getAll()) {
-                                        jComboBoxxx.addItem(f.getIdfornitore() + "|" + f.getFullname());
-                                    }
-                                    if (jComboBoxxx.getItemCount() == 0) {
-                                        JOptionPane.showMessageDialog(null, "Non hai creato ancora un fornitore!");
-                                        return;
-                                    }
-
-                                } catch (SQLException ex) {
-                                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                                }
-
-                                vaiarod.setVisible(true);
-                           
-                           }  else return;
-                        }
-                        //******************************************************
-
-                        aggiungiTOcarrello(p.getSku() + "|  " + p.getNome());
-
-                    }
-
-                } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                }
-
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent arg0) {
-                  insertUpdate(arg0);
-                  tabnomeprodotto.aggiornaNome(casella.getText());
-            }
-        });
 
         orizontalprod.add(casella);
         sxpan.add(orizontalprod);
 
-        jComboBox = new JComboBox<>();
-        jComboBox.setVisible(false); //Logica nascosta
-        jComboBox.setFont(new Font("Arial Black", Font.BOLD, 30));
-        // Aggiungi i nomi del fornitori
-        jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
-        FornitoreDAO daof = new FornitoreDAO();
-        try {
-            for (Fornitore f : daof.getAll()) {
-
-                jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-        }
-        jComboBox.setForeground(Color.black);
-        jComboBox.setBackground(Color.DARK_GRAY);
-        jComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                // SVUOTA LA LISTA DI PRODOTTI
-                listModel.clear();
-                FornitoreDAO daof = new FornitoreDAO();
-                if (jComboBox.getSelectedItem().toString().equals("Seleziona un fornitore")) {
-                    return;
-                }
-                String idfornitore = "";
-                String selezionato = "";
-                String subselezionato = "";
-                selezionato = jComboBox.getSelectedItem().toString();
-                subselezionato = selezionato.substring(0, selezionato.lastIndexOf("|"));
-
-                idfornitore = subselezionato;
-                OrdineDAO daoo = new OrdineDAO();
-                ProdottoDAO prodao = new ProdottoDAO();
-
-                try {
-                    for (String sku : daoo.getPFr(idfornitore)) {
-                        Prodotto pp = prodao.getBySku(sku);
-                        ((DefaultListModel) list.getModel()).addElement(pp.getSku() + "|  " + pp.getNome());
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                }
-            }
-        });
-        sxpan.add(jComboBox);
         
-        //Logica nascosta
-        listModel = new DefaultListModel();
-        list = new JList(listModel);
-        JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setBounds(10, 11, 227, 239);
 
-        list.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                // se non è doppio click
-                if (e.getClickCount() != 2) {
-                    return;
-                }
-                int index = list.getSelectedIndex(); // Prodotto selezionato dalla jlist
-                String s = (String) list.getSelectedValue();
-
-                aggiungiTOcarrello(list.getSelectedValue().toString());
-            }
-        });
         
-        //****************************************
-        tabnomeprodotto = new JPanelNomeProdotto(casella,"", false);        
+        tabnomeprodotto = new JPanelNomeProdotto(casella,"", false);    
+        tabnomeprodotto.setAdminComunicator(this);
         sxpan.add(tabnomeprodotto);
 
         JPanel dxpan = new JPanel();
@@ -477,16 +289,7 @@ public class OrdiniAdminPanel extends JPanel {
                 model.setRowCount(0);
                 costocarrell = 0;
                 costot.setText("Costo totale: 0 euro");
-                listModel.clear();
-                jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
-                FornitoreDAO daof = new FornitoreDAO();
-                try {
-                    for (Fornitore f : daof.getAll()) {
-                        jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                }
+
             }
         });
         manageprod.add(svuotaprod);
@@ -690,25 +493,13 @@ public class OrdiniAdminPanel extends JPanel {
 
     //QUANDO CHIAMARE IL REFRESH DI ORDINI?
     public void refreshTab() {
-        // refresh lista fornitori
-        // BISOGNA SVUOTARE E RICARICARE LISTA FORN
-        //System.out.println("R   E   F   R   E   S   H   !   !   !");
-        jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
-        FornitoreDAO daof = new FornitoreDAO();
-        try {
-            for (Fornitore f : daof.getAll()) {
-                jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-        }
+
+        tabnomeprodotto.refresh();
 
         casella.setBackground(Color.darkGray);
         casella.setText("");
         costot.setText("Costo totale: 0 euro");
         numordine.setText("#Ordine:");
-        jComboBox.setSelectedIndex(0);
-        listModel.clear();
         // model.setRowCount(0); magari il carrello non lo svuoto ogni volta al cambio scheda
 
         // REFRESHA TABELLA RIEPILOGO ORDINI
@@ -899,9 +690,9 @@ public class OrdiniAdminPanel extends JPanel {
 
     }
 
-    public void aggiungiTOcarrello(String skuselezionato) {
+    public void aggiungiTOcarrello(String skuselezionato, String fornitore) {
 
-        skusel = skuselezionato.substring(0, skuselezionato.indexOf("|"));
+        skusel = skuselezionato;
         //Quando clicco un prodotto dalla jList mi si apre la finestra Pop-UP
         popup = new JDialog();
         popup.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -916,17 +707,7 @@ public class OrdiniAdminPanel extends JPanel {
 
             public void windowClosing(WindowEvent e) {
                 System.out.println("CHIUDOOOOOOOOOOOOOOOO");
-                listModel.clear();
-                jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleziona un fornitore"}));
-                FornitoreDAO daof = new FornitoreDAO();
-                try {
-                    for (Fornitore f : daof.getAll()) {
-                        jComboBox.addItem(f.getIdfornitore() + "|" + f.getFullname());
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                }
-
+         
             }
         });
 
@@ -974,31 +755,7 @@ public class OrdiniAdminPanel extends JPanel {
         ggallacons.addKeyListener(new KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent e) {
                 if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-                    confermaProdotto();
-                    listModel.clear();
-                    FornitoreDAO daof = new FornitoreDAO();
-                    if (jComboBox.getSelectedItem().toString().equals("Seleziona un fornitore")) {
-                        return;
-                    }
-                    String idfornitore = "";
-                    String selezionato = "";
-                    String subselezionato = "";
-                    selezionato = jComboBox.getSelectedItem().toString();
-                    subselezionato = selezionato.substring(0, selezionato.lastIndexOf("|"));
-
-                    idfornitore = subselezionato;
-                    OrdineDAO daoo = new OrdineDAO();
-                    ProdottoDAO prodao = new ProdottoDAO();
-
-                    try {
-                        for (String sku : daoo.getPFr(idfornitore)) {
-                            Prodotto pp = prodao.getBySku(sku);
-                            ((DefaultListModel) list.getModel()).addElement(pp.getSku() + "|  " + pp.getNome());
-                        }
-                    } catch (SQLException ex) {
-                        Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                    }
-
+                    confermaProdotto(fornitore);
                 }
             }
         });
@@ -1011,31 +768,7 @@ public class OrdiniAdminPanel extends JPanel {
         ButtonConferma.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                confermaProdotto();
-                listModel.clear();
-                FornitoreDAO daof = new FornitoreDAO();
-                if (jComboBox.getSelectedItem().toString().equals("Seleziona un fornitore")) {
-                    return;
-                }
-                String idfornitore = "";
-                String selezionato = "";
-                String subselezionato = "";
-                selezionato = jComboBox.getSelectedItem().toString();
-                subselezionato = selezionato.substring(0, selezionato.lastIndexOf("|"));
-
-                idfornitore = subselezionato;
-                OrdineDAO daoo = new OrdineDAO();
-                ProdottoDAO prodao = new ProdottoDAO();
-
-                try {
-                    for (String sku : daoo.getPFr(idfornitore)) {
-                        Prodotto pp = prodao.getBySku(sku);
-                        ((DefaultListModel) list.getModel()).addElement(pp.getSku() + "|  " + pp.getNome());
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
-                }
-
+                confermaProdotto(fornitore);
             }
         });
 
@@ -1045,7 +778,7 @@ public class OrdiniAdminPanel extends JPanel {
 
     }
 
-    public void confermaProdotto() {
+    public void confermaProdotto(String fornitore) {
 
         ProdottoDAO pdao = new ProdottoDAO();
 
@@ -1077,7 +810,8 @@ public class OrdiniAdminPanel extends JPanel {
                     }
                 }
                           
-                model.addRow(new Object[]{skusel, casellaqty.getText(),costouny+" €" , ggallacons.getText(), jComboBox.getSelectedItem().toString()});
+                //MMMMMMMHh
+                model.addRow(new Object[]{skusel, casellaqty.getText(),costouny+" €" , ggallacons.getText(), fornitore});
 
                 costocarrell += p.getCosto() * Integer.parseInt(casellaqty.getText());
                 BigDecimal bd = new BigDecimal(String.valueOf(costocarrell));
