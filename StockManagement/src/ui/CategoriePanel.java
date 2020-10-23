@@ -212,7 +212,6 @@ class CategoriePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                System.out.println("GetSelectedRow: " + table.getSelectedRow());
 
                 // Se trattasi di categorie dinamiche
                 if (model.getValueAt(table.getSelectedRow(), 1).toString().equals("DA DEFINIRE")) {
@@ -317,6 +316,9 @@ class CategoriePanel extends JPanel {
         table.setRowSorter(rowSorter);
         
         rowSorter.setSortable(2, false);// toglie il sorting alla colonna query
+        rowSorter.setSortable(1, false);
+        rowSorter.setSortable(0, false);
+        
 
         casella.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -374,6 +376,15 @@ class CategoriePanel extends JPanel {
         String key;
         names = dao.getCatAndSum().keys();
 
+        
+        // Aggiorno con le nuove
+        for (String catDinamica : list_cat_new) {
+
+            model.addRow(new Object[]{catDinamica, "DA DEFINIRE", "Vai a prodotti"});
+
+        }
+
+        
         while (names.hasMoreElements()) {
             key = (String) names.nextElement(); //Nome categoria del db
             if (list_cat_new.contains(key)) {
@@ -382,12 +393,6 @@ class CategoriePanel extends JPanel {
             model.addRow(new Object[]{key, dao.getCatAndSum().get(key), "Vai a prodotti"});
         }
 
-        // Aggiorno con le nuove
-        for (String catDinamica : list_cat_new) {
-
-            model.addRow(new Object[]{catDinamica, "DA DEFINIRE", "Vai a prodotti"});
-
-        }
 
         // Agiorno il file con le nuove cat_dinamiche
         try {
@@ -494,7 +499,11 @@ class CategoriePanel extends JPanel {
             name.addKeyListener(new KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent e) {
                     if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-                        confermaCategoria();
+                        try {
+                            confermaCategoria();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
             });
@@ -504,7 +513,13 @@ class CategoriePanel extends JPanel {
             add.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent arg0) {
-                    confermaCategoria();
+                
+                    try {
+                        confermaCategoria();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
                 }
             });
 
@@ -524,7 +539,7 @@ class CategoriePanel extends JPanel {
             return this.name.getText().toUpperCase();
         }
 
-        public void confermaCategoria() {
+        public void confermaCategoria() throws SQLException {
             
             setAlwaysOnTop(false);
 
@@ -543,6 +558,8 @@ class CategoriePanel extends JPanel {
                 list_cat_new.add(name.getText().toUpperCase());
                 frameprinc.prodotti.list_cat_new.add(name.getText().toUpperCase());
                 close();
+                refreshTab();
+
             }
             try {
 
