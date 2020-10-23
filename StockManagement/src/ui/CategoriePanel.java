@@ -223,7 +223,7 @@ class CategoriePanel extends JPanel {
                 } // Trattasi di categoria del db
                 else {
                     Object[] options = {"Cancella solo categoria", "Cancella TUTTI i prodotti correlati alla categoria"};
-                    int scelta = JOptionPane.showOptionDialog(null, "Seleziona la modalità di eliminazione", "Elimina categoria", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                    int scelta = JOptionPane.showOptionDialog(null, "Seleziona la modalità di eliminazione", "Elimina categoria "+model.getValueAt(table.getSelectedRow(), 0).toString(), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
                     // Cancella solo categoria
                     if (scelta == 0) {
