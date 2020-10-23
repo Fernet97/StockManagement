@@ -211,10 +211,12 @@ class CategoriePanel extends JPanel {
         buttonCancella.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
+                System.out.println("GetSelectedRow: " + table.getSelectedRow());
 
                 // Se trattasi di categorie dinamiche
                 if (model.getValueAt(table.getSelectedRow(), 1).toString().equals("DA DEFINIRE")) {
-                    int OpzioneScelta = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler cancellare la categoria " + model.getValueAt(table.getSelectedRow(), 0).toString() + "?");
+                    int OpzioneScelta = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler cancellare la categoria  " + model.getValueAt(table.getSelectedRow(), 0).toString() + "?");
                     if (OpzioneScelta == JOptionPane.OK_OPTION) {
                         int index = list_cat_new.indexOf(model.getValueAt(table.getSelectedRow(), 0).toString());
                         list_cat_new.remove(index);
