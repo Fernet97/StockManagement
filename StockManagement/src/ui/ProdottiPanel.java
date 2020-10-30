@@ -16,6 +16,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import dao.FornitoreDAO;
 import dao.OrdineDAO;
 import dao.ProdottoDAO;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import static java.awt.Component.CENTER_ALIGNMENT;
@@ -101,6 +102,7 @@ public class ProdottiPanel extends JPanel {
     public String percorsofoto;
     private FramePrincipale frameprinc;
     public JRadioButton checkOnlyArriv;
+    public JDialog visualizz;
 
     public ProdottiPanel() {
 
@@ -1105,45 +1107,54 @@ public class ProdottiPanel extends JPanel {
 
             bfoto = new JButton();
             bfoto.addActionListener(new ActionListener() {
+               
                 public void actionPerformed(ActionEvent e) {
-
+                    
+                    
                     setAlwaysOnTop(false);
+                    setModal(false);
+                    
+                    if (percorsofoto == null || percorsofoto.equals("null") || percorsofoto.equals("NULL")) {                        
+                            setChooser();
+                            return;
+                        } 
+  
+                    visualizz = new JDialog(form, "Visualizza foto");
+                    visualizz.setSize(600, 800);
+                    visualizz.setResizable(false);
+                    visualizz.setModal(true);
+                    
+                    JPanel MainPanel = new JPanel();
+                    JLabel foto = new JLabel();
+                    ImageIcon icon;
 
-                    try {
-                        JFileChooser jFileChooser = new JFileChooser();
-                        jFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp", "tiff"));
-                        jFileChooser.setCurrentDirectory(new File("./"));
-                        jFileChooser.setAcceptAllFileFilterUsed(false);
-
-                        JFrame framechooser = new JFrame();
-                        framechooser.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                        int result = jFileChooser.showOpenDialog(framechooser);
-                        if (result == JFileChooser.APPROVE_OPTION) {
-                            // File selezionato
-                            File selectedFile = jFileChooser.getSelectedFile();
-                            percorsofoto = selectedFile.getAbsolutePath();
-
-                            ImageIcon icon = new ImageIcon(percorsofoto);
-                            Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
-                            icon.setImage(ImmagineScalata);
-                            bfoto.setIcon(icon);
-                            setAlwaysOnTop(true);
-                            framechooser.dispose();
-
+                    icon = new ImageIcon(percorsofoto);
+                    
+                    Image ImmagineScalata = icon.getImage().getScaledInstance(550, 750, Image.SCALE_DEFAULT);
+                    icon.setImage(ImmagineScalata);
+                    foto.setIcon(icon);
+                    MainPanel.add(foto);
+                    
+                    JButton modifica = new JButton("Modifica");
+                    modifica.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {                                               
+                            setChooser();
+                            visualizz.dispose();
                         }
-                        else {
-                            jFileChooser.cancelSelection();
-                            framechooser.dispose();
-                        }
-                        
-                        
-                    } catch (StringIndexOutOfBoundsException ex) {// mi dava -1 alla riga 664
-                        Logger.getLogger("userlog").warning("StringIndexOutOfBoundsException: percorso foto \n" + StockManagement.printStackTrace(ex));
+                    });
+                                     
+                    visualizz.add(MainPanel, BorderLayout.CENTER);
+                    visualizz.add(modifica, BorderLayout.SOUTH);
 
-                    }
+                    
+                    visualizz.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                    visualizz.setVisible(true);
 
                 }
             });
+            
+            
             ImageIcon icon = new ImageIcon(getClass().getResource("/res/img/upload.png"));
             Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
             icon.setImage(ImmagineScalata);
@@ -1201,6 +1212,49 @@ public class ProdottiPanel extends JPanel {
             add(panmain);
 
         }
+        
+        
+        
+        
+        private void setChooser(){
+            try {
+             JFileChooser jFileChooser = new JFileChooser();
+             jFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp", "tiff"));
+             jFileChooser.setCurrentDirectory(new File("./"));
+             jFileChooser.setAcceptAllFileFilterUsed(false);
+
+             JFrame framechooser = new JFrame();
+             framechooser.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+             int result = jFileChooser.showOpenDialog(framechooser);
+             if (result == JFileChooser.APPROVE_OPTION) {
+                 // File selezionato
+                 File selectedFile = jFileChooser.getSelectedFile();
+                 percorsofoto = selectedFile.getAbsolutePath();
+
+                 ImageIcon icon = new ImageIcon(percorsofoto);
+                 Image ImmagineScalata = icon.getImage().getScaledInstance(90, 80, Image.SCALE_DEFAULT);
+                 icon.setImage(ImmagineScalata);
+                 bfoto.setIcon(icon);
+                 setAlwaysOnTop(true);
+                 framechooser.dispose();
+
+             }
+             else {
+                 jFileChooser.cancelSelection();
+                 framechooser.dispose();
+             }
+
+
+         } catch (StringIndexOutOfBoundsException ex) {// mi dava -1 alla riga 664
+             Logger.getLogger("userlog").warning("StringIndexOutOfBoundsException: percorso foto \n" + StockManagement.printStackTrace(ex));
+
+         }   
+
+        }
+        
+        
+        
+        
 
         // casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), Innegozio, Float.valueOf(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, InStock);
         private boolean check() {
