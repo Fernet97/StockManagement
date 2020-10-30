@@ -1065,7 +1065,8 @@ public class ProdottiPanel extends JPanel {
             panelcat.add(lcat);
 
             cat = new JComboBox<>();
-            cat.setFont(new Font("Arial Black", Font.BOLD, 11));
+            //cat.setPrototypeDisplayValue(cat.getItemAt(6));
+            //cat.setFont(new Font("Arial Black", Font.BOLD, 8));
 
             cat.setModel(new javax.swing.DefaultComboBoxModel<>(stringsP));
             cat.setForeground(Color.black);

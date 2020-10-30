@@ -149,9 +149,9 @@ class CategoriePanel extends JPanel {
                     public void actionPerformed(ActionEvent arg0) {
                         modificaframe.setAlwaysOnTop(false);
            
-                        if (name.getText().length() < 2 || name.getText().length() > 45) {
+                        if (name.getText().length() < 2 || name.getText().length() > 22) {
                             modificaframe.setAlwaysOnTop(false);
-                            JOptionPane.showMessageDialog(getParent(), "La lunghezza della categoria deve essere compresa tra 2 e 45 caratteri|");
+                            JOptionPane.showMessageDialog(getParent(), "La lunghezza della categoria deve essere compresa tra 2 e 22 caratteri|");
                             modificaframe.setAlwaysOnTop(true);
                             return;
                         }
@@ -550,8 +550,8 @@ class CategoriePanel extends JPanel {
                 }
             }
             
-            if (name.getText().length() < 2 || name.getText().length() > 45) {
-                JOptionPane.showMessageDialog(getParent(), "La categoria deve avere lunghezza compresa tra 2 e 45 caratteri!");
+            if (name.getText().length() < 2 || name.getText().length() > 22) {
+                JOptionPane.showMessageDialog(getParent(), "La categoria deve avere lunghezza compresa tra 2 e 22 caratteri!");
             } else {
                 Logger.getLogger("userlog").info("Hai aggiunto la categoria: " + name.getText());
                 model.addRow(new Object[]{name.getText().toUpperCase(), "DA DEFINIRE", "Vai a prodotti"});
