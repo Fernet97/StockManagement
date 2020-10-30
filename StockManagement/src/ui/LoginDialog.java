@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -20,6 +21,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,6 +31,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 import others.Cryptorr;
 
 public class LoginDialog extends javax.swing.JDialog {
@@ -50,21 +54,29 @@ public class LoginDialog extends javax.swing.JDialog {
 
     private void CreaGUI() {
 
-        ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo-Icon.png"));
+        ImageIcon img = new ImageIcon(getClass().getResource("/res/img/logo.png"));
         this.setIconImage(img.getImage());
-
+        this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
+                
         //Crea pannello Iniziale: Titolo- Logo 
-        JPanel PannelloIniziale = new JPanel();
-        PannelloIniziale = new JPanel();
-        JLabel titolo = new JLabel("$tock managemenT");
-        titolo.setFont(new Font("Arial", Font.PLAIN, 20));
-        PannelloIniziale.add(titolo, BorderLayout.NORTH);
-        ImageIcon icon = new ImageIcon(getClass().getResource("/res/img/logo.jpg"));
-        Image ImmagineScalata = icon.getImage().getScaledInstance(400, 225, Image.SCALE_DEFAULT);
+        JPanel nordpan = new JPanel();
+        JLabel titolo = new JLabel("Nashira Management");
+        titolo.setFont(new Font("Arial", Font.BOLD, 20));
+        nordpan.add(titolo);
+        
+        JPanel logopan = new JPanel();
+        logopan.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15)); 
+        logopan.setLayout(new FlowLayout(HEIGHT));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/res/img/logo.png"));
+        Image ImmagineScalata = icon.getImage().getScaledInstance(360, 180, Image.SCALE_DEFAULT);
         icon.setImage(ImmagineScalata);
         JLabel logo = new JLabel(icon);
-        PannelloIniziale.add(logo, BorderLayout.CENTER);
-        this.add(PannelloIniziale, BorderLayout.NORTH);
+        logopan.add(logo);
+
+       
+        this.add(nordpan);
+        this.add(logopan);
+
 
         //Crea campi username e password
         JPanel PannelloAutenticazione = new JPanel();
@@ -107,7 +119,7 @@ public class LoginDialog extends javax.swing.JDialog {
         PannelloAutenticazione.add(panelnome);
         PannelloAutenticazione.add(panelpwd);
 
-        this.add(PannelloAutenticazione, BorderLayout.CENTER);
+        this.add(PannelloAutenticazione);
 
         //Crea tasto Accedi
         JPanel pannelloB = new JPanel();
@@ -120,7 +132,11 @@ public class LoginDialog extends javax.swing.JDialog {
         });
         ButtonAccedi.setFont(new Font("Arial", Font.PLAIN, 15));
         pannelloB.add(ButtonAccedi, BorderLayout.CENTER);
-        this.add(pannelloB, BorderLayout.SOUTH);
+        
+        
+        this.add(new JLabel("            "));
+        
+        this.add(pannelloB);
 
     }
 
@@ -176,7 +192,7 @@ public class LoginDialog extends javax.swing.JDialog {
             mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             mainFrame.setVisible(true);
             //mainFrame.setResizable(false);
-            mainFrame.setTitle("$tock managemenT");
+            mainFrame.setTitle("Nashira management");
             //mainFrame.setSize(1750, 1050);
 
             mainFrame.setMinimumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));

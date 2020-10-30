@@ -146,7 +146,7 @@ public class StockManagement {
         ld.setLocationRelativeTo(null);
         ld.setResizable(false);
         ld.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        ld.setSize(400, 450);
+        ld.setSize(400, 490);
         ld.setLocationRelativeTo(null);  // CENTRA 
         ld.setAlwaysOnTop(true);  // Focus
         ld.setVisible(true);

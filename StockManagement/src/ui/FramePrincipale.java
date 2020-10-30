@@ -110,7 +110,7 @@ public class FramePrincipale extends JFrame {
         }
 
         //set icona finestra
-        ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo-Icon.png")));
+        ImageIcon img = new ImageIcon((getClass().getResource("/res/img/logo.png")));
         this.setIconImage(img.getImage());
 
         //Aggiungi barra Menu
