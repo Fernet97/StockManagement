@@ -566,7 +566,7 @@ class FrameRiepilogo extends JDialog {
 
                 f.add(main, BorderLayout.CENTER);
 
-                JButton ok = new JButton("O K   K   E   Y");
+                JButton ok = new JButton("Conferma");
                 ok.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {

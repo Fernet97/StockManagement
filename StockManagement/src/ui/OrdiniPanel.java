@@ -471,9 +471,12 @@ public class OrdiniPanel extends JPanel {
 
     }
 
-    public void windowPrelCreate() {
+    public void windowPrelCreate(String mysku) {
 
         try {
+            
+            skusel = mysku;
+            
             JDialog f = new JDialog();
             f.setResizable(false);
             f.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -485,6 +488,7 @@ public class OrdiniPanel extends JPanel {
 
             ProdottoDAO prodao = new ProdottoDAO();
             Prodotto pro = prodao.getBySku(skusel);
+            System.out.println("ECCO IL MOTIVO DFL DANNO "+pro.getSku()+" "+ pro.getQty()+ " "+pro.getQty_min());
 
             JPanel main = new JPanel();
 
@@ -541,7 +545,7 @@ public class OrdiniPanel extends JPanel {
 
             f.add(main, BorderLayout.CENTER);
 
-            JButton ok = new JButton("O K   K   E   Y");
+            JButton ok = new JButton("Aggiungi al carrello");
             ok.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

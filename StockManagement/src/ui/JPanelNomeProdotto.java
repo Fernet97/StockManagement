@@ -512,7 +512,7 @@ public class JPanelNomeProdotto extends JPanel {
                                 return;
                             }
                             
-                           Ordinipanel.windowPrelCreate();
+                           Ordinipanel.windowPrelCreate(casella.getText());
 
                             
                             
@@ -593,7 +593,7 @@ public class JPanelNomeProdotto extends JPanel {
                                 return;
                             }
                             
-                            Ordinipanel.windowPrelCreate();
+                            Ordinipanel.windowPrelCreate(casella.getText());
                             
                         }
                         else {
