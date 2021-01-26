@@ -421,7 +421,6 @@ public class FramePrincipale extends JFrame {
                 b.pan.setBackground(new Color(38, 44, 70));
                 b.setBackground(new Color(38, 44, 70));
                 b.icon.setIcon(ImpostaImg(b.pathfoto, 30));
-                System.out.println("disattiv:"+ b.pathfoto);
                 b.testo.setForeground(Color.white);
                 b.premuto = false;
             }
@@ -789,7 +788,6 @@ public class FramePrincipale extends JFrame {
                     b.pan.setBackground(new Color(38, 44, 70));
                     b.setBackground(new Color(38, 44, 70));
                     b.icon.setIcon(ImpostaImg(b.pathfoto));
-                    System.out.println("disattiv:"+ b.pathfoto);
                     b.testo.setForeground(Color.white);
                     b.premuto = false;
                 }

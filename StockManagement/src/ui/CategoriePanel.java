@@ -135,7 +135,7 @@ class CategoriePanel extends JPanel {
                     JOptionPane.showMessageDialog(getParent(), "Devi selezionare una riga da modificare!");
                     return;
                 }
-                System.out.println("Categoria da modificare " + table.getValueAt(table.getSelectedRow(), 0));
+                //System.out.println("Categoria da modificare " + table.getValueAt(table.getSelectedRow(), 0));
                 JFrame modificaframe = new JFrame("Specifica il nuovo valore per la categoria");
                 modificaframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 modificaframe.setAlwaysOnTop(true);

@@ -359,7 +359,6 @@ public class ProdottoDAO {
 
 
         String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE nome = '"+nome+"'";
-           //System.out.println(selectSQL);
            
         Collection<Prodotto> prodotti = new LinkedList<Prodotto>();
 
@@ -410,7 +409,6 @@ public class ProdottoDAO {
 
 
         String selectSQL = "SELECT * FROM " + this.TABLE_NAME + " WHERE nome LIKE  '%"+nome+"%'";
-           //System.out.println(selectSQL);
            
         Collection<Prodotto> prodotti = new LinkedList<Prodotto>();
 

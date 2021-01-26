@@ -997,9 +997,7 @@ public class ProdottiPanel extends JPanel {
 
                 @Override
                 public void removeUpdate(DocumentEvent arg0) {
-                          // Highlighter highlighter = ccosto.getHighlighter();
-                          //highlighter.removeAllHighlights();              
-                         System.out.println("removeeeeeeeee");              
+             
                 }
 
                     @Override
@@ -1397,7 +1395,7 @@ public class ProdottiPanel extends JPanel {
 
                 // CONDENSA 0s
                 BigDecimal bd = new BigDecimal(String.valueOf(prodotto.getCosto()));
-                System.out.println("il grande decimalo " + bd.toString());
+                //System.out.println("il grande decimalo " + bd.toString());
 
                 if (bd.toPlainString().contains(".") == true) {
                     char punto = (char) bd.toPlainString().indexOf('.');

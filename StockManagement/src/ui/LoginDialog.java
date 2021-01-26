@@ -168,8 +168,6 @@ public class LoginDialog extends javax.swing.JDialog {
 
             if (utente.getIdutente().equals(user)) {
                 if (utente.getPwd().equals(Cryptorr.MD5(password))) {
-                  //  System.out.println("PASSWORD CORRETTA");
-                    //System.out.println("pwd nel db:" + utente.getPwd() + " pwd inserita adesso:" + password);
                     return true;
                 }
             }

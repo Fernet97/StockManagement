@@ -118,7 +118,6 @@ public class UtenteDAO {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
-        // System.out.println("Pwd utente nuovo:"+u.getPwd()+"->"+Cryptorr.MD5(u.getPwd()));
         String insertSQL = "INSERT INTO " + TABLE_NAME
                 + " VALUES (?, ?, ?, ?, ?, ?, ?, md5(?), ?, ?, ?)";
 

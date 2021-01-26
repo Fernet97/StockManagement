@@ -151,7 +151,6 @@ public class JPanelNomeProdotto extends JPanel {
                             if ( fornitore == null || fornitore.length() < 2) {
                                 casella.setBackground(Color.ORANGE);
                                 casella.setForeground(Color.black);
-                                System.out.println("E' uno sku senza fonritore");
                                 nessunFornitore(text);
                                 return;
                             }
@@ -211,7 +210,6 @@ public class JPanelNomeProdotto extends JPanel {
                             if (ordinedao.getFPr(text) == null || ordinedao.getFPr(text).length() < 2) {
                                 casella.setBackground(Color.ORANGE);
                                 casella.setForeground(Color.black);
-                                System.out.println("E' uno sku senza fonritore");
                                 nessunFornitore(text);
                                 return;
                             }
@@ -232,7 +230,6 @@ public class JPanelNomeProdotto extends JPanel {
                     }
                     
                     if(casella.getText().length() <= 0){
-                        System.out.println("nulla");
                         casella.setBackground(Color.darkGray);
                         casella.setForeground(Color.white);
                      }
@@ -499,7 +496,6 @@ public class JPanelNomeProdotto extends JPanel {
                             if (ordinedao.getFPr(text) == null || ordinedao.getFPr(text).length() < 2) {
                                 casella.setBackground(Color.ORANGE);
                                 casella.setForeground(Color.black);
-                                System.out.println("E' uno sku senza fonritore");
                                 JOptionPane.showMessageDialog(null, "Fornitore non associato. Contattare l'amministratore.");
                                 //Deve essere un thread a parte rispetto al thread del documen listener
                                 Runnable pusliscicasella = new Runnable() {
@@ -528,7 +524,6 @@ public class JPanelNomeProdotto extends JPanel {
                     }
                     
                     if(casella.getText().length() <= 0){
-                        System.out.println("nulla");
                         casella.setBackground(Color.darkGray);
                         casella.setForeground(Color.white);
                      }
@@ -580,7 +575,6 @@ public class JPanelNomeProdotto extends JPanel {
                             if (ordinedao.getFPr(text) == null || ordinedao.getFPr(text).length() < 2) {
                                 casella.setBackground(Color.ORANGE);
                                 casella.setForeground(Color.black);
-                                System.out.println("E' uno sku senza fonritore");
                                 JOptionPane.showMessageDialog(null, "Fornitore non associato. Contattare l'amministratore.");
                                 //Deve essere un thread a parte rispetto al thread del documen listener
                                 Runnable pusliscicasella = new Runnable() {
@@ -607,7 +601,6 @@ public class JPanelNomeProdotto extends JPanel {
                     }
                     
                     if(casella.getText().length() <= 0){
-                        System.out.println("nulla");
                         casella.setBackground(Color.darkGray);
                         casella.setForeground(Color.white);
                      }
