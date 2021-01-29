@@ -88,7 +88,7 @@ class FrameRiepPreleva extends JDialog{
                         
                         
                     } catch (SQLException ex) {
-                        Logger.getLogger(FrameRiepPreleva.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                     }
                         
                      
@@ -160,7 +160,7 @@ class FrameRiepPreleva extends JDialog{
                     if(!ordinedao.getNote(Numordine).equals(casNote.getText())) comment.setEnabled(true);
                     else  comment.setEnabled(false);
                 } catch (SQLException ex) {
-                    Logger.getLogger(FrameRiepPreleva.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
             }
 
@@ -171,7 +171,7 @@ class FrameRiepPreleva extends JDialog{
                     if(!ordinedao.getNote(Numordine).equals(casNote.getText())) comment.setEnabled(true);
                     else  comment.setEnabled(false);
                 } catch (SQLException ex) {
-                    Logger.getLogger(FrameRiepPreleva.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
             }
 
@@ -228,9 +228,9 @@ class FrameRiepPreleva extends JDialog{
                            comment.setEnabled(false);
                     }
                     } catch (InterruptedException ex) {        
-                    Logger.getLogger(FrameRiepPreleva.class.getName()).log(Level.SEVERE, null, ex);
+                   Logger.getLogger("genlog").warning("InterruptedException\n" + StockManagement.printStackTrace(ex));
                 } catch (SQLException ex) {
-                    Logger.getLogger(FrameRiepPreleva.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }        
                             
             }

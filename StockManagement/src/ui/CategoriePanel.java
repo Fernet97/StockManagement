@@ -502,7 +502,7 @@ class CategoriePanel extends JPanel {
                         try {
                             confermaCategoria();
                         } catch (SQLException ex) {
-                            Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger("genlog").warning("SQLExceprion:\n" + StockManagement.printStackTrace(ex));
                         }
                     }
                 }
@@ -517,8 +517,7 @@ class CategoriePanel extends JPanel {
                     try {
                         confermaCategoria();
                     } catch (SQLException ex) {
-                        Logger.getLogger(CategoriePanel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                        Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));                    }
                     
                 }
             });

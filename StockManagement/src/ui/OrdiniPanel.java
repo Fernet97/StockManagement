@@ -346,9 +346,9 @@ public class OrdiniPanel extends JPanel {
 
                         refreshTab();
                     } catch (SQLException ex) {
-                        ex.printStackTrace();
+                        Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
+                       Logger.getLogger("genlog").warning("InterruptedException\n" + StockManagement.printStackTrace(ex));
                     }
 
                 }
@@ -459,7 +459,7 @@ public class OrdiniPanel extends JPanel {
 
             }
         } catch (SQLException ex) {
-            Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
+           Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
         
         
@@ -574,7 +574,7 @@ public class OrdiniPanel extends JPanel {
             f.add(ok, BorderLayout.SOUTH);
             f.setVisible(true);
         } catch (SQLException ex) {
-            Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
     }
 
@@ -590,7 +590,7 @@ public class OrdiniPanel extends JPanel {
             prodAggiunti.setText("        #Prodotti aggiunti: " + String.valueOf(numprodaggiunti) + "        ");
 
         } catch (SQLException ex) {
-            Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
 
     }
@@ -614,7 +614,7 @@ public class OrdiniPanel extends JPanel {
             
             
         } catch (SQLException ex) {
-            Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
         
 
@@ -813,7 +813,7 @@ public class OrdiniPanel extends JPanel {
                         f.setTitle("Riepilogo ordine: " + table.getValueAt(row, 0));
                         //f.setTitle("#ORDINE: PRE-1 del 28/07/2020 @admin");
                     } catch (SQLException ex) {
-                        Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                     }
                     
                 }
@@ -878,7 +878,7 @@ public class OrdiniPanel extends JPanel {
                 
             } 
         } catch (SQLException ex) {
-            Logger.getLogger(OrdiniPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
         }
        }   
  }

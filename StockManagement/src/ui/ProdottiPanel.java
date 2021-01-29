@@ -191,7 +191,7 @@ public class ProdottiPanel extends JPanel {
 
                 }
                 }catch(SQLException ex){
-                    //miaooo
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                 }
 
             }
@@ -395,7 +395,7 @@ public class ProdottiPanel extends JPanel {
 
                         
                     } catch (SQLException ex) {
-                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                     }
                 }
             }
@@ -431,7 +431,7 @@ public class ProdottiPanel extends JPanel {
 
                         
                     } catch (SQLException ex) {
-                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                     }
                 }
             }
@@ -468,9 +468,9 @@ public class ProdottiPanel extends JPanel {
                //Genera sku del prodotto corrente
                generaQRdaSKU(pro.getSku());
            } catch (IOException ex) {
-               Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+               Logger.getLogger("genlog").warning("IOException\n" + StockManagement.printStackTrace(ex));
            } catch (WriterException ex) {
-               Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+               Logger.getLogger("genlog").warning("WriterException\n" + StockManagement.printStackTrace(ex));
            }
             
             Fornitore forni = forndao.getByID(daoo.getFPr(pro.getSku()));

@@ -178,7 +178,7 @@ public class JPanelNomeProdotto extends JPanel {
 
                         
                     } catch (SQLException ex) {
-                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                       Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                     }
                 }
             }
@@ -237,7 +237,7 @@ public class JPanelNomeProdotto extends JPanel {
 
                         
                     } catch (SQLException ex) {
-                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                       Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                     }
                 }
             }
@@ -298,7 +298,7 @@ public class JPanelNomeProdotto extends JPanel {
                 
                 vaiarod.setVisible(true);
             } catch (SQLException ex) {
-                Logger.getLogger(JPanelNomeProdotto.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
             }
     } 
        else {
@@ -353,6 +353,7 @@ public class JPanelNomeProdotto extends JPanel {
                     try {
                         fireEditingStopped();
                     } catch (ArrayIndexOutOfBoundsException ex) {
+                    //perchè è vuoto?
                     }
                 }
             });
@@ -389,6 +390,7 @@ public class JPanelNomeProdotto extends JPanel {
             try {
                 super.fireEditingStopped();
             } catch (ArrayIndexOutOfBoundsException ex) {
+            //perchè è vuoto?
             }
         }
     }
@@ -531,7 +533,7 @@ public class JPanelNomeProdotto extends JPanel {
 
                         
                     } catch (SQLException ex) {
-                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                       Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                     }
                 }
             }
@@ -607,7 +609,7 @@ public class JPanelNomeProdotto extends JPanel {
                         
 
                     } catch (SQLException ex) {
-                        Logger.getLogger(ProdottiPanel.class.getName()).log(Level.SEVERE, null, ex);
+                       Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                     }
                 }
             }
@@ -666,7 +668,7 @@ public class JPanelNomeProdotto extends JPanel {
             }
 
            } catch (SQLException ex) {
-                    Logger.getLogger(JPanelNomeProdotto.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
            }
     
     }
