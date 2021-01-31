@@ -345,6 +345,7 @@ public class OrdiniPanel extends JPanel {
                         }
 
                         refreshTab();
+                        
                     } catch (SQLException ex) {
                         Logger.getLogger("genlog").warning("SQLException\n" + StockManagement.printStackTrace(ex));
                     } catch (InterruptedException ex) {
@@ -432,12 +433,17 @@ public class OrdiniPanel extends JPanel {
     //QUANDO CHIAMARE IL REFRESH DI ORDINI?
     public void refreshTab() {
         try {
+            
+           
             casella.setBackground(Color.darkGray);
             casella.setText("");
             numprodaggiunti = 0;
             prodAggiunti.setText("        #Prodotti aggiunti: 0        ");
             model.setRowCount(0);
-            model2.setRowCount(0);
+            if(model2 != null)model2.setRowCount(0);
+            
+            tabnomeprodotto.refresh();
+             tabnomeprodotto.revalidate();
             
             PrelevaDAO predao = new PrelevaDAO();
             
@@ -455,7 +461,7 @@ public class OrdiniPanel extends JPanel {
                     }
                 }
                 // CAZZZZZ
-                model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), coast,  "Ricarica", "Visualizza"});
+                if(model2 != null )model2.addRow(new Object[]{ordine.get(0), ordine.get(3), ordine.get(1), coast,  "Ricarica", "Visualizza"});
 
             }
         } catch (SQLException ex) {
