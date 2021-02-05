@@ -206,7 +206,7 @@ class FrameRiepPreleva extends JDialog{
                     PrelevaDAO ordinedao = new PrelevaDAO();
                     
                     try{  
-                        int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di uscire ed annullare le modifiche?", "", JOptionPane.YES_NO_OPTION);
+                        int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di salvare le modifiche?", "", JOptionPane.YES_NO_OPTION);
                             if (OpzioneScelta == JOptionPane.OK_OPTION) {
                             
                         
