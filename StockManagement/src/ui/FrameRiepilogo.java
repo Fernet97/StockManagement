@@ -230,7 +230,7 @@ class FrameRiepilogo extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di voler apportare le seguenti modifiche?????");
+                int OpzioneScelta = JOptionPane.showConfirmDialog(getParent(), "Sei sicuro di voler apportare le seguenti modifiche?");
 
                 
                 if (OpzioneScelta == JOptionPane.OK_OPTION) {
