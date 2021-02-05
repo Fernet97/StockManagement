@@ -493,6 +493,8 @@ public class FramePrincipale extends JFrame {
         disattivaTuttiIBottoniTranne(lateralDashOrdini.code);
         
         OrdiniStatus = true;
+        
+        ordini.refreshTab();
         cardlayout.show(HomePanel, "Preleva");
     }
 
