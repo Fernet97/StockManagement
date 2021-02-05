@@ -556,6 +556,11 @@ public class OrdiniPanel extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     
+                    if(qtyp.getText().length() <= 0){
+                        JOptionPane.showMessageDialog(null, "Il campo non può essere vuoto!");
+                        return;
+                     }
+                    
                     if(Integer.parseInt(qtyp.getText()) <= 0){
                         JOptionPane.showMessageDialog(null, "Nessuna unità prelevabile!");
                         return;

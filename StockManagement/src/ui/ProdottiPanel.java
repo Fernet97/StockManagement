@@ -1346,7 +1346,7 @@ public class ProdottiPanel extends JPanel {
             // public Prodotto(String nome, int qty, String Categoria, int instock, float costo, int qty_min, String note, String foto, int negozio)
             Prodotto prod;
             try {
-                int a = JOptionPane.showConfirmDialog(this, "Dario, sei proprio sicuro?");
+                int a = JOptionPane.showConfirmDialog(this, "Sei proprio sicuro?");
                 if (a == JOptionPane.YES_OPTION) {
                     prod = new Prodotto(casname.getText(), Integer.parseInt(casqty.getText()), cat.getSelectedItem().toString(), inStock.isSelected(), Double.parseDouble(ccosto.getText()), Integer.parseInt(cmin.getText()), note.getText(), percorsofoto, negozio.isSelected());
                     ProdottoDAO dao = new ProdottoDAO();
