@@ -26,8 +26,6 @@ public class Cliente {
 
     /**
      * 
-     * @param idcliente
-     * @param datareg
      * @param fullname
      * @param cf
      * @param indirizzo
@@ -50,7 +48,7 @@ public class Cliente {
     
     /**
      * per update
-     * @param fullname
+     * @param fullname 
      * @param cf
      * @param indirizzo
      * @param tel

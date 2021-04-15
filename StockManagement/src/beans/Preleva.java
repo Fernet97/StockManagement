@@ -68,7 +68,6 @@ public class Preleva {
 /**
  * serve per settare le note
  * @param n_ordine
- * @param data
  * @param note
  * @param fk_utente
  * @throws InterruptedException 
